@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B&B Shuffle | Admin Panel</title>
+    <link rel="stylesheet" href="../modern-styles.css">
+    <link rel="stylesheet" href="../admin-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="app-title">
+                        <i class="fas fa-shield-alt"></i>
+                        B&B Shuffle
+                    </h1>
+                </div>
+                <div class="header-actions">
+                    <a href="../../index.html" class="btn btn-secondary" style="background: #6366f1; margin-right: 10px;">
+                        <i class="fas fa-home"></i>
+                        Main Index
+                    </a>
+                    <a href="../player.html" class="btn btn-secondary">
+                        <i class="fas fa-eye"></i>
+                        Player View
+                    </a>
+                    <button class="theme-cycler-btn" onclick="cycleTheme()" style="margin-left: 10px;">
+                        <i class="fas fa-palette"></i>
+                        Theme
+                    </button>
+                    <button class="btn btn-primary" onclick="refreshGame()">
+                        <i class="fas fa-refresh"></i>
+                        Refresh Game
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.backgroundManager?.openGallery()">
+                        <i class="fas fa-image"></i>
+                        Backgrounds
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Admin Dashboard -->
+        <main class="admin-main">
+            <div class="admin-grid">
+                <!-- Game Status Panel -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom Builder Modal -->
+    <div class="modal" id="builderModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Custom Scenario Builder</h3>
+                <button class="close-btn" onclick="closeCustomBuilder()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="builder-grid">
+                    <div class="builder-section">
+                        <h4>Initial Compromise</h4>
+                        <select id="builderA" onchange="updateBuilderPreview('A')">
+                            <option value="">Select card...</option>
+                        </select>
+                        <div class="builder-card-preview" id="previewA">
+                            <div class="placeholder">No card selected</div>
+                        </div>
+                    </div>
+                    <div class="builder-section">
+                        <h4>Pivot & Escalate</h4>
+                        <select id="builderB" onchange="updateBuilderPreview('B')">
+                            <option value="">Select card...</option>
+                        </select>
+                        <div class="builder-card-preview" id="previewB">
+                            <div class="placeholder">No card selected</div>
+                        </div>
+                    </div>
+                    <div class="builder-section">
+                        <h4>Persistence</h4>
+                        <select id="builderD" onchange="updateBuilderPreview('D')">
+                            <option value="">Select card...</option>
+                        </select>
+                        <div class="builder-card-preview" id="previewD">
+                            <div class="placeholder">No card selected</div>
+                        </div>
+                    </div>
+                    <div class="builder-section">
+                        <h4>C2 & Exfil</h4>
+                        <select id="builderC" onchange="updateBuilderPreview('C')">
+                            <option value="">Select card...</option>
+                        </select>
+                        <div class="builder-card-preview" id="previewC">
+                            <div class="placeholder">No card selected</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="import-export-section">
+                    <button class="btn btn-small btn-outline" onclick="exportCustomScenario()">
+                        <i class="fas fa-download"></i>
+                        Export Scenario
+                    </button>
+                    <button class="btn btn-small btn-outline" onclick="importCustomScenario()">
+                        <i class="fas fa-upload"></i>
+                        Import Scenario
+                    </button>
+                    <input type="file" id="scenarioFileInput" accept=".json" style="display: none;"
+                        onchange="handleScenarioFileImport()">
+                </div>
+                <div class="main-actions">
+                    <button class="btn btn-primary" onclick="applyCustomScenario()">
+                        <i class="fas fa-check"></i>
+                        Apply Scenario
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeCustomBuilder()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        // Theme cycling functionality
+        const themes = [
+            { name: 'Default', class: '' },
+            { name: 'Dark', class: 'theme-dark' },
+            { name: 'Blue', class: 'theme-blue' },
+            { name: 'Green', class: 'theme-green' },
+            { name: 'Purple', class: 'theme-purple' },
+            { name: 'Vampire', class: 'theme-vampire' },
+            { name: 'Cotton Candy', class: 'theme-cottoncandy' },
+            { name: 'Blue Grey', class: 'theme-bluegrey' }
+        ];
+
+        let currentThemeIndex = 0;
+    </script>
+
+    <script src="../ai-narrative-tool.js"></script>
+
+
+
+</body>
+
+</html>

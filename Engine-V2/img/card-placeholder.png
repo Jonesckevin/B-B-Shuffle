@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="280" viewBox="0 0 200 280">
+  <rect width="200" height="280" fill="#f0f0f0" stroke="#ccc" stroke-width="2"/>
+  <text x="100" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#666">
+    Card Image
+  </text>
+  <text x="100" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#999">
+    Not Available
+  </text>
+</svg>

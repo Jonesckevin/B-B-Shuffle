@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backdoors & Breaches - GM Scenario Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #ff6b35;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            background-color: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #e55a2b;
+        }
+        
+        button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+        
+        .scenario-output {
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            border: 1px solid #555;
+            min-height: 200px;
+        }
+        
+        .copy-button {
+            background-color: #4CAF50;
+            margin-top: 10px;
+        }
+        
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+        
+        .instructions {
+            background-color: #3a3a3a;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #ff6b35;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Backdoors & Breaches GM Assistant</h1>
+        
+        <div class="instructions">
+            <h3>📋 How to Use This Tool:</h3>
+            <ol>
+                <li><strong>Generate Scenario:</strong> Click the button below to randomly select attack cards and create a complete scenario</li>
+                <li><strong>Review Setup:</strong> Check the attack cards, procedures, and inject deck</li>
+                <li><strong>Use Narrative Examples:</strong> Reference the success/failure examples during gameplay</li>
+                <li><strong>Copy & Share:</strong> Use the copy button to share the scenario with your players</li>
+            </ol>
+            <p><strong>💡 Tip:</strong> Each scenario is completely randomized to ensure unique gameplay experiences!</p>
+        </div>
+        
+        <div class="controls">
+            <button onclick="generateNewScenario()" id="generateBtn">
+                🎲 Generate New Scenario
+            </button>
+            <button onclick="copyScenario()" id="copyBtn" disabled>
+                📋 Copy Scenario
+            </button>
+            <button onclick="exportScenario()" id="exportBtn" disabled>
+                💾 Export to File
+            </button>
+        </div>
+        
+        <div id="scenarioOutput" class="scenario-output">
+            Click "Generate New Scenario" to create your first scenario...
+        </div>
+    </div>
+
+    <script src="gm-assistant.js"></script>
+    <script>
+        let currentScenario = '';
+        let gmAssistant = new BackdoorsBreachesGM();
+
+        function generateNewScenario() {
+            const outputDiv = document.getElementById('scenarioOutput');
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            
+            // Show loading state
+            outputDiv.innerHTML = '<div class="loading">🎲 Generating new scenario...</div>';
+            generateBtn.disabled = true;
+            copyBtn.disabled = true;
+            exportBtn.disabled = true;
+            
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                try {
+                    currentScenario = gmAssistant.generateFormattedScenario();
+                    outputDiv.textContent = currentScenario;
+                    
+                    // Re-enable buttons
+                    generateBtn.disabled = false;
+                    copyBtn.disabled = false;
+                    exportBtn.disabled = false;
+                    
+                    // Add some visual feedback
+                    outputDiv.style.animation = 'fadeIn 0.5s ease-in';
+                } catch (error) {
+                    outputDiv.innerHTML = '<div style="color: #ff4444;">❌ Error generating scenario: ' + error.message + '</div>';
+                    generateBtn.disabled = false;
+                }
+            }, 500);
+        }
+
+        function copyScenario() {
+            if (currentScenario) {
+                navigator.clipboard.writeText(currentScenario).then(() => {
+                    const copyBtn = document.getElementById('copyBtn');
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = '✅ Copied!';
+                    copyBtn.style.backgroundColor = '#4CAF50';
+                    
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.style.backgroundColor = '#4CAF50';
+                    }, 2000);
+                }).catch(err => {
+                    alert('Failed to copy scenario to clipboard');
+                });
+            }
+        }
+
+        function exportScenario() {
+            if (currentScenario) {
+                const blob = new Blob([currentScenario], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `backdoors-breaches-scenario-${new Date().toISOString().split('T')[0]}.md`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Add fade-in animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Generate an initial scenario on page load
+        window.addEventListener('load', () => {
+            setTimeout(generateNewScenario, 1000);
+        });
+    </script>
+</body>
+</html>
