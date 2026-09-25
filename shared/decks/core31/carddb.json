@@ -1,0 +1,750 @@
+{
+  "title": "Core 3.1",
+  "revdate": "09-04-2026",
+  "link": "https://home.backdoorsandbreaches.com/classic/core",
+  "data": [
+    {
+      "name": "Credential Stuffing",
+      "image": "../../shared/decks/core31/initial-1.webp",
+      "type": "initial",
+      "id": "001",
+      "description": "The attackers used stolen username and password pairs (obtained from data breaches) and gained access to accounts on different systems.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/credential-stuffing/\">https://freelabfridays.com/labs/decks/core-v31/ic/credential-stuffing/</a></li>",
+      "tools": [
+        "CredMaster",
+        "Burp Suite",
+        "Hashcat",
+        "Hydra"
+      ]
+    },
+    {
+      "name": "Exploited External Service",
+      "image": "../../shared/decks/core31/initial-2.webp",
+      "type": "initial",
+      "id": "002",
+      "description": "The attackers targeted misconfigurations or unpatched vulnerabilities using publicly available exploits and gained access to your organization’s internal resources.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/exploited-external-service/\">https://freelabfridays.com/labs/decks/core-v31/ic/exploited-external-service/</a></li>",
+      "tools": [
+        "Nuclei",
+        "Metasploit",
+        "Exploit-db",
+        "Shodan"
+      ]
+    },
+    {
+      "name": "Bring Your Own (Exploited) Device",
+      "image": "../../shared/decks/core31/initial-3.webp",
+      "type": "initial",
+      "id": "003",
+      "description": "Your organization allows users to bring their own devices. The attackers compromised a user’s personal device to connect to your organization’s network.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/bring-your-own-exploited-device/\">https://freelabfridays.com/labs/decks/core-v31/ic/bring-your-own-exploited-device/</a></li>",
+      "tools": [
+        "Malware",
+        "Remote Access Trojan (RAT)",
+        "Malicious Web Ads"
+      ]
+    },
+    {
+      "name": "Social Engineering",
+      "image": "../../shared/decks/core31/initial-4.webp",
+      "type": "initial",
+      "id": "004",
+      "description": "The attackers manipulated and deceived a user in your organization to bypass technical controls and gained access to sensitive information, credentials and/or systems.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/social-engineering/\">https://freelabfridays.com/labs/decks/core-v31/ic/social-engineering/</a></li>",
+      "tools": [
+        "Open-Source Intelligence Gathering (OSINT)",
+        "Manipulation of Human Feelings",
+        "Sense of Urgency"
+      ]
+    },
+    {
+      "name": "Compromised Trusted Relationship",
+      "image": "../../shared/decks/core31/initial-5.webp",
+      "type": "initial",
+      "id": "005",
+      "description": "The attackers exploited a relationship between your organization and a third-party (e.g., vendor, partner, contractor) that has a service-level account within your organization and gained unauthorized access.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/compromised-trusted-relationship/\">https://freelabfridays.com/labs/decks/core-v31/ic/compromised-trusted-relationship/</a></li>",
+      "tools": [
+        "Gato-X",
+        "Compromised Service Accounts",
+        "Publicly Available Breach Data"
+      ]
+    },
+    {
+      "name": "External Password Spray",
+      "image": "../../shared/decks/core31/initial-6.webp",
+      "type": "initial",
+      "id": "006",
+      "description": "The attackers gained access to your internal network by spraying commonly used passwords (like SeasonYear!) across multiple accounts.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/external-password-spray/\">https://freelabfridays.com/labs/decks/core-v31/ic/external-password-spray/</a></li>",
+      "tools": [
+        "CredMaster",
+        "MSOLSpray",
+        "FireProx",
+        "FindMeAccess"
+      ]
+    },
+    {
+      "name": "Insider Threat",
+      "image": "../../shared/decks/core31/initial-7.webp",
+      "type": "initial",
+      "id": "007",
+      "description": "The attacker was a trusted individual who performed unauthorized actions within your organization.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/insider-threat/\">https://freelabfridays.com/labs/decks/core-v31/ic/insider-threat/</a></li>",
+      "tools": [
+        "Company-Issued Equipment"
+      ]
+    },
+    {
+      "name": "Unauthorized Cloud Access",
+      "image": "../../shared/decks/core31/initial-8.webp",
+      "type": "initial",
+      "id": "008",
+      "description": "The attackers gained unauthorized access to your organization’s cloud infrastructure or Software as a Service (SaaS) applications.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/unauthorized-cloud-access/\">https://freelabfridays.com/labs/decks/core-v31/ic/unauthorized-cloud-access/</a></li>",
+      "tools": [
+        "GraphRunner",
+        "ROADtools",
+        "ScoutSuite",
+        "Pacu"
+      ]
+    },
+    {
+      "name": "Compromised Web Server",
+      "image": "../../shared/decks/core31/initial-9.webp",
+      "type": "initial",
+      "id": "009",
+      "description": "The attackers exploited vulnerabilities in an external web server to gain unauthorized access to your organizations internal network.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/compromised-web-server/\">https://freelabfridays.com/labs/decks/core-v31/ic/compromised-web-server/</a></li>",
+      "tools": [
+        "Burp Suite",
+        "Caido",
+        "sqlmap",
+        "Nuclei"
+      ]
+    },
+    {
+      "name": "Phishing",
+      "image": "../../shared/decks/core31/initial-10.webp",
+      "type": "initial",
+      "id": "010",
+      "description": "The attackers gained access to your organization’s network through a deceptive email.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/ic/phishing/\">https://freelabfridays.com/labs/decks/core-v31/ic/phishing/</a></li>",
+      "tools": [
+        "Modlishka",
+        "Evilginx",
+        "Gophish",
+        "Social-Engineer Toolkit (SET)"
+      ]
+    },
+    {
+      "name": "Local Privilege Escalation (LPE)",
+      "image": "../../shared/decks/core31/pivot-1.webp",
+      "type": "pivot",
+      "id": "011",
+      "description": "The attackers use a misconfiguration or vulnerability in local software to gain administrative access.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/local-privilege-escalation/\">https://freelabfridays.com/labs/decks/core-v31/pe/local-privilege-escalation/</a></li>",
+      "tools": [
+        "Impacket",
+        "Seatbelt",
+        "SharpUp",
+        "PEASS-ng"
+      ]
+    },
+    {
+      "name": "New Service Creation or Modification",
+      "image": "../../shared/decks/core31/pivot-2.webp",
+      "type": "pivot",
+      "id": "012",
+      "description": "The attackers create new services or modify existing ones to evade detection by launching malicious payloads at startup or altering legitimate services to execute unauthorized commands.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/new-service-creation-modification/\">https://freelabfridays.com/labs/decks/core-v31/pe/new-service-creation-modification/</a></li>",
+      "tools": [
+        "PsExec",
+        "PowerShell",
+        "ServiceController",
+        "Malware"
+      ]
+    },
+    {
+      "name": "Credential Harvesting",
+      "image": "../../shared/decks/core31/pivot-3.webp",
+      "type": "pivot",
+      "id": "013",
+      "description": "The attackers collect and exploit username and password pairs found in open shares and files within your environment providing access to more valuable systems and data.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/credential-harvesting/\">https://freelabfridays.com/labs/decks/core-v31/pe/credential-harvesting/</a></li>",
+      "tools": [
+        "GraphRunner",
+        "DonPAPI",
+        "Snaffler",
+        "Mimikatz"
+      ]
+    },
+    {
+      "name": "Weaponizing Active Directory",
+      "image": "../../shared/decks/core31/pivot-4.webp",
+      "type": "pivot",
+      "id": "014",
+      "description": "The attackers map Domain Trust Relationships, Group Policies, user/group privileges, and Object Access Control Lists (ACLs) in order to take full control of the Domain or network infrastructure.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/weaponizing-active-directory/\">https://freelabfridays.com/labs/decks/core-v31/pe/weaponizing-active-directory/</a></li>",
+      "tools": [
+        "BloodHound",
+        "PlumHound",
+        "Admimer",
+        "SCCMHunter"
+      ]
+    },
+    {
+      "name": "Broadcast or Multicast Protocol Poisoning",
+      "image": "../../shared/decks/core31/pivot-5.webp",
+      "type": "pivot",
+      "id": "015",
+      "description": "The attackers exploit vulnerabilities in network protocols to intercept, redirect, or manipulate traffic to access sensitive data, impersonate devices, or disrupt communication.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/broadcast-multicast-protocol-poisoning/\">https://freelabfridays.com/labs/decks/core-v31/pe/broadcast-multicast-protocol-poisoning/</a></li>",
+      "tools": [
+        "Responder",
+        "Impacket",
+        "MITM6",
+        "Inveigh"
+      ]
+    },
+    {
+      "name": "Kerberoasting",
+      "image": "../../shared/decks/core31/pivot-6.webp",
+      "type": "pivot",
+      "id": "016",
+      "description": "The attackers compromise additional systems by using a “feature” of Service Principal Names (SPNs) to extract and crack service passwords.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/kerberoasting/\">https://freelabfridays.com/labs/decks/core-v31/pe/kerberoasting/</a></li>",
+      "tools": [
+        "Rubeus",
+        "Impacket",
+        "Hashcat",
+        "NetExec"
+      ]
+    },
+    {
+      "name": "Internal Password Spray",
+      "image": "../../shared/decks/core31/pivot-7.webp",
+      "type": "pivot",
+      "id": "017",
+      "description": "The attackers enumerate accounts and spray commonly used passwords (like SeasonYear!) within the rest of your organization.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/pe/internal-password-spray/\">https://freelabfridays.com/labs/decks/core-v31/pe/internal-password-spray/</a></li>",
+      "tools": [
+        "Kerbrute",
+        "NetExec",
+        "net use",
+        "LOLBins"
+      ]
+    },
+    {
+      "name": "Accessibility Features",
+      "image": "../../shared/decks/core31/persist-1.webp",
+      "type": "persist",
+      "id": "018",
+      "description": "The attacker hijack Operating System Accessibility features like Sticky Keys and On-Screen Keyboard.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/accesibility-features/\">https://freelabfridays.com/labs/decks/core-v31/per/accesibility-features/</a></li>",
+      "tools": [
+        "Bash Bunny",
+        "USB Rubber Ducky",
+        "OMGCable"
+      ]
+    },
+    {
+      "name": "Malicious Firmware",
+      "image": "../../shared/decks/core31/persist-2.webp",
+      "type": "persist",
+      "id": "019",
+      "description": "The attackers update the firmware of network cards, video cards, and Basic Input/Output System (BIOS) or Unified Extensible Firmware Interface (UEFI) with malicious code, which allows them to survive reboots or operating system reinstalls, often evading detection.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/malicious-firmware/\">https://freelabfridays.com/labs/decks/core-v31/per/malicious-firmware/</a></li>",
+      "tools": [
+        "CHIPSEC",
+        "Flashrom",
+        "Impacket",
+        "PowerShell",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "Logon Scripts",
+      "image": "../../shared/decks/core31/persist-3.webp",
+      "type": "persist",
+      "id": "020",
+      "description": "The attackers add or modify scripts to your system’s logon process. This allows them to maintain access, escalate privileges, and perform malicious actions each time a user logs in.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/logon-scripts/\">https://freelabfridays.com/labs/decks/core-v31/per/logon-scripts/</a></li>",
+      "tools": [
+        "Metasploit",
+        "Impacket",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Malicious Browser Plugins",
+      "image": "../../shared/decks/core31/persist-4.webp",
+      "type": "persist",
+      "id": "021",
+      "description": "The attackers install a browser plugin that executes malicious code and tracks activity while evading detection.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/malicious-browser-plugins/\">https://freelabfridays.com/labs/decks/core-v31/per/malicious-browser-plugins/</a></li>",
+      "tools": [
+        "Metasploit",
+        "PowerShell",
+        "Chromebackdoor",
+        "Browser Exploitation Framework (BeEF)",
+        "Evilginx"
+      ]
+    },
+    {
+      "name": "Application Shimming",
+      "image": "../../shared/decks/core31/persist-5.webp",
+      "type": "persist",
+      "id": "022",
+      "description": "The attackers use the Application Compatibility Toolkit (ACT) to trick applications into not seeing ports, directories, files, and services to evade detection.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/application-shimming/\">https://freelabfridays.com/labs/decks/core-v31/per/application-shimming/</a></li>",
+      "tools": [
+        "Metasploit",
+        "PowerShell",
+        "Shim Generator (shimgen)",
+        "sdb-explorer",
+        "Atomic Red Team (ART)"
+      ]
+    },
+    {
+      "name": "New User Added",
+      "image": "../../shared/decks/core31/persist-6.webp",
+      "type": "persist",
+      "id": "023",
+      "description": "The attackers create a user account to maintain access  and ensure persistence, even if the original compromised account is discovered or disabled.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/new-user-added/\">https://freelabfridays.com/labs/decks/core-v31/per/new-user-added/</a></li>",
+      "tools": [
+        "Metasploit",
+        "Impacket",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Malicious Driver",
+      "image": "../../shared/decks/core31/persist-7.webp",
+      "type": "persist",
+      "id": "024",
+      "description": "The attackers install or modify a device driver on a compromised system to retain control even after the system reboots.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/malicious-driver/\">https://freelabfridays.com/labs/decks/core-v31/per/malicious-driver/</a></li>",
+      "tools": [
+        "Impacket",
+        "PowerShell",
+        "Metasploit",
+        "Kernel Driver Utility (KDU)",
+        "SharpStay"
+      ]
+    },
+    {
+      "name": "Dynamic Link Library (DLL) Hijacking",
+      "image": "../../shared/decks/core31/persist-8.webp",
+      "type": "persist",
+      "id": "025",
+      "description": "The attackers inject malicious code into existing DLL files, often with elevated priveleges, to maintain access to the system even after it is rebooted.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/dynamic-link-library-hijacking/\">https://freelabfridays.com/labs/decks/core-v31/per/dynamic-link-library-hijacking/</a></li>",
+      "tools": [
+        "DLLHijackTest",
+        "PowerSploit",
+        "FaceDancer",
+        "PersistBOF"
+      ]
+    },
+    {
+      "name": "Malicious Service",
+      "image": "../../shared/decks/core31/persist-9.webp",
+      "type": "persist",
+      "id": "026",
+      "description": "The attackers create or modify system services in order to maintain long-term access to a compromised system.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/per/malicious-service/\">https://freelabfridays.com/labs/decks/core-v31/per/malicious-service/</a></li>",
+      "tools": [
+        "SharpStay",
+        "SharPersist",
+        "StayKit",
+        "PsExec"
+      ]
+    },
+    {
+      "name": "Domain Fronting as C2",
+      "image": "../../shared/decks/core31/c2-1.webp",
+      "type": "c2",
+      "id": "027",
+      "description": "The attackers route requests destined for their server through legitimate web services like Content Delivery Networks (CDNs).",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/c2e/domain-fronting-as-c2/\">https://freelabfridays.com/labs/decks/core-v31/c2e/domain-fronting-as-c2/</a></li>",
+      "tools": [
+        "Sliver",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Cloud-Based Services as Exfil",
+      "image": "../../shared/decks/core31/c2-2.webp",
+      "type": "c2",
+      "id": "028",
+      "description": "The attackers use common cloud services to blend in with legitimate traffic to send sensitive data from a compromised system to their servers.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/c2e/cloud-based-services-as-exfil/\">https://freelabfridays.com/labs/decks/core-v31/c2e/cloud-based-services-as-exfil/</a></li>",
+      "tools": [
+        "Gcat",
+        "Sneaky Creeper",
+        "Gost"
+      ]
+    },
+    {
+      "name": "Background Intelligent Transfer Service (BITS) as Exfil",
+      "image": "../../shared/decks/core31/c2-3.webp",
+      "type": "c2",
+      "id": "029",
+      "description": "The attackers use a legitimate service to send stolen data to a remote server.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/c2e/backround-intelligent-transfer-service-as-exfil/\">https://freelabfridays.com/labs/decks/core-v31/c2e/backround-intelligent-transfer-service-as-exfil/</a></li>",
+      "tools": [
+        "Leviathan",
+        "UBoatRAT"
+      ]
+    },
+    {
+      "name": "Domain Name System (DNS) as C2",
+      "image": "../../shared/decks/core31/c2-4.webp",
+      "type": "c2",
+      "id": "030",
+      "description": "The attackers maintain communication with compromised systems and exfiltrate data using the standard DNS protocol.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/c2e/domain-name-system-as-c2/\">https://freelabfridays.com/labs/decks/core-v31/c2e/domain-name-system-as-c2/</a></li>",
+      "tools": [
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "HTTPS as Exfil",
+      "image": "../../shared/decks/core31/c2-5.webp",
+      "type": "c2",
+      "id": "031",
+      "description": "The attackers use normal encrypted web ports and protocols to send stolen data from a compromised system to their servers.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/c2e/https-as-exfil/\">https://freelabfridays.com/labs/decks/core-v31/c2e/https-as-exfil/</a></li>",
+      "tools": [
+        "Sliver",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "HTTP as Exfil",
+      "image": "../../shared/decks/core31/c2-6.webp",
+      "type": "c2",
+      "id": "032",
+      "description": "The attackers use normal web ports and protocols to send stolen data from a compromised system to their servers.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/c2e/http-as-exfil/\">https://freelabfridays.com/labs/decks/core-v31/c2e/http-as-exfil/</a></li>",
+      "tools": [
+        "Sliver",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Permissions Audit",
+      "image": "../../shared/decks/core31/procedure-1.webp",
+      "type": "procedure",
+      "id": "033",
+      "description": "The Defenders examine configurations such as Identity and Access Management (IAM) roles in Microsoft Active Directory, Amazon Web Services (AWS), Azure AD permissions, or file access controls to detect excessive privileges, unauthorized access, or potential insider threats.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/permissions-audit/\">https://freelabfridays.com/labs/decks/core-v31/det/permissions-audit/</a></li>",
+      "cost": "2 RP",
+      "tools": [
+        "AD Users and Computers",
+        "BloodHound",
+        "ScoutSuite",
+        "Prowler"
+      ]
+    },
+    {
+      "name": "Cloud Event Log Analysis",
+      "image": "../../shared/decks/core31/procedure-2.webp",
+      "type": "procedure",
+      "id": "034",
+      "description": "The Defenders monitor, collect and examine event logs generated by cloud-based systems and services to identify potential security incidents, misconfigurations , and unusual or unauthorized activities.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/cloud-event-log-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/cloud-event-log-analysis/</a></li>",
+      "cost": "2 RP",
+      "tools": [
+        "Wazuh",
+        "Security Onion",
+        "Graylog Open",
+        "Falco",
+        "Hawk"
+      ]
+    },
+    {
+      "name": "Memory Analysis",
+      "image": "../../shared/decks/core31/procedure-3.webp",
+      "type": "procedure",
+      "id": "035",
+      "description": "The Defenders pull the memory from the suspect system and review it for possible malicious activity, such as running malware, hidden processes, or unauthorized code execution.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/memory-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/memory-analysis/</a></li>",
+      "cost": "2 RP",
+      "tools": [
+        "Volatility",
+        "Velociraptor",
+        "Endpoint Detection and Response (EDR) Tools"
+      ]
+    },
+    {
+      "name": "Crisis Management",
+      "image": "../../shared/decks/core31/procedure-4.webp",
+      "type": "procedure",
+      "id": "036",
+      "description": "The Defenders coordinate response efforts during cybersecurity incidents, ensuring effective communication and swift containment.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/crisis-management/\">https://freelabfridays.com/labs/decks/core-v31/det/crisis-management/</a></li>",
+      "cost": "1 RP",
+      "tools": [
+        "Incident Response Plans (IRP)",
+        "Disaster Recovery Plans (DRP)"
+      ]
+    },
+    {
+      "name": "Isolation",
+      "image": "../../shared/decks/core31/procedure-5.webp",
+      "type": "procedure",
+      "id": "037",
+      "description": "The Defenders quarantine compromised systems or network segments to prevent further spread of malicious activity, containing threats while enabling secure investigation and remediation.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/isolation/\">https://freelabfridays.com/labs/decks/core-v31/det/isolation/</a></li>",
+      "cost": "1 RP",
+      "tools": [
+        "Switch and Router Commands",
+        "Host Firewall",
+        "Endpoint Detection and Response (EDR) Tools"
+      ]
+    },
+    {
+      "name": "Endpoint Analysis",
+      "image": "../../shared/decks/core31/procedure-6.webp",
+      "type": "procedure",
+      "id": "038",
+      "description": "The Defenders investigate endpoint devices to identify indicators of compromise, unauthorized changes, or suspicious activities.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/endpoint-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/endpoint-analysis/</a></li>",
+      "cost": "3 RP",
+      "tools": [
+        "DeepBlueCLI",
+        "Velociraptor",
+        "Incident Response Cheat Sheets",
+        "osquery"
+      ]
+    },
+    {
+      "name": "User and Entity Behavior Analytics (UEBA)",
+      "image": "../../shared/decks/core31/procedure-7.webp",
+      "type": "procedure",
+      "id": "039",
+      "description": "The Defenders leverage advanced analytics to detect anomalies in user behavior, identifying potential insider threats, compromised accounts, or unusual activity patterns.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/ueba-analytics/\">https://freelabfridays.com/labs/decks/core-v31/det/ueba-analytics/</a></li>",
+      "cost": "3 RP",
+      "tools": [
+        "LogonTracer",
+        "DeepBlueCLI",
+        "OpenUBA",
+        "Hayabusa"
+      ]
+    },
+    {
+      "name": "Endpoint Security Protection Analysis",
+      "image": "../../shared/decks/core31/procedure-8.webp",
+      "type": "procedure",
+      "id": "040",
+      "description": "The Defenders deploy and monitor endpoint security solutions to detect and prevent unauthorized access and activity on endpoints.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/endpoint-security-protection-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/endpoint-security-protection-analysis/</a></li>",
+      "cost": "4 RP",
+      "tools": [
+        "Elastic Security",
+        "OpenEDR",
+        "Velociraptor",
+        "OSSEC",
+        "Wazuh"
+      ]
+    },
+    {
+      "name": "Active Defense and Cyber Deception",
+      "image": "../../shared/decks/core31/procedure-9.webp",
+      "type": "procedure",
+      "id": "041",
+      "description": "The Defenders simulate real systems and services, luring attackers to interact with them, carefully monitoring and alerting on those interactions.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/active-defense-and-cyber-deception/\">https://freelabfridays.com/labs/decks/core-v31/det/active-defense-and-cyber-deception/</a></li>",
+      "cost": "2 RP",
+      "tools": [
+        "CanaryTokens",
+        "HoneyBadger",
+        "Active Defense Harbinger Distribution (ADHD)",
+        "MITRE Engage"
+      ]
+    },
+    {
+      "name": "Network Threat Hunting",
+      "image": "../../shared/decks/core31/procedure-10.webp",
+      "type": "procedure",
+      "id": "042",
+      "description": "The Defenders analyze network traffic to actively hunt for signs of malicious activity, such as unusual protocols, C2 communication, or data exfil.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/network-threat-hunting/\">https://freelabfridays.com/labs/decks/core-v31/det/network-threat-hunting/</a></li>",
+      "cost": "2 RP",
+      "tools": [
+        "Real Intelligence Threat Analytics (RITA)",
+        "Security Onion",
+        "Passer",
+        "espy"
+      ]
+    },
+    {
+      "name": "Firewall Log Analysis",
+      "image": "../../shared/decks/core31/procedure-11.webp",
+      "type": "procedure",
+      "id": "043",
+      "description": "The Defenders analyze logs generated by the firewall to monitor network traffic patterns, detect unauthorized access, and identify anomalies such as unusual connections or high traffic volumes.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/firewall-log-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/firewall-log-analysis/</a></li>",
+      "cost": "3 RP",
+      "tools": [
+        "Wazuh",
+        "Graylog Open",
+        "ELK Stack",
+        "Security Onion",
+        "Kiwi Syslog Server"
+      ]
+    },
+    {
+      "name": "Security Information and Event Management (SIEM) Log Analysis",
+      "image": "../../shared/decks/core31/procedure-12.webp",
+      "type": "procedure",
+      "id": "044",
+      "description": "The Defenders use SIEM to aggregate logs from systems and devices to identify abnormal patterns, such as unusual access, traffic, or attack signatures.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/security-informations-and-event-management-log-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/security-informations-and-event-management-log-analysis/</a></li>",
+      "cost": "4 RP",
+      "tools": [
+        "Security Onion",
+        "OSSIM",
+        "Wazuh",
+        "JPCERT Tool Analysis"
+      ]
+    },
+    {
+      "name": "Server Analysis",
+      "image": "../../shared/decks/core31/procedure-13.webp",
+      "type": "procedure",
+      "id": "045",
+      "description": "The Defenders monitor sever activity, logs, and configurations to detect abnormal behaviors, such as unauthorized access, unusual traffic, or process anomalies.",
+      "details": "<li><a target=\"_blank\" href=\"https://freelabfridays.com/labs/decks/core-v31/det/server-analysis/\">https://freelabfridays.com/labs/decks/core-v31/det/server-analysis/</a></li>",
+      "cost": "2 RP",
+      "tools": [
+        "DeepBlueCLI",
+        "Velociraptor",
+        "Sysinternals Suite"
+      ]
+    },
+    {
+      "name": "Firewall Log Review",
+      "image": "../../shared/decks/core31/procedure-14.webp",
+      "type": "procedure",
+      "id": "046",
+      "description": "Can your organization analyze and understand firewall logs? Do you regularly emulate attack scenarios and verify that your procedures work?",
+      "tools": [
+        "SOF-ELK",
+        "Your Magical Commercial Black Box"
+      ]
+    },
+    {
+      "name": "Memory Analysis",
+      "image": "../../shared/decks/core31/procedure-15.webp",
+      "type": "procedure",
+      "id": "047",
+      "description": "The Defenders pull the memory from the suspect system and review it for possible malicious activity.",
+      "tools": [
+        "Strings",
+        "bulk_extractor",
+        "Volatility",
+        "Velociraptor"
+      ]
+    },
+    {
+      "name": "Honeypots Deployed",
+      "description": "The defenders had honeypots on their network. The \"Incident Master\" has to show their Pivot and Escalate Card to the defenders.",
+      "image": "../../shared/decks/core31/inject-1.webp",
+      "type": "inject",
+      "id": "048",
+      "details": "<li><a target=\"_blank\" href=\"https://www.activecountermeasures.com/free-tools/adhd\">https://www.activecountermeasures.com/free-tools/adhd</a></li><li><a target=\"_blank\" href=\"https://canarytokens.org/generate\">https://canarytokens.org/generate</a></li>",
+      "notes": "Check out the Active Defense Harbinger Distribution (ADHD), it has lots and lots of cool tools. Also, take a look at canarytokens.org."
+    },
+    {
+      "name": "It was a Pentest",
+      "description": "Ha! Ha! Just kidding, you were never attacked! The CEO hired an external firm (BHIS?) to run an unannounced Red Team.",
+      "image": "../../shared/decks/core31/inject-2.webp",
+      "type": "inject",
+      "id": "049",
+      "details": "<a target=\"_blank\" href=\"https://www.blackhillsinfosec.com\">https://www.blackhillsinfosec.com</a>",
+      "notes": "This is almost always a bittersweet moment for companies. On the one hand they are glad it wasn't the real thing. On the other... well, they were compromised. It's time to start working through how to prevent this from happening again."
+    },
+    {
+      "name": "Data Uploaded to Pastebin",
+      "description": "Bummer, the attackers have posted internal sensitive data on Pastebin. Your customers are now informed of the attack by the media.",
+      "image": "../../shared/decks/core31/inject-3.webp",
+      "type": "inject",
+      "id": "050",
+      "notes": "It happens... a lot, but it's just pure evil. Time to bring in Upper Management and the Legal Team."
+    },
+    {
+      "name": "SIEM Analyst Returns from Splunk Training",
+      "description": "+2 Modifier for Log-Related Actions",
+      "image": "../../shared/decks/core31/inject-4.webp",
+      "type": "inject",
+      "id": "051",
+      "notes": "Training is awesome. You need to get some."
+    },
+    {
+      "name": "Take One Procedure Card Away",
+      "description": "What it says on the tin. Take a Procedure Card away from the defenders.",
+      "image": "../../shared/decks/core31/inject-5.webp",
+      "type": "inject",
+      "id": "052",
+      "notes": "Sometimes procedures fail. Sometimes they're not followed correctly. Sometimes you can't find a procedure when you need it the most. Nobody's perfect. Sorry."
+    },
+    {
+      "name": "Give the Defenders a Random Procedure Card",
+      "description": "For whatever reason, everyone forgot they had this procedure. It must be Monday.",
+      "image": "../../shared/decks/core31/inject-6.webp",
+      "type": "inject",
+      "id": "053",
+      "notes": "Look, it happens all the time. We forget what we have. Different teams, different tools, different offices. It's nice when we all pull together as a team."
+    },
+    {
+      "name": "Lead Handler Has a Baby, Takes FMLA Leave",
+      "description": "Yeah, there's always one person who pretty much runs the whole IR process. That one essential person. Well, now it's time for the \"Incident Master\" to silence that person.",
+      "image": "../../shared/decks/core31/inject-7.webp",
+      "type": "inject",
+      "id": "054",
+      "notes": "We have to continue to be able to work effectively without the one or two most advanced people on the team. All of the quiet people who were just passively listening and hoping to not get called on now need to step up. Now is your time. Shine!"
+    },
+    {
+      "name": "Bobby the Intern Kills the System You are Reviewing",
+      "description": "This. Happens. Far. Too. Often.",
+      "image": "../../shared/decks/core31/inject-8.webp",
+      "type": "inject",
+      "id": "055",
+      "notes": "No. Murder is never okay. Don't even think that."
+    },
+    {
+      "name": "Legal Takes Your Only Skills Handler Into a Meeting to Explain the Incident",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process. That one essential person. Well, the legal team took that person away for \"Very Important Reasons.\"",
+      "image": "../../shared/decks/core31/inject-9.webp",
+      "type": "inject",
+      "id": "056",
+      "notes": "They may never come back... all of the quiet people who were just passively listening and hoping to not get called on now need to step up. Now is your time. Shine!"
+    },
+    {
+      "name": "Management Has Just Approved the Release of a New Procedure",
+      "description": "Internal Network Capture and Analysis (+5 Modifier for Network Capture Analysis Tasks) How many times has management come to the rescue? Knights in shining business suits. Every once in a great while the benevolent C-suite smiles on you.",
+      "image": "../../shared/decks/core31/inject-10.webp",
+      "type": "inject",
+      "id": "057",
+      "notes": "Get taps and monitoring in ASAP!!"
+    }
+  ],
+  "red": "../../shared/decks/cardbacks/v1/init.webp",
+  "yellow": "../../shared/decks/cardbacks/v1/pivot.webp",
+  "brown": "../../shared/decks/cardbacks/v1/c2.webp",
+  "purple": "../../shared/decks/cardbacks/v1/persist.webp",
+  "grey": "../../shared/decks/cardbacks/v1/inject.webp",
+  "green": "",
+  "logo": ""
+}

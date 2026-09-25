@@ -1,3 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
 <head>
-  <meta http-equiv="Refresh" content="0; URL=App/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <link rel="icon" href="shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="shared/img/favicon.png">
+    <title>B&amp;B Shuffle Home</title>
+    <link rel="stylesheet" href="shared/css/base.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--color-bg);
+            color: var(--color-text);
+        }
+
+        .portal { flex: 1 0 auto; width: 100%; max-width: 1100px; margin: 0 auto; padding: 10px 10px 30px; container-type: inline-size; }
+
+        /* ===== Hero mat ===== */
+        .portal-header {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            margin-bottom: 34px;
+            padding: 10px 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 58%),
+                linear-gradient(180deg, var(--color-bg-secondary), var(--color-bg));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 50px rgba(0, 0, 0, 0.35);
+            animation: riseIn 0.55s cubic-bezier(0.22, 0.7, 0.22, 1) both;
+        }
+        .portal-halo {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(520px 210px at 50% -6%, rgba(59, 130, 246, 0.18), transparent 70%);
+            pointer-events: none;
+        }
+        .portal-header > *:not(.portal-halo) { position: relative; }
+        .portal-logo { height: 84px; width: auto; margin-bottom: 6px; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.55)); }
+        .portal-header h1 { margin: 8px 0 4px; font-size: 32px; letter-spacing: -0.01em; }
+        .portal-sub { margin: 0; color: var(--color-text-secondary); font-size: 14px; }
+
+        /* Fan of card-backs laid on the mat */
+        .portal-fan {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            width: max-content;
+            margin: 20px auto 0;
+        }
+        .portal-fan img {
+            width: 48px;
+            aspect-ratio: 2.5 / 3.5;
+            object-fit: cover;
+            border-radius: 7px;
+            border: 2px solid rgba(255, 255, 255, 0.06);
+            box-shadow: var(--shadow-card);
+        }
+        .portal-fan img:nth-child(1) { transform: rotate(-18deg) translateY(7px); margin-right: -6px; }
+        .portal-fan img:nth-child(2) { transform: rotate(-9deg) translateY(3px); margin-right: -6px; }
+        .portal-fan img:nth-child(3) { transform: translateY(-2px); }
+        .portal-fan img:nth-child(4) { transform: rotate(9deg) translateY(3px); margin-left: -6px; }
+        .portal-fan img:nth-child(5) { transform: rotate(18deg) translateY(7px); margin-left: -6px; }
+
+        .portal-section { margin-bottom: 30px; }
+        .portal-section > h2 {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 18px; margin: 0 0 14px;
+            padding-bottom: 8px; border-bottom: 1px solid var(--color-border);
+        }
+        .portal-section > h2 .tag {
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+            color: var(--color-bg); background: var(--color-primary);
+            padding: 2px 8px; border-radius: 999px;
+        }
+
+        .portal-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 5px;
+        }
+
+        /* Engine V1 + Resource share a row whenever the card grid is wide
+           enough for ~4+ cards per row (portal content >= 860px). */
+        .portal-duo {
+            display: grid;
+            grid-template-columns: 1fr;
+            align-items: start;
+            column-gap: 20px;
+        }
+        @container (min-width: 860px) {
+            .portal-duo {
+                grid-template-columns: 240px minmax(0, 1fr);
+            }
+        }
+
+        /* ===== Tactile portal tiles ===== */
+        .portal-card {
+            --accent: var(--color-primary);
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-areas:
+                "icon title"
+                "desc desc"
+                "go   go";
+            grid-template-rows: auto 1fr auto;
+            grid-template-columns: auto 1fr;
+            column-gap: 12px;
+            row-gap: 6px;
+            padding: 18px 18px 16px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 55%),
+                var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--color-text);
+            box-shadow: var(--shadow-card);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            animation: riseIn 0.5s cubic-bezier(0.22, 0.7, 0.22, 1) both;
+        }
+        .portal-cards .portal-card:nth-child(1) { animation-delay: 0.04s; }
+        .portal-cards .portal-card:nth-child(2) { animation-delay: 0.10s; }
+        .portal-cards .portal-card:nth-child(3) { animation-delay: 0.16s; }
+        .portal-cards .portal-card:nth-child(4) { animation-delay: 0.22s; }
+        .portal-cards .portal-card:nth-child(5) { animation-delay: 0.28s; }
+        .portal-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent 72%);
+        }
+        .portal-card h3 { grid-area: title; align-self: center; margin: 0; font-size: 15px; }
+        .portal-card p { grid-area: desc; margin: 0; font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+        .portal-card .go { grid-area: go; align-self: end; font-size: 12px; font-weight: 600; color: var(--accent); }
+        .portal-card:hover {
+            transform: translateY(-4px);
+            border-color: color-mix(in srgb, var(--accent) 45%, var(--color-border));
+            box-shadow: var(--shadow-card-hover), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+        }
+        .portal-card:hover .go { text-decoration: underline; }
+
+        /* ===== Portal card icon chip (inline with the card title) ===== */
+        .portal-card .card-icon {
+            grid-area: icon;
+            align-self: center;
+            display: grid;
+            place-items: center;
+            width: 26px;
+            height: 26px;
+            color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 13%, transparent);
+            border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+            border-radius: 8px;
+            transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+        .portal-card:hover .card-icon {
+            transform: translateY(-1px) scale(1.05);
+            background: color-mix(in srgb, var(--accent) 22%, transparent);
+            box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--accent) 60%, transparent);
+        }
+        .card-icon svg { width: 17px; height: 17px; }
+
+        /* ===== Official-game plaque ===== */
+        .portal-banner {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+                var(--color-bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-left: 3px solid var(--color-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+        }
+        .portal-banner-logo { height: 30px; width: auto; flex: 0 0 auto; opacity: 0.95; }
+        .portal-banner-text { min-width: 0; }
+        .portal-banner strong { display: block; font-size: 14px; }
+        .portal-banner a { color: var(--color-primary); }
+        .portal-banner p { margin: 3px 0 0; font-size: 13px; color: var(--color-text-secondary); }
+
+        @media (max-width: 620px) {
+            .portal-header { padding: 10px 16px 20px; }
+            .portal-logo { height: 66px; }
+            .portal-fan img { width: 38px; }
+            .portal-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
 </head>
+<body class="surface-felt">
+    <div class="portal">
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="portal-halo" aria-hidden="true"></div>
+            <img class="portal-logo" src="shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+            <h1>B&amp;B Shuffle</h1>
+            <p class="portal-sub">Backdoors &amp; Breaches — remote incident-response training dashboards</p>
+            <div class="portal-fan" aria-hidden="true">
+                <img src="shared/decks/cardbacks/v2/initial.webp" alt="">
+                <img src="shared/decks/cardbacks/v2/pivot.webp" alt="">
+                <img src="shared/decks/cardbacks/v2/c2.webp" alt="">
+                <img src="shared/decks/cardbacks/v2/persist.webp" alt="">
+                <img src="shared/decks/cardbacks/v2/procedure.webp" alt="">
+            </div>
+        </header>
+
+        <main>
+            <!-- Engine V2 -->
+            <section class="portal-section">
+                <h2>Engine V2 <span class="tag">Recommended</span></h2>
+                <div class="portal-cards">
+                    <a class="portal-card" style="--accent:#3b82f6" href="Engine-V2/player.html">
+                        <span class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </span>
+                        <h3>Player Interface</h3>
+                        <p>The live game board — scenario cards, procedures, dice and turn tracking.</p>
+                        <span class="go">Open →</span>
+                    </a>
+                    <a class="portal-card" style="--accent:#6366f1" href="Engine-V2/admin.html">
+                        <span class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- cog -->
+                                <g transform="translate(-1.3 4.9) scale(0.58)">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                </g>
+                                <!-- upright wrench -->
+                                <g transform="translate(9.4 3.5) scale(0.72) rotate(-45 12 12)">
+                                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                                </g>
+                            </svg>
+                        </span>
+                        <h3>Scenario Editor</h3>
+                        <p>Build and configure scenarios — deck, cards, procedures and settings.</p>
+                        <span class="go">Open →</span>
+                    </a>
+                    <a class="portal-card" style="--accent:#8b5cf6" href="Engine-V2/scenario-library.html">
+                        <span class="card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                            </svg>
+                        </span>
+                        <h3>Scenario Library</h3>
+                        <p>Browse, search, import and export saved scenarios.</p>
+                        <span class="go">Open →</span>
+                    </a>
+                </div>
+            </section>
+
+            <div class="portal-duo">
+                <!-- Engine V1 -->
+                <section class="portal-section">
+                    <h2>Engine V1</h2>
+                    <div class="portal-cards">
+                        <a class="portal-card" style="--accent:#64748b" href="Engine-V1/index.html">
+                            <span class="card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                </svg>
+                            </span>
+                            <h3>Engine-V1</h3>
+                            <p>Legacy engine, kept alongside Engine-V2 for comparison.</p>
+                            <span class="go">Open →</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Resource -->
+                <section class="portal-section">
+                    <h2>Resource</h2>
+                    <div class="portal-cards">
+                        <a class="portal-card" style="--accent:#22c55e" href="shared/catalogue.html">
+                            <span class="card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                                </svg>
+                            </span>
+                            <h3>Card Catalogue</h3>
+                            <p>Shared reference of every deck and card across the engines (Core, Core 3.1, ICS-OT, sponsor expansions, and more).</p>
+                            <span class="go">Open →</span>
+                        </a><!---->
+                        <a class="portal-card" style="--accent:#38bdf8" href="Engine-V2/modules/mermaid/flowchart.html">
+                            <span class="card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="6" y1="3" x2="6" y2="15"/>
+                                    <circle cx="18" cy="6" r="3"/>
+                                    <circle cx="6" cy="18" r="3"/>
+                                    <path d="M18 9a9 9 0 0 1-9 9"/>
+                                </svg>
+                            </span>
+                            <h3>Flowchart</h3>
+                            <p>Build and preview Mermaid flowcharts for your exercises.</p>
+                            <span class="go">Open →</span>
+                        </a>
+                        <a class="portal-card" style="--accent:#a855f7" href="Engine-V2/modules/scenario-ai/scenario_ai.html">
+                            <span class="card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 8V4H8"/>
+                                    <rect width="16" height="12" x="4" y="8" rx="2"/>
+                                    <path d="M2 14h2"/>
+                                    <path d="M20 14h2"/>
+                                    <path d="M15 13v2"/>
+                                    <path d="M9 13v2"/>
+                                </svg>
+                            </span>
+                            <h3>AI Generator</h3>
+                            <p>Generate fresh scenarios from a prompt and save them to the library.</p>
+                            <span class="go">Open →</span>
+                        </a>
+                        <a class="portal-card" style="--accent:#f59e0b" href="Engine-V2/modules/card-creator/card_creator.html">
+                            <span class="card-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                    <path d="M18.375 2.625a2.121 2.121 0 113 3L12 15l-4 1 1-4z"/>
+                                </svg>
+                            </span>
+                            <h3>Card Creator</h3>
+                            <p>Design your own cards and save them into a Custom Cards deck.</p>
+                            <span class="go">Open →</span>
+                        </a>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Official game -->
+            <div class="portal-banner">
+                <img class="portal-banner-logo" src="shared/img/blackhills-logo-w.png" alt="Black Hills Information Security logo">
+                <div class="portal-banner-text">
+                    <strong>Looking for the original game?</strong>
+                    <p><a href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">Backdoors &amp; Breaches — Classic</a> is published by Black Hills Information Security.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Legal footer -->
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
+                <img class="app-legal-logo" src="shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <span>B&amp;B Classic — play on the official site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="shared/js/fab.js"></script>
+</body>
+</html>

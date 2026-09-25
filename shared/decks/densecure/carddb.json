@@ -1,0 +1,1064 @@
+{
+  "title": "DenSecure",
+  "revdate": "11-8-2023",
+  "link": "https://www.wolfandco.com/services/densecure/",
+  "data": [
+    {
+      "name": "Phishing",
+      "description": "The attackers gained access to your organization's network through a deceptive email.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_01.webp",
+      "type": "initial",
+      "id": "001",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Modlishka",
+        "Evilginx",
+        "Gophish",
+        "Social-Engineer Toolkit (SET)"
+      ]
+    },
+    {
+      "name": "Compromised Web Server",
+      "description": "The attackers exploited vulnerabilities in an external web server to gain unauthorized access to your organization's internal network.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_02.webp",
+      "type": "initial",
+      "id": "002",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Burp Suite",
+        "Caido",
+        "sqlmap",
+        "Nuclei"
+      ]
+    },
+    {
+      "name": "Unauthorized Cloud Access",
+      "description": "The attackers gained unauthorized access to your organization's cloud infrastructure or Software as a Service (SaaS) applications.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_03.webp",
+      "type": "initial",
+      "id": "003",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "GraphRunner",
+        "ROADtools",
+        "ScoutSuite",
+        "Pacu"
+      ]
+    },
+    {
+      "name": "Insider Threat",
+      "description": "The attacker was a trusted individual who performed unauthorized actions within your organization.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_04.webp",
+      "type": "initial",
+      "id": "004",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Company-Issued Equipment"
+      ]
+    },
+    {
+      "name": "External Password Spray",
+      "description": "The attackers gained access to your internal network by spraying commonly used passwords (like SeasonYear!) across multiple accounts.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_05.webp",
+      "type": "initial",
+      "id": "005",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "CredMaster",
+        "MSOLSpray",
+        "FireProx",
+        "FindMeAccess"
+      ]
+    },
+    {
+      "name": "Compromised Trusted Relationship",
+      "description": "The attackers exploited a relationship between your organization and a third-party (e.g., vendor, partner, contractor) that has a service-level account within your organization and gained unauthorized access.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_06.webp",
+      "type": "initial",
+      "id": "006",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Gato-X",
+        "Compromised Service Accounts",
+        "Publicly Available Breach Data"
+      ]
+    },
+    {
+      "name": "Social Engineering",
+      "description": "The attackers manipulated and deceived a user in your organization to bypass technical controls and gained access to sensitive information, credentials, and/or systems.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_07.webp",
+      "type": "initial",
+      "id": "007",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Open-Source Intelligence Gathering (OSINT)",
+        "Manipulation of Human Feelings",
+        "Sense of Urgency"
+      ]
+    },
+    {
+      "name": "Bring Your Own (Exploited) Device",
+      "description": "Your organization allows users to bring their own devices. The attackers compromised a user's personal device to connect to your organization's network.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_08.webp",
+      "type": "initial",
+      "id": "008",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Malware",
+        "Remote Access Trojan (RAT)",
+        "Malicious Web Ads"
+      ]
+    },
+    {
+      "name": "Exploited External Service",
+      "description": "The attackers targeted misconfigurations or unpatched vulnerabilities using publicly available exploits and gained access to your organization's internal resources.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_09.webp",
+      "type": "initial",
+      "id": "009",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Nuclei",
+        "Metasploit",
+        "Exploit-db",
+        "Shodan"
+      ]
+    },
+    {
+      "name": "Credential Stuffing",
+      "description": "The attackers used stolen username and password pairs (obtained from data breaches) and gained access to accounts on different systems.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_10.webp",
+      "type": "initial",
+      "id": "010",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "CredMaster",
+        "Burp Suite",
+        "Hashcat",
+        "Hydra"
+      ]
+    },
+    {
+      "name": "Internal Password Spray",
+      "description": "The attackers enumerate accounts and spray commonly used passwords (like SeasonYear!) within the rest of your organization.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_11.webp",
+      "type": "pivot",
+      "id": "011",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Kerbrute",
+        "NetExec",
+        "net use",
+        "LOLBins"
+      ]
+    },
+    {
+      "name": "Kerberoasting",
+      "description": "The attackers compromise additional systems by using a \"feature\" of Service Principal Names (SPNs) to extract and crack service passwords.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_12.webp",
+      "type": "pivot",
+      "id": "012",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Rubeus",
+        "Impacket",
+        "Hashcat",
+        "NetExec"
+      ]
+    },
+    {
+      "name": "Broadcast/Multicast Protocol Poisoning",
+      "description": "The attackers exploit vulnerabilities in network protocols to intercept, redirect, or manipulate traffic to access sensitive data, impersonate devices, or disrupt communication.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_13.webp",
+      "type": "pivot",
+      "id": "013",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Responder",
+        "Impacket",
+        "MITM6",
+        "Inveigh"
+      ]
+    },
+    {
+      "name": "Weaponizing Active Directory",
+      "description": "The attackers map Domain Trust Relationships, Group Policies, user/group privileges, and Object Access Control Lists (ACLs) in order to take full control of the Domain or network infrastructure.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_14.webp",
+      "type": "pivot",
+      "id": "014",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "BloodHound",
+        "PlumHound",
+        "Adminer",
+        "SCCMHunter"
+      ]
+    },
+    {
+      "name": "Credential Harvesting",
+      "description": "The attackers collect and exploit username and password pairs found in open shares and files within your environment providing access to more valuable systems and data.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_15.webp",
+      "type": "pivot",
+      "id": "015",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "GraphRunner",
+        "DonPAPI",
+        "Snaffler",
+        "Mimikatz"
+      ]
+    },
+    {
+      "name": "New Service Creation/Modification",
+      "description": "The attackers create new services or modify existing ones to evade detection by launching malicious payloads at startup or altering legitimate services to execute unauthorized commands.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_16.webp",
+      "type": "pivot",
+      "id": "016",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "PsExec",
+        "PowerShell",
+        "ServiceController",
+        "Malware"
+      ]
+    },
+    {
+      "name": "Local Pivilege Escalation (LPE)",
+      "description": "The attackers use a misconfiguration or vulnerability in local software to gain administrative access.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_17.webp",
+      "type": "pivot",
+      "id": "017",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Impacket",
+        "Seatbelt",
+        "SharpUp",
+        "PEASS-ng"
+      ]
+    },
+    {
+      "name": "Malicious Service",
+      "description": "The attackers create or modify system services in order to maintain long-term access to a compromised system.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_18.webp",
+      "type": "persist",
+      "id": "018",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "SharpStay",
+        "SharPersist",
+        "StayKit",
+        "PsExec"
+      ]
+    },
+    {
+      "name": "Dynamic Link Library (DLL) Hijacking",
+      "description": "The attackers inject malicious code into existing DLL files, often with elevated privileges, to maintain access to the system even after it is rebooted.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_19.webp",
+      "type": "persist",
+      "id": "019",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "DLLHijackTest",
+        "PowerSploit",
+        "FaceDancer",
+        "PersistBOF"
+      ]
+    },
+    {
+      "name": "Malicious Driver",
+      "description": "The attackers install or modify a device driver on a compromised system to retain control even after the system reboots.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_20.webp",
+      "type": "persist",
+      "id": "020",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Impacket",
+        "PowerShell",
+        "Metasploit",
+        "Kernel Driver Utility (KDU)",
+        "SharpStay"
+      ]
+    },
+    {
+      "name": "New User Added",
+      "description": "The attackers create a user account to maintain access and ensure persistence, even if the original compromised account is discovered or disabled.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_21.webp",
+      "type": "persist",
+      "id": "021",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Metasploit",
+        "Impacket",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Application Shiming",
+      "description": "The attackers use the Application Compatibility Toolkit (ACT) to trick applications into not seeing ports, directories, files, and services to evade detection.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_22.webp",
+      "type": "persist",
+      "id": "022",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Metasploit",
+        "PowerShell",
+        "Shim Generator (shimgen)",
+        "sdb-explorer",
+        "Atomic Red Team (ART)"
+      ]
+    },
+    {
+      "name": "Malicious Browser Plugins",
+      "description": "The attackers install a browser plugin that executes malicious code and tracks activity while evading detection.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_23.webp",
+      "type": "persist",
+      "id": "023",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Metasploit",
+        "PowerShell",
+        "Chromebackdoor",
+        "Browser Exploitation Framework (BeEF)",
+        "Evilginx"
+      ]
+    },
+    {
+      "name": "Logon Scripts",
+      "description": "The attackers add or modify scripts to your system's logon process. This allows them to maintain access, escalate privileges, and perform malicious actions each time a user logs in.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_24.webp",
+      "type": "persist",
+      "id": "024",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Metasploit",
+        "Impacket",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Malicious Firmware",
+      "description": "The attackers update the firmware of network cards, video cards, and Basic Input/Output System (BIOS) or Unified Extensible Firmware Interface (UEFI) with malicious code, which allows them to survive reboots or operating system reinstalls, often evading detection.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_25.webp",
+      "type": "persist",
+      "id": "025",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "CHIPSEC",
+        "Flashrom",
+        "Impacket",
+        "PowerShell",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "Accessibility Features",
+      "description": "The attackers hijack Operating System Accessibility features like Sticky Keys and On-Screen Keyboard.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_26.webp",
+      "type": "persist",
+      "id": "026",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Bash Bunny",
+        "USB Rubber Ducky",
+        "OMGCable"
+      ]
+    },
+    {
+      "name": "HTTP as Exfil",
+      "description": "The attackers use normal web ports and protocols to send stolen data from a compromised system to their servers.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_27.webp",
+      "type": "c2",
+      "id": "027",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Sliver",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "HTTPS as Exfil",
+      "description": "The attackers use normal encrypted web ports and protocols to send stolen data from a compromised system to their servers.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_28.webp",
+      "type": "c2",
+      "id": "028",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Sliver",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Domain Name System (DNS) as C2",
+      "description": "The attackers maintain communication with compromised systems and exfiltrate data using the standard DNS protocol.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_29.webp",
+      "type": "c2",
+      "id": "029",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Background Intelligent Transfer Service Bits (BITS) as Exfil",
+      "description": "The attackers use a legitimate service to send stolen data to a remote server.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_30.webp",
+      "type": "c2",
+      "id": "030",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Leviathan",
+        "UBoatRAT"
+      ]
+    },
+    {
+      "name": "Cloud-Based Services as Exfil",
+      "description": "The attackers use common cloud services to blend in with legitimate traffic to send sensitive data from a compromised system to their servers.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_31.webp",
+      "type": "c2",
+      "id": "031",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Goat",
+        "Sneaky Creeper",
+        "Gost"
+      ]
+    },
+    {
+      "name": "Domaining Fronting as C2",
+      "description": "The attackers route requests destined for their server through legitimate web services like Content Delivery Networks (CDNs).",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_32.webp",
+      "type": "c2",
+      "id": "032",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "tools": [
+        "Sliver",
+        "Havok",
+        "Mythic"
+      ]
+    },
+    {
+      "name": "Server Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_33.webp",
+      "type": "procedure",
+      "id": "033",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders monitor server activity, logs, and configurations to detect abnormal behaviors, such as unauthorized access, unusual traffic, or process anomalies.",
+      "tools": [
+        "DeepBlueCLI",
+        "Velociraptor",
+        "Sysinternals Suite"
+      ],
+      "cost": "2 RP"
+    },
+    {
+      "name": "Security Information and Event Management (SIEM) Log Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_34.webp",
+      "type": "procedure",
+      "id": "034",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders use SIEM to aggregate logs from systems and devices to identify abnormal patterns, such as unusual access, traffic, or attack signatures.",
+      "tools": [
+        "Security Onion",
+        "OSSIM",
+        "Wazuh",
+        "JPCERT Tool Analysis"
+      ],
+      "cost": "4 RP"
+    },
+    {
+      "name": "Firewall Log Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_35.webp",
+      "type": "procedure",
+      "id": "035",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders analyze logs generated by the firewall to monitor network traffic patterns, detect unauthorized access, and identify anomalies such as unusual connections or high traffic volumes.",
+      "tools": [
+        "Wazuh",
+        "Graylog Open",
+        "ELK Stack",
+        "Security Onion",
+        "Kiwi Syslog Server"
+      ],
+      "cost": "3 RP"
+    },
+    {
+      "name": "Network Threat Hunting",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_36.webp",
+      "type": "procedure",
+      "id": "036",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders analyze network traffic to actively hunt for signs of malicious activity, such as unusual protocols, C2 communication, or data exfil.",
+      "tools": [
+        "Real Intelligence Threat Analytics (RITA)",
+        "Security Onion",
+        "Passer",
+        "espy"
+      ],
+      "cost": "2 RP"
+    },
+    {
+      "name": "Active Defense and Cyber Deception",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_37.webp",
+      "type": "procedure",
+      "id": "037",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders simulate real systems and services, luring attackers to interact with them, carefully monitoring and alerting on those interactions.",
+      "tools": [
+        "CanaryTokens",
+        "HoneyBadger",
+        "Active Defense Harbinger Distribution (ADHD)",
+        "MITRE Engage"
+      ],
+      "cost": "2 RP"
+    },
+    {
+      "name": "Endpoint Security Protection Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_38.webp",
+      "type": "procedure",
+      "id": "038",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders deploy and monitor endpoint security solutions to detect and prevent unauthorized access and activity on endpoints.",
+      "tools": [
+        "Elastic Security",
+        "OpenEDR",
+        "Velociraptor",
+        "OSSEC",
+        "Wazuh"
+      ],
+      "cost": "4 RP"
+    },
+    {
+      "name": "User and Entity Behavior Analytics (UEBA)",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_39.webp",
+      "type": "procedure",
+      "id": "039",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders leverage advanced analytics to detect anomalies in user behavior, identifying potential insider threats, compromised accounts, or unusual activity patterns.",
+      "tools": [
+        "LogonTracer",
+        "DeepBlueCLI",
+        "OpenUBA",
+        "Hayabusa"
+      ],
+      "cost": "3 RP"
+    },
+    {
+      "name": "Endpoint Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_40.webp",
+      "type": "procedure",
+      "id": "040",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders investigate endpoint devices to identify indicators of compromise, unauthorized changes, or suspicious activities.",
+      "tools": [
+        "DeepBlueCLI",
+        "Velociraptor",
+        "Incident Response Cheat Sheets",
+        "osquery"
+      ],
+      "cost": "3 RP"
+    },
+    {
+      "name": "Isolation",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_41.webp",
+      "type": "procedure",
+      "id": "041",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders quarantine compromised systems or network segments to prevent further spread of malicious activity, containing threats while enabling secure investigation and remediation.",
+      "tools": [
+        "Switch and Router Commands",
+        "Host Firewall",
+        "Endpoint Detection and Response (EDR) Tools"
+      ],
+      "cost": "1 RP"
+    },
+    {
+      "name": "Crisis Management",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_42.webp",
+      "type": "procedure",
+      "id": "042",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders coordinate response efforts during cybersecurity incidents, ensuring effective communication and swift containment.",
+      "tools": [
+        "Incident Response Plans (IRP)",
+        "Disaster Recovery Plans (DRP)"
+      ],
+      "cost": "1 RP"
+    },
+    {
+      "name": "Memory Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_43.webp",
+      "type": "procedure",
+      "id": "043",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders pull the memory from the suspect system and review it for possible malicious activity, such as running malware, hidden processes, or unauthorized code execution.",
+      "tools": [
+        "Volatility",
+        "Velociraptor",
+        "Endpoint Detection and Response (EDR) Tools"
+      ],
+      "cost": "2 RP"
+    },
+    {
+      "name": "Cloud Event Log Analysis",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_44.webp",
+      "type": "procedure",
+      "id": "044",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders monitor, collect, and examine event logs generated by cloud-based systems and services to identify potential security incidents, misconfigurations, and unusual or unauthorized activities.",
+      "tools": [
+        "Wazuh",
+        "Security Onion",
+        "Graylog Open",
+        "Falco",
+        "Hawk"
+      ],
+      "cost": "2 RP"
+    },
+    {
+      "name": "Permissions Audit",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_45.webp",
+      "type": "procedure",
+      "id": "045",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>",
+      "description": "The Defenders examine configurations such as Identity and Access Management (IAM) roles in Microsoft Active Directory, Amazon Web Services (AWS), Azure AD permissions, or file access controls to detect excessive privileges, unauthorized access, or potential insider threats.",
+      "tools": [
+        "AD Users and Computers",
+        "BloodHound",
+        "ScoutSuite",
+        "Prowler"
+      ],
+      "cost": "2 RP"
+    },
+    {
+      "name": "False Alarm: It Was a Penetration Test",
+      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
+      "type": "inject",
+      "id": "046",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Data Uploaded to Pastebin",
+      "description": "Surprise! The attackers spilled sensitive customer data all over Pastebin. Now customers are learning about the breach over their morning coffee... from The News. The Defenders must play their Crisis Management Detection. If they are successful, they can move past this issue. If they aren't, they receive a -2 modifier on all Detections for the rest of the session.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_47.webp",
+      "type": "inject",
+      "id": "047",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Analyst Returns from Incident Response Training",
+      "description": "Armed with newfound Splunk-fu, the Defenders' Security Information and Event Management (SIEM) analyst is now a log-sifting ninja. Attackers, beware! The regex game just leveled up. The Defenders get a +2 modifier for all Detections until the end of the session.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_48.webp",
+      "type": "inject",
+      "id": "048",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Policy? What Policy?",
+      "description": "Oops, that Detection just vanished faster than the Defenders' budget during Q4. Good luck explaining this one! The Incident Captain must remove a Detection Card.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_49.webp",
+      "type": "inject",
+      "id": "049",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Luck of The SOC",
+      "description": "Congrats! The Defenders hit the Detection Roulette Jackpot. Let's hope it's more useful than a phishing awareness poster. The Incident Captain must reveal one of the Attack Cards.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_50.webp",
+      "type": "inject",
+      "id": "050",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Bobby the Intern Kills the System You are Reviewing",
+      "description": "In a bold move of intern ingenuity, Bobby decides \"reboot\" means \"unplug everything.\" The Defenders' investigation is now as dead as the server. The Defenders lose their next turn.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_51.webp",
+      "type": "inject",
+      "id": "051",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
+      "type": "inject",
+      "id": "052",
+      "details": "<a target=\"_blank\" href=\"https://backdoorsandbreaches.com/coredeck/v3/\">https://backdoorsandbreaches.com/coredeck/v3/</a>"
+    },
+    {
+      "name": "Cloud Event Log Analysis",
+      "image": "../../shared/decks/densecure/DENSECURE_1.webp",
+      "type": "procedure",
+      "id": "052",
+      "details": "",
+      "description": "Are you missing what should be in your cloud logs? Do you even know what cloud provider logs you need in an incident response situation? There are thousands of data connectors in your cloud service provider. Have any of them changed since the last time you reviewed them? Good luck hunting for a specific needle in a stack of needles.",
+      "tools": [
+        "Check with your cloud provider and see what tools they provide. It's ok, you're paying them a ton of money for all this."
+      ]
+    },
+    {
+      "name": "Permissions Audit",
+      "image": "../../shared/decks/densecure/DENSECURE_2.webp",
+      "type": "procedure",
+      "id": "053",
+      "details": "",
+      "description": "Users can have everything by default... which makes your organization vulnerable by design. Who gets to do what and why? Who is the magical unicorn that gets the exceptions? Are permissions open for convenience? When was the last time you fixed something a security audit didn't make you do? You can be the decider if you want--the power is yours!",
+      "tools": [
+        "ROADtools",
+        "ScoutSuite",
+        "AzureHound",
+        "Prowler"
+      ]
+    },
+    {
+      "name": "Microsoft Direct Phishing",
+      "description": "The attackers found your public Microsoft 365 smart host mail endpoint and delivered a phishing email to an end user, bypassing your spam filtering. They harvested the end user's credentials.",
+      "image": "../../shared/decks/densecure/DENSECURE_3.webp",
+      "type": "initial",
+      "id": "054",
+      "details": "<li><a target=\"_blank\" href=\"https://www.wolfandco.com/resources/blog/call-coming-inside-house-microsoft-direct-send-why-you-need-mitigate/\">https://www.wolfandco.com/resources/blog/call-coming-inside-house-microsoft-direct-send-why-you-need-mitigate/</a></li>",
+      "tools": [
+        "Direct Send"
+      ]
+    },
+    {
+      "name": "Wi-Fi Guest Network Escape",
+      "description": "The attackers abused your open guest network. A misconfiguration allowed them access to the production network.",
+      "image": "../../shared/decks/densecure/DENSECURE_4.webp",
+      "type": "initial",
+      "id": "055",
+      "details": "<li><a target=\"_blank\" href=\"https://www.bettercap.org/\">https://www.bettercap.org/</a></li>",
+      "tools": [
+        "bettercap",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "Publicly Exposed Secret Key",
+      "description": "The attackers compromised your network after a developer pushed an application secret access key to a public Git repository.",
+      "image": "../../shared/decks/densecure/DENSECURE_5.webp",
+      "type": "initial",
+      "id": "056",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/trufflesecurity/trufflehog\">https://github.com/trufflesecurity/trufflehog</a></li><li><a target=\"_blank\" href=\"https://trufflesecurity.com/why-security-scanning/\">https://trufflesecurity.com/why-security-scanning/</a></li>",
+      "tools": [
+        "TruffleHog"
+      ]
+    },
+    {
+      "name": "Vendor Default Credentials Attack",
+      "description": "The attackers examined public vendor documentation, finding the default passwords to one of your remote services, granting them access.",
+      "image": "../../shared/decks/densecure/DENSECURE_6.webp",
+      "type": "initial",
+      "id": "057",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/ihebski/DefaultCreds-cheat-sheet\">https://github.com/ihebski/DefaultCreds-cheat-sheet</a></li>",
+      "tools": [
+        "Firefox"
+      ]
+    },
+    {
+      "name": "Vishing",
+      "description": "The attackers spoofed the help desk caller ID, convincing an employee to provide credentials in order to complete an \"urgent task.\"",
+      "image": "../../shared/decks/densecure/DENSECURE_7.webp",
+      "type": "initial",
+      "id": "058",
+      "details": "<li><a target=\"_blank\" href=\"https://www.social-engineer.org/framework/attack-vectors/vishing\">https://www.social-engineer.org/framework/attack-vectors/vishing</a></li>",
+      "tools": [
+        "SpoofCard"
+      ]
+    },
+    {
+      "name": "Trojan Mail",
+      "description": "The attackers shipped enticingly labeled USB devices with autorun malware to remote employees' homes. Multiple employees connected them to their workstations, allowing the malware to beacon back to the attacker.",
+      "image": "../../shared/decks/densecure/DENSECURE_8.webp",
+      "type": "initial",
+      "id": "059",
+      "details": "<li><a target=\"_blank\" href=\"https://www.bleepingcomputer.com/news/security/plugx-malware-hides-on-usb-devices-to-infect-new-windows-hosts/\">https:/www.bleepingcomputer.com/news/security/plugx-malware-hides-on-usb-devices-to-infect-new-windows-hosts/</a></li><li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1091/\">https://attack.mitre.org/techniques/T1091/</a></li>",
+      "tools": [
+        "A USB device loaded with malware (ex. PlugX) and a little luck."
+      ]
+    },
+    {
+      "name": "HTML Smuggling",
+      "description": "The attackers obtained a remote shell on an endpoint by convincing a user to execute malware utilizing a well-disguised .html attachment.",
+      "image": "../../shared/decks/densecure/DENSECURE_9.webp",
+      "type": "initial",
+      "id": "060",
+      "details": "<li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1027/006/\">https://attack.mitre.org/techniques/T1027/006/</a></li><li><a target=\"_blank\" href=\"https://outflank.nl/blog/2018/08/14/html-smuggling-explained/\">https://outflank.nl/blog/2018/08/14/html-smuggling-explained/</a></li>"
+    },
+    {
+      "name": "Insecure Internet of Things (IoT)",
+      "description": "The attackers exploit IoT devices accessible from the production network, allowing them to pivot to other network segments.",
+      "image": "../../shared/decks/densecure/DENSECURE_10.webp",
+      "type": "pivot",
+      "id": "061",
+      "details": "<li><a target=\"_blank\" href=\"https://Shodan.io/\">https://Shodan.io/</a></li>",
+      "tools": [
+        "Shodan"
+      ]
+    },
+    {
+      "name": "Misconfigured Certificate Template",
+      "description": "The attackers request a vulnerable certificate template from your Active Directory Certificate Services (AD CS) server.",
+      "image": "../../shared/decks/densecure/DENSECURE_11.webp",
+      "type": "pivot",
+      "id": "062",
+      "details": "<li><a target=\"_blank\" href=\"https://www.wolfandco.com/resources/blog/active-directory-certificate-services-attackers-exploit/\">https://www.wolfandco.com/resources/blog/active-directory-certificate-services-attackers-exploit/</a></li><li><a target=\"_blank\" href=\"https://specterops.io/wp-content/uploads/sites/3/2022/06/Certified_Pre-Owned.pdf\">https://specterops.io/wp-content/uploads/sites/3/2022/06/Certified_Pre-Owned.pdf</a></li>",
+      "tools": [
+        "Certipy/Certify",
+        "PKINIT",
+        "Impacket"
+      ]
+    },
+    {
+      "name": "NTLM Abuse",
+      "description": "The attackers perform a New Technology LAN Manager Version 1 (NTLMv1) downgrade attack by coercing authentication from a target host.",
+      "image": "../../shared/decks/densecure/DENSECURE_12.webp",
+      "type": "pivot",
+      "id": "063",
+      "details": "<li><a target=\"_blank\" href=\"https://www.trustedsec.com/blog/practical-attacks-against-ntlmv1/\">https://www.trustedsec.com/blog/practical-attacks-against-ntlmv1/</a></li>",
+      "tools": [
+        "Coercer",
+        "PetitPotam"
+      ]
+    },
+    {
+      "name": "Dumping LSASS Via Task Manager",
+      "description": "The attackers utilize local admin access to perform a memory dump of the Local Security Authority Subsystem Service (LSASS) process using Task Manager.",
+      "image": "../../shared/decks/densecure/DENSECURE_13.webp",
+      "type": "pivot",
+      "id": "064",
+      "details": "<li><a target=\"_blank\" href=\"https://www.ired.team/offensive-security/credential-access-and-credential-dumping/dump-credentials-from-lsass-process-without-mimikatz\">https://www.ired.team/offensive-security/credential-access-and-credential-dumping/dump-credentials-from-lsass-process-without-mimikatz</a></li>",
+      "tools": [
+        "taskmgr.exe",
+        "Pypykatz",
+        "Mimikatz",
+        "CrackMapExec"
+      ]
+    },
+    {
+      "name": "Default Administrator Credentials",
+      "description": "The attackers were able to identify a device that was still configured with the default credentials. A single web search was all it took to gain admin access to your machines.",
+      "image": "../../shared/decks/densecure/DENSECURE_14.webp",
+      "type": "pivot",
+      "id": "065",
+      "details": "<li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T0812/\">https://attack.mitre.org/techniques/T0812/</a></li>"
+    },
+    {
+      "name": "Decrypting LSA Secrets",
+      "description": "The attackers utilize local admin access to query the registry and find credentials stored within the Local Security Authority (LSA) secrets.",
+      "image": "../../shared/decks/densecure/DENSECURE_15.webp",
+      "type": "pivot",
+      "id": "066",
+      "details": "<li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1003/004/\">https://attack.mitre.org/techniques/T1003/004/</a></li>",
+      "tools": [
+        "CrackMapExec",
+        "Mimikatz",
+        "PowerShell"
+      ]
+    },
+    {
+      "name": "SUID Permissions Abuse",
+      "description": "The attackers identify and exploit a binary with Set User ID (SUID) permissions.",
+      "image": "../../shared/decks/densecure/DENSECURE_16.webp",
+      "type": "pivot",
+      "id": "067",
+      "details": "<li><a target=\"_blank\" href=\"https://www.hackingarticles.in/linux-privilege-escalation-using-suid-binaries/\">https://www.hackingarticles.in/linux-privilege-escalation-using-suid-binaries</a></li><li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1548/001/\">https://attack.mitre.org/techniques/T1548/001/</a></li>",
+      "tools": [
+        "Impacket",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "MachineAccountQuota (MAQ) Abuse",
+      "description": "The attackers identify and abuse the MachineAccountQuota (MAQ) attribute to create a new machine account in the domain.",
+      "image": "../../shared/decks/densecure/DENSECURE_17.webp",
+      "type": "persist",
+      "id": "068",
+      "details": "<li><a target=\"_blank\" href=\"https://www.netspi.com/blog/technical/network-penetration-testing/machineaccountquota-is-useful-sometimes/\">https://www.netspi.com/blog/technical/network-penetration-testing/machineaccountquota-is-useful-sometimes/</a></li><li><a target=\"_blank\" href=\"https://www.thehacker.recipes/ad/movement/domain-settings/machineaccountquota\">https://www.thehacker.recipes/ad/movement/domain-settings/machineaccountquota</a></li>",
+      "tools": [
+        "Impacket",
+        "PowerShell"
+      ]
+    },
+    {
+      "name": "Group Policy Object (GPO) Modification",
+      "description": "The attackers modify a Group Policy Object (GPO) to create a scheduled task which reestablishes a beacon.",
+      "image": "../../shared/decks/densecure/DENSECURE_18.webp",
+      "type": "persist",
+      "id": "069",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/FSecureLABS/SharpGPOAbuse\">https://github.com/FSecureLABS/SharpGPOAbuse</a></li><li><a target=\"_blank\" href=\"https://adsecurity.org/?p=2716\">https://adsecurity.org/?p=2716</a></li>",
+      "tools": [
+        "SharpGPOAbuse",
+        "Microsoft Advanced Group Policy Management"
+      ]
+    },
+    {
+      "name": "Golden Ticket Attack",
+      "description": "The attackers steal the Kerberos Ticket Granting Ticket (KRBTGT) account credentials and issue TGTs outside the network.",
+      "image": "../../shared/decks/densecure/DENSECURE_19.webp",
+      "type": "persist",
+      "id": "070",
+      "details": "<li><a target=\"_blank\" href=\"https://book.hacktricks.xyz/windows-hardening/active-directory-methodology/golden-ticket\"><li><a target=\"_blank\" href=\"https://book.hacktricks.xyz/windows-hardening/active-directory-methodology/golden-ticket</a></li><li><a target=\"_blank\" href=\"LINKHERE\">LINKHERE</a></li>",
+      "tools": [
+        "Impacket",
+        "Mimikatz",
+        "Rubeus"
+      ]
+    },
+    {
+      "name": "Screensaver Hijack",
+      "description": "The attackers modify the screensaver path to create a reverse shell triggered by user inactivity. Unfortunately, this exciting new virtual fishtank screensaver has end users hooked, and they might fight efforts to remove it.",
+      "image": "../../shared/decks/densecure/DENSECURE_20.webp",
+      "type": "persist",
+      "id": "071",
+      "details": "<li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1546/002/\">https://attack.mitre.org/techniques/T1546/002/</a></li><li><a target=\"_blank\" href=\"https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/privilege-escalation/untitled-3/screensaver\">https://dmcxblue.gitbook.io/red-team-notes-2-0/red-team-techniques/privilege-escalation/untitled-3/screensaver</a></li>",
+      "tools": [
+        "SCRNSAVE.EXE"
+      ]
+    },
+    {
+      "name": "SSH Authorized Keys Modification",
+      "description": "The attackers add their own SSH public key to a user's authorized_keys file.",
+      "image": "../../shared/decks/densecure/DENSECURE_21.webp",
+      "type": "persist",
+      "id": "072",
+      "details": "<li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1098/004/\">https://attack.mitre.org/techniques/T1098/004/</a></li><li><a target=\"_blank\" href=\"https://www.infosecmatter.com/metasploit-module-library/?mm=post/linux/manage/sshkey_persistence\">https://www.infosecmatter.com/metasploit-module-library/?mm=post/linux/manage/sshkey_persistence</a></li>",
+      "tools": [
+        "Impacket",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "Unauthorized Filesharing Utility",
+      "description": "The attackers take advantage of an employee's unsanctioned \"shadow IT\" cloud-based filesharing resource to exfiltrate data.",
+      "image": "../../shared/decks/densecure/DENSECURE_22.webp",
+      "type": "c2",
+      "id": "073",
+      "details": "<li><a target=\"_blank\" href=\"https://thwack.solarwinds.com/resources/b/geek-speak/posts/shadow-it-file-sharing-and-data-security\">https://thwack.solarwinds.com/resources/b/geek-speak/posts/shadow-it-file-sharing-and-data-security</a></li>",
+      "tools": [
+        "Dropbox",
+        "Google Drive"
+      ]
+    },
+    {
+      "name": "Misuse of Remote Access Software",
+      "description": "The attackers install a trusted and commonly used remote access software in the environment.",
+      "image": "../../shared/decks/densecure/DENSECURE_23.webp",
+      "type": "c2",
+      "id": "074",
+      "details": "<li><a target=\"_blank\" href=\"https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-025a\">https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-025a</a></li>",
+      "tools": [
+        "TeamViewer",
+        "AnyDesk",
+        "ScreenConnect"
+      ]
+    },
+    {
+      "name": "Hosted Note Taking as C2",
+      "description": "The attackers use a trusted note-taking application to publish commands, allowing malware to fetch and execute.",
+      "image": "../../shared/decks/densecure/DENSECURE_24.webp",
+      "type": "c2",
+      "id": "075",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/mttaggart/OffensiveNotion\">https://github.com/mttaggart/OffensiveNotion</a></li><li><a target=\"_blank\" href=\"https://rastamouse.me/externalc2-net/\">https://rastamouse.me/externalc2-net/</a></li><li><a target=\"_blank\" href=\"https://www.varonis.com/blog/power-automate-data-exfiltration\">https://www.varonis.com/blog/power-automate-data-exfiltration</a></li><li><a target=\"_blank\" href=\"https://lots-project.com/\">https://lots-project.com/</a></li>",
+      "tools": [
+        "OffensiveNotion",
+        "Discord",
+        "Power Automate"
+      ]
+    },
+    {
+      "name": "Bluetooth as Exfil",
+      "description": "The attackers enable Bluetooth and then lurk within the broadcast range (33') to exfiltrate data.",
+      "image": "../../shared/decks/densecure/DENSECURE_25.webp",
+      "type": "c2",
+      "id": "076",
+      "details": "<li><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1011/001/\">https://attack.mitre.org/techniques/T1011/001/</a></li>",
+      "tools": [
+        "Windows Bluetooth"
+      ]
+    },
+    {
+      "name": "Crank Up the Pressure",
+      "description": "The attackers have started contacting your clients stating that they have compromised personally identifiable information (PII) and your company was not willing to protect it. Word spreads quickly on social media.",
+      "image": "../../shared/decks/densecure/DENSECURE_26.webp",
+      "type": "inject",
+      "id": "077",
+      "details": "",
+      "notes": "Leadership is demanding results faster than you can possibly deliver, the Defenders lose 1 turn."
+    },
+    {
+      "name": "Communication Infrastucture DDoS ",
+      "description": "An attack group unrelated to the current scenario runs a DDoS attack against your communications infrastructure during the incident.",
+      "image": "../../shared/decks/densecure/DENSECURE_27.webp",
+      "type": "inject",
+      "id": "078",
+      "details": "",
+      "notes": "The Defenders must use an alternative form of communication for the next two turns."
+    },
+    {
+      "name": "Way to Plan Ahead",
+      "description": "The security team brought on DenSecure™ for threat emulation against known threat actor behavior. The team has implemented new detections that caught the attacker's persistence actions within the network.",
+      "image": "../../shared/decks/densecure/DENSECURE_28.webp",
+      "type": "inject",
+      "id": "079",
+      "details": "",
+      "notes": "The Incident Captain must reveal the Persistence card."
+    },
+    {
+      "name": "Water, Water Everywhere!",
+      "description": "A pipe bursts in the server room. Seems like a good time to model that new flower print bathing suit while the backup site is brought online.",
+      "image": "../../shared/decks/densecure/DENSECURE_29.webp",
+      "type": "inject",
+      "id": "080",
+      "details": "",
+      "notes": "The Defenders receive a -3 modifier for the next two turns."
+    },
+    {
+      "name": "Timber!",
+      "description": "A tree falls and knocks out power to your office -- time to head to a secondary location. Unfortunately, traffic is terrible and you'll be stuck in the car for a while.",
+      "image": "../../shared/decks/densecure/DENSECURE_30.webp",
+      "type": "inject",
+      "id": "081",
+      "details": "",
+      "notes": "The Defender who rolled the die and caused this Inject can't help the team for three turns while they're stuck in traffic."
+    },
+    {
+      "name": "It's a Feature, not a Bug",
+      "description": "A penetration test reveals a critical severity issue in one of your core technologies that the vendor claims is a feature, not a bug. The Defenders implement their own defenses to mitigate exploitation.",
+      "image": "../../shared/decks/densecure/DENSECURE_31.webp",
+      "type": "inject",
+      "id": "082",
+      "details": "",
+      "notes": "The Defenders receive a +2 modifier on all Procedure cards for the rest of the session."
+    },
+    {
+      "name": "Dude...Where's My Server?",
+      "description": "Your organization's users contact the helpdesk saying all of their fileshares are missing. Security footage reveals an unknown person absconding with the physical drives.",
+      "image": "../../shared/decks/densecure/DENSECURE_32.webp",
+      "type": "inject",
+      "id": "083",
+      "details": "",
+      "notes": "Server Analysis is unavailable to the Defenders for the rest of the session -- in addition, they lose 1 turn as they figure out whose problem this is."
+    },
+    {
+      "name": "Executive Buy-In",
+      "description": "An at-home PC compromise has your CEO's personally identifiable information (PII) all over the web. Suddenly, management cares a lot about security and has approved all of the team's training requests.",
+      "image": "../../shared/decks/densecure/DENSECURE_33.webp",
+      "type": "inject",
+      "id": "084",
+      "details": "",
+      "notes": "The Defenders receive a +2 modifier on all Procedure cards for the rest of the session."
+    }
+  ],
+  "red": "img/bb-back-init.png",
+  "yellow": "img/bb-back-pivot.png",
+  "brown": "img/bb-back-c2.png",
+  "purple": "img/bb-back-persist.png",
+  "grey": "img/bb-back-inject.png",
+  "green": "",
+  "logo": "decks/DenSecure/DenSecureLogo.png"
+}

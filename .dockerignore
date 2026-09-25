@@ -1,0 +1,91 @@
+# ---------------------------------------------------------------------------
+# Build context for the production image.
+#
+# The Dockerfile runs `COPY . /usr/share/nginx/html/`, so anything not listed
+# here is both baked into the image AND downloadable from the web root.
+#
+# REQUIRED at runtime (deliberately kept):
+#   Engine-V1/ Engine-V2/ shared/ index.html api_server.py nginx.conf
+#   shared/decks/**            -> all deck art, served / fetched per deck
+#   docs/card-details.json     -> fetched by modules/card-creator/card_creator.js
+#   docs/rules.pdf             -> linked from the Player header
+#   LICENSE NOTICE             -> attribution for this GPL-3.0 project
+# ---------------------------------------------------------------------------
+
+# --- Git / VCS ---
+.git
+.gitignore
+dockerupload.gitignore
+
+# --- Docker files (not needed inside the image) ---
+# docker-compose.dev.yml carries a real provider API key; excluding it here
+# stops it being baked into the image and served from the web root.
+docker-compose.yml
+docker-compose.dev.yml
+.dockerignore
+Dockerfile
+
+# --- Markdown docs (never served) ---
+*.md
+HowTo-*.md
+ChangeLog.md
+
+# --- Screenshots and README example art ---
+Screenshots/
+shared/example-*.png
+B-B-Shuffle-UnRaid-Template.xml
+
+# --- Design prototypes / reference files (not part of the app) ---
+# CSS_Design_* are gitignored layout experiments. floating-action-btn.html is
+# the reference the site-navigation FAB (shared/js/fab.js) was adapted from.
+CSS_Design_06/
+CSS_Design_10/
+floating-action-btn.html
+
+# --- Local runtime data (11.9 MB) ---
+# Volume-mounted at /usr/share/nginx/html/data by docker-compose, and the API
+# server recreates the directory tree on startup, so the local copy must never
+# be baked into the image.
+data/
+
+# --- Tooling / build inputs (not used at runtime) ---
+scripts/
+docs/build_card_details.py
+docs/card-detection.json
+docs/detection/
+.trivy/
+__pycache__/
+*.pyc
+
+# --- Setup scripts / archived legacy launchers ---
+Setup.sh
+Setup.Sh
+start_quick_localserver.py
+start.py
+archive/
+
+# --- Logs ---
+*.log
+bb-shuffle-api.log
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
+
+# --- Editor files ---
+.vscode/
+*.swp
+*.swo
+
+# --- Temporary files ---
+*.tmp
+*.temp
+
+# --- Development files ---
+node_modules/
+
+# --- Large image sources ---
+*.psd
+
+# Engine-V1 is intentionally kept (linked from the portal for comparison).
+# Engine-V1/

@@ -1,0 +1,620 @@
+{
+  "title": "ICS-OT-V1",
+  "revdate": "12-05-2022",
+  "link": "https://www.dragos.com/",
+  "data": [
+    {
+      "name": "Vendor Portal",
+      "description": "A vendor portal had been added to the network that created a path into your organization, bypassing all security controls. The attackers scanned this system and deployed malware to it.",
+      "image": "../../shared/decks/ics-ot/initial-1.webp",
+      "type": "initial",
+      "id": "001",
+      "details": "<a target=\"_blank\" href=\"https://www.dragos.com/blog/industry-news/preventing-initial-access-in-industrial-environments/\">https://www.dragos.com/blog/industry-news/preventing-initial-access-in-industrial-environments/</a>",
+      "tools": [
+        "Error",
+        "Maliciousness",
+        "Shodan",
+        "Nmap",
+        "Masscan"
+      ]
+    },
+    {
+      "name": "Dual-Homed Device",
+      "description": "An operator connected an engineering workstation (EWS) directly to the internet via a secondary network interface. The attackers found that host on Shodan, and they brute force attacked it to gain access.",
+      "image": "../../shared/decks/ics-ot/initial-2.webp",
+      "type": "initial",
+      "id": "002",
+      "details": "<a target=\"_blank\" href=\"https://github.com/galkan/crowbar\">https://github.com/galkan/crowbar</a>",
+      "tools": [
+        "Shodan",
+        "Nmap",
+        "Masscan",
+        "Metasploit",
+        "Crowbar"
+      ]
+    },
+    {
+      "name": "Infected Authorized Vendor Laptop",
+      "description": "An ICS vendor arrived on-site to perform maintenance and plugged in an infected laptop. The malware propagated to local systems. This gave the attackers access to the network even after the vendor left the site.",
+      "image": "../../shared/decks/ics-ot/initial-3.webp",
+      "type": "initial",
+      "id": "003",
+      "details": "<a target=\"_blank\" href=\"https://www.reuters.com/article/us-nuclearpower-cyber-germany-idUSKCN0XN2OS\">https://www.reuters.com/article/us-nuclearpower-cyber-germany-idUSKCN0XN2OS</a>",
+      "tools": [
+        "Targeted Attack on Vendor (Supply Chain)",
+        "Malware (Worm)"
+      ]
+    },
+    {
+      "name": "Data Historian Compromise",
+      "description": "The attackers have compromised the IT network and discovered that a data historian in the ICS network is exposed due to permissive firewall rules. The attackers gained access to the ICS network through this historian.",
+      "image": "../../shared/decks/ics-ot/initial-4.webp",
+      "type": "initial",
+      "id": "004",
+      "tools": [
+        "Any Remote Access Protocol",
+        "SQL Injection"
+      ]
+    },
+    {
+      "name": "IT Compromised With Shared Domain Trust",
+      "description": "The attackers have compromised the enterprise domain controllers (DC). They moved laterally to devices in the ICS network that shared trust with the DC.",
+      "image": "../../shared/decks/ics-ot/initial-5.webp",
+      "type": "initial",
+      "id": "005",
+      "details": "<li><a target=\"_blank\" href=\"https://news.microsoft.com/transform/hackers-hit-norsk-hydro-ransomware-company-responded-transparency\">https://news.microsoft.com/transform/hackers-hit-norsk-hydro-ransomware-company-responded-transparency</a></li><li><a target=\"_blank\" href=\"https://github.com/BloodHoundAD/BloodHound\">https://github.com/BloodHoundAD/BloodHound</a></li>",
+      "tools": [
+        "Windows Server GPO",
+        "BloodHound"
+      ]
+    },
+    {
+      "name": "Dirty USB",
+      "description": "With a boring night shift, the plant operator brought in downloaded movies on a USB drive that contained malware. Upon insertion, the malware automatically infected the system and beaconed home.",
+      "image": "../../shared/decks/ics-ot/initial-6.webp",
+      "type": "initial",
+      "id": "006",
+      "details": "<a target=\"_blank\" href=\"https://www.dragos.com/blog/industry-news/asset-visibility-maps-relationships-and-communication-pathways-in-ot-environments\">https://www.dragos.com/blog/industry-news/asset-visibility-maps-relationships-and-communication-pathways-in-ot-environments</a>",
+      "tools": [
+        "Error",
+        "Boredom",
+        "USBs",
+        "Torrents",
+        "Malware"
+      ]
+    },
+    {
+      "name": "Exploitable API",
+      "description": "A device is deployed to the ICS network with an internet-exposed API for a predictive maintenance system. The attackers took advantage of an available exploit of the API to gain access and control of the underlying device.",
+      "image": "../../shared/decks/ics-ot/initial-7.webp",
+      "type": "initial",
+      "id": "007",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/byt3bl33d3r/SprayingToolkit\">https://github.com/byt3bl33d3r/SprayingToolkit</a></li><li><a target=\"_blank\" href=\"https://github.com/dxa4481/truffleHog\">https://github.com/dxa4481/truffleHog</a></li>",
+      "tools": [
+        "Documented APIs Poorly Secured",
+        "Fuzzing",
+        "SprayingToolkit",
+        "TruffleHog"
+      ]
+    },
+    {
+      "name": "Insider Threat",
+      "description": "A disgruntled internal user purposely allows attackers to gain access to devices in the ICS network that they control.",
+      "image": "../../shared/decks/ics-ot/initial-8.webp",
+      "type": "initial",
+      "id": "008",
+      "tools": [
+        "Being Considered a Full-Time Expenditure (FTE)",
+        "Long Hours",
+        "Bribery",
+        "Extortion"
+      ]
+    },
+    {
+      "name": "Malicious Project Files",
+      "description": "The attackers take control of an engineering workstation (EWS), modify the project files, and push them to controllers.",
+      "image": "../../shared/decks/ics-ot/pivot-1.webp",
+      "type": "pivot",
+      "id": "009",
+      "tools": [
+        "Any Remote Access Protocol",
+        "Living off the Land"
+      ]
+    },
+    {
+      "name": "EWS Issues Rogue Commands",
+      "description": "The attackers leverage an engineering workstation (EWS) to issue industrial commands directly to controllers.",
+      "image": "../../shared/decks/ics-ot/pivot-2.webp",
+      "type": "pivot",
+      "id": "010",
+      "tools": [
+        "Any GUI Remote Access Protocol",
+        "Living off the Land"
+      ]
+    },
+    {
+      "name": "Modifying Read/Write Scripts",
+      "description": "The attackers locate scripts used for ICS network and system administration with write permissions and modify them. These scripts are linked to scheduled tasks.",
+      "image": "../../shared/decks/ics-ot/pivot-3.webp",
+      "type": "pivot",
+      "id": "011",
+      "tools": [
+        "Notepad",
+        "Vim",
+        "Your Politically-Charged Text Editor of Choice"
+      ]
+    },
+    {
+      "name": "Internal Password Spray",
+      "description": "The attackers use default passwords to spray and access systems in the ICS network.",
+      "image": "../../shared/decks/ics-ot/pivot-4.webp",
+      "type": "pivot",
+      "id": "012",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/dafthack/DomainPasswordSpray\">https://github.com/dafthack/DomainPasswordSpray</a></li><li><a target=\"_blank\" href=\"https://github.com/ropnop/kerbrute\">https://github.com/ropnop/kerbrute</a></li><li><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/webcast-attack-tactics-5-zero-to-hero-attack\">https://www.blackhillsinfosec.com/webcast-attack-tactics-5-zero-to-hero-attack</a></li>",
+      "tools": [
+        "DomainPasswordSpray",
+        "BruteLoops",
+        "Kerbrute",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "Broadcast/Multicast Protocol Poisoning",
+      "description": "For years, LANMAN was the worst thing in Windows. Then LLMNR said, \"Stand Back and Hold My Beer!\" Basically, LLMNR lets a host ask for name resolution from any system on the same network. The attackers perform Broadcast/Multicast protocol poisoning on your Active Directory Network.",
+      "image": "../../shared/decks/ics-ot/pivot-5.webp",
+      "type": "pivot",
+      "id": "013",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/fox-it/mitm6\">https://github.com/fox-it/mitm6</a></li><li><a target=\"_blank\" href=\"https://github.com/lgandx/Responder\">https://github.com/lgandx/Responder</a></li><li><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to\">https://www.blackhillsinfosec.com/how-to-disable-llmnr-why-you-want-to</a></li>",
+      "tools": [
+        "mitm6 Attacks DHCPv6",
+        "Responder Attacks LLMNR, NBT-NS, WPAD, and mDNS."
+      ]
+    },
+    {
+      "name": "New Service Creation/Modification",
+      "description": "The attackers create and load their malware using a new service or existing service modification.",
+      "image": "../../shared/decks/ics-ot/pivot-6.webp",
+      "type": "pivot",
+      "id": "014",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/SecureAuthCorp/impacket\">https://github.com/SecureAuthCorp/impacket</a></li><li><a target=\"_blank\" href=\"https://www.metasploit.com\">https://metasploit.com</a></li>",
+      "tools": [
+        "Sysinternals PsExec",
+        "services.msc",
+        "Impacket",
+        "psexec.py",
+        "Metasploit",
+        "psexec",
+        "getsystem"
+      ]
+    },
+    {
+      "name": "Local Privilege Escalation",
+      "description": "The attackers use a misconfiguration or vulnerability in local software to gain administrative access.",
+      "image": "../../shared/decks/ics-ot/pivot-7.webp",
+      "type": "pivot",
+      "id": "015",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/slyd0g/DLLHijackTest\">https://github.com/slyd0g/DLLHijackTest</a></li><li><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/powershell-without-powershell-how-to-bypass-application-whitelisting-environment-restrictions-av\">https://www.blackhillsinfosec.com/powershell-without-powershell-how-to-bypass-application-whitelisting-environment-restrictions-av</a></li>",
+      "tools": [
+        "Meterpreter Post-Exploitation Scripts",
+        "DLLHijackTest",
+        "PowerSploit",
+        "PowerUp",
+        "GhostPack",
+        "SharpUp"
+      ]
+    },
+    {
+      "name": "GPO Push of Scheduled Tasks",
+      "description": "The attackers leverage access to the domain controller (DC) for the industrial environment. They push scheduled tasks to all hosts enrolled in the domain in order to access and control every device.",
+      "image": "../../shared/decks/ics-ot/pivot-8.webp",
+      "type": "pivot",
+      "id": "016",
+      "tools": [
+        "Windows Server",
+        "gpedit.msc"
+      ]
+    },
+    {
+      "name": "Stolen Engineering Workstation (EWS) Account",
+      "description": "Logon credentials for all engineering workstations (EWS) in the industrial environment are shared and weak. The attackers crack and repeatedly use them to access multiple Windows workstations.",
+      "image": "../../shared/decks/ics-ot/persist-1.webp",
+      "type": "persist",
+      "id": "017",
+      "tools": [
+        "hashcat",
+        "mimikatz"
+      ]
+    },
+    {
+      "name": "Malicious Logon Scripts",
+      "description": "A local logon script runs at each user logon to build their session and auto-launch the human-machine interface (HMI) application. The attackers discover that the logon script is editable by any user on the host and modify it.",
+      "image": "../../shared/decks/ics-ot/persist-2.webp",
+      "type": "persist",
+      "id": "018",
+      "tools": [
+        "Your Politically-Charged Text Editor of Choice"
+      ]
+    },
+    {
+      "name": "GPO Modification",
+      "description": "The attackers discover an account with permissions to modify a GPO that is linked to all Windows systems on the domain. They modify it to schedule a custom Windows service that launches a payload and establishes callbacks to C2 infrastructure.",
+      "image": "../../shared/decks/ics-ot/persist-3.webp",
+      "type": "persist",
+      "id": "019",
+      "tools": [
+        "gpedit.msc"
+      ]
+    },
+    {
+      "name": "Malicious Report Macros",
+      "description": "Automated daily production reports were built using an outdated spreadsheet that retrieves summarized production data from the distributed control system (DCS). The attackers introduce malicious macro code to call back to a local C2 proxy.",
+      "image": "../../shared/decks/ics-ot/persist-4.webp",
+      "type": "persist",
+      "id": "020",
+      "tools": [
+        "Excel '97 and... a Dream of Evil"
+      ]
+    },
+    {
+      "name": "HMI Graphics Manipulation",
+      "description": "The attackers modify an OnLoad.vbs script that a local human-machine interface (HMI) relies on.",
+      "image": "../../shared/decks/ics-ot/persist-5.webp",
+      "type": "persist",
+      "id": "021",
+      "tools": [
+        "Your Politically-Charged Text Editor of Choice"
+      ]
+    },
+    {
+      "name": "Malicious Firmware",
+      "description": "The attackers leverage access to an engineering workstation (EWS) to deploy trojanized firmware to devices.",
+      "image": "../../shared/decks/ics-ot/persist-6.webp",
+      "type": "persist",
+      "id": "022",
+      "details": "OH MY! <a href=\"https://google.com\">https://google.com</a>",
+      "tools": [
+        "Living off the Land"
+      ]
+    },
+    {
+      "name": "Autorun Malware",
+      "description": "The attackers modify a system so that malicious code is launched by the operating system during startup.",
+      "image": "../../shared/decks/ics-ot/persist-7.webp",
+      "type": "persist",
+      "id": "023",
+      "tools": [
+        "Meterpreter Persistence Modules",
+        "msconfig.exe"
+      ]
+    },
+    {
+      "name": "New User Added",
+      "description": "Easy, the attackers add a new user to the local computer.",
+      "image": "../../shared/decks/ics-ot/persist-8.webp",
+      "type": "persist",
+      "id": "024",
+      "details": "<li><a target=\"_blank\" href=\"https://www.metasploit.com\">https://www.metasploit.com</a></li><li><a target=\"_blank\" href=\"https://www.cobaltstrike.com\">https://www.cobaltstrike.com</a></li>",
+      "tools": [
+        "Metasploit",
+        "Cobalt Strike",
+        "Living off the Land"
+      ]
+    },
+    {
+      "name": "Accessibility Features",
+      "description": "The attackers hijack Accessibility Features like Sticky Keys and On-Screen Keyboard.",
+      "image": "../../shared/decks/ics-ot/persist-9.webp",
+      "type": "persist",
+      "id": "025",
+      "details": "<a target=\"_blank\" href=\"https://shop.hak5.org\">https://shop.hak5.org</a>",
+      "tools": [
+        "Bash Bunny - For examples",
+        "USB Rubber Ducky - For examples"
+      ]
+    },
+    {
+      "name": "Screenshot Exfil",
+      "description": "The attackers leverage access to the network to conduct reconnaissance of human-machine interfaces (HMI) by taking screenshots and exfiltrating them in unencrypted .jpg format.",
+      "image": "../../shared/decks/ics-ot/c2-1.webp",
+      "type": "c2",
+      "id": "026",
+      "tools": [
+        "Any Screen Capture Utility"
+      ]
+    },
+    {
+      "name": "Bridged System",
+      "description": "A bridged system was installed in the DMZ that has open file-shares for both the IT and ICS networks. The attackers use this share to move data across the IT/ICS DMZ without passing through the firewall or monitoring.",
+      "image": "../../shared/decks/ics-ot/c2-2.webp",
+      "type": "c2",
+      "id": "027",
+      "tools": [
+        "Living off the Land"
+      ]
+    },
+    {
+      "name": "Exfiltration Over Physical Medium",
+      "description": "The attackers use a USB drive, printouts, or even socks... yes, socks, as a way to get data out of a network. This requires an accomplice on the inside or it can be used with the Insider Threat (Initial Compromise) card.",
+      "image": "../../shared/decks/ics-ot/c2-3.webp",
+      "type": "c2",
+      "id": "028",
+      "details": "Exfiltration over physical medium..",
+      "tools": [
+        "USB Drive/Socks and a Dream... a Dream of Evil."
+      ]
+    },
+    {
+      "name": "HTTP as Exfil",
+      "description": "The attackers use HTTP as an exfil method. This is usually used in conjunction with some type of stego. For example, VSAgent uses Base64 encoded __VIEWSTATE as an exfil field.",
+      "image": "../../shared/decks/ics-ot/c2-4.webp",
+      "type": "c2",
+      "id": "029",
+      "details": "<a target=\"_blank\" href=\"https://www.thec2matrix.com\">https://www.thec2matrix.com</a>",
+      "tools": [
+        "Metasploit Reverse HTTP Payloads",
+        "C2 Matrix"
+      ]
+    },
+    {
+      "name": "TCP Handshakes as Morse Code",
+      "description": "The security controls allow outbound TCP SYN packets through before killing a session, so the attackers are using SYN packets as a form of Morse code to get signal out.",
+      "image": "../../shared/decks/ics-ot/c2-5.webp",
+      "type": "c2",
+      "id": "030",
+      "tools": [
+        "Anything That Can Start a TCP Session"
+      ]
+    },
+    {
+      "name": "DNS as C2",
+      "description": "The attackers use DNS as a C2 channel.",
+      "image": "../../shared/decks/ics-ot/c2-6.webp",
+      "type": "c2",
+      "id": "031",
+      "details": "<a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/bypassing-cylance-part-2-using-dnscat2\">https://www.blackhillsinfosec.com/bypassing-cylance-part-2-using-dnscat2</a>",
+      "tools": [
+        "dnscat2"
+      ]
+    },
+    {
+      "name": "Sequence of Events (SOE) Analysis",
+      "image": "../../shared/decks/ics-ot/procedure-1.webp",
+      "type": "procedure",
+      "id": "032",
+      "description": "Reviewing the data historian and sequence of events (SOE) recordings can determine which part of the process showed signs of impact, during what time period this occurred, and in what order.",
+      "tools": [
+        "Operator Observations",
+        "Historian Records",
+        "Alarm State Record",
+        "Excel",
+        "Notepad"
+      ]
+    },
+    {
+      "name": "Protocol Analysis",
+      "image": "../../shared/decks/ics-ot/procedure-2.webp",
+      "type": "procedure",
+      "id": "033",
+      "description": "Examining the protocol traffic on a network can determine what systems should be talking and what systems shouldn't be talking to each other on specific protocols.",
+      "tools": [
+        "SOF-ELK",
+        "Wireshark",
+        "Dragos Platform™"
+      ]
+    },
+    {
+      "name": "Crisis Management",
+      "image": "../../shared/decks/ics-ot/procedure-3.webp",
+      "type": "procedure",
+      "id": "034",
+      "description": "Your legal and management teams have procedures to minimize the risk to human safety and property loss while preparing communica- tion for external stakeholders. A good notification strategy will help deal with any crisis.",
+      "tools": [
+        "Management",
+        "Lawyers",
+        "Insurance Companies",
+        "PR Firms",
+        "Incident Response Coaches"
+      ]
+    },
+    {
+      "name": "Site Walkthrough",
+      "image": "../../shared/decks/ics-ot/procedure-4.webp",
+      "type": "procedure",
+      "id": "035",
+      "description": "Sending personnel to the site to examine the written logs, look for wireless access points, physical ingress methods, and equipment stacks can help identify abnormalities.",
+      "tools": [
+        "Personal Protective Equipment (PPE)",
+        "Recording Device",
+        "CCTV",
+        "Badge Readers",
+        "Ladder",
+        "Wireless Spectrum Analyzers",
+        "Eyeballs"
+      ]
+    },
+    {
+      "name": "Shodan Review",
+      "image": "../../shared/decks/ics-ot/procedure-5.webp",
+      "type": "procedure",
+      "id": "036",
+      "description": "Our ICS equipment shouldn't be visible directly from the internet, but stuff happens. By looking for hostnames, certificates, keywords, and other fingerprints, we find \"air-gapped\" systems enumerated in Shodan.",
+      "tools": [
+        "Shodan",
+        "Censys",
+        "Graylog",
+        "Cymru"
+      ]
+    },
+    {
+      "name": "Security Information and Event Management (SIEM) Log Analysis",
+      "image": "../../shared/decks/ics-ot/procedure-6.webp",
+      "type": "procedure",
+      "id": "037",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/philhagen/sof-elk\">https://github.com/philhagen/sof-elk</a></li><li><a target=\"_blank\" href=\"https://jpcertcc.github.io/ToolAnalysisResultSheet\">https://jpcertcc.github.io/ToolAnalysisResultSheet</a></li>",
+      "description": "Yeah... good luck with this one. Are you logging the right things? Do you regularly emulate attack scenarios to see if you can detect them?",
+      "tools": [
+        "SOF-ELK",
+        "JPCert Tool Analysis"
+      ]
+    },
+    {
+      "name": "Firewall Log Review",
+      "image": "../../shared/decks/ics-ot/procedure-7.webp",
+      "type": "procedure",
+      "id": "038",
+      "details": "<a target=\"_blank\" href=\"https://github.com/philhagen/sof-elk\">https://github.com/philhagen/sof-elk</a>",
+      "description": "Can your organization analyze and understand firewall logs? Do you regularly emulate attack scenarios and verify that your procedures work?",
+      "tools": [
+        "SOF-ELK",
+        "Your Magical Commercial Black Box"
+      ]
+    },
+    {
+      "name": "Consequence-Driven Threat Hunting",
+      "image": "../../shared/decks/ics-ot/procedure-8.webp",
+      "type": "procedure",
+      "id": "039",
+      "details": "<li><a target=\"_blank\" href=\"https://www.activecountermeasures.com/free-tools\">https://www.activecountermeasures.com/free-tools</a></li><li><a target=\"_blank\" href=\"https://securityonionsolutions.com/\">https://securityonionsolutions.com/</a></li>",
+      "description": "Does your team consider their worst industrial consequences, track down what systems could cause those hazards, what mitigations are in place, and use those to map attacker tools, tactics, and procedures to hypothesize and hunt for malicious activity?",
+      "tools": [
+        "SOF-ELK",
+        "Real Intelligence Threat Analytics (RITA)",
+        "Security Onion"
+      ]
+    },
+    {
+      "name": "Employee Interviews",
+      "image": "../../shared/decks/ics-ot/procedure-9.webp",
+      "type": "procedure",
+      "id": "040",
+      "description": "Your team gets to interview the operators, architects, vendors, and security personnel at the site of the incident.",
+      "tools": [
+        "Pen and Paper",
+        "Recording Equipment",
+        "Virtual Meeting"
+      ]
+    },
+    {
+      "name": "User and Entity Behavior Analytics (UEBA)",
+      "image": "../../shared/decks/ics-ot/procedure-10.webp",
+      "type": "procedure",
+      "id": "041",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/JPCERTCC/LogonTracer\">https://github.com/JPCERTCC/LogonTracer</a></li><li><a target=\"_blank\" href=\"https://openuba.org\">https://openuba.org/</a></li>",
+      "description": "It's like logging, but it actually works. User and entity behavior analytics (UEBA) looks for multiple concurrent logons, impossible logons based on geography, unusual file access, password sprays, and more!",
+      "tools": [
+        "LogonTracer",
+        "DeepBlueCLI",
+        "OpenUBA"
+      ]
+    },
+    {
+      "name": "Endpoint Analysis",
+      "image": "../../shared/decks/ics-ot/procedure-11.webp",
+      "type": "procedure",
+      "id": "042",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/sans-blue-team/DeepBlueCLI\">https://github.com/sans-blue-team/DeepBlueCLI</a></li><li><a target=\"_blank\" href=\"https://www.velocidex.com\">https://www.velocidex.com</a></li><li><a target=\"_blank\" href=\"https://github.com/teamdfir/sift\">https://github.com/teamdfir/sift</a></li><li><a target=\"_blank\" href=\"https://github.com/keydet89/RegRipper3.0\">https://github.com/keydet89/RegRipper3.0</a></li>",
+      "description": "This is where the Defenders use their SANS IR Cheat Sheets to detect attacks on workstations. Time to bring in the Local Operator... and pray.",
+      "tools": [
+        "DeepBlueCLI",
+        "Velociraptor",
+        "SANS IR Cheat Sheets",
+        "SIFT Workstation",
+        "RegRipper",
+        "Sysinternals"
+      ]
+    },
+    {
+      "name": "Memory Analysis",
+      "image": "../../shared/decks/ics-ot/procedure-12.webp",
+      "type": "procedure",
+      "id": "043",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/simsong/bulk_extractor\">https://github.com/simsong/bulk_extractor</a></li><li><a target=\"_blank\" href=\"https://volatilityfoundation.org\">https://volatilityfoundation.org</a></li><li><a target=\"_blank\" href=\"https://www.velocidex.com\">https://www.velocidex.com</a></li>",
+      "description": "The Defenders pull the memory from the suspect system and review it for possible malicious activity.",
+      "tools": [
+        "Strings",
+        "bulk_extractor",
+        "Volatility",
+        "Velociraptor"
+      ]
+    },
+    {
+      "name": "Unexpected PLC State Change",
+      "description": "A programmable logic controller (PLC) has exhibited an unexpected start/stop state change. This indicates the attackers are currently active.",
+      "image": "../../shared/decks/ics-ot/inject-1.webp",
+      "type": "inject",
+      "id": "044",
+      "notes": "The Defenders gain a +2 modifier for Protocol Analysis on their next turn for knowing where to look."
+    },
+    {
+      "name": "Safety Instrumented System (SIS) Tampering",
+      "description": "A safety instrumented system (SIS) goes offline, and when the maintenance crew examines it, the firmware checksum does not match.",
+      "image": "../../shared/decks/ics-ot/inject-2.webp",
+      "type": "inject",
+      "id": "045",
+      "notes": "The Defenders receive a +2 modifier for Endpoint Analysis on their next turn for knowing where to look."
+    },
+    {
+      "name": "Mediation",
+      "description": "The Defenders have to function as mediators between the IT and ICS network teams.",
+      "image": "../../shared/decks/ics-ot/inject-3.webp",
+      "type": "inject",
+      "id": "046",
+      "notes": "All future turns receive a -1 modifier until they reveal an Attack Card, then all turns thereafter receive a +1 modifier for the goodwill period."
+    },
+    {
+      "name": "You Can't Get There From Here",
+      "description": "Due to the remote location and travel logistics, the Defenders have to walk a site operator through the evidence collection process.",
+      "image": "../../shared/decks/ics-ot/inject-4.webp",
+      "type": "inject",
+      "id": "047",
+      "notes": "They receive a -1 modifier on Endpoint Analysis and Memory Analysis for the rest of the session."
+    },
+    {
+      "name": "Emergency Facility Shutdown",
+      "description": "A compromise of a hazardous material container causes an immediate evacuation of the production facility. This is where all of the backbone ICS routers are located.",
+      "image": "../../shared/decks/ics-ot/inject-5.webp",
+      "type": "inject",
+      "id": "048",
+      "notes": "The Defenders lose 1 turn."
+    },
+    {
+      "name": "Legacy Knowledge",
+      "description": "The Defenders must roll again to see if the person who built the system is still working at the site.",
+      "image": "../../shared/decks/ics-ot/inject-6.webp",
+      "type": "inject",
+      "id": "049",
+      "notes": "(1-10) means the happily retired individual is not there to assist them. -2 modifier on the next turn (11-20) means the grizzled veteran that deployed the legacy system still works at the site to assist them. +2 modifier on the next turn"
+    },
+    {
+      "name": "No High Availability (HA) System",
+      "description": "Current endpoint investigations are on fragile systems that are without redundancy.",
+      "image": "../../shared/decks/ics-ot/inject-7.webp",
+      "type": "inject",
+      "id": "050",
+      "notes": "The Defenders are limited to collecting information with the tools already installed. They receive a -2 modifier on Endpoint Analysis and Memory Analysis for the next two turns."
+    },
+    {
+      "name": "No Shirt, No Shoes",
+      "description": "Half of the Defenders have been deemed to be wearing inadequate personal protective equipment (PPE). They may not enter the site until they purchase full leather uppers and cotton clothes.",
+      "image": "../../shared/decks/ics-ot/inject-8.webp",
+      "type": "inject",
+      "id": "051",
+      "notes": "The Defenders may elect to receive a -4 modifier on their next turn OR lose 1 turn and receive a +4 modifier on the turn thereafter."
+    },
+    {
+      "name": "USB Worm",
+      "description": "The USB devices used for collecting information become infected with Autorun malware.",
+      "image": "../../shared/decks/ics-ot/inject-9.webp",
+      "type": "inject",
+      "id": "052",
+      "notes": "The Defenders receive a -2 modifier on Endpoint Analysis and Memory Analysis for the next two turns."
+    }
+  ],
+  "red": "../../shared/decks/cardbacks/v2/initial.webp",
+  "yellow": "../../shared/decks/cardbacks/v2/pivot.webp",
+  "brown": "../../shared/decks/cardbacks/v2/exfil.webp",
+  "purple": "../../shared/decks/cardbacks/v2/persist.webp",
+  "grey": "../../shared/decks/cardbacks/v2/inject.webp",
+  "green": "../../shared/decks/cardbacks/v2/consultant.webp",
+  "logo": "../../shared/decks/ics-ot/dragos-logo.webp"
+}

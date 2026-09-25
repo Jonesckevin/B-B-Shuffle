@@ -1,0 +1,1148 @@
+/**
+ * B&B Shuffle - Admin Page Styles
+ * Page-specific styles for the Scenario Editor interface
+ */
+
+/* Layout */
+.admin-layout {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 320px;
+    min-height: 100vh;
+}
+
+.admin-header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(180deg, var(--color-bg-secondary), var(--color-bg));
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+    color: var(--color-text);
+}
+
+.admin-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Main Content */
+.admin-main {
+    padding: var(--space-6);
+    overflow-y: auto;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Deck Section */
+.deck-section {
+    margin-bottom: var(--space-8);
+}
+
+.deck-selector {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin-bottom: var(--space-3);
+}
+
+.deck-selector .form-select {
+    flex: 1;
+    max-width: 300px;
+}
+
+.deck-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3);
+    background: var(--color-surface-elevated);
+    border-radius: var(--radius-md);
+}
+
+.deck-name {
+    font-weight: 500;
+}
+
+.card-count {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+/* Scenario Builder */
+.scenario-section {
+    margin-bottom: var(--space-8);
+}
+
+.scenario-builder {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.scenario-slot {
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-3);
+    transition: border-color var(--transition-fast);
+}
+
+.scenario-slot:hover {
+    border-color: var(--color-border-hover);
+}
+
+.scenario-slot[data-type="initial"] { border-color: var(--color-initial); }
+.scenario-slot[data-type="pivot"] { border-color: var(--color-pivot); }
+.scenario-slot[data-type="c2"] { border-color: var(--color-c2); }
+.scenario-slot[data-type="persist"] { border-color: var(--color-persist); }
+
+.slot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+}
+
+.slot-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.scenario-slot[data-type="initial"] .slot-label { color: var(--color-initial); }
+.scenario-slot[data-type="pivot"] .slot-label { color: var(--color-pivot); }
+.scenario-slot[data-type="c2"] .slot-label { color: var(--color-c2); }
+.scenario-slot[data-type="persist"] .slot-label { color: var(--color-persist); }
+
+.slot-random-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.slot-random-btn:hover {
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+
+.slot-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.slot-swap-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    transition: all var(--transition-fast);
+}
+.slot-swap-btn:hover:not(:disabled) {
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+.slot-swap-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.slot-card {
+    aspect-ratio: 2.5 / 3.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface-elevated);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform var(--transition-fast);
+}
+
+.slot-card:hover {
+    transform: scale(1.02);
+}
+
+.slot-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slot-placeholder {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    text-align: center;
+}
+
+.scenario-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+/* Procedure Section */
+.procedure-section {
+    margin-bottom: var(--space-8);
+}
+
+.procedure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    min-height: 180px;
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.procedure-grid:empty::before {
+    content: 'No procedure cards drawn';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / -1;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+}
+
+.procedure-card {
+    aspect-ratio: 2.5 / 3.5;
+    background: var(--color-surface-elevated);
+    border: 2px solid var(--color-procedure);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.procedure-card:hover {
+    transform: scale(1.05);
+}
+
+.procedure-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.procedure-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+/* Inject Section */
+.inject-section {
+    margin-bottom: var(--space-8);
+}
+
+/* Inject actions */
+.inject-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+/* Config grids (round settings, procedure limits) */
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    max-width: 480px;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.config-item label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.config-item .form-input {
+    width: 100%;
+}
+
+/* Card Picker Sidebar */
+.card-picker {
+    background: var(--color-surface);
+    border-left: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform var(--transition-normal);
+}
+
+.card-picker.open {
+    transform: translateX(0);
+}
+
+.picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.picker-title {
+    font-size: var(--text-md);
+    font-weight: 600;
+    margin: 0;
+}
+
+.picker-close {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+}
+
+.picker-close:hover {
+    color: var(--color-text);
+}
+
+.picker-search {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.picker-cards {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-3);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2);
+    align-content: start;
+}
+
+.picker-card {
+    position: relative;
+    aspect-ratio: 2.5 / 3.5;
+    background: var(--color-surface-elevated);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--transition-fast);
+}
+
+.picker-card:hover {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+}
+
+.picker-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.picker-view-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 2;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 6px;
+    background: rgba(8, 10, 14, 0.72);
+    color: #e5e7eb;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--transition-fast), background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+.picker-card:hover .picker-view-btn,
+.picker-view-btn:focus-visible {
+    opacity: 1;
+}
+.picker-view-btn:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-bg);
+}
+@media (hover: none) {
+    .picker-view-btn { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-picker {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 320px;
+        z-index: var(--z-modal);
+    }
+}
+
+@media (max-width: 900px) {
+    .scenario-builder {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-header {
+        flex-direction: column;
+        gap: var(--space-3);
+        padding: var(--space-3);
+    }
+    
+    .header-left,
+    .header-right {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .admin-main {
+        padding: var(--space-4);
+    }
+    
+    .scenario-builder {
+        grid-template-columns: 1fr;
+    }
+    
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Save modal helpers (page-specific; base.css owns the generic modal) ===== */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.tags-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-tertiary);
+}
+
+.tags-input input {
+    flex: 1;
+    min-width: 120px;
+    border: none;
+    background: none;
+    color: var(--color-text);
+    outline: none;
+}
+
+.tags-input .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+}
+
+.tags-input .tag button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* ===== Enhanced procedures (feature) ===== */
+.procedure-card {
+    position: relative;
+}
+
+.procedure-card.enhanced {
+    border-color: #fbbf24;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.45);
+}
+
+.procedure-card .enhanced-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 2;
+    background: rgba(18, 14, 4, 0.88);
+    color: #fcd34d;
+    border: 1px solid rgba(251, 191, 36, 0.85);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 6px;
+    pointer-events: none;
+}
+
+.config-hint {
+    margin-top: 8px;
+    max-width: 660px;
+}
+
+/* ===== 1920x1080 fit (compact) ===== */
+.admin-layout {
+    overflow-x: hidden;
+}
+
+.admin-main {
+    padding: var(--space-3) var(--space-4);
+}
+
+.deck-section,
+.scenario-section,
+.procedure-section,
+.inject-section {
+    margin-bottom: var(--space-3);
+}
+
+.scenario-builder {
+    gap: var(--space-3);
+}
+
+.scenario-slot {
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+}
+
+.slot-header {
+    margin-bottom: var(--space-1);
+}
+
+.slot-label {
+    font-size: 12px;
+}
+
+.slot-card {
+    width: 104px;
+    height: 145px;
+    margin: 0 auto;
+    aspect-ratio: auto;
+    border-radius: var(--radius-sm);
+}
+
+.procedure-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    min-height: 0;
+}
+
+.procedure-card {
+    width: 86px;
+    height: 120px;
+    flex: 0 0 auto;
+}
+
+.procedure-actions,
+.inject-actions,
+.scenario-actions {
+    margin-top: var(--space-1);
+}
+
+.config-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 720px;
+}
+
+.config-item label {
+    font-size: 12px;
+}
+
+.config-item .form-input {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.section-title {
+    margin-bottom: var(--space-2);
+}
+
+/* ===== Injects pool (editor) ===== */
+.inject-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.inject-head .section-title {
+    margin: 0;
+}
+
+.inject-count-ctrl {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.inject-count-input {
+    width: 64px;
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.injects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    min-height: 0;
+    background: var(--color-surface);
+    border: 2px dashed var(--color-inject);
+    border-radius: var(--radius-md);
+}
+
+.inject-card {
+    position: relative;
+    width: 70px;
+    height: 98px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface-elevated);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+.inject-card:hover {
+    border-color: var(--color-inject);
+    transform: translateY(-1px);
+}
+
+.inject-card.is-start {
+    border-color: var(--color-inject);
+    box-shadow: 0 0 8px rgba(107, 114, 128, 0.55);
+}
+
+.inject-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.inject-order {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    background: rgba(10, 12, 16, 0.85);
+    color: #d1d5db;
+    border-radius: 999px;
+    padding: 1px 5px;
+    pointer-events: none;
+}
+
+.inject-card.is-start .inject-order {
+    background: #6b7280;
+    color: #fff;
+}
+
+.inject-hint {
+    margin-top: var(--space-1);
+    max-width: 700px;
+}
+
+.config-grid {
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+    max-width: 840px;
+}
+
+/* ===== Section header bars: title + actions on one row ===== */
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.section-head .section-title {
+    margin: 0;
+}
+
+.section-head .scenario-actions,
+.section-head .procedure-actions,
+.section-head .inject-actions {
+    margin-top: 0;
+}
+
+/* Injects: count control + draw/clear actions share the title row */
+.inject-tools {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+/* Deck row: deck selector + loaded deck info share one line */
+.deck-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.deck-row .deck-selector {
+    flex: 0 1 auto;
+    margin-bottom: 0;
+}
+
+.deck-row .deck-selector .form-select {
+    max-width: 300px;
+}
+
+.deck-row .deck-info {
+    flex: 0 1 auto;
+}
+
+@media (max-width: 700px) {
+    .section-head,
+    .inject-tools {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* ===== Deck row: expansion pack include toggles (Green v2, Expansion 1, ...) ===== */
+.deck-expansion {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.expansion-toggles {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+}
+
+.expansion-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    user-select: none;
+}
+
+.expansion-label:hover {
+    color: var(--color-text);
+}
+
+.expansion-checkbox {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--color-primary, #2563eb);
+    cursor: pointer;
+}
+
+/* ===== Per-procedure randomize (swap) button ===== */
+.proc-random-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: rgba(15, 23, 42, 0.78);
+    color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
+}
+
+.procedure-card:hover .proc-random-btn {
+    opacity: 1;
+}
+
+.proc-random-btn:hover {
+    transform: scale(1.15);
+    background: var(--color-primary, #2563eb);
+}
+
+@media (max-width: 700px) {
+    .proc-random-btn {
+        opacity: 1; /* touch-friendly */
+    }
+}
+
+/* ============================================================
+   Card-table polish (admin) — physical "workbench" feel
+   ============================================================ */
+
+/* Header console bar */
+.admin-header {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 62%),
+        linear-gradient(180deg, var(--color-bg-secondary), var(--color-bg));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.admin-title { text-shadow: 0 2px 12px rgba(99, 102, 241, 0.3); }
+
+/* Loaded-deck chip */
+.deck-info {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Scenario slots become recessed, type-tinted wells */
+.scenario-slot {
+    --glow: var(--color-border);
+    background:
+        radial-gradient(360px 90px at 50% -10%, rgba(255, 255, 255, 0.02), transparent 72%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.06)),
+        var(--color-surface);
+    box-shadow: var(--shadow-tray);
+}
+.scenario-slot[data-type="initial"] { --glow: var(--color-initial); }
+.scenario-slot[data-type="pivot"]   { --glow: var(--color-pivot); }
+.scenario-slot[data-type="c2"]      { --glow: var(--color-c2); }
+.scenario-slot[data-type="persist"] { --glow: var(--color-persist); }
+.scenario-slot:hover {
+    border-color: color-mix(in srgb, var(--glow) 62%, var(--color-border));
+    box-shadow: var(--shadow-tray), 0 0 0 1px color-mix(in srgb, var(--glow) 24%, transparent), 0 0 18px color-mix(in srgb, var(--glow) 20%, transparent);
+}
+
+.slot-card {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45), 0 10px 18px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.slot-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5), 0 18px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Procedure pool: recessed well */
+.procedure-grid {
+    background:
+        radial-gradient(560px 90px at 50% -10%, rgba(255, 255, 255, 0.02), transparent 72%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.06));
+    box-shadow: var(--shadow-tray);
+}
+.procedure-card {
+    border-color: color-mix(in srgb, var(--color-procedure) 55%, transparent);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 8px 18px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.procedure-card:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--color-procedure) 75%, transparent);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5), 0 18px 30px rgba(0, 0, 0, 0.4), 0 0 0 2px color-mix(in srgb, var(--color-procedure) 35%, transparent), 0 0 18px color-mix(in srgb, var(--color-procedure) 25%, transparent);
+}
+
+/* Inject pool + tiles */
+.injects-grid {
+    box-shadow: var(--shadow-tray);
+}
+.inject-card {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.inject-card.is-start {
+    box-shadow: 0 0 8px rgba(107, 114, 128, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Card-picker drawer edge */
+.card-picker {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0)),
+        var(--color-surface);
+    box-shadow: -10px 0 28px rgba(0, 0, 0, 0.3);
+}
+.picker-header {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)), var(--color-bg-secondary);
+}
+.picker-card {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.picker-card:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(59, 130, 246, 0.4);
+    border-color: var(--color-primary);
+}
+
+/* Tactile button press */
+.admin-layout .btn:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* Entrance: workbench sections rise into place on load */
+.admin-main > section {
+    animation: riseIn 0.5s cubic-bezier(0.22, 0.7, 0.22, 1) both;
+}
+.admin-main > section:nth-child(1) { animation-delay: 0.02s; }
+.admin-main > section:nth-child(2) { animation-delay: 0.08s; }
+.admin-main > section:nth-child(3) { animation-delay: 0.14s; }
+.admin-main > section:nth-child(4) { animation-delay: 0.20s; }
+.admin-main > section:nth-child(5) { animation-delay: 0.26s; }
+
+/* ===== Category panels: each section in its own visible border ===== */
+.admin-main > section {
+    background:
+        radial-gradient(560px 90px at 50% -10%, rgba(255, 255, 255, 0.02), transparent 72%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0) 60%),
+        var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 10px 14px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Underlined category heading bar */
+.admin-main > section > .section-title {
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+.admin-main > section .section-head,
+.admin-main > section .inject-head {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+}
+.admin-main > section .section-head .section-title,
+.admin-main > section .inject-head .section-title {
+    margin: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* ===== Relocated game settings (Round Settings in deck + procedure limits) ===== */
+.deck-settings,
+.proc-limits {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--color-border);
+}
+.config-strip-title {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+}
+.admin-main .config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 16px;
+    max-width: 620px;
+}
+.deck-settings .config-hint,
+.proc-limits .config-hint {
+    margin: 8px 0 0;
+    max-width: 620px;
+}
+
+/* ===== Consultants (optional "Call a Consultant" pool) ===== */
+.consultant-section {
+    margin-bottom: var(--space-5);
+}
+
+.consultants-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    min-height: 0;
+    background: var(--color-surface);
+    border: 2px dashed color-mix(in srgb, var(--color-consultant, #ec4899) 45%, transparent);
+    border-radius: var(--radius-md);
+}
+
+.consultant-card {
+    position: relative;
+    width: 70px;
+    height: 98px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+    background: var(--color-surface-elevated);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.consultant-card:hover {
+    border-color: var(--color-consultant, #ec4899);
+    transform: translateY(-1px);
+}
+
+.consultant-card.is-start {
+    border-color: var(--color-consultant, #ec4899);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-consultant, #ec4899) 55%, transparent);
+}
+
+.consultant-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.consultant-card .cons-start-btn,
+.consultant-card .cons-remove-btn {
+    position: absolute;
+    top: 2px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-full);
+    background: rgba(10, 12, 18, 0.82);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.consultant-card .cons-start-btn { left: 2px; }
+.consultant-card .cons-remove-btn { right: 2px; font-size: 14px; }
+
+.consultant-card:hover .cons-start-btn,
+.consultant-card:hover .cons-remove-btn,
+.consultant-card.is-start .cons-start-btn {
+    opacity: 1;
+}
+
+.consultant-card.is-start .cons-start-btn,
+.consultant-card .cons-start-btn:hover {
+    color: #fbbf24;
+}
+
+.consultant-card .cons-remove-btn:hover {
+    color: var(--color-danger);
+}
+
+.consultant-card .cons-start-badge {
+    position: absolute;
+    left: 3px;
+    bottom: 3px;
+    padding: 1px 5px;
+    border-radius: var(--radius-full);
+    background: rgba(18, 14, 4, 0.88);
+    border: 1px solid color-mix(in srgb, var(--color-consultant, #ec4899) 70%, transparent);
+    color: #fbcfe8;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    pointer-events: none;
+}
+
+.consultant-hint {
+    margin-top: var(--space-2);
+}
+
+/* ===== Deck box art on the loaded-deck panel (shared/img/decks/<key>.webp) =====
+   Only decks that have art upstream show it; the <img> ships with the `hidden`
+   class and admin.js flips it (and drops the src) for decks with no cover.
+   Sized off the HEIGHT on purpose: the panel is about which deck is loaded, so
+   the cover is a thumbnail beside the name, not a poster — and the covers are
+   not all the same aspect ratio, so a fixed height keeps the row even. */
+.deck-info .deck-cover {
+    flex: 0 0 auto;
+    height: 54px;
+    width: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+}
+
+.deck-info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+@media (max-width: 700px) {
+    .deck-info .deck-cover { height: 44px; }
+}

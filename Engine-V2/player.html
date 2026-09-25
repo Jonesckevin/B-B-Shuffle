@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>B&amp;B Shuffle - Player</title>
+    <link rel="icon" href="../shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="../shared/img/favicon.png">
+    
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="../shared/css/base.css">
+    
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="css/player.css">
+</head>
+<body class="surface-felt">
+    <div class="player-layout">
+        <!-- Header -->
+        <header class="player-header">
+            <div class="header-left">
+                <img id="custom-logo" class="custom-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Table logo">
+                <h1 class="game-title">B&amp;B Shuffle</h1>
+                <span class="badge badge-primary" id="deck-badge">No Deck</span>
+            </div>
+            <div class="header-center">
+                <div class="game-stats">
+                    <div class="stat-item roll">
+                    <span class="stat-label">Roll</span>
+                        <div class="dice-result hidden" id="dice-result">
+                            <span class="dice-value" id="dice-value">0</span>
+                            <span class="dice-mod hidden" id="dice-mod"></span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Turns</span>
+                        <span class="stat-value" id="turns-remaining">10</span>
+                    </div>
+                    <div class="stat-item strikes">
+                        <span class="stat-label">Strikes</span>
+                        <div class="strike-indicators" id="strike-indicators">
+                            <span class="strike-dot"></span>
+                            <span class="strike-dot"></span>
+                            <span class="strike-dot"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="quick-start-btn" class="btn btn-primary btn-sm header-action" type="button" title="Randomly deal a fresh game from any deck">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 3 21 3 21 8"/>
+                        <line x1="4" y1="20" x2="21" y2="3"/>
+                        <polyline points="21 16 21 21 16 21"/>
+                        <line x1="15" y1="15" x2="21" y2="21"/>
+                        <line x1="4" y1="4" x2="9" y2="9"/>
+                    </svg>
+                    <span>Quick Start</span>
+                </button>
+                <div class="load-wrap" id="load-wrap">
+                    <button id="load-scenario-btn" class="btn btn-secondary btn-sm header-action" type="button" title="Load a saved scenario">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <span>Load</span>
+                    </button>
+                    <div id="load-menu" class="load-menu hidden" role="menu" aria-label="Saved scenarios">
+                        <div class="load-menu-head">Saved scenarios</div>
+                        <div class="load-menu-list" id="load-menu-list"></div>
+                    </div>
+                </div>
+                <button id="gm-mode-btn" class="btn btn-ghost btn-sm header-action" title="Open Scenario Editor">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <span>Scenario Editor</span>
+                </button>
+                <button id="theme-custom-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Table theme — set a background image and a top-left logo (stored only in this browser)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="m21 15-5-5L5 21"/>
+                    </svg>
+                    <span>Theme</span>
+                </button>
+                <div class="fx-toggle-col">
+                    <button id="dice-fx-btn" class="btn btn-ghost btn-sm header-action dice-fx-btn" type="button" title="Dice FX on — rolls toss a big animated d20. Click to turn off." aria-pressed="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="2"/>
+                            <circle cx="8" cy="8" r="1.5"/>
+                            <circle cx="16" cy="8" r="1.5"/>
+                            <circle cx="8" cy="16" r="1.5"/>
+                            <circle cx="16" cy="16" r="1.5"/>
+                            <circle cx="12" cy="12" r="1.5"/>
+                        </svg>
+                        <span>Dice FX</span>
+                        <b class="fx-state" id="dice-fx-btn-state" aria-hidden="true">on</b>
+                    </button>
+                    <button id="card-fx-btn" class="btn btn-ghost btn-sm header-action card-fx-btn" type="button" title="Card FX on — holographic tilt on cards. Click to turn off." aria-pressed="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/>
+                            <path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9z"/>
+                        </svg>
+                        <span>Card FX</span>
+                        <b class="fx-state" id="card-fx-btn-state" aria-hidden="true">on</b>
+                    </button>
+                </div>
+                <button id="print-sheet-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Load a scenario first — the sheet prints the cards in play" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    <span>Print</span>
+                </button>
+                <a id="rules-link" class="rules-btn header-action" href="../docs/rules.pdf" target="_blank" rel="noopener noreferrer" title="Open the B&amp;B Shuffle Rule Book (PDF)" aria-label="Rule Book (PDF)">?</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="player-main">
+            <!-- Game Controls (top action bar) -->
+            <section class="controls-bar">
+                <div class="controls-side">
+                    <p class="hint roll-status hidden" id="roll-status"></p>
+                </div>
+                <div class="controls-actions">
+                    <button id="roll-dice-btn" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="2"/>
+                            <circle cx="8" cy="8" r="1.5"/>
+                            <circle cx="16" cy="8" r="1.5"/>
+                            <circle cx="8" cy="16" r="1.5"/>
+                            <circle cx="16" cy="16" r="1.5"/>
+                            <circle cx="12" cy="12" r="1.5"/>
+                        </svg>
+                        Roll Dice
+                    </button>
+                    <button id="use-turn-btn" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                        </svg>
+                        Use Turn
+                    </button>
+                    <button id="add-strike-btn" class="btn btn-danger">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        Add Strike
+                    </button>
+                </div>
+                <div class="controls-side controls-right">
+                    <button type="button" id="reveal-cards-btn" class="btn btn-ghost btn-sm controls-right-btn" disabled aria-pressed="false" title="Reveal all scenario cards for a quick GM look">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span>Reveal all</span>
+                    </button>
+                    <button type="button" id="reveal-procedures-btn" class="btn btn-ghost btn-sm controls-right-btn" disabled aria-pressed="false" title="Reveal all procedure cards for a quick look at the hand">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>
+                        <span>Reveal procedures</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Scenario Cards Row -->
+            <section class="scenario-row">
+                <div class="card-wrapper" data-type="initial">
+                    <div class="card-label">Initial</div>
+                    <div class="flip-card" id="initial-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="../shared/decks/cardbacks/v2/initial.webp" alt="Initial Card Back">
+                            </div>
+                            <div class="flip-card-back">
+                                <img alt="Initial Card" id="initial-card-img" onerror="Utils.onImgError(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper" data-type="pivot">
+                    <div class="card-label">Pivot</div>
+                    <div class="flip-card" id="pivot-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="../shared/decks/cardbacks/v2/pivot.webp" alt="Pivot Card Back">
+                            </div>
+                            <div class="flip-card-back">
+                                <img alt="Pivot Card" id="pivot-card-img" onerror="Utils.onImgError(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper" data-type="c2">
+                    <div class="card-label">C2</div>
+                    <div class="flip-card" id="c2-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="../shared/decks/cardbacks/v2/c2.webp" alt="C2 Card Back">
+                            </div>
+                            <div class="flip-card-back">
+                                <img alt="C2 Card" id="c2-card-img" onerror="Utils.onImgError(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-wrapper" data-type="persist">
+                    <div class="card-label">Persist</div>
+                    <div class="flip-card" id="persist-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="../shared/decks/cardbacks/v2/persist.webp" alt="Persist Card Back">
+                            </div>
+                            <div class="flip-card-back">
+                                <img alt="Persist Card" id="persist-card-img" onerror="Utils.onImgError(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Consultants + Procedures + Injects (shared row) -->
+            <section class="procedure-row">
+                <div class="procedure-head">
+                    <span class="consultant-label">CONSULTANT</span>
+                    <h2 class="section-title">Procedures</h2>
+                    <span class="inject-label" id="inject-label">INJECT</span>
+                </div>
+                <div class="procedure-body">
+                    <div class="consultant-rail" id="consultant-rail">
+                        <div class="consultant-card-wrapper card-wrapper" data-type="consultant">
+                            <div class="flip-card consultant-flip-card" id="consultant-card">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="../shared/decks/cardbacks/v2/consultant.webp" alt="Consultant Card Back">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <img alt="Consultant" id="consultant-card-img" onerror="Utils.onImgError(event)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="call-consultant-btn" class="btn btn-sm btn-ghost consultant-call-btn" type="button" title="Call a consultant from this deck">Call</button>
+                    </div>
+                    <div class="procedure-cards" id="procedure-cards">
+                        <div class="empty-state">
+                            <p>No procedure cards yet</p>
+                        </div>
+                    </div>
+                    <div class="inject-rail">
+                        <div class="inject-card-wrapper">
+                            <div class="flip-card inject-flip-card" id="inject-card">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="../shared/decks/cardbacks/v2/inject.webp" alt="Inject Card Back">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <img alt="Inject Card" id="inject-card-img" onerror="Utils.onImgError(event)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="draw-inject-btn" class="btn btn-sm btn-ghost inject-draw-btn" type="button" title="Draw the next inject card">Draw next</button>
+                    </div>
+                </div>
+            </section>
+
+
+        </main>
+
+        <!-- Footer: the shared legal footer, plus this page's scenario name.
+             Site navigation moved into the floating action button. -->
+        <footer class="app-legal">
+            <div class="app-legal-scenario">
+                <span class="scenario-name" id="scenario-name">No scenario loaded</span>
+            </div>
+            <div class="app-legal-content">
+                <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
+                    <img class="app-legal-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                    <span>B&amp;B Classic — play on the official site</span>
+                </a>
+                <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+                <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                    <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    <span>Jonesckevin</span>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameover-modal" class="modal-backdrop hidden">
+        <div class="modal gameover-modal">
+            <div class="modal-icon" id="gameover-icon">
+                <!-- Icon will be inserted by JS -->
+            </div>
+            <h2 class="modal-title" id="gameover-title">Game Over</h2>
+            <p class="modal-message" id="gameover-message">The game has ended.</p>
+            <div class="modal-footer">
+                <button id="gameover-restart-btn" class="btn btn-primary">Play Again</button>
+                <a href="scenario-library.html" class="btn btn-ghost">Choose Scenario</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call a Consultant — pick one from the active deck -->
+    <div id="consultant-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Call a Consultant">
+        <div class="modal consultant-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Call a Consultant</h2>
+                <button type="button" id="consultant-close-btn" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint" id="consultant-modal-hint">Pick a consultant from this deck.</p>
+                <div class="consultant-grid" id="consultant-grid"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="consultant-clear-btn" class="btn btn-ghost hidden">Stand down</button>
+                <button type="button" id="consultant-cancel-btn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animated d20 roll (Dice FX — the big die modal; toggle off in the header) -->
+    <div id="dice-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Roll the d20">
+        <div class="modal dice-modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="dice-modal-title">Rolling the d20…</h2>
+                <button type="button" id="dice-modal-close" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body dicefx-body">
+                <div class="dicefx-scene" id="dice-fx-scene">
+                    <div class="dicefx-shadow" id="dice-fx-shadow" aria-hidden="true"></div>
+                    <div class="d20-die" id="dice-fx-die"></div>
+                    <div class="dicefx-flourish" id="dice-fx-flourish" aria-hidden="true"></div>
+                </div>
+                <p class="dicefx-caption" id="dice-fx-caption" role="status" aria-live="polite">Rolling…</p>
+            </div>
+            <div class="modal-footer dicefx-footer">
+                <button type="button" id="dice-fx-off-btn" class="btn btn-ghost btn-sm">Turn off animated dice</button>
+                <span class="dicefx-footer-spacer"></span>
+                <button type="button" id="dice-fx-done-btn" class="btn btn-primary hidden" disabled>Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table theme (browser-only: background image + top-left logo) -->
+    <div id="theme-modal" class="modal-backdrop hidden">
+        <div class="modal theme-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Table Theme</h2>
+                <button id="theme-modal-close" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint theme-note">Set a background image and/or a logo for this table. Both are stored only in this browser (localStorage) and are never uploaded — handy for personal touches or event sessions.</p>
+
+                <div class="theme-group">
+                    <h3 class="theme-group-title">Background image</h3>
+                    <div class="theme-preview" id="theme-bg-preview">
+                        <span class="theme-preview-empty">No background set</span>
+                    </div>
+                    <label class="btn btn-secondary btn-sm">
+                        <input type="file" id="theme-bg-file" accept="image/*" class="file-input-hidden">Choose image…
+                    </label>
+                    <button id="theme-bg-remove" class="btn btn-ghost btn-sm" type="button">Remove background</button>
+                    <small class="form-hint">Auto-shrunk and stored locally.</small>
+                </div>
+
+                <div class="theme-group">
+                    <h3 class="theme-group-title">Top-left logo</h3>
+                    <div class="theme-preview theme-preview-logo" id="theme-logo-preview">
+                        <span class="theme-preview-empty">No logo set</span>
+                    </div>
+                    <label class="btn btn-secondary btn-sm">
+                        <input type="file" id="theme-logo-file" accept="image/*" class="file-input-hidden">Choose image…
+                    </label>
+                    <button id="theme-logo-remove" class="btn btn-ghost btn-sm" type="button">Remove logo</button>
+                    <button id="theme-logo-reset" class="btn btn-ghost btn-sm" type="button" title="Discard your uploaded logo and show the bundled B&amp;B logo again">Reset to default</button>
+                    <label class="form-label theme-toggle">
+                        <input type="checkbox" id="theme-logo-toggle" checked> Show logo in the header
+                    </label>
+                    <small class="form-hint theme-logo-status" id="theme-logo-status">Using the default logo.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="theme-modal-done" class="btn btn-primary">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start modal -->
+    <div id="quickstart-modal" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Quick Start</h2>
+                <button type="button" id="qs-close-btn" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint">Pick a deck and a random base set (Initial / Pivot / C2 / Persist, procedures and injects) will be dealt so you can play immediately.</p>
+                <div class="form-group">
+                    <label class="form-label" for="qs-deck-select">Deck</label>
+                    <select id="qs-deck-select" class="form-select"></select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="qs-cancel-btn" class="btn btn-ghost">Cancel</button>
+                <button type="button" id="qs-start-btn" class="btn btn-primary">Deal &amp; Start</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print-only session sheet (built by js/print-sheet.js; hidden on screen).
+         The FRAME is static on purpose - an <img> created at print time has not
+         decoded yet and paints blank, which is what used to happen to the
+         masthead logo. Only #ps-head-text, #ps-stats and #ps-body are rewritten
+         per print. Any artwork that has to READ on paper is a `-print` variant:
+         the app's own `-w` files are white-on-transparent. -->
+    <section class="print-sheet" id="print-sheet" aria-hidden="true">
+        <div class="ps-frame">
+            <div class="ps-head">
+                <div class="ps-mark">
+                    <!-- The deck's box art leads the masthead; it already carries the
+                         B&B logo, so a deck that has one REPLACES the standalone
+                         lockup. The logo stays as the fallback for decks with no
+                         cover art. Both are static and only one is ever shown. -->
+                    <img id="ps-cover" class="ps-cover hidden" alt="" decoding="sync">
+                    <img id="ps-mark-logo" class="ps-mark-logo" src="../shared/img/bb-logo-print.png" alt="Backdoors &amp; Breaches" decoding="sync">
+                </div>
+                <div class="ps-head-text" id="ps-head-text"></div>
+                <!-- The session's own logo (Theme -> logo), when one has been
+                     uploaded. Static like the rest of the masthead. -->
+                <div class="ps-custom-mark" id="ps-custom-mark">
+                    <img id="ps-custom-logo" alt="" decoding="sync">
+                </div>
+            </div>
+            <div class="ps-stats" id="ps-stats"></div>
+            <div id="ps-body"></div>
+            <!-- Notes flex to fill whatever height is left above the footer, so
+                 the ruled lines follow the paper size instead of a fixed count. -->
+            <div class="ps-notes">
+                <h3 class="ps-h">Notes</h3>
+                <div class="ps-note-lines" id="ps-note-lines"></div>
+            </div>
+            <div class="ps-foot">
+                <img class="ps-bhis" src="../shared/img/blackhills-logo-print.png" alt="Black Hills Information Security" decoding="sync">
+                <div class="ps-foot-text">
+                    <p>B&amp;B Shuffle session sheet · card art © Black Hills Information Security &amp; Antisyphon Training · This is an unofficial project</p>
+                    <p><a href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">B&amp;B Classic — play on the official site</a> · <a href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer">github.com/Jonesckevin</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/game-state.js"></script>
+    <script src="js/session-sync.js"></script>
+    <script src="js/scenario-schema.js"></script>
+    <script src="js/scenario-io.js"></script>
+    <script src="../shared/js/card-viewer.js"></script>
+    <script src="js/card-fx.js"></script>
+    <script src="js/dice-fx.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/custom-theme.js"></script>
+    <script src="js/print-sheet.js"></script>
+
+
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="../shared/js/fab.js"></script>
+</body>
+</html>

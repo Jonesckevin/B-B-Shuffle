@@ -1,0 +1,200 @@
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Ubuntu:wght@300&display=swap"
+    rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <link href="lightbox.css" rel="stylesheet" />
+  <style>
+    .cardgrid {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .cardgrid .proc {
+      height: 150px;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.6);
+      margin: 0px;
+      background-color: #FFF;
+    }
+
+    .cardgrid .procimg {
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      font-family: 'Architects Daughter', cursive;
+      clear: both;
+    }
+  </style>
+
+</head>
+
+
+
+<!-- CARD REFERENCE -->
+<header>
+  <center>
+    <h1 tabindex="0" id="title">CARD REFERENCE</h1>
+</header>
+
+<h2>Procedure Cards</h2>
+<div class="establishedprocs" id="output"></div>
+<div style="clear:both; margin-bottom:10px;"></div>
+
+<h2>Initial Compromise Cards</h2>
+<div class="cardgrid" id="initialcards"></div>
+<div style="clear:both; margin-bottom:10px;"></div>
+
+<h2>Pivot & Escalate Cards</h2>
+<div class="cardgrid" id="pivotcards"></div>
+<div style="clear:both; margin-bottom:10px;"></div>
+
+<h2>Persistence Cards</h2>
+<div class="cardgrid" id="persistcards"></div>
+<div style="clear:both; margin-bottom:10px;"></div>
+
+<h2>C2 & Exfil Cards</h2>
+<div class="cardgrid" id="c2cards"></div>
+<div style="clear:both; margin-bottom:10px;"></div>
+
+<h2>Inject Cards</h2>
+<div class="cardgrid" id="injectcards"></div>
+</center>
+<div style="clear:both; margin-bottom:10px;"></div>
+
+
+
+<!-- CARD SCRIPT-->
+<script>
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  var proc = [
+    "<div class='proc'><a href='../shared/decks/core/procedure-1.webp' data-lightbox='procedure1'><img class='procimg' src='../shared/decks/core/procedure-1.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-2.webp' data-lightbox='procedure2'><img class='procimg' src='../shared/decks/core/procedure-2.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-3.webp' data-lightbox='procedure3'><img class='procimg' src='../shared/decks/core/procedure-3.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-4.webp' data-lightbox='procedure4'><img class='procimg' src='../shared/decks/core/procedure-4.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-5.webp' data-lightbox='procedure5'><img class='procimg' src='../shared/decks/core/procedure-5.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-6.webp' data-lightbox='procedure6'><img class='procimg' src='../shared/decks/core/procedure-6.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-7.webp' data-lightbox='procedure7'><img class='procimg' src='../shared/decks/core/procedure-7.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-8.webp' data-lightbox='procedure8'><img class='procimg' src='../shared/decks/core/procedure-8.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-9.webp' data-lightbox='procedure9'><img class='procimg' src='../shared/decks/core/procedure-9.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-10.webp' data-lightbox='procedure10'><img class='procimg' src='../shared/decks/core/procedure-10.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/procedure-11.webp' data-lightbox='procedure11'><img class='procimg' src='../shared/decks/core/procedure-11.webp'></a></div>"
+  ]
+
+  var init = [
+    "<div class='proc'><a href='../shared/decks/core/initial-1.webp' data-lightbox='initial1'><img class='procimg' src='../shared/decks/core/initial-1.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-2.webp' data-lightbox='initial2'><img class='procimg' src='../shared/decks/core/initial-2.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-3.webp' data-lightbox='initial3'><img class='procimg' src='../shared/decks/core/initial-3.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-4.webp' data-lightbox='initial4'><img class='procimg' src='../shared/decks/core/initial-4.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-5.webp' data-lightbox='initial5'><img class='procimg' src='../shared/decks/core/initial-5.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-6.webp' data-lightbox='initial6'><img class='procimg' src='../shared/decks/core/initial-6.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-7.webp' data-lightbox='initial7'><img class='procimg' src='../shared/decks/core/initial-7.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-8.webp' data-lightbox='initial8'><img class='procimg' src='../shared/decks/core/initial-8.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-9.webp' data-lightbox='initial9'><img class='procimg' src='../shared/decks/core/initial-9.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/initial-10.webp' data-lightbox='initial10'><img class='procimg' src='../shared/decks/core/initial-10.webp'></a></div>"
+  ]
+
+  var pivot = [
+    "<div class='proc'><a href='../shared/decks/core/pivot-1.webp' data-lightbox='pivot1'><img class='procimg' src='../shared/decks/core/pivot-1.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/pivot-2.webp' data-lightbox='pivot2'><img class='procimg' src='../shared/decks/core/pivot-2.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/pivot-3.webp' data-lightbox='pivot3'><img class='procimg' src='../shared/decks/core/pivot-3.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/pivot-4.webp' data-lightbox='pivot4'><img class='procimg' src='../shared/decks/core/pivot-4.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/pivot-5.webp' data-lightbox='pivot5'><img class='procimg' src='../shared/decks/core/pivot-5.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/pivot-6.webp' data-lightbox='pivot6'><img class='procimg' src='../shared/decks/core/pivot-6.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/pivot-7.webp' data-lightbox='pivot7'><img class='procimg' src='../shared/decks/core/pivot-7.webp'></a></div>"
+  ]
+
+  var c2 = [
+    "<div class='proc'><a href='../shared/decks/core/exfil-2.webp' data-lightbox='c21'><img class='procimg' src='../shared/decks/core/exfil-2.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/exfil-3.webp' data-lightbox='c21'><img class='procimg' src='../shared/decks/core/exfil-3.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/exfil-4.webp' data-lightbox='c22'><img class='procimg' src='../shared/decks/core/exfil-4.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/exfil-5.webp' data-lightbox='c23'><img class='procimg' src='../shared/decks/core/exfil-5.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/exfil-6.webp' data-lightbox='c24'><img class='procimg' src='../shared/decks/core/exfil-6.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/exfil-7.webp' data-lightbox='c22'><img class='procimg' src='../shared/decks/core/exfil-7.webp'></a></div>"
+  ]
+
+  var persist = [
+    "<div class='proc'><a href='../shared/decks/core/persist-1.webp' data-lightbox='persist1'><img class='procimg' src='../shared/decks/core/persist-1.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-2.webp' data-lightbox='persist2'><img class='procimg' src='../shared/decks/core/persist-2.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-3.webp' data-lightbox='persist3'><img class='procimg' src='../shared/decks/core/persist-3.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-4.webp' data-lightbox='persist4'><img class='procimg' src='../shared/decks/core/persist-4.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-5.webp' data-lightbox='persist5'><img class='procimg' src='../shared/decks/core/persist-5.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-6.webp' data-lightbox='persist6'><img class='procimg' src='../shared/decks/core/persist-6.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-7.webp' data-lightbox='persist7'><img class='procimg' src='../shared/decks/core/persist-7.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-8.webp' data-lightbox='persist8'><img class='procimg' src='../shared/decks/core/persist-8.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/persist-9.webp' data-lightbox='persist9'><img class='procimg' src='../shared/decks/core/persist-9.webp'></a></div>"
+  ]
+
+  var ins = [
+    "<div class='proc'><a href='../shared/decks/core/inject-1.webp' data-lightbox='inject1'><img class='procimg' src='../shared/decks/core/inject-1.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-2.webp' data-lightbox='inject2'><img class='procimg' src='../shared/decks/core/inject-2.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-3.webp' data-lightbox='inject3'><img class='procimg' src='../shared/decks/core/inject-3.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-4.webp' data-lightbox='inject4'><img class='procimg' src='../shared/decks/core/inject-4.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-5.webp' data-lightbox='inject5'><img class='procimg' src='../shared/decks/core/inject-5.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-6.webp' data-lightbox='inject6'><img class='procimg' src='../shared/decks/core/inject-6.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-7.webp' data-lightbox='inject7'><img class='procimg' src='../shared/decks/core/inject-7.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-8.webp' data-lightbox='inject8'><img class='procimg' src='../shared/decks/core/inject-8.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-9.webp' data-lightbox='inject9'><img class='procimg' src='../shared/decks/core/inject-9.webp'></a></div>",
+    "<div class='proc'><a href='../shared/decks/core/inject-10.webp' data-lightbox='inject10'><img class='procimg' src='../shared/decks/core/inject-10.webp'></a></div>"
+  ]
+
+  shuffle(proc);
+  document.getElementById("output").innerHTML = proc.slice(0, 11).join("");
+
+  // Display all initial compromise cards
+  document.getElementById("initialcards").innerHTML = init.join("");
+
+  // Display all pivot cards
+  document.getElementById("pivotcards").innerHTML = pivot.join("");
+
+  // Display all c2 cards
+  document.getElementById("c2cards").innerHTML = c2.join("");
+
+  // Display all persist cards
+  document.getElementById("persistcards").innerHTML = persist.join("");
+
+  // Display all inject cards
+  document.getElementById("injectcards").innerHTML = ins.join("");
+</script>
+
+
+
+
+<!-- ATTRIBUTION -->
+<div id="copyright">
+  <a href="https://www.blackhillsinfosec.com/projects/backdoorsandbreaches">
+    <div id="bb"></div>
+  </a>
+  <a href="https://www.blackhillsinfosec.com/">
+    <div id="bh"></div>
+  </a>
+</div>
+
+<p class="bb-disclaimer" style="max-width:900px;margin:10px auto 20px;padding:0 12px;font-size:11.5px;line-height:1.4;color:#9aa4b2;text-align:center;">
+  Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training. Card artwork and game content remain the property of their respective owners.
+</p>
+
+
+
+<script src="lightbox.js"></script>

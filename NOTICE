@@ -1,0 +1,43 @@
+B&B Shuffle — Engine-V2
+Copyright (C) 2020-2026 the B&B Shuffle contributors
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 of the License.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program (see the LICENSE file). If not, see
+<https://www.gnu.org/licenses/>.
+
+------------------------------------------------------------------------------
+Provenance / modifications (GPL-3.0 section 5a)
+------------------------------------------------------------------------------
+This repository is a modified version of the following GPL-3.0 projects:
+
+  * p3hndrx/B-B-Shuffle
+      https://github.com/p3hndrx/B-B-Shuffle
+  * blackhillsinfosec/play.backdoorsandbreaches.com
+      https://github.com/blackhillsinfosec/play.backdoorsandbreaches.com
+      (fork of the project above)
+
+Original Engine-V1 code is preserved under Engine-V1/ and retains its original
+license and copyright notices. Engine-V2 is a refactored/rewritten version of
+that codebase, modified by the B&B Shuffle contributors. The entire work is
+distributed under GPL-3.0.
+
+------------------------------------------------------------------------------
+Trademark / content notice
+------------------------------------------------------------------------------
+"Backdoors & Breaches" is a game by Black Hills Information Security &
+Antisyphon Training. This is an unofficial project. It is not
+affiliated with Black Hills Information Security
+or Antisyphon Training.
+
+Card artwork, card text, and game design are the property of Black Hills
+Information Security and their respective sponsors. They are NOT licensed
+under this project's GPL-3.0 license and require a separate content license
+from the rights holders to redistribute. See THIRD-PARTY-NOTICES.md.

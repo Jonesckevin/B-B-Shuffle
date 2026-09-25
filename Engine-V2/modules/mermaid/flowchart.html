@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>B&amp;B Shuffle - Flowchart Editor</title>
+    <link rel="icon" href="../../../shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="../../../shared/img/favicon.png">
+    
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="../../../shared/css/base.css">
+    <link rel="stylesheet" href="../../../shared/css/modules.css">
+    
+    <!-- Mermaid Library -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="module-layout">
+        <!-- Header -->
+        <header class="module-header">
+            <div class="header-left">
+                <a href="../../player.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Game
+                </a>
+                <h1 class="module-title">Flowchart Editor</h1>
+            </div>
+            <div class="header-right">
+                <button id="clear-btn" class="btn btn-ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                    </svg>
+                    Clear
+                </button>
+                <div class="dropdown">
+                    <button id="export-btn" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Export
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item" data-format="svg">Export as SVG</button>
+                        <button class="dropdown-item" data-format="png">Export as PNG</button>
+                        <button class="dropdown-item" data-format="mmd">Export as Mermaid (.mmd)</button>
+                        <button class="dropdown-item" data-format="clipboard">Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="module-main split-layout">
+            <!-- Editor Panel -->
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Mermaid Code</h2>
+                    <div class="panel-actions">
+                        <button id="format-btn" class="btn btn-sm btn-ghost" title="Format code">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="21" y1="10" x2="3" y2="10"/>
+                                <line x1="21" y1="6" x2="3" y2="6"/>
+                                <line x1="21" y1="14" x2="3" y2="14"/>
+                                <line x1="21" y1="18" x2="3" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="editor-wrapper">
+                    <div class="editor-highlight">
+                        <pre class="editor-highlight-layer" aria-hidden="true"><code></code></pre>
+                        <textarea id="mermaid-input" class="mermaid-editor" spellcheck="false" placeholder="Enter your Mermaid diagram code here...">flowchart TD
+    IC["Initial: Compromised Trusted Relationship"]
+    PV["Pivot: Weaponizing Active Directory"]
+    C2["C2: Domain Name System (DNS) as C2"]
+    PS["Persist: Malicious Driver"]
+    WIN(["Incident contained"])
+
+    IC -->|"third-party SLA account"| PV
+    PV -->|"delegation abuse, Kerberos tickets"| C2
+    C2 -->|"tunnelled commands on port 53"| PS
+    PS -->|"kernel-mode driver survives reboot"| WIN
+    
+    style IC fill:#ef4444,color:#fff
+    style PV fill:#f59e0b,color:#1a1a1a
+    style C2 fill:#b45309,color:#fff
+    style PS fill:#8b5cf6,color:#fff
+    style WIN fill:#10b981,color:#fff</textarea>
+                    </div>
+                </div>
+                
+                <!-- Templates -->
+                <div class="templates-section">
+                    <h3 class="templates-title">Templates</h3>
+                    <div class="templates-grid">
+                        <button class="template-btn" data-template="attack-chain">
+                            <span class="template-icon">⚔️</span>
+                            <span class="template-name">Attack Chain</span>
+                        </button>
+                        <button class="template-btn" data-template="decision-tree">
+                            <span class="template-icon">🌳</span>
+                            <span class="template-name">Decision Tree</span>
+                        </button>
+                        <button class="template-btn" data-template="network">
+                            <span class="template-icon">🌐</span>
+                            <span class="template-name">Network Map</span>
+                        </button>
+                        <button class="template-btn" data-template="timeline">
+                            <span class="template-icon">📅</span>
+                            <span class="template-name">Timeline</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Preview</h2>
+                    <div class="panel-actions">
+                        <button id="zoom-out-btn" class="btn btn-sm btn-ghost" title="Zoom out">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                <line x1="8" y1="11" x2="14" y2="11"/>
+                            </svg>
+                        </button>
+                        <button id="zoom-in-btn" class="btn btn-sm btn-ghost" title="Zoom in">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                <line x1="11" y1="8" x2="11" y2="14"/>
+                                <line x1="8" y1="11" x2="14" y2="11"/>
+                            </svg>
+                        </button>
+                        <button id="reset-zoom-btn" class="btn btn-sm btn-ghost" title="Reset zoom">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/>
+                                <path d="M3 3v5h5"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="preview-wrapper">
+                    <div class="mermaid-preview" id="mermaid-preview">
+                        <!-- Rendered diagram will appear here -->
+                    </div>
+                </div>
+                <div class="preview-status" id="preview-status">
+                    <span class="status-text">Ready</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../js/utils.js"></script>
+    <script src="mermaid-highlight.js"></script>
+    <script src="flowchart.js"></script>
+
+    <style>
+        /* Additional module-specific styles */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: var(--space-1);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all var(--transition-fast);
+            z-index: var(--z-dropdown);
+        }
+        .dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: var(--space-2) var(--space-3);
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+        .dropdown-item:hover {
+            background: var(--color-surface-elevated);
+        }
+
+        .templates-section {
+            padding: var(--space-3);
+            border-top: 1px solid var(--color-border);
+        }
+        .templates-title {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-2);
+        }
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-2);
+        }
+        .template-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2);
+            background: var(--color-surface-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .template-btn:hover {
+            border-color: var(--color-primary);
+            background: var(--color-surface);
+        }
+        .template-icon {
+            font-size: var(--text-lg);
+        }
+        .template-name {
+            font-size: var(--text-sm);
+            color: var(--color-text);
+        }
+
+        .preview-status {
+            padding: var(--space-2) var(--space-3);
+            background: var(--color-surface-elevated);
+            border-top: 1px solid var(--color-border);
+            font-size: var(--text-sm);
+        }
+        .preview-status.error {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--color-error);
+        }
+        .preview-status.success {
+            color: var(--color-success);
+        }
+    </style>
+
+    <!-- Legal footer: official B&B Classic link + unofficial disclaimer -->
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
+                <img class="app-legal-logo" src="../../../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <span>B&amp;B Classic — play on the official site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="../../../shared/js/fab.js"></script>
+</body>
+</html>

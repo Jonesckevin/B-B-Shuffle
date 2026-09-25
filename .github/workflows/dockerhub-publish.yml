@@ -1,0 +1,280 @@
+name: Publish to Docker Hub
+
+on:
+  push:
+    branches:
+      - Engine-V2
+      - main
+      - master
+    tags:
+      - 'v*'
+    paths-ignore:
+      # Only prose is skipped. docs/ must NOT be listed here: docs/rules.pdf and
+      # docs/card-details.json are baked into the image and fetched at runtime.
+      - '**.md'
+      - 'AGENTS.md'
+      - '.trivy/**'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Extra tag on top of the standard set (e.g. v2.1.0-rc1). Leave blank for branch + sha tags only.'
+        required: false
+        default: ''
+      platforms:
+        description: 'Target platforms for the push.'
+        required: false
+        default: 'linux/amd64,linux/arm64'
+
+permissions:
+  contents: read
+
+# Never cancel a push that has already started: two half-uploaded manifests
+# would leave a tag pointing at the wrong digest.
+concurrency:
+  group: dockerhub-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # Docker Hub repository. Must be lowercase (<namespace>/<repository>); keep
+  # the namespace in step with the DOCKERHUB_USERNAME secret.
+  IMAGE_NAME: jonesckevin/b-b-shuffle
+
+jobs:
+  verify:
+    name: Smoke-test the image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      # A GitHub checkout contains *tracked* files only, and this repo's
+      # .gitignore is broad (`docs/*` is ignored apart from the !docs/*.json
+      # and !docs/*.pdf exceptions). The published image is expected to ship
+      # the rule book and the card catalog, so fail here with the fix rather
+      # than ship an image whose /docs/ links 404. `git ls-files docs/` lists
+      # what actually travels.
+      - name: Check the runtime files the image must ship
+        run: |
+          set -euo pipefail
+
+          required=(
+            index.html
+            api_server.py
+            nginx.conf
+            LICENSE
+            NOTICE
+            Engine-V1/index.html
+            Engine-V2/player.html
+            Engine-V2/admin.html
+            Engine-V2/scenario-library.html
+            shared/catalogue.html
+            shared/css/base.css
+            shared/js/card-viewer.js
+            shared/js/fab.js
+            shared/decks/core/carddb.json
+            shared/decks/cardbacks/v2/initial.webp
+            docs/rules.pdf
+            docs/card-details.json
+          )
+
+          missing=0
+          for f in "${required[@]}"; do
+            if [ ! -s "$f" ]; then
+              echo "::error file=$f::$f is missing or empty in the checkout. Gitignored files never reach CI - force-add it with: git add -f $f"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ] || exit 1
+
+          # Catches a half-populated deck tree, which no single path check would.
+          decks=$(find shared/decks -name carddb.json | wc -l)
+          if [ "$decks" -lt 12 ]; then
+            echo "::error::Only $decks deck carddb.json files found - shared/decks looks truncated."
+            exit 1
+          fi
+          echo "Runtime files present: ${#required[@]} checked, $decks deck databases."
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # amd64 only and loaded into the local daemon so it can actually be run.
+      # The same gha cache scope is reused by the publish job below.
+      - name: Build linux/amd64 image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          load: true
+          tags: bb-shuffle:ci
+          # Attestation manifests cannot be exported with `load: true`.
+          provenance: false
+          sbom: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Runs the exact two-process entrypoint the Dockerfile defines: if the API
+      # server, nginx or the /api/ proxy are broken, this job fails before
+      # anything reaches Docker Hub.
+      - name: Run container and probe it
+        run: |
+          set -euo pipefail
+
+          image="bb-shuffle:ci"
+          container="bb-shuffle-smoke"
+          base="http://127.0.0.1:8080"
+
+          cleanup() {
+            status=$?
+            if [ "$status" -ne 0 ]; then
+              echo "::group::Container logs (last 60 lines)"
+              docker logs "$container" 2>&1 | tail -n 60 || true
+              echo "::endgroup::"
+            fi
+            docker rm -f "$container" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          docker run -d --name "$container" -p 8080:80 "$image"
+
+          echo "::group::Waiting for /api/health"
+          ready=0
+          for i in $(seq 1 30); do
+            if curl -fsS "$base/api/health" -o /tmp/health.json; then
+              ready=1
+              break
+            fi
+            echo "waiting for the API server... ($i/30)"
+            sleep 2
+          done
+          echo "::endgroup::"
+
+          if [ "$ready" -ne 1 ]; then
+            echo "::error::The API server never answered /api/health."
+            exit 1
+          fi
+
+          jq -e '.status == "healthy"' /tmp/health.json > /dev/null \
+            || { echo "::error::/api/health did not report status=healthy."; exit 1; }
+          echo "ok  /api/health -> version $(jq -r '.version' /tmp/health.json)"
+
+          # Static assets worth 200ing: the portal, the Player (the biggest page
+          # and the one that pulls every deck file), a deck carddb, the two
+          # docs/ payloads (rule book behind the header "?" button, card catalog
+          # behind the Catalogue/Card Creator/print sheet), and an API route
+          # behind the nginx proxy.
+          for path in \
+            "/" \
+            "/index.html" \
+            "/Engine-V2/player.html" \
+            "/shared/decks/core/carddb.json" \
+            "/docs/rules.pdf" \
+            "/docs/card-details.json" \
+            "/api/scenarios"
+          do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$base$path")
+            if [ "$code" != "200" ]; then
+              echo "::error::GET $path returned $code (expected 200)."
+              exit 1
+            fi
+            echo "ok  $path -> $code"
+          done
+
+          # Guard against a hollow image that serves a placeholder page.
+          curl -fsS "$base/" | grep -qi 'Engine-V2' \
+            || { echo "::error::The served index.html does not look like the B&B portal."; exit 1; }
+
+  publish:
+    name: Build and push to Docker Hub
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Fail early when the Docker Hub secrets are missing
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "::error::Set the DOCKERHUB_USERNAME and DOCKERHUB_TOKEN repository secrets (Settings -> Secrets and variables -> Actions). DOCKERHUB_TOKEN must be an access token, not the account password."
+            exit 1
+          fi
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Derive image tags and labels
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            # Rolling names for the current Engine-V2 line: the three the
+            # deployment docs and UnRaid-style templates reach for.
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=main,enable={{is_default_branch}}
+            type=raw,value=v2,enable={{is_default_branch}}
+            type=raw,value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
+            type=ref,event=branch
+            type=ref,event=tag
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha,prefix=sha-,format=short
+          labels: |
+            org.opencontainers.image.title=B&B Shuffle
+            org.opencontainers.image.description=Self-hosted Backdoors & Breaches tabletop simulator (Player, Admin, scenario library and stdlib-only Python API).
+            org.opencontainers.image.licenses=GPL-3.0-only
+
+      - name: Build and push
+        id: push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Attestations are off on purpose: the extra "unknown/unknown"
+          # manifest entries confuse NAS/UnRaid-style UIs that self-hosters use.
+          provenance: false
+          sbom: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Publish the run summary
+        run: |
+          {
+            echo "### Docker Hub publish"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Image | \`${{ env.IMAGE_NAME }}\` |"
+            echo "| Digest | \`${{ steps.push.outputs.digest }}\` |"
+            echo "| Platforms | \`${{ inputs.platforms || 'linux/amd64,linux/arm64' }}\` |"
+            echo "| Commit | \`${{ github.sha }}\` |"
+            echo ""
+            echo "Tags pushed:"
+            echo ""
+            echo '```'
+            echo "${{ steps.meta.outputs.tags }}"
+            echo '```'
+            echo ""
+            echo "Pull it with:"
+            echo ""
+            echo '```sh'
+            echo "docker pull ${{ env.IMAGE_NAME }}:latest"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

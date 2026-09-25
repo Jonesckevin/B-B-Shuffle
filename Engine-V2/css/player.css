@@ -1,0 +1,2060 @@
+/**
+ * B&B Shuffle - Player Page Styles
+ * Page-specific styles for the Player interface
+ */
+
+/* Layout */
+.player-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+.player-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(180deg, var(--color-bg-secondary), var(--color-bg));
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.game-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Game Stats */
+.game-stats {
+    display: flex;
+    gap: var(--space-6);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.stat-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.strike-indicators {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.strike-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--color-surface-elevated);
+    border: 2px solid var(--color-border);
+    transition: all var(--transition-fast);
+}
+
+.strike-dot.active {
+    background: var(--color-error);
+    border-color: var(--color-error);
+}
+
+/* Main Content */
+.player-main {
+    flex: 1;
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Section Title (CCAS micro-label) */
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Scenario Row */
+.scenario-row {
+    display: grid;
+    /* minmax(0, 1fr) not 1fr: a revealed card is wider than its column and the
+       default `auto` minimum would let it push the whole row into overflow. */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+    justify-items: center;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    max-width: 200px;
+}
+
+.card-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.card-wrapper[data-type="initial"] .card-label { color: var(--color-initial); }
+.card-wrapper[data-type="pivot"] .card-label { color: var(--color-pivot); }
+.card-wrapper[data-type="c2"] .card-label { color: var(--color-c2); }
+.card-wrapper[data-type="persist"] .card-label { color: var(--color-persist); }
+
+/* Flip Cards */
+.flip-card {
+    aspect-ratio: 2.5 / 3.5;
+    width: 100%;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front img,
+.flip-card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Card type borders */
+.card-wrapper[data-type="initial"] .flip-card-front,
+.card-wrapper[data-type="initial"] .flip-card-back {
+    border: 3px solid var(--color-initial);
+}
+
+.card-wrapper[data-type="pivot"] .flip-card-front,
+.card-wrapper[data-type="pivot"] .flip-card-back {
+    border: 3px solid var(--color-pivot);
+}
+
+.card-wrapper[data-type="c2"] .flip-card-front,
+.card-wrapper[data-type="c2"] .flip-card-back {
+    border: 3px solid var(--color-c2);
+}
+
+.card-wrapper[data-type="persist"] .flip-card-front,
+.card-wrapper[data-type="persist"] .flip-card-back {
+    border: 3px solid var(--color-persist);
+}
+
+/* Procedure Row */
+.procedure-row {
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.procedure-cards {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding: var(--space-2);
+}
+
+.procedure-cards .flip-card {
+    flex-shrink: 0;
+    width: 140px;
+}
+
+.procedure-cards .flip-card-front,
+.procedure-cards .flip-card-back {
+    border: 3px solid var(--color-procedure);
+}
+
+.procedure-cards .empty-state {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: var(--color-text-muted);
+}
+
+/* Inject Card */
+.inject-card-wrapper {
+    max-width: 200px;
+    width: 100%;
+}
+
+.inject-flip-card .flip-card-front,
+.inject-flip-card .flip-card-back {
+    border: 3px solid var(--color-inject);
+}
+
+/* Controls Bar (top action bar - single row to minimize height) */
+.controls-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.controls-side {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.controls-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+/* Dice readout lives in the header as the "Roll" stat */
+.stat-item.roll {
+    min-width: 46px;
+}
+
+.header-center .dice-result {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-center .dice-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+}
+
+.header-center .dice-mod {
+    font-size: 10px;
+    color: #fcd34d;
+    font-weight: 600;
+    line-height: 1;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+.header-center .dice-result.rolling .dice-value {
+    animation: dice-roll 0.62s cubic-bezier(0.3, 0.7, 0.3, 1) both;
+}
+
+@keyframes dice-roll {
+    0%   { transform: translateY(-12px) scale(0.6) rotate(0deg); filter: blur(3px); opacity: 0; }
+    18%  { transform: translateY(3px) scale(1.3) rotate(-9deg); filter: blur(1px); opacity: 1; }
+    36%  { transform: translateY(-4px) scale(0.85) rotate(8deg); filter: blur(1px); }
+    54%  { transform: translateY(2px) scale(1.18) rotate(-4deg); filter: blur(0); }
+    72%  { transform: translateY(-1px) scale(0.95) rotate(2deg); }
+    100% { transform: translateY(0) scale(1) rotate(0deg); }
+}
+
+/* Footer moved to the shared .app-legal footer in base.css; site navigation is
+   now the floating action button (shared/js/fab.js). */
+
+/* Responsive */
+@media (max-width: 900px) {
+    .scenario-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    .player-header {
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+    
+    .header-center {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .player-header {
+        padding: var(--space-3);
+    }
+    
+    .player-main {
+        padding: var(--space-4);
+    }
+    
+    .scenario-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+    }
+    
+    .card-wrapper {
+        max-width: 150px;
+    }
+    
+    .game-stats {
+        gap: var(--space-4);
+    }
+    
+    .stat-value {
+        font-size: var(--text-xl);
+    }
+}
+
+/* ===== Game-over modal (page-specific; base.css owns the generic modal) ===== */
+.gameover-modal {
+    text-align: center;
+    padding: var(--space-8);
+}
+
+.modal-icon {
+    font-size: 64px;
+    margin-bottom: var(--space-4);
+}
+
+.gameover-modal .modal-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-2);
+}
+
+.gameover-modal .modal-message {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+}
+
+.gameover-modal .modal-footer {
+    justify-content: center;
+    border: none;
+    padding: 0;
+}
+
+/* ===== Enhanced procedures + dice mod (feature) ===== */
+.procedure-cards .flip-card {
+    position: relative;
+}
+
+.procedure-cards .flip-card.enhanced {
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.55), 0 0 16px rgba(251, 191, 36, 0.35);
+}
+
+.procedure-cards .flip-card.enhanced .flip-card-front,
+.procedure-cards .flip-card.enhanced .flip-card-back {
+    border-color: #fbbf24;
+}
+
+.procedure-cards .flip-card.active {
+    box-shadow: 0 0 0 2px #fbbf24, 0 0 22px rgba(251, 191, 36, 0.6);
+}
+
+.proc-arm {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 6;
+    border: 1px solid rgba(251, 191, 36, 0.9);
+    background: rgba(18, 14, 4, 0.88);
+    color: #fcd34d;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    line-height: 1;
+    padding: 3px 7px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.proc-arm:hover {
+    background: #fbbf24;
+    color: #16130a;
+}
+
+.procedure-cards .flip-card.active .proc-arm {
+    background: #fbbf24;
+    color: #16130a;
+}
+
+/* ===== 1920x1080 fit (compact) ===== */
+.player-main {
+    padding: var(--space-4);
+    gap: var(--space-4);
+    max-width: 1560px;
+}
+
+.card-wrapper {
+    max-width: 150px;
+    gap: var(--space-1);
+}
+
+.scenario-row {
+    gap: var(--space-3);
+}
+
+.procedure-row {
+    padding: var(--space-3);
+}
+
+.procedure-cards .flip-card {
+    width: 112px;
+}
+
+.procedure-row .section-title,
+.inject-section .section-title {
+    margin-bottom: var(--space-2);
+}
+
+.inject-card-wrapper {
+    max-width: 122px;
+}
+
+.controls-bar {
+    gap: var(--space-2);
+}
+
+/* ===== Procedures + Injects shared row ===== */
+.procedure-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.procedure-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.procedure-head .section-title {
+    margin: 0;
+}
+
+.inject-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--color-inject);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.procedure-body {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-3);
+}
+
+.procedure-body .procedure-cards {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.inject-rail {
+    flex: 0 0 auto;
+    width: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--color-border);
+}
+
+.inject-rail .inject-card-wrapper {
+    width: 100%;
+    max-width: none;
+}
+
+.inject-rail .inject-flip-card {
+    width: 100%;
+}
+
+.inject-draw-btn {
+    width: 100%;
+}
+
+.roll-status {
+    margin-top: 2px;
+    text-align: center;
+    font-weight: 600;
+}
+.roll-status-ok { color: var(--color-success); }
+.roll-status-fail { color: var(--color-danger); }
+.roll-status-warn { color: var(--color-warning); }
+.roll-status-info { color: var(--color-text-secondary); }
+
+/* Status text on the left of the Roll Dice button */
+.controls-side .roll-status {
+    margin: 0;
+    text-align: right;
+    max-width: 720px;
+}
+
+@media (max-width: 900px) {
+    .controls-bar {
+        grid-template-columns: 1fr;
+    }
+    .controls-side {
+        justify-content: center;
+    }
+    .controls-actions {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 700px) {
+    .procedure-body {
+        flex-direction: column;
+    }
+    .inject-rail {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        padding-left: 0;
+        border-left: 0;
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--color-border);
+    }
+    .inject-rail .inject-card-wrapper {
+        width: 86px;
+    }
+    .inject-draw-btn {
+        width: auto;
+    }
+}
+
+/* ============================================================
+   Card-table polish (player)
+   Physical felt table + tactile cards + entrance motion.
+   ============================================================ */
+
+/* Sticky header reads as a lit console bar */
+.player-header {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 62%),
+        linear-gradient(180deg, var(--color-bg-secondary), var(--color-bg));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.game-title { text-shadow: 0 2px 12px rgba(59, 130, 246, 0.28); }
+
+/* Stat chips sit on the bar */
+.game-stats .stat-item {
+    background: rgba(255, 255, 255, 0.028);
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    border-radius: var(--radius-md);
+    padding: 5px 14px 7px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.stat-item .stat-value { text-shadow: 0 0 18px rgba(59, 130, 246, 0.35); }
+.strike-dot {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.strike-dot.active {
+    animation: popIn 0.3s ease-out;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 10px rgba(239, 68, 68, 0.6);
+}
+
+/* Recessed trays hold the rows of cards */
+.scenario-row {
+    padding: 20px 16px 18px;
+    background:
+        radial-gradient(720px 130px at 50% -10%, rgba(255, 255, 255, 0.025), transparent 72%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.12));
+    border: 1px solid rgba(255, 255, 255, 0.045);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-tray), 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+.procedure-row {
+    background:
+        radial-gradient(760px 110px at 50% -10%, rgba(255, 255, 255, 0.02), transparent 72%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.08)),
+        var(--color-surface);
+    box-shadow: var(--shadow-tray), 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+.controls-bar {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* A custom table background (Theme → background image) should show through the
+   card trays, so drop their fills and inset shadows, keeping just a hairline
+   edge so the rows still read as lanes. */
+body.has-custom-bg .scenario-row,
+body.has-custom-bg .procedure-row {
+    background: transparent;
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Scenario cards: real object depth + type glow on hover */
+.card-wrapper { --glow: var(--color-primary); }
+.card-wrapper[data-type="initial"] { --glow: var(--color-initial); }
+.card-wrapper[data-type="pivot"]   { --glow: var(--color-pivot); }
+.card-wrapper[data-type="c2"]      { --glow: var(--color-c2); }
+.card-wrapper[data-type="persist"] { --glow: var(--color-persist); }
+
+.card-wrapper .flip-card { transition: transform 0.18s ease; }
+.card-wrapper:hover .flip-card { transform: translateY(-6px); }
+
+.flip-card-front,
+.flip-card-back {
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.5),
+        0 12px 26px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.card-wrapper:hover .flip-card-front,
+.card-wrapper:hover .flip-card-back {
+    box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.55),
+        0 24px 48px rgba(0, 0, 0, 0.45),
+        0 0 0 3px color-mix(in srgb, var(--glow) 40%, transparent),
+        0 0 28px color-mix(in srgb, var(--glow) 38%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Procedure + inject mini cards lift gently too */
+.procedure-cards .flip-card,
+.inject-flip-card {
+    transition: transform 0.18s ease;
+}
+.procedure-cards .flip-card:hover,
+.inject-flip-card:hover {
+    transform: translateY(-4px);
+}
+.procedure-cards .flip-card:hover .flip-card-front,
+.procedure-cards .flip-card:hover .flip-card-back,
+.inject-flip-card:hover .flip-card-front,
+.inject-flip-card:hover .flip-card-back {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5), 0 18px 34px rgba(0, 0, 0, 0.4);
+}
+
+/* Tactile button press */
+.player-layout .btn:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* Entrance: static rows rise into place on load */
+.player-main > .controls-bar {
+    animation: riseIn 0.45s cubic-bezier(0.22, 0.7, 0.22, 1) both;
+}
+.player-main > .scenario-row {
+    animation: riseIn 0.55s cubic-bezier(0.22, 0.7, 0.22, 1) 0.08s both;
+}
+.player-main > .procedure-row {
+    animation: riseIn 0.55s cubic-bezier(0.22, 0.7, 0.22, 1) 0.16s both;
+}
+
+/* ============================================================
+   Quick Start + Load (player header controls)
+   ============================================================ */
+.header-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+.header-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.header-action svg { flex: 0 0 auto; }
+
+.load-wrap { position: relative; }
+
+.load-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: var(--z-tooltip);
+    width: min(340px, 88vw);
+    max-height: min(58vh, 420px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-hover);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 24px 60px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.18s ease-out;
+}
+.load-menu-head {
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)), var(--color-bg-secondary);
+}
+.load-menu-list {
+    overflow-y: auto;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.load-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+    padding: 8px 10px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+.load-item:hover { background: var(--color-bg-tertiary); }
+.load-item-title { font-size: 13px; font-weight: 600; }
+.load-item-meta { font-size: 11px; color: var(--color-text-muted); }
+.load-menu-empty {
+    padding: 16px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Quick Start modal tweaks */
+#quickstart-modal .modal { max-width: 440px; }
+#quickstart-modal .modal-body p.hint { line-height: 1.55; margin: 0 0 14px; }
+#quickstart-modal .form-group { margin-bottom: 0; }
+#quickstart-modal .form-label { margin-bottom: 6px; }
+
+/* Compact player header actions on narrower windows */
+@media (max-width: 1200px) {
+    .header-action span { display: none; }
+    .header-action { gap: 0; }
+}
+@media (max-width: 900px) {
+    .header-right { flex-wrap: wrap; justify-content: center; }
+}
+
+/* GM reveal-all controls: scenario cards + procedure cards */
+.controls-side.controls-right { min-width: 0; gap: var(--space-2); }
+.controls-right-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.controls-right-btn svg { flex: 0 0 auto; }
+.controls-right-btn:disabled { opacity: 0.55; cursor: default; }
+@media (max-width: 1080px) {
+    .controls-right-btn span { display: none; }   /* icon-only: eye = scenarios, bands = procedures */
+}
+
+/* ============================================================
+   Player page graphical boosts (2026-09-06)
+   Felt vignette, lane label chips, card sheen, reveal ring,
+   dice crit/fail drama, and the Rules (PDF) question button.
+   ============================================================ */
+
+/* Edge vignette sits above the felt but below modals/toasts */
+body.surface-felt::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background:
+        radial-gradient(120% 110% at 50% -12%, transparent 58%, rgba(0, 0, 0, 0.26) 100%),
+        radial-gradient(140% 110% at 50% 115%, transparent 60%, rgba(0, 0, 0, 0.34) 100%);
+    box-shadow: inset 0 0 150px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Lane labels become small type-colored pill chips */
+.card-wrapper .card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 11px;
+    border-radius: 999px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    line-height: 1.7;
+    background: color-mix(in srgb, currentColor 13%, transparent);
+    border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Sheen sweep over the big scenario cards on hover */
+.card-wrapper .flip-card {
+    position: relative;
+}
+.card-wrapper .flip-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.09) 44%, rgba(255, 255, 255, 0.03) 54%, transparent 68%);
+    background-size: 260% 260%;
+    background-position: 130% 0;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+.card-wrapper:hover .flip-card::after {
+    opacity: 1;
+    animation: cardSheen 0.9s ease forwards;
+}
+@keyframes cardSheen {
+    to { background-position: -170% 0; }
+}
+
+/* Reveal ring: one-shot type-colored pulse when a card flips open */
+.card-wrapper .flip-card::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    z-index: 5;
+    border-radius: calc(var(--radius-lg) + 6px);
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: 0 0 0 0 transparent;
+}
+.card-wrapper .flip-card.flipped::before {
+    animation: revealRing 0.9s ease-out 0.05s both;
+}
+.inject-flip-card.flipped::before {
+    animation: revealRing 0.7s ease-out 0.05s both;
+}
+@keyframes revealRing {
+    0%   { opacity: 0; box-shadow: 0 0 0 0 transparent; }
+    18%  { opacity: 0.95; }
+    100% { opacity: 0; box-shadow: 0 0 36px 12px color-mix(in srgb, var(--glow, var(--color-primary)) 50%, transparent); }
+}
+
+/* Dice drama: natural 20 glows success, natural 1 turns danger + shakes */
+.header-center .dice-result.crit .dice-value {
+    color: var(--color-success);
+    text-shadow: 0 0 16px color-mix(in srgb, var(--color-success) 70%, transparent);
+    animation: diceCritPop 0.5s ease-out;
+}
+.header-center .dice-result.fail .dice-value {
+    color: var(--color-danger);
+    text-shadow: 0 0 16px color-mix(in srgb, var(--color-danger) 75%, transparent);
+    animation: diceFailShake 0.5s ease-out;
+}
+@keyframes diceCritPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+@keyframes diceFailShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px) rotate(-2deg); }
+    40% { transform: translateX(4px) rotate(2deg); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(2px); }
+}
+
+/* Rules (PDF) question button in the player header */
+.rules-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+.rules-btn:hover {
+    color: var(--color-primary);
+    border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border));
+    background: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+    text-decoration: none;
+}
+
+/* ============================================================
+   Browser-only table theme (background image + top-left logo)
+   Stored in localStorage; never uploaded. Player page only.
+   ============================================================ */
+/* The logo is sized as a fixed fraction of the header bar. The bar
+   height is set via --header-bar and pinned to exactly that height
+   whenever a logo is shown (wide screens), so the logo fills ~90%. */
+.player-header { --header-bar: 100px; }
+
+.custom-logo {
+    height: calc(var(--header-bar) * 0.9);
+    width: auto;
+    max-width: 260px;
+    object-fit: contain;
+    border-radius: 8px;
+    padding: 3px;
+    background: rgba(15, 17, 23, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+@media (min-width: 901px) {
+    /* Bar is exactly --header-bar tall only while a logo is displayed,
+       so the rest of the page layout is unaffected otherwise. */
+    .player-header:has(.custom-logo:not([hidden])) { height: var(--header-bar); }
+}
+
+@media (max-width: 900px) {
+    /* Below 900px the header can wrap to multiple rows, so let it grow. */
+    .player-header:has(.custom-logo:not([hidden])) { height: auto; }
+}
+
+@media (max-width: 600px) {
+    .player-header { --header-bar: 72px; }
+}
+
+.file-input-hidden { display: none; }
+
+.theme-modal .modal { max-width: 480px; }
+.theme-note { color: var(--color-text-secondary); line-height: 1.55; }
+.theme-group { padding: 16px 0; border-bottom: 1px solid var(--color-border); }
+.theme-group:last-of-type { border-bottom: 0; }
+.theme-group-title {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-secondary);
+}
+.theme-preview {
+    width: 100%;
+    height: 120px;
+    border: 1px dashed var(--color-border-hover);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+.theme-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.theme-preview-logo { height: 90px; }
+.theme-preview-logo img { object-fit: contain; }
+.theme-preview-empty { color: var(--color-text-muted); font-size: 12px; }
+/* The status line gets its own row - inline after the toggle it reads as part
+   of the checkbox label. */
+.theme-logo-status { display: block; margin-top: 8px; }
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 12px;
+    font-size: 13px;
+}
+.theme-modal .modal-footer { justify-content: space-between; }
+
+/* ============================================================
+   Dice FX — big animated d20 modal (optional roll theatrics)
+   On/off via the "Dice FX" header control or the "Turn off
+   animated dice" link inside the modal. The die itself is built
+   by js/dice-fx.js (pure CSS 3D icosahedron).
+   ============================================================ */
+
+/* Header toggles: lit (primary) when on, quiet ghost when off */
+.dice-fx-btn,
+.card-fx-btn { color: var(--color-text-secondary); }
+.dice-fx-btn.on,
+.card-fx-btn.on {
+    color: var(--color-primary-light);
+    border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border));
+    background: var(--color-primary-soft);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.22);
+}
+.dice-fx-btn .fx-state,
+.card-fx-btn .fx-state {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    padding: 2px 5px;
+    border-radius: 999px;
+    color: var(--color-bg);
+}
+.dice-fx-btn.on .fx-state,
+.card-fx-btn.on .fx-state { background: var(--color-success); }
+.dice-fx-btn:not(.on) .fx-state,
+.card-fx-btn:not(.on) .fx-state { background: var(--color-text-tertiary); }
+.dice-fx-btn:not(.on) svg,
+.card-fx-btn:not(.on) svg { opacity: 0.55; }
+.card-fx-btn:disabled { opacity: 0.45; cursor: default; }
+
+/* The two FX toggles stack as a small pair at the end of the toolbar */
+.fx-toggle-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+}
+
+/* Hide the tiny state pill with the other header labels on narrow widths */
+@media (max-width: 1200px) {
+    .dice-fx-btn .fx-state,
+    .card-fx-btn .fx-state { display: none; }
+}
+
+/* Modal */
+#dice-modal .modal { max-width: 560px; }
+.dice-modal .modal-body { padding: 12px 18px 8px; }
+
+.dicefx-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Recessed "table" well the die spins over */
+.dicefx-scene {
+    position: relative;
+    width: min(430px, 100%);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 950px;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    /*background:
+        radial-gradient(540px 300px at 50% 28%, rgba(59, 130, 246, 0.10), transparent 72%),
+        radial-gradient(circle at 50% 46%, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.16) 88%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 14px 44px rgba(0, 0, 0, 0.42);
+    */
+}
+
+/* The die (0x0 origin; faces hang off it via matrix3d — see Dice.html) */
+#dice-fx-die {
+    position: relative;
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transition: transform 1.5s cubic-bezier(0.22, 0.9, 0.28, 1.02);
+}
+/* Promote the die only while it is actually moving: a permanently composited
+   layer is rasterised once and then aliases badly at oblique angles. */
+.dicefx-scene.tossing #dice-fx-die { will-change: transform; }
+.d20-face {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+.d20-num {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), 0 -1px 0 rgba(255, 255, 255, 0.16);
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Airborne motion lives on the scene, so the die's own 3D transform is untouched */
+.dicefx-scene {
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
+}
+.dicefx-scene.tossing {
+    transform: scale(1.05);
+    filter: blur(0.7px);
+}
+.dicefx-scene.fail-shake { animation: diceFailShake 0.5s ease-out; }
+
+/* Soft ground shadow: shrinks and blurs while the die is in the air */
+.dicefx-shadow {
+    position: absolute;
+    left: 50%;
+    bottom: 11%;
+    width: 46%;
+    height: 13%;
+    transform: translateX(-50%) scale(1);
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 46%, transparent 74%);
+    filter: blur(6px);
+    opacity: 0.9;
+    pointer-events: none;
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease, filter 0.4s ease;
+}
+.dicefx-scene.tossing .dicefx-shadow {
+    transform: translateX(-50%) scale(0.7);
+    opacity: 0.5;
+    filter: blur(8px);
+}
+
+/* Reveal flourish: a type-coloured ring expanding from the landed die */
+.dicefx-flourish {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 58%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+}
+.dicefx-flourish.play-ok     { --fx-fl: 34, 197, 94;  animation: dicefxRing 0.85s ease-out forwards; }
+.dicefx-flourish.play-inject { --fx-fl: 245, 158, 11; animation: dicefxRing 0.85s ease-out forwards; }
+.dicefx-flourish.play-fail   { --fx-fl: 239, 68, 68;  animation: dicefxRing 0.7s ease-out forwards; }
+@keyframes dicefxRing {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.55); box-shadow: 0 0 0 2px rgba(var(--fx-fl), 0.75), 0 0 22px 2px rgba(var(--fx-fl), 0.35); }
+    32%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.35); box-shadow: 0 0 0 2px rgba(var(--fx-fl), 0), 0 0 64px 12px rgba(var(--fx-fl), 0); }
+}
+
+/* Caption under the die: "Rolling…" then the outcome reveal */
+.dicefx-caption {
+    min-height: 92px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+.dicefx-caption.rolling {
+    color: var(--color-text-muted);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    animation: dicefxPulse 1s ease-in-out infinite;
+}
+@keyframes dicefxPulse {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1; }
+}
+
+.dicefx-caption.dicefx-outcome { min-height: 128px; }
+.dicefx-big {
+    font-size: clamp(36px, 8vw, 60px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.01em;
+}
+.dicefx-mod { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); }
+.dicefx-msg { font-size: 13px; font-weight: 700; color: var(--color-text); }
+
+/* Outcome tones (success / danger / inject warning) */
+.dicefx-outcome.tone-ok .dicefx-big {
+    color: var(--color-success);
+    text-shadow: 0 0 28px rgba(34, 197, 94, 0.6);
+    animation: diceCritPop 0.5s ease-out;
+}
+.dicefx-outcome.tone-fail .dicefx-big {
+    color: var(--color-danger);
+    text-shadow: 0 0 28px rgba(239, 68, 68, 0.65);
+    animation: diceFailShake 0.5s ease-out;
+}
+.dicefx-outcome.tone-inject .dicefx-big {
+    color: var(--color-warning);
+    text-shadow: 0 0 28px rgba(245, 158, 11, 0.55);
+    animation: diceCritPop 0.5s ease-out;
+}
+
+/* Footer: quiet off-link on the left, Done on the right */
+.dicefx-footer { justify-content: flex-start; }
+.dicefx-footer-spacer { flex: 1; }
+.dicefx-footer .btn-ghost { color: var(--color-text-tertiary); }
+.dicefx-footer .btn-ghost:hover { color: var(--color-danger); }
+
+/* Fit shorter / narrower screens */
+@media (max-width: 640px) {
+    .dicefx-scene { width: min(360px, 100%); perspective: 860px; }
+    .dicefx-caption { min-height: 82px; }
+    .dicefx-caption.dicefx-outcome { min-height: 112px; }
+}
+
+/* ============================================================
+   Card FX — holographic tilt / sheen / click burst (Player)
+   Pointer-tracked, pure CSS + JS (js/card-fx.js). Scales from the
+   single --fx-intensity knob. body.fx-enabled is only set when a
+   fine hover pointer is present and reduced-motion is not asked
+   for, so touch / reduced-motion keep the plain hover behaviour.
+   ============================================================ */
+
+body.fx-enabled { --fx-intensity: 3; }
+
+/* Base transform (composes the existing lift with the pointer tilt).
+   Selectors are deliberately specific enough to beat the pre-existing
+   :hover translateY rules further up the file. */
+body.fx-enabled .flip-card { position: relative; }
+
+body.fx-enabled .card-wrapper .flip-card,
+body.fx-enabled .procedure-cards .flip-card,
+body.fx-enabled .inject-flip-card,
+body.fx-enabled .cv-stage {
+    transform:
+        translateY(var(--fx-lift, 0))
+        rotateX(calc(var(--fx-rx, 0deg) * var(--fx-intensity, 1)))
+        rotateY(calc(var(--fx-ry, 0deg) * var(--fx-intensity, 1)));
+    transition: transform 0.16s ease-out;
+}
+
+/* Keep the existing hover lift, now as a variable feeding the transform */
+body.fx-enabled .card-wrapper:hover .flip-card { --fx-lift: -6px; }
+body.fx-enabled .procedure-cards .flip-card:hover,
+body.fx-enabled .inject-flip-card:hover { --fx-lift: -4px; }
+
+/* Per-type holo colours (drive the sheen + burst ring) */
+body.fx-enabled .card-wrapper[data-type="initial"] .flip-card { --fx-c1: #ef4444; --fx-c2: #f59e0b; }
+body.fx-enabled .card-wrapper[data-type="pivot"]   .flip-card { --fx-c1: #f59e0b; --fx-c2: #fcd34d; }
+body.fx-enabled .card-wrapper[data-type="c2"]      .flip-card { --fx-c1: #b45309; --fx-c2: #f97316; }
+body.fx-enabled .card-wrapper[data-type="persist"] .flip-card { --fx-c1: #8b5cf6; --fx-c2: #22d3ee; }
+body.fx-enabled .procedure-cards .flip-card { --fx-c1: #10b981; --fx-c2: #38bdf8; }
+body.fx-enabled .inject-flip-card { --fx-c1: #6b7280; --fx-c2: #9aa4b5; }
+body.fx-enabled .cv-stage { --fx-c1: #3b82f6; --fx-c2: #8b5cf6; }
+
+/* The blended holo overlay (color-dodge over the card art) */
+body.fx-enabled .card-holo {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    mix-blend-mode: soft-light;
+    background-image:
+        radial-gradient(circle at var(--fx-hx, 50%) var(--fx-hy, 50%), rgba(255, 255, 255, 0.5) 0%, transparent 42%),
+        linear-gradient(115deg, transparent 22%, var(--fx-c1, #3b82f6) 44%, var(--fx-c2, #6366f1) 58%, transparent 80%),
+        linear-gradient(125deg, rgba(255, 0, 132, 0.32) 12%, rgba(252, 164, 0, 0.26) 32%, rgba(255, 255, 0, 0.18) 45%, rgba(0, 255, 138, 0.2) 62%, rgba(0, 207, 255, 0.28) 78%, rgba(204, 76, 250, 0.3) 94%);
+    background-size: 220% 220%, 250% 250%, 180% 180%;
+    background-position:
+        var(--fx-hx, 50%) var(--fx-hy, 50%),
+        var(--fx-hx, 50%) var(--fx-hy, 50%),
+        50% 50%;
+    background-blend-mode: screen, overlay, normal;
+    filter: brightness(1.02) contrast(1.12) saturate(1.45);
+}
+
+body.fx-enabled .cv-stage > .card-holo { border-radius: var(--radius-md); }
+
+body.fx-enabled .flip-card.fx-active .card-holo,
+body.fx-enabled .cv-stage.fx-active .card-holo {
+    opacity: calc(var(--fx-op, 0.5) * var(--fx-intensity, 1));
+}
+
+/* Viewer stage: keep it relative for the overlay; the tilt comes from the
+   shared transform rule above. Never tilt while zoomed/pannable. */
+body.fx-enabled .cv-stage { position: relative; }
+body.fx-enabled .cv-stage.cv-zoomed { transform: none; }
+
+/* No holo sheen or click ring on the zoomed (pannable) image */
+body.fx-enabled .cv-stage.cv-zoomed > .card-holo,
+body.fx-enabled .cv-stage.cv-zoomed > .fx-burst { display: none; }
+
+/* Click burst: expanding ring + a bright holo flash + a press pop */
+body.fx-enabled .fx-burst {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    border-radius: var(--radius-lg);
+    border: 2px solid color-mix(in srgb, var(--fx-c1, #3b82f6) 85%, #ffffff);
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes fxClickPop {
+    0%, 100% {
+        transform:
+            translateY(var(--fx-lift, 0))
+            rotateX(calc(var(--fx-rx, 0deg) * var(--fx-intensity, 1)))
+            rotateY(calc(var(--fx-ry, 0deg) * var(--fx-intensity, 1)))
+            scale(1);
+    }
+    45% {
+        transform:
+            translateY(var(--fx-lift, 0))
+            rotateX(calc(var(--fx-rx, 0deg) * var(--fx-intensity, 1)))
+            rotateY(calc(var(--fx-ry, 0deg) * var(--fx-intensity, 1)))
+            scale(calc(1 + 0.045 * var(--fx-intensity, 1)));
+    }
+}
+@keyframes fxBurstRing {
+    0%   { opacity: 0.9; transform: scale(0.97); }
+    100% { opacity: 0;   transform: scale(1.12); }
+}
+@keyframes fxClickFlash {
+    0%   { filter: brightness(1.5) contrast(1.3); }
+    100% { filter: brightness(0.95) contrast(1.15); }
+}
+
+body.fx-enabled .flip-card.fx-click,
+body.fx-enabled .cv-stage.fx-click { animation: fxClickPop 0.45s ease-out; }
+
+body.fx-enabled .flip-card.fx-click .fx-burst,
+body.fx-enabled .cv-stage.fx-click .fx-burst { animation: fxBurstRing 0.55s ease-out; }
+
+body.fx-enabled .flip-card.fx-click .card-holo { animation: fxClickFlash 0.5s ease-out; }
+
+/* ============================================================
+   Call a Consultant — rail on the board + selection modal
+   The rail mirrors the Inject rail on the opposite side, so the
+   Procedures end up in the middle of the row.
+   ============================================================ */
+
+/* Head becomes a 3-column grid matching the rail widths */
+.procedure-head {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr) 108px;
+    align-items: baseline;
+    gap: var(--space-3);
+}
+.procedure-head .section-title { margin: 0; text-align: center; }
+.consultant-label {
+    justify-self: start;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--color-consultant);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.procedure-head .inject-label { justify-self: end; }
+
+/* Rail mirrors .inject-rail on the opposite side */
+.consultant-rail {
+    flex: 0 0 auto;
+    width: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding-right: var(--space-3);
+    border-right: 1px solid var(--color-border);
+}
+.consultant-rail .consultant-card-wrapper {
+    width: 100%;
+    max-width: none;
+}
+.consultant-rail .consultant-flip-card { width: 100%; }
+.consultant-call-btn { width: 100%; }
+
+/* The consultant card reads in the rose consultant colour */
+.consultant-flip-card .flip-card-front,
+.consultant-flip-card .flip-card-back { border: 3px solid var(--color-consultant); }
+.consultant-flip-card .flip-card-back img { object-fit: cover; }
+
+/* FX sheen colours for the consultant card */
+body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4899; --fx-c2: #f9a8d4; }
+
+/* Selection modal */
+.consultant-modal .modal { max-width: 640px; }
+#consultant-modal .modal-body { padding: 14px 18px; }
+#consultant-modal .modal-footer { justify-content: space-between; }
+.consultant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 10px;
+    max-height: min(52vh, 460px);
+    overflow: auto;
+    padding: 4px 2px;
+}
+.consultant-tile {
+    position: relative;
+    display: flex;
+    transition: transform 0.15s ease;
+}
+.consultant-tile:hover { transform: translateY(-2px); }
+.consultant-tile .consultant-option { width: 100%; }
+
+.consultant-option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.consultant-option:hover {
+    border-color: color-mix(in srgb, var(--color-consultant) 60%, var(--color-border));
+}
+.consultant-option.selected {
+    border-color: var(--color-consultant);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-consultant) 45%, transparent), 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+.consultant-option img {
+    width: 100%;
+    aspect-ratio: 2.5 / 3.5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 2px solid color-mix(in srgb, var(--color-consultant) 55%, var(--color-border));
+    background: var(--color-bg-tertiary);
+}
+.consultant-option .cons-name {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-text-secondary);
+}
+.consultant-option.selected .cons-name { color: var(--color-text); }
+.consultant-option .cons-tick {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 18px;
+    height: 18px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-consultant);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+.consultant-option.selected .cons-tick { display: flex; }
+
+/* Large-preview trigger sitting on the tile's top-right corner */
+.cons-view-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 2;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-consultant) 45%, transparent);
+    border-radius: 50%;
+    background: rgba(8, 10, 16, 0.8);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    opacity: 0.68;
+    transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.consultant-tile:hover .cons-view-btn,
+.consultant-tile:focus-within .cons-view-btn {
+    opacity: 1;
+    color: #fff;
+    background: color-mix(in srgb, var(--color-consultant) 72%, #0b0e15);
+}
+.consultant-empty {
+    grid-column: 1 / -1;
+    padding: 26px 10px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Narrow: mirrors the inject rail stacking */
+@media (max-width: 700px) {
+    .procedure-head { grid-template-columns: 1fr; justify-items: center; gap: 2px; }
+    .consultant-label,
+    .procedure-head .inject-label { justify-self: center; }
+    .consultant-rail {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        padding-right: 0;
+        border-right: 0;
+        padding-bottom: var(--space-2);
+        border-bottom: 1px solid var(--color-border);
+    }
+    .consultant-rail .consultant-card-wrapper { width: 86px; }
+    .consultant-call-btn { width: auto; }
+}
+
+/* Registered <number> so a card's aspect ratio can animate: aspect-ratio
+   itself is not interpolable, but a registered custom property is. Shared by
+   the scenario cards (--card-ar) and the procedure cards. */
+@property --card-ar {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0.7143;
+}
+
+/* ============================================================
+   Scenario cards: horizontal while face-down, and a readable band
+   showing the top 1/3 of the card once revealed (same treatment as
+   the procedure cards).
+   The v2 card backs are landscape art (1891x1340 ≈ 3.5:2.5) and were
+   being cropped into portrait slots, so face-down scenario cards take
+   the card-back's own shape: 2.5/3.5 inverted = 1.4.
+   The revealed card face is 2.5:3.5, so its top third is a
+   2.5:1.1667 band — the card has to get wider for that crop to
+   actually magnify the text, hence the width increase on reveal.
+   The wrapper is left uncapped so the wider band can borrow its grid
+   column, with max-width clamping it instead of overlapping a
+   neighbour.
+   ============================================================ */
+.scenario-row .card-wrapper[data-type] {
+    max-width: 100%;            /* let the revealed band use the grid column */
+}
+
+.scenario-row .card-wrapper[data-type] .flip-card {
+    --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
+    flex: 0 0 auto;
+    width: 150px;
+    max-width: 100%;
+    aspect-ratio: var(--card-ar);
+    transition:
+        width 0.6s cubic-bezier(0.85, 0, 0.15, 1),
+        --card-ar 0.6s cubic-bezier(0.85, 0, 0.15, 1),
+        transform 0.18s ease;
+}
+
+.scenario-row .card-wrapper[data-type] .flip-card.flipped {
+    --card-ar: 2.1429;          /* 2.5 / (3.5 / 3) — the top 1/3 band */
+    width: 300px;
+}
+
+.scenario-row .card-wrapper[data-type] .flip-card.flipped .flip-card-back img {
+    object-position: center top;   /* keep the top of the card, crop the rest away */
+}
+
+/* ============================================================
+   Procedure cards: wider, wrapping, and face-up cards open into a
+   readable band showing the top 1/5 of the card face (the name
+   banner + the first line) instead of the whole card shrunk small.
+   The card face is 2.5:3.5, so the top fifth is a 2.5:0.7 band — the
+   card has to get wider for that crop to actually magnify the text,
+   hence the width increase on reveal.
+   The shape is driven by the shared registered --card-ar so the ratio
+   (and therefore the height) animates, timed to the flip's edge-on
+   midpoint like the scenario cards.
+   ============================================================ */
+.procedure-body .procedure-cards {
+    flex-wrap: wrap;            /* wrap instead of a clipped horizontal scroller */
+    overflow: visible;
+    align-items: flex-start;    /* stop flex stretch from overriding aspect-ratio */
+    justify-content: center;    /* centre the hand in the tray instead of hugging the left */
+}
+
+.procedure-row .procedure-body .procedure-cards .flip-card {
+    --card-ar: 0.7143;          /* 2.5 / 3.5 — the portrait card back */
+    width: 132px;               /* a bit wider than the old 112px */
+    aspect-ratio: var(--card-ar);
+    transition:
+        width 0.6s cubic-bezier(0.85, 0, 0.15, 1),
+        --card-ar 0.6s cubic-bezier(0.85, 0, 0.15, 1),
+        transform 0.18s ease;
+}
+
+/* Face-up: the top fifth of the card face, at a size you can read */
+.procedure-row .procedure-body .procedure-cards .flip-card.flipped {
+    --card-ar: 3.5714;          /* 2.5 / (3.5 / 5) — the top 1/5 band */
+    width: min(260px, 100%);
+}
+
+.procedure-cards .flip-card.flipped .flip-card-back img {
+    object-position: center top;   /* keep the name banner, crop the rest away */
+}
+
+/* ============================================================
+   Printable session sheet (#print-sheet, built by js/print-sheet.js)
+
+   The sheet is an independent DOM tree, so the board's 3D flip
+   transforms and `backface-visibility` never have to survive print,
+   and the whole inject queue can be listed (only the current inject
+   is ever in the board DOM).
+
+   The FRAME - both logos, the rules and the notes box - is static
+   markup in player.html; only #ps-head-text and #ps-body are
+   rewritten per print. An <img> created at print time has not
+   decoded yet and paints blank, which is why the artwork is not
+   built here.
+
+   COLOURS: these are PAPER colours, not theme tokens. The app is
+   dark-only and base.css has no print palette, so taking
+   `--color-text` here would print near-white text on white paper.
+   ============================================================ */
+
+#print-sheet { display: none; }
+
+/* Nothing to print yet (no game on the board) — leave the page alone and
+   fall back to the browser's normal print behaviour. */
+@media print {
+    /* Zero page margin on purpose: the sheet supplies it as padding, so its own
+       height is exactly one page. With a non-zero @page margin the 100vh below
+       resolves against the page *box* and the sheet overflows the printable
+       area by the margins, which pushed the notes and the footer onto a second
+       page. Board-only prints get their margin from the body padding here. */
+    @page { size: portrait; margin: 0; }
+    body { padding: 12mm; }
+
+    body.print-has-sheet { padding: 0; }
+    body.print-has-sheet .player-layout,
+    body.print-has-sheet .modal-backdrop,
+    body.print-has-sheet .cv-backdrop,
+    body.print-has-sheet .fab-container,
+    body.print-has-sheet #site-fab-menu { display: none !important; }
+
+    body.print-has-sheet { background: #fff !important; color: #111827 !important; }
+    /* The felt surface + spotlight vignette live on body pseudo-elements. */
+    body.print-has-sheet::before,
+    body.print-has-sheet::after { display: none !important; }
+
+    /* Empty or half-built sheet: print nothing rather than a blank page. */
+    body.print-has-sheet #print-sheet:not(.is-ready) { display: none !important; }
+
+    body.print-has-sheet #print-sheet {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        /* 100vh, not a percentage: in paged media the viewport is the page box,
+           so with the zero @page margin above this is exactly one sheet of
+           paper. A `height: 100%` chain looks equivalent but resolves against
+           an indefinite height when printing, which lets the content-sized
+           sheet overflow. */
+        height: 100vh;
+        padding: 12mm;
+        font-family: var(--font-family);
+        color: #0f172a;
+        text-align: left;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    .ps-frame {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        box-sizing: border-box;
+        padding: 6mm;
+        border: 1px solid #94a3b8;
+    }
+
+    /* ---- Masthead: logo mark, eyebrow, title, meta ---- */
+    .ps-head {
+        display: grid;
+        /* Side columns are as wide as the logo so the title stays optically centred. */
+        grid-template-columns: 158px 1fr 158px;
+        align-items: center;
+        padding-bottom: 3mm;
+        border-bottom: 2px solid #111827;
+    }
+    .ps-mark img {
+        display: block;
+        width: auto;
+    }
+    /* shared/img/bb-logo-print.png: the app's own logo with the white wordmark
+       inked, so the full lockup reads on paper. Its two-line wordmark needs the
+       height - smaller than this and it turns to mush. */
+    .ps-mark-logo { height: 60px; }
+    /* The deck's box art, which takes the logo's place in the masthead (see
+       player.html + print-sheet.js syncCover). Box art is landscape, so it is
+       sized a little larger - the printed logo inside it has to stay legible. */
+    .ps-mark .ps-cover {
+        height: 74px;
+        border: 1px solid #94a3b8;
+        border-radius: 1mm;
+        background: #f8fafc;
+    }
+    /* The session's uploaded logo (Theme -> logo), opposite the masthead logo. */
+    .ps-custom-mark { justify-self: end; max-width: 158px; }
+    .ps-custom-mark img {
+        display: block;
+        max-height: 60px;
+        max-width: 158px;
+        width: auto;
+        height: auto;
+    }
+    .ps-custom-mark:not(.has-logo) img { display: none; }
+    .ps-head-text { grid-column: 2; text-align: center; }
+    .ps-eyebrow {
+        margin: 0;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2.6px;
+        text-transform: uppercase;
+        color: #6b7280;
+    }
+    .ps-title {
+        margin: 0.5mm 0 1mm;
+        font-size: 22px;
+        line-height: 1.15;
+        font-weight: 700;
+        color: #5b6472;      /* the board's silver-gradient title, flattened */
+    }
+    .ps-meta { margin: 0; font-size: 10px; color: #6b7280; }
+
+    /* ---- Stats strip ---- */
+    .ps-stats {
+        display: flex;
+        gap: 10mm;
+        padding: 2.5mm 0;
+        border-bottom: 1px solid #cbd5e1;
+    }
+    .ps-stat { display: flex; flex-direction: column; }
+    .ps-stat + .ps-stat {
+        padding-left: 10mm;
+        border-left: 1px solid #e2e8f0;
+    }
+    .ps-stat-value { font-size: 19px; font-weight: 700; line-height: 1.1; color: #0f172a; }
+    .ps-stat-label { font-size: 9px; color: #6b7280; }
+
+    /* ---- Section headings ---- */
+    .ps-h {
+        margin: 3.5mm 0 0;
+        padding-bottom: 1mm;
+        border-bottom: 1px solid #cbd5e1;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.7px;
+        text-transform: uppercase;
+        color: #475569;
+    }
+    .ps-count { color: #64748b; }
+
+    /* ---- Scenario cards (+ their DETECTION lists) ---- */
+    .ps-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .ps-card {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5mm;
+        padding: 3mm 3mm 1mm 0;
+    }
+    .ps-card + .ps-card {
+        padding-left: 3mm;
+        border-left: 1px solid #e2e8f0;
+    }
+    .ps-card-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 2.5mm;
+        min-width: 0;
+        /* One thumbnail tall, so the DETECTION lists below start on the same line
+           however many lines each card name takes. */
+        min-height: 58px;
+    }
+    .ps-thumb {
+        flex: 0 0 auto;
+        width: 40px;
+        height: 56px;
+        object-fit: cover;
+        border: 1px solid #94a3b8;
+        border-radius: 3px;
+    }
+    .ps-card-title {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8mm;
+        min-width: 0;
+    }
+    .ps-type {
+        padding-bottom: 0.6mm;
+        border-bottom: 1px dotted #cbd5e1;
+        font-size: 8px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: #6b7280;
+    }
+    .ps-name {
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: #0f172a;
+    }
+    /* The scenario card's own text, under its name: the paragraph that sets the scene.
+       It shares the sheet's footnote scale, because four of these sit side by side. */
+    .ps-card-text {
+        display: block;
+        margin-top: 0.4mm;
+        font-size: 7px;
+        font-weight: 400;
+        line-height: 1.28;
+        color: #475569;
+    }
+    .ps-detection { margin-top: 0.5mm; }
+    .ps-detection-label {
+        font-size: 7.5px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #64748b;
+    }
+    .ps-detection ul {
+        margin: 0.6mm 0 0;
+        padding-left: 3mm;
+    }
+    .ps-detection li {
+        font-size: 8px;
+        line-height: 1.35;
+        color: #334155;
+    }
+    /* The catalog key is absent for roughly half of the printed scenario cards,
+       so an unread list says so instead of printing nothing. */
+    .ps-detection-none {
+        margin: 0.6mm 0 0;
+        font-size: 8px;
+        font-style: italic;
+        color: #94a3b8;
+    }
+
+    /* ---- Procedures + inject queue ---- */
+    .ps-cols {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 8mm;
+    }
+    /* The two columns are a stretch grid, so the shorter one leaves a bare patch under
+       its last row - in practice the hand, which ends halfway down while the inject
+       queue runs on. Letting the hand's rows share out that height squares the block
+       off; 16mm is the ceiling, so a nine-inject game does not spread seven rows over
+       half a page. Only the hand is stretched: an inject row's own text must never be
+       clamped. */
+    .ps-cols > section {
+        display: flex;
+        flex-direction: column;
+    }
+    .ps-cols > section > .ps-h { flex: 0 0 auto; }
+    .ps-cols section:first-child > .ps-list {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+    }
+    .ps-cols section:first-child .ps-row {
+        flex: 1 1 auto;
+        max-height: 16mm;
+        align-items: center;
+    }
+    .ps-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .ps-row {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr) auto;
+        align-items: baseline;
+        gap: 2mm;
+        /* 1.2mm, not 1.5mm: with the card's own text under each inject name the
+           inject column is the tallest thing on the sheet, and these rows are what
+           decides whether a six-inject game still fits one page. */
+        padding: 1.2mm 0;
+        border-bottom: 1px dashed #cbd5e1;
+    }
+    .ps-row.is-empty { color: #6b7280; font-style: italic; }
+    .ps-index { font-size: 9.5px; color: #6b7280; }
+    .ps-check {
+        align-self: center;
+        width: 10px;
+        height: 10px;
+        border: 1px solid #475569;
+        border-radius: 2px;
+    }
+    .ps-row-name {
+        font-size: 10.5px;
+        line-height: 1.25;
+        color: #0f172a;
+    }
+    .ps-row.is-enhanced .ps-row-name { font-weight: 700; }
+    /* The card's own text, under its name (an inject's rules). Deliberately small and
+       quiet: it glosses the name, it is not another row. 7.5px matches the sheet's
+       other footnote type (detection lists, credits), and every point of it buys the
+       ruled notes area back a line. Clamped at four lines so one wordy card cannot
+       push the footer onto a second sheet. */
+    .ps-row-note {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+        overflow: hidden;
+        margin-top: 0.6mm;
+        font-size: 7.5px;
+        font-weight: 400;
+        line-height: 1.3;
+        color: #475569;
+    }
+    /* A queue longer than a session deals (see INJECT_TEXT_MAX) prints names only. */
+    .print-sheet.ps-queue-long .ps-row-note { display: none; }
+    .ps-badge {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: #2563eb;
+    }
+
+    /* ---- Consultant + notes ---- */
+    .ps-consultant {
+        margin: 2.5mm 0 0;
+        font-size: 10.5px;
+        font-style: italic;
+        color: #6b7280;
+    }
+    /* The consultant's own action - the one line of blue text under the name on the
+       card face. The name above it is a caption in italics; this is a rule the GM
+       applies, so it is reset to upright and dark, one step up from the sheet's
+       7.5px footnote type because it is read aloud rather than glanced at. */
+    .ps-consultant-action {
+        display: block;
+        margin-top: 0.6mm;
+        font-size: 9px;
+        font-style: normal;
+        line-height: 1.3;
+        color: #334155;
+    }
+
+    /* Notes sit directly above the footer, and the ruled lines share out whatever
+       height the paper leaves between the two. */
+    .ps-notes {
+        display: flex;
+        flex-direction: column;
+        margin-top: 3mm;
+    }
+    .ps-note-lines {
+        /* One column, so the lines can share the height exactly. flex-basis 0, not
+           auto: the box takes the space left above the footer instead of being
+           sized by how many lines are in it. */
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0;
+        /* 10mm, not 25mm: an inject row that carries the card's own text can add
+           three lines each, and the notes area is the only block with slack. It
+           still yields a handful of usable rules on a full six-inject sheet. */
+        min-height: 10mm;
+        margin-top: 1mm;
+        overflow: hidden;   /* belt and braces; the flex maths never overflows */
+    }
+    /* A ruled writing line. `height: 7mm` is the preferred pitch; grow *and*
+       shrink are allowed (min-height: 0 overrides the automatic minimum that
+       would otherwise make the specified height a floor) so however many lines
+       there are they share out exactly the height the paper leaves. That matters
+       for print: in-flow content taller than its box becomes extra pages - 60
+       lines of 7mm overflowed onto two further sheets. */
+    .ps-note-line {
+        flex: 1 1 auto;
+        height: 7mm;
+        min-height: 0;
+        border-bottom: 1px solid #dbe2ea;
+    }
+
+    /* ---- Credits ---- */
+    .ps-foot {
+        display: flex;
+        align-items: flex-start;
+        gap: 5mm;
+        margin-top: 3mm;
+        padding-top: 2.5mm;
+        border-top: 1px solid #cbd5e1;
+    }
+    .ps-bhis {
+        flex: 0 0 auto;
+        height: 22px;
+        width: auto;
+        /* shared/img/blackhills-logo-print.png: the light-background variant, so
+           the wordmark is already black and the rule under it its proper red -
+           no filter (the dark-background asset needed brightness(0), which also
+           killed the red). */
+    }
+    .ps-foot p {
+        margin: 0 0 1mm;
+        font-size: 7.5px;
+        line-height: 1.45;
+        color: #6b7280;
+    }
+    .ps-foot a { color: #1d4ed8; text-decoration: underline; }
+    /* The notes box takes whatever is left above the footer. */
+    .ps-notes { flex: 1 1 auto; }
+}
+
+

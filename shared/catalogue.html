@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>B&amp;B Shuffle — Card Catalogue</title>
+    <link rel="icon" href="img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="css/base.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--color-bg);
+            color: var(--color-text);
+        }
+
+        .cat { flex: 1 0 auto; width: 100%; max-width: 1200px; margin: 0 auto; padding: 24px 20px 36px; }
+
+        .cat-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+        .cat-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+        .cat-brand img { height: 52px; width: auto; }
+        .cat-brand h1 { margin: 0; font-size: 22px; }
+        .cat-brand .sub { display: block; font-size: 12px; color: var(--color-text-secondary); }
+        .cat-home { color: var(--color-primary); text-decoration: none; font-size: 13px; font-weight: 600; }
+
+        .cat-decks { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .deck-btn {
+            padding: 8px 14px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text);
+            font-size: 13px;
+            cursor: pointer;
+            transition: border-color .15s ease, background .15s ease;
+        }
+        .deck-btn:hover { border-color: var(--color-primary); }
+        .deck-btn.active { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-bg); font-weight: 600; }
+
+        .deck-note { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 6px; }
+        .deck-summary { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 14px; }
+
+        .type-group { margin-bottom: 22px; }
+        .type-head {
+            display: flex; align-items: baseline; gap: 8px;
+            border-bottom: 1px solid var(--color-border); padding-bottom: 5px; margin-bottom: 10px;
+        }
+        .type-head h2 { margin: 0; font-size: 15px; }
+        .type-head .count { font-size: 12px; color: var(--color-text-secondary); }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+        .card-tile { display: flex; flex-direction: column; gap: 6px; cursor: zoom-in; }
+        .card-tile .frame {
+            aspect-ratio: 2.5 / 3.5; overflow: hidden; border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border); background: var(--color-bg-tertiary);
+            transition: transform .15s ease, border-color .15s ease;
+        }
+        .card-tile:hover .frame { transform: translateY(-2px); border-color: var(--color-primary); }
+        .card-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-tile .name { font-size: 11px; line-height: 1.35; color: var(--color-text-secondary); }
+
+        .cat-empty { padding: 40px; text-align: center; color: var(--color-text-secondary); }
+        .loading { padding: 30px; text-align: center; color: var(--color-text-secondary); }
+
+        /* ===== Card-table polish (felt surface + tactile tiles) ===== */
+        .cat-brand img { filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5)); }
+        .cat-top { padding-bottom: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .deck-btn {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+        }
+        .deck-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+        .deck-btn.active {
+            background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+            box-shadow: 0 6px 16px color-mix(in srgb, var(--color-primary) 40%, transparent);
+        }
+        .card-tile .frame {
+            box-shadow: var(--shadow-card);
+            transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+        }
+        .card-tile:hover .frame {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover), 0 0 0 1px color-mix(in srgb, var(--color-primary) 30%, transparent);
+        }
+        .card-tile .name { transition: color .15s ease; }
+        .card-tile:hover .name { color: var(--color-text); }
+
+        /* ===== Filter toolbar (name search + type chips) ===== */
+        .cat-toolbar {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+            margin: 0 0 16px;
+        }
+        .cat-toolbar .form-input { flex: 1 1 240px; min-width: 190px; max-width: 340px; }
+        .type-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .type-chip {
+            padding: 5px 12px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
+            color: var(--color-text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: transform .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
+        }
+        .type-chip:hover { transform: translateY(-1px); border-color: var(--color-primary); color: var(--color-text); }
+        .type-chip.is-active {
+            background: linear-gradient(180deg, var(--color-primary), var(--color-primary-dark));
+            border-color: var(--color-primary);
+            color: var(--color-bg);
+            font-weight: 600;
+        }
+        .type-chip .chip-count { margin-left: 5px; font-size: 11px; opacity: .75; }
+        .type-chip.is-active .chip-count { opacity: .85; }
+        .cat-count { flex: 1 1 100%; margin: 0; font-size: 12px; color: var(--color-text-secondary); }
+        .cat-count.is-empty { color: var(--color-warning); font-weight: 600; }
+
+        /* ===== Detection cross-reference (rendered inside CardViewer panels) ===== */
+        .det-lead { margin: 0 0 8px; font-size: 12px; color: var(--color-text-muted); }
+        .det-list { margin: 0; padding-left: 18px; color: var(--color-text-secondary); }
+        .det-list li { margin: 5px 0; font-size: 13px; line-height: 1.5; }
+        .det-list li.is-proc { color: var(--color-text); }
+        .det-tag {
+            margin-left: 6px; padding: 1px 6px;
+            border: 1px solid var(--color-border); border-radius: var(--radius-full);
+            font-size: 10px; color: var(--color-text-muted);
+            text-transform: uppercase; letter-spacing: .04em;
+        }
+
+        /* ===== Deck box art (shared/img/decks/<key>.webp) ===== */
+        .deck-btn { display: inline-flex; align-items: center; gap: 8px; }
+        .deck-btn-cover { display: block; height: 22px; width: auto; border-radius: 3px; }
+        .deck-btn.active .deck-btn-cover { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4); }
+
+        .deck-hero { display: flex; align-items: flex-start; gap: 18px; margin: 0 0 16px; }
+        .deck-hero-cover {
+            flex: 0 0 auto; width: 260px; height: auto;
+            border: 1px solid var(--color-border); border-radius: var(--radius-md);
+            background: var(--color-surface); box-shadow: var(--shadow-card);
+        }
+        .deck-hero-text { flex: 1 1 auto; min-width: 0; }
+        .deck-hero-name { margin: 0 0 6px; font-size: 18px; }
+        .deck-hero-text .deck-summary { margin-bottom: 0; }
+
+        @media (max-width: 720px) {
+            .deck-hero { flex-direction: column; gap: 12px; }
+            .deck-hero-cover { width: 100%; max-width: 320px; }
+        }
+    </style>
+</head>
+<body class="surface-felt">
+    <div class="cat">
+        <!-- Header -->
+        <div class="cat-top">
+            <a class="cat-brand" href="../index.html">
+                <img src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <span>
+                    <h1>Card Catalogue</h1>
+                    <span class="sub">B&amp;B Shuffle · every deck &amp; card (shared)</span>
+                </span>
+            </a>
+            <a class="cat-home" href="../index.html">← Home</a>
+        </div>
+
+        <!-- Deck picker -->
+        <div class="cat-decks" id="deck-buttons"></div>
+
+        <!-- Deck header: box art (when the deck has one), name, note, coverage -->
+        <div class="deck-hero">
+            <img class="deck-hero-cover" id="deck-cover" alt="" decoding="async">
+            <div class="deck-hero-text">
+                <h2 class="deck-hero-name" id="deck-hero-name"></h2>
+                <p class="deck-note" id="deck-note"></p>
+                <p class="deck-summary" id="deck-summary"></p>
+            </div>
+        </div>
+
+        <!-- Filter toolbar (name search + type chips) -->
+        <div class="cat-toolbar" id="cat-toolbar" role="search">
+            <input type="search" id="cat-search" class="form-input" placeholder="Filter cards by name…" autocomplete="off" aria-label="Filter cards by name">
+            <div class="type-chips" id="cat-type-chips" role="group" aria-label="Filter by card type"></div>
+            <button type="button" id="cat-clear-btn" class="btn btn-ghost btn-sm hidden">Clear filters</button>
+            <p class="cat-count" id="cat-count" role="status" aria-live="polite"></p>
+        </div>
+
+        <!-- Cards -->
+        <div id="cards" class="loading">Loading…</div>
+    </div>
+
+    <!-- Legal footer -->
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
+                <img class="app-legal-logo" src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <span>B&amp;B Classic — play on the official site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/card-viewer.js"></script>
+    <script>
+        const DECKS = [
+            { key: 'core',               name: 'Core Deck',     note: 'Original Core deck used by the legacy Engine-V1 style builds.', cover: 'core.webp' },
+            { key: 'core31',             name: 'Core 3.1',      note: 'Official Core Deck v3.1 — downloaded from backdoorsandbreaches.com.', cover: 'core31.webp' },
+            { key: 'green-expansion-v2', name: 'Green Expansion v2', note: 'Expansion set — toggle it on in the Engine-V2 Scenario Editor to merge into any loaded deck.', expansion: true },
+            { key: 'expansion1',         name: 'Expansion 1',   note: 'Expansion pack — toggle it on in the Engine-V2 Scenario Editor to merge into any loaded deck.', expansion: true, cover: 'expansion1.webp' },
+            { key: 'ics-ot',             name: 'ICS-OT',        note: 'ICS/OT focused deck.', cover: 'ics-ot.webp' },
+            { key: 'core-v1',            name: 'Core v1',       note: 'Original v1 Core deck (dev-site archive).' },
+            { key: 'core-v3',            name: 'Core v3',       note: 'Core v3 deck (dev-site archive).', cover: 'core-v3.webp' },
+            { key: 'core-v22',           name: 'Core v2.2',     note: 'Core v2.2 deck (dev-site archive).', cover: 'core-v22.webp' },
+            { key: 'core-spanish',       name: 'Core Spanish 1.0', note: 'Spanish-language Core deck.', cover: 'core-spanish.webp' },
+            { key: 'cloud-security',     name: 'Cloud Security', note: 'Cloud-focused sponsor expansion.', cover: 'cloud-security.webp' },
+            { key: 'datadog',            name: 'DataDog',       note: 'DataDog sponsor expansion.', cover: 'datadog.webp' },
+            { key: 'huntress',           name: 'Huntress',      note: 'Huntress sponsor expansion.', cover: 'huntress.webp' },
+            { key: 'red-canary',         name: 'Red Canary',    note: 'Red Canary sponsor expansion.', cover: 'red-canary.webp' },
+            { key: 'densecure',          name: 'DenSecure',     note: 'DenSecure sponsor expansion.', cover: 'densecure.webp' },
+            { key: 'trimarc',            name: 'Trimarc',       note: 'Trimarc sponsor expansion.', cover: 'trimarc.webp' },
+            { key: 'electrical-co-op',   name: 'Electrical Co-Op', note: 'Energy-sector / NRECA deck.', cover: 'electrical-co-op.webp' },
+            { key: 'mega-deck',          name: 'The MEGA Deck', note: 'Every deck merged into one huge deck.', cover: 'mega-deck.webp' }
+        ];
+
+        // Deck box art, generated into shared/img/decks/<key>.webp. Entries without
+        // a `cover` have no box art upstream — the pills and the header just omit
+        // the image for those.
+        const COVER_BASE = 'img/decks/';
+
+        // DELIBERATE DUPLICATES of Utils.CARD_TYPES / Utils.SCENARIO_TYPES /
+        // Utils.CARD_TYPE_LABELS (Engine-V2/js/utils.js). This page loads no
+        // utils.js at all, and uniquely also knows the `exfil` type.
+        const TYPE_ORDER = ['initial', 'pivot', 'c2', 'persist', 'procedure', 'inject', 'consultant', 'exfil'];
+        const TYPE_LABEL = {
+            initial: 'Initial Compromise', pivot: 'Pivot & Escalate', c2: 'C2 / Exfiltration',
+            persist: 'Persistence', procedure: 'Procedure', inject: 'Inject',
+            consultant: 'Consultant', exfil: 'Exfiltration'
+        };
+
+        const buttonsEl = document.getElementById('deck-buttons');
+        const noteEl = document.getElementById('deck-note');
+        const summaryEl = document.getElementById('deck-summary');
+        const coverEl = document.getElementById('deck-cover');
+        const heroNameEl = document.getElementById('deck-hero-name');
+        const cardsEl = document.getElementById('cards');
+        const searchEl = document.getElementById('cat-search');
+        const chipsEl = document.getElementById('cat-type-chips');
+        const countEl = document.getElementById('cat-count');
+        const clearBtnEl = document.getElementById('cat-clear-btn');
+
+        let activeKey = DECKS[0].key;
+
+        // ---- Filter state (client-side; the whole deck is already loaded) ----
+        const filter = { query: '', type: '' };
+        let deckCardCount = 0;
+        let detectionPrefetched = false;
+
+        function imgUrl(image) {
+            // carddb image fields can use a few relative forms pointing into shared/decks:
+            //   ../../shared/decks/<deck>/<file>.png   (current schema)
+            //   ../shared/decks/<deck>/<file>.png      (legacy)
+            //   shared/decks/<deck>/<file>.png         (legacy/cached)
+            // Normalize each to a /shared/-relative "decks/<deck>/<file>.png" URL.
+            const v = String(image || '');
+            if (/^(https?:)?\/\//i.test(v) || v.startsWith('data:') || v.startsWith('/')) return v;
+            let p = v.replace(/^(\.\.\/)+/, '');
+            if (p.startsWith('shared/')) p = p.slice('shared/'.length);
+            return p; // -> decks/<deck>/<file>.png (relative to /shared/)
+        }
+
+        // DELIBERATE DUPLICATE of Utils.escapeHtml (Engine-V2/js/utils.js) -
+        // this page loads no utils.js at all.
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        /* ============================================================
+           Detection cross-reference (docs/card-details.json)
+           Loaded lazily + memoised, and prefetched in the background
+           after the first deck so a card click is normally instant.
+           Indexed by the shared-relative image path — exactly what
+           imgUrl() produces and what card-details.json stores.
+           Deck-keyed joins would miss core-v31-expansion (absent from
+           DECKS) and decks that reuse another deck's card art.
+           ============================================================ */
+        const DETECTION_URL = '../docs/card-details.json';
+        const SCENARIO_TYPES = ['initial', 'pivot', 'c2', 'persist'];
+        let detectionPromise = null;
+        const detection = {
+            byImage: new Map(),   // image -> [{ deck, id, type, name, detection, details, description }]
+            byName: new Map(),    // loose/strict card name -> same entries (cross-deck fallback)
+            coverage: new Map(),  // deck  -> { of, filled }
+            procs: new Map()      // deck  -> Set(lowercased procedure names)
+        };
+
+        /**
+         * Lookup keys for a card name, tolerant of how the decks spell the same
+         * printed card ("New Service Creation/Modification" vs "New Service Creation
+         * or Modification"). strict = lowercase + non-alphanumerics collapsed;
+         * loose = the same with the joining words or/and/the/a dropped.
+         */
+        function nameKeys(name) {
+            const strict = String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+            if (!strict) return [];
+            const loose = strict.split(' ').filter(word => word !== 'or' && word !== 'and' && word !== 'the' && word !== 'a').join(' ');
+            return strict === loose ? [strict] : [strict, loose];
+        }
+
+        async function ensureDetection() {
+            if (!detectionPromise) {
+                detectionPromise = (async () => {
+                    try {
+                        const res = await fetch(DETECTION_URL, { cache: 'no-store' });
+                        if (!res.ok) throw new Error('HTTP ' + res.status);
+                        const catalog = await res.json();
+                        (catalog.decks || []).forEach(deck => {
+                            if (!deck || !deck.deck) return;
+                            if (deck.detectionCoverage) detection.coverage.set(deck.deck, deck.detectionCoverage);
+                            const cards = deck.cards || {};
+                            detection.procs.set(deck.deck, new Set(
+                                (cards.procedure || []).map(p => String(p.name || '').toLowerCase())
+                            ));
+                            Object.keys(cards).forEach(type => {
+                                (cards[type] || []).forEach(card => {
+                                    if (!card || !card.image) return;
+                                    const item = {
+                                        deck: deck.deck, id: card.id, type: type, name: card.name,
+                                        image: card.image, detection: card.detection,
+                                        details: card.details, description: card.description,
+                                        tools: card.tools, notes: card.notes,
+                                        specialties: card.specialties, quote: card.quote,
+                                        cost: card.cost
+                                    };
+                                    const list = detection.byImage.get(card.image) || [];
+                                    list.push(item);
+                                    detection.byImage.set(card.image, list);
+                                    nameKeys(card.name).forEach(key => {
+                                        const byName = detection.byName.get(key) || [];
+                                        byName.push(item);
+                                        detection.byName.set(key, byName);
+                                    });
+                                });
+                            });
+                        });
+                        return true;
+                    } catch (err) {
+                        console.warn('Catalogue: detection cross-reference unavailable', err);
+                        return false;
+                    }
+                })();
+            }
+            return detectionPromise;
+        }
+
+        function prefetchDetection() {
+            const kick = () => { ensureDetection(); };
+            if (typeof requestIdleCallback === 'function') requestIdleCallback(kick, { timeout: 2500 });
+            else setTimeout(kick, 1200);
+        }
+
+        /**
+         * Best catalog entry for a card: the same art first (preferring this deck's
+         * own entry), then - for cards whose art the catalog never recorded, such as
+         * Core 3.1's re-encode of the shared v3.1 master - the same card NAME in
+         * another deck. Ranked: this deck, then the v3.1 master art, then the rest.
+         * A name is not an identity (two decks can print a different card under one
+         * name), so only entries that actually carry a detection list are eligible.
+         */
+        function detectionEntry(image, name) {
+            const list = detection.byImage.get(image);
+            if (list && list.length) return list.find(e => e.deck === activeKey) || list[0];
+
+            let best = null;
+            let bestRank = 99;
+            nameKeys(name).forEach(key => {
+                (detection.byName.get(key) || []).forEach(cand => {
+                    if (!cand.detection || !cand.detection.length) return;
+                    const rank = cand.deck === activeKey ? 0
+                        : (String(cand.image || '').indexOf('decks/cardbase/v31/') === 0 ? 1 : 2);
+                    if (rank < bestRank) {
+                        bestRank = rank;
+                        best = cand;
+                    }
+                });
+            });
+            return best;
+        }
+
+        /** Bulleted list of already-escaped strings. */
+        function listHtml(items) {
+            return `<ul class="cv-detail-list">${items.map(x => `<li>${x}</li>`).join('')}</ul>`;
+        }
+
+        function detailsHtml(entry) {
+            const parts = [];
+            const description = String(entry.description || '').trim();
+            if (description) parts.push(`<p>${esc(description)}</p>`);
+
+            // The rest of the text printed on the card face: an inject's NOTES
+            // paragraph, the TOOLS list on procedures and scenario cards, a
+            // consultant's SPECIALTIES and quote, and the v3.1 price badge.
+            const notes = String(entry.notes || '').trim();
+            if (notes) parts.push(`<p class="cv-note"><b>NOTES:</b> ${esc(notes)}</p>`);
+
+            const strings = (value) => (Array.isArray(value) ? value : [])
+                .map(v => String(v || '').trim()).filter(Boolean);
+
+            const tools = strings(entry.tools);
+            if (tools.length) parts.push('<p class="cv-sub">Tools</p>' + listHtml(tools.map(esc)));
+
+            const specialties = strings(entry.specialties);
+            if (specialties.length) parts.push('<p class="cv-sub">Specialties</p>' + listHtml(specialties.map(esc)));
+
+            const quote = String(entry.quote || '').trim();
+            if (quote) parts.push(`<blockquote class="cv-quote">${esc(quote)}</blockquote>`);
+
+            const cost = String(entry.cost || '').trim();
+            if (cost) parts.push(`<dl class="cv-info-list"><dt>Competitive Price</dt><dd>${esc(cost)}</dd></dl>`);
+
+            const items = (Array.isArray(entry.details) ? entry.details : [])
+                .filter(d => d && (d.text || d.url))
+                .map(d => {
+                    const text = String(d.text || d.url || '').trim();
+                    const url = String(d.url || '').trim();
+                    if (!/^https?:\/\//i.test(url)) return `<li>${esc(text)}</li>`;
+                    return `<li><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(text)}</a></li>`;
+                });
+            if (items.length) parts.push(`<ul class="cv-detail-list">${items.join('')}</ul>`);
+            return parts.join('');
+        }
+
+        function infoHtml(entry, tile) {
+            const rows = [];
+            const add = (label, value) => {
+                if (value === undefined || value === null || value === '') return;
+                rows.push(`<dt>${esc(label)}</dt><dd>${esc(value)}</dd>`);
+            };
+            add('Name', entry.name || tile.dataset.name);
+            add('Type', TYPE_LABEL[entry.type] || entry.type);
+            add('Deck', (DECKS.find(d => d.key === activeKey) || {}).name);
+            add('Card ID', entry.id);
+            return rows.length ? `<dl class="cv-info-list">${rows.join('')}</dl>` : '';
+        }
+
+        /** Scenario card -> the Procedure cards printed in its DETECTION section. */
+        function detectionHtml(entry) {
+            const list = Array.isArray(entry.detection) ? entry.detection : [];
+            const procs = detection.procs.get(activeKey) || detection.procs.get(entry.deck) || new Set();
+            const coverage = detection.coverage.get(activeKey) || detection.coverage.get(entry.deck);
+
+            if (!list.length) {
+                const note = (coverage && coverage.of)
+                    ? 'Not yet recorded for this card — the deck\'s card faces are ' + coverage.filled + ' of ' + coverage.of + ' scenario cards read.'
+                    : 'Not yet recorded for this card.';
+                return `<p class="det-lead">${esc(note)}</p>`;
+            }
+
+            const items = list.map(raw => {
+                const isProc = procs.has(String(raw).toLowerCase());
+                return `<li class="${isProc ? 'is-proc' : ''}">${esc(raw)}`
+                    + (isProc ? '' : '<span class="det-tag">not a procedure card</span>')
+                    + '</li>';
+            });
+            return `<p class="det-lead">Printed in this card&rsquo;s DETECTION section:</p>`
+                + `<ul class="det-list">${items.join('')}</ul>`;
+        }
+
+        /** Procedure card -> the scenario cards whose DETECTION section names it. */
+        function detectsHtml(entry) {
+            const target = String(entry.name || '').toLowerCase();
+            if (!target) return '';
+
+            const hits = [];
+            detection.byImage.forEach(entries => {
+                entries.forEach(e => {
+                    if (!SCENARIO_TYPES.includes(String(e.type))) return;
+                    if (!Array.isArray(e.detection) || !e.detection.length) return;
+                    if (!e.detection.some(d => String(d).toLowerCase() === target)) return;
+                    hits.push(e);
+                });
+            });
+            if (!hits.length) return '';
+
+            const own = hits.filter(e => e.deck === activeKey);
+            const list = own.length ? own : hits;
+            const items = list.map(e =>
+                `<li>${esc(e.name)}<span class="det-tag">${esc(TYPE_LABEL[e.type] || e.type)}</span></li>`
+            );
+            const lead = own.length
+                ? 'This deck&rsquo;s scenario cards that print this procedure in their DETECTION section:'
+                : 'Scenario cards in other decks that print this procedure (no recorded match in this deck):';
+            return `<p class="det-lead">${lead}</p><ul class="det-list">${items.join('')}</ul>`;
+        }
+
+        function buildSections(tile) {
+            const entry = detectionEntry(tile.dataset.image || '', tile.dataset.name || '');
+            if (!entry) return null;
+
+            const sections = [];
+            const details = detailsHtml(entry);
+            if (details) sections.push({ label: 'Details', html: details });
+
+            if (SCENARIO_TYPES.includes(String(entry.type))) {
+                sections.push({ label: 'Detection', html: detectionHtml(entry) });
+            } else if (String(entry.type) === 'procedure') {
+                const detects = detectsHtml(entry);
+                if (detects) sections.push({ label: 'Detects', html: detects });
+            }
+            sections.push({ label: 'Info', html: infoHtml(entry, tile) });
+
+            // A single section still flips CardViewer into its 2-column layout for no
+            // gain, so fall back to the classic centred viewer unless there are 2+.
+            return sections.length > 1 ? sections : null;
+        }
+
+        function renderDeckButtons() {
+            buttonsEl.innerHTML = DECKS.map(d => {
+                // Eager on purpose: these are ~20 KB each and the row is the first
+                // thing on the page, so lazy loading only risked them popping in.
+                const cover = d.cover
+                    ? `<img class="deck-btn-cover" src="${COVER_BASE}${d.cover}" alt="" decoding="async">`
+                    : '';
+                return `<button type="button" class="deck-btn${d.key === activeKey ? ' active' : ''}" data-key="${d.key}">${cover}${esc(d.name)}${d.expansion ? ' ⚡' : ''}</button>`;
+            }).join('');
+            buttonsEl.querySelectorAll('.deck-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activeKey = btn.dataset.key;
+                    renderDeckButtons();
+                    loadDeck(activeKey);
+                });
+            });
+        }
+
+        /** Deck header: box art (only when the deck has one) + name. */
+        function renderDeckHero(deck) {
+            heroNameEl.textContent = deck ? deck.name : '';
+            if (!coverEl) return;
+            if (deck && deck.cover) {
+                const src = COVER_BASE + deck.cover;
+                if (coverEl.getAttribute('src') !== src) coverEl.setAttribute('src', src);
+                coverEl.alt = deck.name + ' box art';
+                coverEl.classList.remove('hidden');
+            } else {
+                coverEl.removeAttribute('src');
+                coverEl.classList.add('hidden');
+            }
+        }
+
+        async function loadDeck(key) {
+            const deck = DECKS.find(d => d.key === key);
+            cardsEl.className = 'loading';
+            cardsEl.textContent = 'Loading…';
+            renderDeckHero(deck);
+            noteEl.textContent = deck ? deck.note + (deck.expansion ? ' (This is an expansion deck — its cards merge into a base deck rather than stand alone.)' : '') : '';
+            summaryEl.textContent = '';
+
+            try {
+                // Never serve a stale carddb from cache (older schemas break image paths)
+                const res = await fetch('decks/' + encodeURIComponent(key) + '/carddb.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const db = await res.json();
+                renderCards(db);
+            } catch (err) {
+                console.error('Failed to load deck ' + key, err);
+                cardsEl.className = 'cat-empty';
+                cardsEl.textContent = 'Could not load this deck (' + err.message + ').';
+            }
+        }
+
+        function buildTypeChips(byType) {
+            const present = TYPE_ORDER.filter(t => byType[t]);
+            // A type filter carried over from the previous deck may not exist here.
+            if (filter.type && !byType[filter.type]) filter.type = '';
+            const chip = (type, label, count) =>
+                `<button type="button" class="type-chip${filter.type === type ? ' is-active' : ''}"`
+                + ` data-type="${esc(type)}" aria-pressed="${filter.type === type ? 'true' : 'false'}">`
+                + `${esc(label)}<span class="chip-count">${count}</span></button>`;
+
+            chipsEl.innerHTML = chip('', 'All', deckCardCount)
+                + present.map(type => chip(type, TYPE_LABEL[type] || type, byType[type].length)).join('');
+        }
+
+        function applyFilter() {
+            // Nothing to filter while the deck is loading or failed to load.
+            if (!cardsEl.querySelector('.type-group')) {
+                countEl.textContent = '';
+                countEl.classList.remove('is-empty');
+                clearBtnEl.classList.add('hidden');
+                return;
+            }
+
+            const q = filter.query.trim().toLowerCase();
+            let visibleTotal = 0;
+
+            cardsEl.querySelectorAll('.type-group').forEach(group => {
+                const typeOk = !filter.type || (group.dataset.type || '') === filter.type;
+                const tiles = group.querySelectorAll('.card-tile');
+                let visible = 0;
+                tiles.forEach(tile => {
+                    const match = typeOk && (!q || String(tile.dataset.name || '').toLowerCase().includes(q));
+                    tile.classList.toggle('hidden', !match);
+                    if (match) visible++;
+                });
+                group.classList.toggle('hidden', visible === 0);
+
+                const count = group.querySelector('.count');
+                if (count) count.textContent = (visible === tiles.length) ? String(visible) : visible + '/' + tiles.length;
+                visibleTotal += visible;
+            });
+
+            const none = visibleTotal === 0;
+            const empty = cardsEl.querySelector('.cat-filter-empty');
+            if (empty) {
+                empty.textContent = none ? 'No cards match these filters.' : '';
+                empty.classList.toggle('hidden', !none);
+            }
+
+            const active = !!(q || filter.type);
+            countEl.textContent = active
+                ? (none ? 'No cards match — showing 0 of ' + deckCardCount
+                        : 'Showing ' + visibleTotal + ' of ' + deckCardCount + ' cards')
+                : deckCardCount + ' cards in this deck';
+            countEl.classList.toggle('is-empty', none);
+            clearBtnEl.classList.toggle('hidden', !active);
+
+            // Keep the chip pressed states in sync (cheap; 9 buttons).
+            chipsEl.querySelectorAll('.type-chip').forEach(c => {
+                const on = (c.dataset.type || '') === filter.type;
+                c.classList.toggle('is-active', on);
+                c.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+        }
+
+        function renderCards(db) {
+            const data = db.data || [];
+            const byType = {};
+            data.forEach(card => {
+                const t = (card.type || '').toLowerCase();
+                (byType[t] = byType[t] || []).push(card);
+            });
+
+            deckCardCount = data.length;
+            summaryEl.textContent = db.title + ' — ' + data.length + ' cards';
+            cardsEl.className = '';
+            cardsEl.innerHTML = TYPE_ORDER.filter(t => byType[t]).map(type => {
+                const list = byType[type];
+                return `
+                    <div class="type-group" data-type="${esc(type)}">
+                        <div class="type-head"><h2>${esc(TYPE_LABEL[type] || type)}</h2><span class="count">${list.length}</span></div>
+                        <div class="card-grid">${list.map(card => `
+                            <div class="card-tile" data-type="${esc(type)}" data-name="${esc(card.name || '')}" data-card-id="${esc(card.id || '')}" data-image="${esc(imgUrl(card.image))}" title="${esc(card.name || '')} — click to enlarge">
+                                <div class="frame"><img loading="lazy" src="${imgUrl(card.image)}" alt="${esc(card.name || 'Card')}" onerror="this.style.opacity=0.15"></div>
+                                <span class="name">${esc(card.name || '')}</span>
+                            </div>`).join('')}
+                        </div>
+                    </div>`;
+            }).join('') || '<div class="cat-empty">No cards in this deck.</div>';
+
+            // Placeholder for "filters match nothing" (kept inside #cards so it
+            // sits where the grid would be).
+            const empty = document.createElement('div');
+            empty.className = 'cat-empty cat-filter-empty hidden';
+            cardsEl.appendChild(empty);
+
+            buildTypeChips(byType);
+            applyFilter();
+
+            if (!detectionPrefetched) {
+                detectionPrefetched = true;
+                prefetchDetection();
+            }
+        }
+
+        renderDeckButtons();
+
+        // ---- Filter wiring (delegated; cards are re-rendered per deck) ----
+        searchEl.addEventListener('input', (e) => {
+            filter.query = e.target.value || '';
+            applyFilter();
+        });
+        searchEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && (e.target.value || filter.query)) {
+                e.target.value = '';
+                filter.query = '';
+                applyFilter();
+            }
+        });
+        chipsEl.addEventListener('click', (e) => {
+            const chip = e.target.closest('.type-chip');
+            if (!chip) return;
+            filter.type = chip.dataset.type || '';
+            applyFilter();
+        });
+        clearBtnEl.addEventListener('click', () => {
+            filter.query = '';
+            filter.type = '';
+            searchEl.value = '';
+            applyFilter();
+            searchEl.focus();
+        });
+
+        // Click any card tile to view it large (shared CardViewer overlay).
+        // The Detection/Details/Info tabs come from docs/card-details.json, which
+        // is prefetched after the first deck so this await is normally instant.
+        cardsEl.addEventListener('click', async (e) => {
+            const tile = e.target.closest('.card-tile');
+            if (!tile) return;
+            const img = tile.querySelector('img');
+            if (!img) return;
+            const name = (img.alt && img.alt !== 'Card')
+                ? img.alt
+                : (tile.querySelector('.name')?.textContent || '');
+            if (typeof CardViewer === 'undefined') return;
+
+            await ensureDetection();
+            const opts = { name, type: tile.dataset.type || '' };
+            const sections = buildSections(tile);
+            if (sections) opts.sections = sections;
+            CardViewer.open(img.currentSrc || img.src, opts);
+        });
+
+        loadDeck(activeKey);
+    </script>
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="js/fab.js"></script>
+</body>
+</html>

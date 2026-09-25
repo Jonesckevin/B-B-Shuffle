@@ -1,0 +1,647 @@
+{
+  "title": "Core Spanish 1.0",
+  "revdate": "08-22-2023",
+  "link": "https://www.antisyphontraining.com/",
+  "data": [
+    {
+      "name": "Phishing",
+      "description": "Los atacantes envían un email malicioso, dirigido a los usuarios debido a que es super fácil atacarlos. Sientete libre de agregar una historia sobre el CEO siendo objeto de phishing iO tal vez la gente de Soporte!",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-1.webp",
+      "type": "initial",
+      "id": "01",
+      "details": "<a target=\"_blank\" href=\"https://github.com/drk1wi/Modlishka\">https://github.com/drk1wi/Modlishka</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/how-to-phish-for-geniuses\">https://www.blackhillsinfosec.com/how-to-phish-for-geniuses</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/offensive-spf-how-to-automate-anti-phishing-reconnaissance-using-sender-policy-framework\">https://www.blackhillsinfosec.com/offensive-spf-how-to-automate-anti-phishing-reconnaissance-using-sender-policy-framework</a>",
+      "tools": [
+        "modlishka",
+        "evilginx",
+        "GoPhish"
+      ]
+    },
+    {
+      "name": "SERVIDOR WEB COMPROMETIDO",
+      "description": "Los atacantes toman el control de un servidor web externo. Lo utilizan para obtener acceso a tu red interna.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-2.webp",
+      "type": "initial",
+      "id": "02",
+      "details": "<a target=\"_blank\" href=\"https://www.zaproxy.org\">https://www.zaproxy.org</a><a target=\"_blank\" href=\"https://portswigger.net/burp\">https://portswigger.net/burp</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/using-simple-burp-macros-to-automate-testing\">https://www.blackhillsinfosec.com/using-simple-burp-macros-to-automate-testing</a>",
+      "tools": [
+        "Zed Attack Proxy",
+        "sqlmap",
+        "Burp Proxy"
+      ]
+    },
+    {
+      "name": "ACCESO EXTERNO A LA NUBE",
+      "description": "Los atacantes obtienen acceso a tus recursos de la nube. Utilizan este acceso para pivotar.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-3.webp",
+      "type": "initial",
+      "id": "03",
+      "details": "<a target=\"_blank\" href=\"https://github.com/byt3bl33d3r/SprayingToolKit\">https://github.com/byt3bl33d3r/SprayingToolKit</a><a target=\"_blank\" href=\"https://github.com/trufflesecurity/trufflehog\">https://github.com/trufflesecurity/trufflehog</a><a target=\"_blank\" href=\"https://github.com/ustayready/fireprox\">https://github.com/ustayready/fireprox</a>",
+      "tools": [
+        "SprayingToolkit",
+        "TruffleHog",
+        "FireProx"
+      ]
+    },
+    {
+      "name": "AMENAZA INTERNA",
+      "description": "Un enojado usuario interno filtra información desde tu red.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-4.webp",
+      "type": "initial",
+      "id": "04",
+      "details": "<a target=\"_blank\" href=\"https://americanaddictioncenters.org\">https://americanaddictioncenters.org</a>",
+      "tools": [
+        "Ser considerado un Gasto de Tiempo Completo",
+        "Adicción",
+        "Jornadas de trabajo largas"
+      ]
+    },
+    {
+      "name": "Password Spray",
+      "description": "Los atacantes obtienen acceso a tu red interna intentando numerosas contraseñas comunmente usadas (Método de \"Password Spraying\") en contra de tu organización. Uno de estos ejemplos podría ser una Red Virtual Privada (VPN).",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-5.webp",
+      "type": "initial",
+      "id": "05",
+      "details": "<a target=\"_blank\" href=\"https://github.com/vanhauser-thc/thc-hydra\">https://github.com/vanhauser-thc/thc-hydra</a><a target=\"_blank\" href=\"https://github.com/dafthack/MailSniper\">https://github.com/dafthack/MailSniper</a><a target=\"_blank\" href=\"https://github.com/arch4ngel/BruteLoops\">https://github.com/arch4ngel/BruteLoops</a><a target=\"_blank\" href=\"https://github.com/dafthack/MSOLSpray\">https://github.com/dafthack/MSOLSpray</a>",
+      "tools": [
+        "SprayingToolkit",
+        "FireProx",
+        "Hydra",
+        "MailSniper",
+        "BruteLoops",
+        "MSOLSpray"
+      ]
+    },
+    {
+      "name": "RELACIÓN DE CONFIANZA",
+      "description": "Un tercero de confianza que tiene acceso a tu red se ve comprometido. Los atacantes usan esto para pivotar tus recursos internos.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-6.webp",
+      "type": "initial",
+      "id": "06",
+      "details": "",
+      "tools": [
+        "Confianza desafortunada y sin fundamentos en la humanidad y en socios de negocios que son completos desconocidos."
+      ]
+    },
+    {
+      "name": "INGENIERÍA SOCIAL",
+      "description": "Los atacantes utilizan ingeniería social y engañan a un usuario para que ejecute software malicioso.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-7.webp",
+      "type": "initial",
+      "id": "07",
+      "details": "<a target=\"_blank\" href=\"https://youtu.be/rnmcRTnTNC8\">https://youtu.be/rnmcRTnTNC8</a><a target=\"_blank\" href=\"https://youtu.be/FvhkKwHjUVg\">https://youtu.be/FvhkKwHjUVg</a>",
+      "tools": [
+        "Un teléfono",
+        "Una meta y sueños de causar el mal"
+      ]
+    },
+    {
+      "name": "TRAE TU PROPIO DISPOSITIVO (BYOD) (COMPROMETIDO)",
+      "description": "Tu organización permite que los usuarios utilicen sus propios dispositivos, los cuales tienen probabilidad de estar ya comprometidos. Los atacantes utilizan estos dispositivos para comprometer tu organización.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-8.webp",
+      "type": "initial",
+      "id": "08",
+      "details": "<a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/pentesting-dropbox-on-steroids\">https://www.blackhillsinfosec.com/pentesting-dropbox-on-steroids</a>",
+      "tools": [
+        "La completamente estúpida creencia en permitir que la gente utilice sus propios dispositivos para ahorrar costos."
+      ]
+    },
+    {
+      "name": "SERVICIO EXTERNO EXPLOTABLE",
+      "description": "Un servicio externo tiene una mala configuracion o una explotacion que se encuentra disponible publicamente. Los atacantes toman ventaja de esto para atacar y pivotar a los recursos internos.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-9.webp",
+      "type": "initial",
+      "id": "09",
+      "details": "<a target=\"_blank\" href=\"https://www.metasploit.com\">https://www.metasploit.com</a>",
+      "tools": [
+        "Metasploit",
+        "Procesos de Parchado Fallidos",
+        "Sistema no autorizado creado por un empleado"
+      ]
+    },
+    {
+      "name": "USO DE CREDENCIALES ROBADAS",
+      "description": "Los atacantes toman ventaja de terceros previamente comprometidos para identificar, y usar, credenciales y contraseñas contra tu organización.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_IC-10.webp",
+      "type": "initial",
+      "id": "10",
+      "details": "<a target=\"_blank\" href=\"https://keepcoding.io/blog/que-es-burp-suite/\">https://keepcoding.io/blog/que-es-burp-suite/</a><a target=\"_blank\" href=\"https://www.elladodelmal.com/2020/05/password-spraying-como-funcionan-esos\">https://www.elladodelmal.com/2020/05/password-spraying-como-funcionan-esos</a><a target=\"_blank\" href=\"https://github.com/dafthack/DomainPasswordSpray\">https://github.com/dafthack/DomainPasswordSpray</a>",
+      "tools": [
+        "Burp Suite",
+        "Hydra",
+        "Registro de servicios con las cuentas de correo de trabajo"
+      ]
+    },
+    {
+      "name": "PASSWORD SPRAY INTERNO",
+      "description": "Los atacantes han comenzado un Password Spray contra el resto de la organización desde un sistema comprometido.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-1.webp",
+      "type": "pivot",
+      "id": "11",
+      "details": "<a target=\"_blank\" href=\"https://github.com/dafthack/DomainPasswordSpray\">https://github.com/dafthack/DomainPasswordSpray</a><a target=\"_blank\" href=\"https://github.com/ropnop/kerbrute\">https://github.com/ropnop/kerbrute</a><a target=\"_blank\" href=\"https://www.elladodelmal.com/2020/05/password-spraying-como-funcionan-esos.html\">https://www.elladodelmal.com/2020/05/password-spraying-como-funcionan-esos.html</a>",
+      "tools": [
+        "DomainPasswordSpray",
+        "Bruteloops",
+        "Kerbrute",
+        "Metasploit"
+      ]
+    },
+    {
+      "name": "KERBEROASTING/ASREPROASTING",
+      "description": "Los atacantes usan una \"caracteristica\" de los nombres principales de servicio (SPNs) para extraer y descifrar contraseñas de servicio",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-2.webp",
+      "type": "pivot",
+      "id": "12",
+      "details": "<a target=\"_blank\" href=\"https://thehackerway.com/2021/05/06/post-explotacion-en-sistemas-windows-con-ghostpack-parte-1-de-3-2/\">https://thehackerway.com/2021/05/06/post-explotacion-en-sistemas-windows-con-ghostpack-parte-1-de-3-2/</a><a target=\"_blank\" href=\"https://thehackerway.com/2021/04/26/network-hacking-con-impacket-parte-1\">https://thehackerway.com/2021/04/26/network-hacking-con-impacket-parte-1</a><a target=\"_blank\" href=\"https://www.redeszone.net/tutoriales/seguridad/hashcat-descifrar-contrasenas\">https://www.redeszone.net/tutoriales/seguridad/hashcat-descifrar-contrasenas</a>",
+      "tools": [
+        "GhostPack",
+        "Rubeus",
+        "Impacket",
+        "GetNPUsers.py",
+        "GetUserSPNs.py",
+        "Hashcat for Cracking"
+      ]
+    },
+    {
+      "name": "ENVENENAMIENTO DE PROTOCOLOS BROADCAST/MULTICAST",
+      "description": "Por años, LANMAN era la peor cosa en Windows. Entonces LLMNR llego y dijo, \"¡Háganse a un lado y sostengan mi cerveza!\" Basicamente, LLMNR deja a un equipo pedir la resolucion de un nombre de cualquier sistema en la misma red. Los atacantes realizan un envenenamiento de protocolos Broadcast/Multicast en la red de su Active Directory / Directorio Activo",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-3.webp",
+      "type": "pivot",
+      "id": "13",
+      "details": "<a target=\"_blank\" href=\"https://www.linkedin.com/pulse/hashes-netntlm-t%C3%A9cnicas-de-relay-y-contramedidas-lacasa-s%C3%A1nchez/?originalSubdomain=es\">https://www.linkedin.com/pulse/hashes-netntlm-t%C3%A9cnicas-de-relay-y-contramedidas-lacasa-s%C3%A1nchez/?originalSubdomain=es</a>",
+      "tools": [
+        "Ataques por medio de mitm6 a DHCPv6, ataques de Responder a LLMNR, NBT-NS, WPAD y mDNS"
+      ]
+    },
+    {
+      "name": "UTILIZANDO ACTIVE DIRECTORY COMO UN ARMA",
+      "description": "Los atacantes identifican las relaciones de confianza de dominio, politicas de grupo, privilegios de usuarios/grupos, y las listas de control de acceso (ACLs) en su Active Directory / Directorio Activo",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-4.webp",
+      "type": "pivot",
+      "id": "14",
+      "details": "<a target=\"_blank\" href=\"https://mexicanpentester.com/2020/12/12/bloodhound-en-espanol\">https://mexicanpentester.com/2020/12/12/bloodhound-en-</a><a target=\"_blank\" href=\"https://github.com/byt3bl33d3r/DeathStar\">https://github.com/byt3bl33d3r/DeathStar</a><a target=\"_blank\" href=\"https://www.elladodelmal.com/2020/05/crackmapexec-una-navaja-suiza-para-el.html\">https://www.elladodelmal.com/2020/05/crackmapexec-una-navaja-suiza-para-el.html</a>",
+      "tools": [
+        "BloodHound",
+        "CrackMapExec",
+        "DeathStar"
+      ]
+    },
+    {
+      "name": "USO DE CREDENCIALES ROBADAS",
+      "description": "Credenciales validas para Active Directory, han sido descubiertas en directorios compartidos y archivos dentro del ambiente. Estos son usados por los atacantes.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-5.webp",
+      "type": "pivot",
+      "id": "15",
+      "details": "<a target=\"_blank\" href=\"https://www.boomernix.com/2019/01/powersploit-windows-hacking.html\">LINKHERE</a><a target=\"_blank\" href=\"https://learn.microsoft.com/es-es/sysinternals/downloads/adexplorer\">https://learn.microsoft.com/es-es/sysinternals/downloads/adexplorer</a><a target=\"_blank\" href=\"https://github.com/dafthack/MailSniper\">https://github.com/dafthack/Mail</a>",
+      "tools": [
+        "PowerSploit",
+        "Invoke-ShareFinder",
+        "Invoke-FileFinder",
+        "Find-InterestingFile",
+        "ADExplorer.exe",
+        "MailSniper",
+        "Snaffler",
+        "CrackMapExec"
+      ]
+    },
+    {
+      "name": "CREACION/MODIFICACIÓN DE NUEVO SERVICIO",
+      "description": "Los atacantes crean y cargan su malware usando un nuevo servicio o modificando un servicio existente",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-6.webp",
+      "type": "pivot",
+      "id": "16",
+      "details": "<a target=\"_blank\" href=\"https://thehackerway.com/2021/04/26/network-hacking-con-impacket-parte-1/\">https://thehackerway.com/2021/04/26/network-hacking-con-impacket-parte-1/</a><a target=\"_blank\" href=\"https://www.metasploit.com/\">https://www.metasploit.com/</a>",
+      "tools": [
+        "Sysinternals PSXEC",
+        "services.msc",
+        "Impacket",
+        "psexec.py",
+        "Metasploit",
+        "psexec",
+        "getsystem"
+      ]
+    },
+    {
+      "name": "ESCALAMIENTO DE PRIVILEGIOS LOCALES",
+      "description": "Los atacantes utilizan una configuración errónea o una vulnerabilidad en el software local para obtener acceso administrativo.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PE-7.webp",
+      "type": "pivot",
+      "id": "17",
+      "details": "<a target=\"_blank\" href=\"https://github.com/slyd0g/DLLHijackTest\">https://github.com/slyd0g/DLLHijackTest</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/powershell-without-powershell-how-to-bypass-application-whitelisting-environment-restrictions-av\">https://www.blackhillsinfosec.com/powershell-without-powershell-how-to-bypass-application-whitelisting-environment-restrictions-av</a>",
+      "tools": [
+        "Scripts de postexplotación de Meterpreter",
+        "Prueba de secuestro de DLL (DLL Hijack Test)",
+        "PowerSploit",
+        "PowerUp",
+        "GhostPack",
+        "SharpUp"
+      ]
+    },
+    {
+      "name": "SERVICIO MALICIOSO",
+      "description": "Los atacantes añaden un servicio que se inicia cada vez que inicia el sistema.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-1.webp",
+      "type": "persist",
+      "id": "18",
+      "details": "<a target=\"_blank\" href=\"https://github.com/byt3bl33d3r/SILENTTRINITY\">https://github.com/byt3bl33d3r/SILENTTRINITY</a><a target=\"_blank\" href=\"https://learn.microsoft.com/es-es/sysinternals/downloads/sysinternals-suite\">https://learn.microsoft.com/es-es/sysinternals/downloads/sysinternals-suite</a>",
+      "tools": [
+        "Módulos de persistencia de Meterpreter",
+        "msconfig.exe",
+        "SILENTTRINITY",
+        "Sysinternals",
+        "autoruns.exe"
+      ]
+    },
+    {
+      "name": "ATAQUES CON DLL",
+      "description": "Los atacantes secuestran el orden en que se cargan las bibliotecas de vínculos dinámicos (DLL). Esto suele hacerse a través de permisos de directorio/archivo inseguros.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-2.webp",
+      "type": "persist",
+      "id": "19",
+      "details": "<a target=\"_blank\" href=\"https://github.com/slyd0g/DLLHijackTest\">https://github.com/slyd0g/DLLHijackTest</a><a target=\"_blank\" href=\"https://github.com/Exploit-install/PowerSploit\">https://github.com/Exploit-install/PowerSploit</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/digging-deeper-vulnerable-windows-services\">https://www.blackhillsinfosec.com/digging-deeper-vulnerable-windows-services</a>",
+      "tools": [
+        "Prueba de secuestro de DLL (DLL Hijack Test)",
+        "PowerSploit",
+        "PowerUp"
+      ]
+    },
+    {
+      "name": "CONTROLADOR MALICIOSO",
+      "description": "Los atacantes cargan un controlador (driver)malicioso en el sistema operativo.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-3.webp",
+      "type": "persist",
+      "id": "20",
+      "details": "<a target=\"_blank\" href=\"https://en.wikipedia.org/wiki/Alureon\">https://en.wikipedia.org/wiki/Alureon</a>",
+      "tools": [
+        "Pasam",
+        "Wingbird",
+        "SeaDuke",
+        "ROCKBOOT",
+        "Alureon"
+      ]
+    },
+    {
+      "name": "ADICIÓN DE NUEVO USUARIO",
+      "description": "Fácil, los atacantes añaden un nuevo usuario a la computadora local.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-4.webp",
+      "type": "persist",
+      "id": "20",
+      "details": "<a target=\"_blank\" href=\"https://www.metasploit.com\">https://www.metasploit.com</a><a target=\"_blank\" href=\"https://www.cobaltstrike.com\">https://www.cobaltstrike.com</a>",
+      "tools": [
+        "Metasploit",
+        "Cobalt Strike"
+      ]
+    },
+    {
+      "name": "SHIMMING DE APLICACIONES",
+      "description": "Los atacantes utilizan el kit de herramientas de compatibilidad de aplicaciones (ACT) para engañar a las aplicaciones para que no vean los puertos, directorios, archivos y servicios que los atacantes quieren ocultar.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-5.webp",
+      "type": "persist",
+      "id": "21",
+      "details": "<a target=\"_blank\" href=\"https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install\">https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install</a><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1546/011/\">https://attack.mitre.org/techniques/T1546/011/</a>",
+      "tools": [
+        "Kit de evaluación e implementación de Windows (Windows ADK)"
+      ]
+    },
+    {
+      "name": "PLUGINS DE NAVEGADOR MALICIOSOS",
+      "description": "Los atacantes instalan plugins (complementos) en el navegador. Esto puede ser utilizado como parte de comando y control (C2) y persistencia. El navegador es el nuevo endpoint.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-6.webp",
+      "type": "persist",
+      "id": "22",
+      "details": "<a target=\"_blank\" href=\"https://www.kaspersky.es/blog/dangers-of-browser-extensions/27625/\">https://www.kaspersky.es/blog/dangers-of-browser-extensions/27625/</a><a target=\"_blank\" href=\"https://github.com/graniet/chromebackdoor\">https://github.com/graniet/chromebackdoor</a>",
+      "tools": [
+        "Grammarly es un Keylogger",
+        "graniet/chromebackdoor"
+      ]
+    },
+    {
+      "name": "SCRIPTS DE INICIO DE SESIÓN",
+      "description": "Los atacantes instalan un script que se activa cuando un usuario inicia sesión.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-7.webp",
+      "type": "persist",
+      "id": "23",
+      "details": "<a target=\"_blank\" href=\"https://www.metasploit.com\">https://www.metasploit.com</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/backdoors-breaches-logon-scripts\">https://www.blackhillsinfosec.com/backdoors-breaches-logon-scripts</a>",
+      "tools": [
+        "Persistencia de Meterpreter"
+      ]
+    },
+    {
+      "name": "FIRMWARE MALICIOSO",
+      "description": "Los atacantes actualizan el firmware de las tarjetas de red, tarjetas de video, BIOS o UEFI... ¡Con malicia! Todos estos son muy difíciles de detectar y actualizar.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-8.webp",
+      "type": "persist",
+      "id": "25",
+      "details": "<a target=\"_blank\" href=\"https://threatpost.com/uefi-rootkit-sednit/140420\">https://threatpost.com/uefi-rootkit-sednit/140420</a><a target=\"_blank\" href=\"https://thehackernews.com/2020/12/trickbot-malware-gets-uefibios-bootkit.html\">https://thehackernews.com/2020/12/trickbot-malware-gets-uefibios-bootkit.html</a>",
+      "tools": [
+        "Hacking Team UEFI Rootkit",
+        "BadBIOS (…quizás)",
+        "Trickbot"
+      ]
+    },
+    {
+      "name": "CARACTERÍSTICAS DE ACCESIBILIDAD",
+      "description": "Los atacantes secuestran características de accesibilidad como Sticky Keys y teclado en pantalla.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PER-9.webp",
+      "type": "persist",
+      "id": "26",
+      "details": "<a target=\"_blank\" href=\"https://shop.hak5.org\">https://shop.hak5.org</a>",
+      "tools": [
+        "Bash Bunny - Para ejemplos USB",
+        "Rubber Ducky - Para ejemplos"
+      ]
+    },
+    {
+      "name": "HTTP COMO CANAL DE EXFILTRACIÓN",
+      "description": "Los atacantes utilizan HTTP como método de exfiltración. Esto generalmente se usa en conjunto con algún tipo de esteganografía. Por ejemplo, VSAgent utiliza el campo de exfiltración __VIEWSTATE codificado en base64.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_CE-1-27.webp",
+      "type": "c2",
+      "id": "27",
+      "details": "<a target=\"_blank\" href=\"https://www.thec2matrix.com/\">https://www.thec2matrix.com/</a>",
+      "tools": [
+        "Payload HTTP inversa de Metasploit",
+        "C2 Matrix"
+      ]
+    },
+    {
+      "name": "HTTPS COMO CANAL DE EXFILTRACIÓN",
+      "description": "Esto es bastante básico: los atacantes usan HTTPS. Muchos tipos de malware utilizan esta técnica. Por ejemplo, Meterpreter ha utilizado esta técnica por mucho tiempo. Se puede usar en conjunto con otras técnicas de esteganografía.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_CE-1-28.webp",
+      "type": "c2",
+      "id": "28",
+      "details": "<a target=\"_blank\" href=\"https://www.metasploit.com\">https://www.metasploit.com</a><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1573/\">https://attack.mitre.org/techniques/T1573/</a><a target=\"_blank\" href=\"https://github.com/byt3bl33d3r/SILENTTRINITY\">https://github.com/byt3bl33d3r/SILENTTRINITY</a>",
+      "tools": [
+        "Payload HTTPS inversa de Metasploit",
+        "SILENT TRINITY"
+      ]
+    },
+    {
+      "name": "DNS Como C2",
+      "description": "Los atacantes utilizan DNS como canal de C2.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_CE-2.webp",
+      "type": "c2",
+      "id": "29",
+      "details": "<a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/bypassing-cylance-part-2-using-dnscat2\">LINKHERE</a>",
+      "tools": [
+        "dnscat2"
+      ]
+    },
+    {
+      "name": "SERVICIO DE TRANSFERENCIA INTELIGENTE EN SEGUNDO PLANO DE WINDOWS (BITS)",
+      "description": "Los atacantes utilizan BITS, otro protocolo que a menudo es ignorado.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_CE-3.webp",
+      "type": "c2",
+      "id": "30",
+      "details": "<a target=\"_blank\" href=\"https://github.com/deruke/HERRAMIENTAS\">https://github.com/deruke/HERRAMIENTAS</a><a target=\"_blank\" href=\"https://attack.mitre.org/techniques/T1197/\">https://attack.mitre.org/techniques/T1197/</a>",
+      "tools": [
+        "Leviathan",
+        "UBoatRAT"
+      ]
+    },
+    {
+      "name": "GMAIL, TUMBLR, SALESFORCE, TWITTER COMO C2",
+      "description": "Los atacantes direccionan el tráfico a través de servicios de terceros. Muchos servicios, como Gmail, son completamente ignorados por muchas herramientas de seguridad.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_CE-4.webp",
+      "type": "c2",
+      "id": "31",
+      "details": "<a target=\"_blank\" href=\"https://github.com/byt3bl33d3r/gcat\">https://github.com/byt3bl33d3r/gcat</a><a target=\"_blank\" href=\"https://github.com/DakotaNelson/sneaky-creeper\">https://github.com/DakotaNelson/sneaky-creeper</a>",
+      "tools": [
+        "Gcat",
+        "Sneaky Creeper"
+      ]
+    },
+    {
+      "name": "ENCUBRIMIENTO DE DOMINIOS COMO C2",
+      "description": "Los atacantes utilizan el encubrimiento de dominio para rebote de su tráfico fuera de de sistemas legítimos.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_CE-5.webp",
+      "type": "c2",
+      "id": "32",
+      "details": "<a target=\"_blank\" href=\"https://www.cobaltstrike.com\">https://www.cobaltstrike.com</a><a target=\"_blank\" href=\"https://www.blackhillsinfosec.com/bypass-web-proxy-filtering\">https://www.blackhillsinfosec.com/bypass-web-proxy-filtering</a>",
+      "tools": [
+        "Cobalt Strike"
+      ]
+    },
+    {
+      "name": "ANÁLISIS DEL SERVIDOR",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-1.webp",
+      "type": "procedure",
+      "id": "33",
+      "details": "<a target=\"_blank\" href=\"https://github.com/sans-blue-team/DeepBlueCLI\">https://github.com/sans-blue-team/DeepBlueCLI</a>",
+      "description": "La capacidad de realizar baseline al sistema y verificar que funciona en un estado normal. Por cierto, esto es más que simplemente ejecutar el Administrador de tareas y buscar evil_backdoor.exe.",
+      "tools": [
+        "DeepBlueCLI",
+        "SANS Analysis Cheat Sheets"
+      ]
+    },
+    {
+      "name": "ANÁLISIS DE BITACORAS DE SIEM",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-.webp",
+      "type": "procedure",
+      "id": "34",
+      "details": "<a target=\"_blank\" href=\"https://github.com/philhagen/sof-elk\">https://github.com/philhagen/sof-elk</a><a target=\"_blank\" href=\"https://jpcertcc.github.io/ToolAnalysisResultSheet\">https://jpcertcc.github.io/ToolAnalysisResultSheet</a>",
+      "description": "Sí... buena suerte con esto. ¿Estás registrando las cosas correctas? ¿Emulas regularmente escenarios de ataque para ver si puedes detectarlos?",
+      "tools": [
+        "SOF-ELK",
+        "JPCert Tool Analysis"
+      ]
+    },
+    {
+      "name": "REVISIÓN DE BITÁCORAS DE FIREWALL",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-3.webp",
+      "type": "procedure",
+      "id": "35",
+      "details": "<a target=\"_blank\" href=\"https://github.com/philhagen/sof-elk\">https://github.com/philhagen/sof-elk</a>",
+      "description": "¿Puede tu organización analizar y comprender bitácoras de firewall? ¿Emula regularmente escenarios de ataque y verifica que sus procedimientos funcionan?",
+      "tools": [
+        "SOF-ELK"
+      ]
+    },
+    {
+      "name": "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-4.webp",
+      "type": "procedure",
+      "id": "36",
+      "details": "<a target=\"_blank\" href=\"https://www.activecountermeasures.com/free-HERRAMIENTAS/\">https://www.activecountermeasures.com/free-HERRAMIENTAS/</a><a target=\"_blank\" href=\"https://securityonionsolutions.com/\">https://securityonionsolutions.com/</a>",
+      "description": "¿Tu organización captura y revisa el tráfico de red? Muy bien. ¿Sabes cómo analizarlo y revisarlo? ¿Está documentado ese proceso? ¿O simplemente utilizas Zeek/RITA/Security Onion/ELK porque lo hacen los chicos cool?",
+      "tools": [
+        "Real Intelligence Threat Analytics (RITA)",
+        "Security Onion",
+        "AC-Hunter",
+        "Passer",
+        "espy"
+      ]
+    },
+    {
+      "name": "CIBERENGAñO",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-5.webp",
+      "type": "procedure",
+      "id": "37",
+      "details": "<a target=\"_blank\" href=\"https://engage.mitre.org/\">https://engage.mitre.org/</a><a target=\"_blank\" href=\"https://www.activecountermeasures.com/free-tools/adhd/\">https://www.activecountermeasures.com/free-tools/adhd/</a>",
+      "description": "Los atacantes van tras una de tus tecnologías de engaño. Puede tratarse de un word web bug, una cuenta falsa o un honeypot completo.",
+      "tools": [
+        "CanaryTokens",
+        "HoneyBadger",
+        "Distribucion Harbinger de Defensa Activa (ADHD)",
+        "MITRE Engage"
+      ]
+    },
+    {
+      "name": "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-6.webp",
+      "type": "procedure",
+      "id": "38",
+      "details": "<a target=\"_blank\" href=\"https://docs.velociraptor.app/\">https://docs.velociraptor.app/</a><a target=\"_blank\" href=\"https://www.elastic.co/downloads/elastic-agent\">https://www.elastic.co/downloads/elastic-agent</a>",
+      "description": "Lo sabemos, tienes AV. ¡Estupendo! ¿Realmente recibes alertas y registros? ¿Los revisas inmediatamente? ¿O simplemente lo enciendes y te vas mientras la red explota como si estuvieras en una mala película de acción?",
+      "tools": [
+        "Consulta con tu proveedor, te echa de menos y siempre quiere charlar contigo."
+      ]
+    },
+    {
+      "name": "ANÁLISIS DE COMPORTAMIENTO DE USUARIOS Y ENTIDADES (UEBA)",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-7.webp",
+      "type": "procedure",
+      "id": "39",
+      "details": "<a target=\"_blank\" href=\"https://github.com/JPCERTCC/LogonTracer\">https://github.com/JPCERTCC/LogonTracer</a><a target=\"_blank\" href=\"https://openuba.org/\">https://openuba.org/</a>",
+      "description": "Es como la bitácora, pero funciona de verdad. El análisis de Comportamiento de Usuarios y Entidades (UEBA) busca múltiples inicios de sesión simultáneos, inicios de sesión imposibles basados en la geografía, accesos inusuales a archivos, Password Spraying ¡y mucho más!",
+      "tools": [
+        "LogonTracer",
+        "DeepBlueCLI",
+        "OpenUBA"
+      ]
+    },
+    {
+      "name": "ANÁLISIS DE ENDPOINTS",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-8.webp",
+      "type": "procedure",
+      "id": "40",
+      "details": "<a target=\"_blank\" href=\"https://github.com/sans-blue-team/DeepBlueCLI\">https://github.com/sans-blue-team/DeepBlueCLI</a><a target=\"_blank\" href=\"https://docs.velociraptor.app/\">https://docs.velociraptor.app/</a>",
+      "description": "Aquí es donde los Defensores utilizan sus guías de referencia SANS IR (Cheat Sheets) para detectar ataques en estaciones de trabajo. Es hora de traer a un operador local... y esperar lo mejor.",
+      "tools": [
+        "DeepBlueCLI",
+        "Velociraptor",
+        "SANS IR Cheat Sheets"
+      ]
+    },
+    {
+      "name": "AISLAMIENTO",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-9.webp",
+      "type": "procedure",
+      "id": "41",
+      "details": "",
+      "description": "Tu equipo de administracion de redes esta en su mejor momento. Pueden aislar fácilmente los sistemas infectados para evitar daños mayores.",
+      "tools": [
+        "Comandos de switch y router"
+      ]
+    },
+    {
+      "name": "GESTIÓN DE CRISIS",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_PRO-10.webp",
+      "type": "procedure",
+      "id": "42",
+      "details": "",
+      "description": "Tus equipos legales y administrativo tienen procedimientos para notificar de manera efectiva y ética a las víctimas afectadas de los compromisos.",
+      "tools": [
+        "Esto casi nunca ocurre. Pero una buena estrategia de notificación le ayudará a hacer frente a las consecuencias políticas."
+      ]
+    },
+    {
+      "name": "ANÁLISIS DE MEMORIA",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_Pro-11.webp",
+      "type": "procedure",
+      "id": "43",
+      "details": "<a target=\"_blank\" href=\"https://docs.velociraptor.app/\">https://docs.velociraptor.app/</a><a target=\"_blank\" href=\"https://www.volatilityfoundation.org/\">https://www.volatilityfoundation.org/</a>",
+      "description": "Los Defensores extraen la memoria del sistema sospechoso y la revisan en busca de posibles actividades maliciosas.",
+      "tools": [
+        "Volatility, para revisar la memoria.",
+        "Velociraptor, para descargas (volcar) la memoria"
+      ]
+    },
+    {
+      "name": "HONEYPOTS DESPLEGADOS",
+      "description": "Los Defensores tenían honeypots en su red. El Capitán del Incidente debe revelar la Carta de Pivotar y Escalar a los Defensores.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-1.webp",
+      "type": "inject",
+      "id": "44",
+      "details": "<a target=\"_blank\" href=\"https://www.activecountermeasures.com/free-tools/adhd\">https://www.activecountermeasures.com/free-tools/adhd</a><a target=\"_blank\" href=\"https://canarytokens.org/generate\">https://canarytokens.org/generate</a>",
+      "notes": "Echa un vistazo a la Active Defense Harbinger Distribution (ADHD), tiene montones y montones de herramientas geniales. Echa un vistazo también a canarytokens.org."
+    },
+    {
+      "name": "FUE UN PENTEST",
+      "description": "¡Ja! ¡Ja! Sólo bromeaba, ¡nunca fuiste atacado! El director general contrató a una empresa externa (¿BHIS?) para dirigir un Red Team sin previo aviso.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-2.webp",
+      "type": "inject",
+      "id": "45",
+      "details": "<a target=\"_blank\" href=\"https://www.blackhillsinfosec.com\">https://www.blackhillsinfosec.com</a>",
+      "notes": "Casi siempre es un momento agridulce para las empresas. Por un lado, se alegran de que no fuera real. Por otro... bueno, estaban en peligro. Es hora de empezar a trabajar para evitar que esto vuelva a suceder."
+    },
+    {
+      "name": "DATOS SUBIDOS A PASTEBIN",
+      "description": "Desastre, los atacantes han publicado datos sensibles internos en Pastebin. Sus clientes están ahora informados del ataque por los medios de comunicación.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-3.webp",
+      "type": "inject",
+      "id": "46",
+      "details": "",
+      "notes": "Ocurre... mucho, pero es pura maldad. Es hora de traer a la Alta Dirección y al Equipo Legal."
+    },
+    {
+      "name": "ANALISTA DE SIEM VUELVE DEL ENTRENAMIENTO EN SPLUNK",
+      "description": "(+2) Modificador para Acciones Relacionadas con Bitácoras (Logs)",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-4.webp",
+      "type": "inject",
+      "id": "47",
+      "details": "",
+      "notes": "El entrenamiento (capacitación) es increíble. Necesitas un poco."
+    },
+    {
+      "name": "QUITAR UNA CARTA DE PROCEDIMIENTOS",
+      "description": "Tal y como dice en el paquete de cartas, quítale una carta de Procediimientos a los defensores. Las cosas no funcionan algunas de las veces. Siendo honestos, ¿Esto es sorpresa para ti?",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-5.webp",
+      "type": "inject",
+      "id": "48",
+      "details": "",
+      "notes": "Los procedimientos fallan algunas veces. En otras ocasiones, no se siguen correctamente. Y en ciertas ocasiones, nunca encuentras un procedimiento cuando más lo necesitas. Lo sentimos – Nadie es perfecto."
+    },
+    {
+      "name": "PROVEE A LOS DEFENSORES CON UNA CARTA DE PROCEDIMIENTO AL AZAR",
+      "description": "Por alguna razón, todo mundo ha olvidado que este procedimiento existe. Debe ser Lunes.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-6.webp",
+      "type": "inject",
+      "id": "49",
+      "details": "",
+      "notes": "Seamos honestos, esto sucede muy frecuentemente. Tendemos a olvidar lo que ya tenemos. Distintos equipos, distintas herramientas, distintas oficinas. Es bueno cuando todos nos unimos y trabajamos como un mismo equipo."
+    },
+    {
+      "name": "EL/LA COORDINADOR(A) DE INCIDENTES SE TOMA VACACIONES DE PATERNIDAD/MATERNIDAD",
+      "description": "Siempre se da el caso en el que, prácticamente, una sola persona se encarga de todo el proceso de Respuesta a Incidentes. Una sola persona que es esencial. Pues bien, es hora de que el Capitán de Incidentes haga callar a esa persona.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-7.webp",
+      "type": "inject",
+      "id": "50",
+      "details": "",
+      "notes": "Debemos de ser capaces de poder trabajar de manera efectiva sin contar con algunas de las personas clave en nuestro equipo. Todos aquellos que escuchaban pasivamente y que esperaban no ser llamados a participar deben ahora contribuír a la causa. ¡Ésta es la oportunidad de brillar!"
+    },
+    {
+      "name": "EL PASANTE ROBERTITO INHABILITA EL SISTEMA QUE SE ENCUENTRA BAJO REVISIÓN.",
+      "description": "Esto sucede MUY A MENUDO.",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-8.webp",
+      "type": "inject",
+      "id": "51",
+      "details": "",
+      "notes": "¡Inhabilitar sistemas clave es algo MUY MALO, Robertito! ¡Ésto no lo enseñan en la escuela!"
+    },
+    {
+      "name": "EL DEPARTAMENTO LEGAL SE LLEVA A TU MEJOR COORDINADOR DE INCIDENTES A UNA REUNION PARA EXPLICAR EL INCIDENTE QUE SE ESTÁ INVESTIGANDO.",
+      "description": "¿Quien invitó a un abogado a la fiesta? Siempre se da el caso en el que, prácticamente, una sola persona se encarga de todo el proceso de Respuesta a Incidentes. Una sola persona que es esencial. Pues bien, el equipo legal se ha llevado a esa persona \"debido a razones muy importantes\".",
+      "image": "../../shared/decks/core-spanish/BNB_SPANISH_v1.0_INJ-9.webp",
+      "type": "inject",
+      "id": "52",
+      "details": "",
+      "notes": "Es posible que esas personas ya no regresen. Todos aquellos que escuchaban pasivamente y que esperaban no ser llamados a participar deben ahora contribuír a la causa. ¡Ésta es la oportunidad de brillar!"
+    }
+  ],
+  "red": "decks/CoreV2.2_Spanish/CARD_BACK_SP_v1.0_outline_RED.png",
+  "yellow": "decks/CoreV2.2_Spanish/CARD_BACK_SP_v1.0_outline_YELLOW.png",
+  "brown": "decks/CoreV2.2_Spanish/CARD_BACK_SP_v1.0_outline_BROWN.png",
+  "purple": "decks/CoreV2.2_Spanish/CARD_BACK_SP_v1.0_outline_PURPLE.png",
+  "grey": "decks/CoreV2.2_Spanish/CARD_BACK_SP_v1.0_outline_GREY.png",
+  "green": "decks/CoreV2.2_Spanish/CARD_BACK_SP_v1.0_outline_GREEN.png",
+  "logo": "img/antisyphon.png"
+}

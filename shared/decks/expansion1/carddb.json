@@ -1,0 +1,431 @@
+{
+  "title": "Expansion 1",
+  "revdate": "01-01-2023",
+  "link": "",
+  "data": [
+    {
+      "name": "Missing HTTP Strict Transport Security (HSTS) Protection",
+      "description": "By having HTTP to HTTPS redirects, the attackers can \"strip\" SSL from a session. The attackers need to be on the same network for this to work. So, think coffee shops... evil, coffee shops.",
+      "image": "../../shared/decks/expansion1/initial-1.webp",
+      "type": "initial",
+      "id": "001",
+      "details": "",
+      "tools": [
+        "SSLStrip",
+        "SSLsplit"
+      ]
+    },
+    {
+      "name": "Supply Chain Attack",
+      "description": "The attackers insert malware in the update process of one of your key enterprise management tools. This gives them direct access to the heart of your infrastructure.",
+      "image": "../../shared/decks/expansion1/initial-2.webp",
+      "type": "initial",
+      "id": "002",
+      "details": "",
+      "tools": [
+        "SUNBURST",
+        "SUPERNOVA"
+      ]
+    },
+    {
+      "name": "Physical Access",
+      "description": "The attackers gain physical access to your organization and use this to pivot to your internal networks.",
+      "image": "../../shared/decks/expansion1/initial-3.webp",
+      "type": "initial",
+      "id": "003",
+      "details": "",
+      "tools": [
+        "Clipboard",
+        "Crowbar",
+        "RFID Badge Cloner",
+        "Lockpicks",
+        "Stolen Keys",
+        "Counterfeit Work ID",
+        "Brick",
+        "Ladder"
+      ]
+    },
+    {
+      "name": "SMB Weakness",
+      "description": "The attackers take advantage of a number of different Server Message Block (SMB) issues that can be used for post-exploitation. From SMB Signing disabled to using SMBv1.",
+      "image": "../../shared/decks/expansion1/pivot-1.webp",
+      "type": "pivot",
+      "id": "004",
+      "details": "",
+      "tools": [
+        "NTLMRelayX",
+        "CrackMapExec",
+        "Responder",
+        "Inveigh"
+      ]
+    },
+    {
+      "name": "Internal Spearphishing",
+      "description": "The attackers leverage existing access to users' email to send attack emails to other targets. Because they come from the inside, the attack emails tend to bypass security controls.",
+      "image": "../../shared/decks/expansion1/pivot-2.webp",
+      "type": "pivot",
+      "id": "005",
+      "details": "",
+      "tools": [
+        "Internal Existing Email Services",
+        "Gamaredon Group"
+      ]
+    },
+    {
+      "name": "Access Token Manipulation",
+      "description": "The attackers conduct actions under other user/service account tokens.",
+      "image": "../../shared/decks/expansion1/pivot-3.webp",
+      "type": "pivot",
+      "id": "006",
+      "details": "",
+      "tools": [
+        "PowerSploit",
+        "Empire",
+        "PoshC2"
+      ]
+    },
+    {
+      "name": "Stale Network Address Configurations (SNAC) Attack",
+      "description": "The attackers take advantage of a system or a network service that has been configured with a hard-coded IP address or fully qualified domain name (FQDN) that is no longer associated with a live host.",
+      "image": "../../shared/decks/expansion1/pivot-4.webp",
+      "type": "pivot",
+      "id": "007",
+      "details": "",
+      "tools": [
+        "Eavesarp"
+      ]
+    },
+    {
+      "name": "Cleartext Passwords in Files",
+      "description": "The attackers love people who share and save passwords in files everyone else can read. This attack works because people (often admins and developers) create documents and spreadsheets with passwords in them. Then, they put them on shares that are readable to everyone in the domain.",
+      "image": "../../shared/decks/expansion1/pivot-5.webp",
+      "type": "pivot",
+      "id": "008",
+      "details": "",
+      "tools": [
+        "Snaffler",
+        "PowerShellEmpire"
+      ]
+    },
+    {
+      "name": "Event Triggered Malware",
+      "description": "The attackers' malware triggers only when specific events occur. For example, when a specific DLL or service is started.",
+      "image": "../../shared/decks/expansion1/persist-1.webp",
+      "type": "persist",
+      "id": "009",
+      "details": "",
+      "tools": [
+        "Tsunami",
+        "WMI Malware"
+      ]
+    },
+    {
+      "name": "Malware Injection into Client Software",
+      "description": "The attackers insert their malware to run alongside (or in) third-party software. Stuxnet and Bonadan did this.",
+      "image": "../../shared/decks/expansion1/persist-2.webp",
+      "type": "persist",
+      "id": "010",
+      "details": "",
+      "tools": [
+        "Stuxnet",
+        "Bonadan"
+      ]
+    },
+    {
+      "name": "Malicious Email Rules",
+      "description": "The attackers create rules in an email inbox and/or client that trigger on specific events or when certain keywords are present in a message.",
+      "image": "../../shared/decks/expansion1/persist-3.webp",
+      "type": "persist",
+      "id": "011",
+      "details": "",
+      "tools": [
+        "Gamaredon Group"
+      ]
+    },
+    {
+      "name": "Windows Service Recovery Actions",
+      "description": "The attackers use Windows Service failure recovery actions as a means of persistence on an accessible service they can remotely crash on demand.",
+      "image": "../../shared/decks/expansion1/persist-4.webp",
+      "type": "persist",
+      "id": "012",
+      "details": "",
+      "tools": [
+        "Windows Service Recovery Actions"
+      ]
+    },
+    {
+      "name": "Registry Keys for Persistence",
+      "description": "The attackers add/modify registry commands to cause their malware to run on system startup and/or user login. This has been around forever. Almost every piece of solid malware in existence can do this.",
+      "image": "../../shared/decks/expansion1/persist-5.webp",
+      "type": "persist",
+      "id": "013",
+      "details": "",
+      "tools": [
+        "reg command"
+      ]
+    },
+    {
+      "name": "Call a Consultant",
+      "image": "../../shared/decks/expansion1/procedure-1.webp",
+      "type": "procedure",
+      "id": "014",
+      "details": "",
+      "description": "Do you want help? Feeling stuck? Rolling badly? Need a different perspective on the incident? Then maybe it's time to phone a friend. You can choose one Consultant Card to help your team with the incident. The Consultant Card's modifier is effective immediately."
+    },
+    {
+      "name": "Food Poisoning",
+      "description": "The life of this organization depends upon just one thing: finding someone back there who can not only work this incident, but who didn't have fish for dinner.",
+      "image": "../../shared/decks/expansion1/inject-1.webp",
+      "type": "inject",
+      "id": "015",
+      "details": "",
+      "notes": "Each of the Defenders must roll a D20 and the person with the lowest number will finish the session by themselves without any assistance from the others."
+    },
+    {
+      "name": "SIEM Goes Down",
+      "description": "No SIEM for you!",
+      "image": "../../shared/decks/expansion1/inject-2.webp",
+      "type": "inject",
+      "id": "016",
+      "details": "",
+      "notes": "It is discovered that due to an intern error, your logging server/SIEM has not been logging properly for the last two weeks. All SIEM actions are off the table for the rest of the session."
+    },
+    {
+      "name": "This Isn't the First Time, and Won't Be the Last",
+      "description": "This is not the first time the attackers have been on your network.",
+      "image": "../../shared/decks/expansion1/inject-3.webp",
+      "type": "inject",
+      "id": "017",
+      "details": "",
+      "notes": "Through forensic analysis, it has been discovered that the backdoor had internal DNS servers' IP addresses hard-coded in them because the attackers have been in before. Have the Incident Master draw an additional Persistence Card."
+    },
+    {
+      "name": "EDR Compromise",
+      "description": "The attackers gain access to your Endpoint Protection suite of tools.",
+      "image": "../../shared/decks/expansion1/inject-4.webp",
+      "type": "inject",
+      "id": "018",
+      "details": "",
+      "notes": "Endpoints stop reporting to the EDR console… The attackers found a console session that hadn't timed out yet and issued mass uninstalls. All Endpoint Security Protection Analysis actions are unavailable for the rest of the session."
+    },
+    {
+      "name": "Attackers Taunt You",
+      "description": "The attackers call out the security team, via a message to every system on the network.",
+      "image": "../../shared/decks/expansion1/inject-5.webp",
+      "type": "inject",
+      "id": "019",
+      "details": "",
+      "notes": "The attackers use msg command to send a popup to incident responders, \"Shall we play a game?\""
+    },
+    {
+      "name": "Attackers Timestomp Key Evidence Files",
+      "description": "(-3) Modifier for Log-Related Actions There are tools that allow attackers to modify Modified-Accessed-Created-Entry (MACE) timestamps of files. One such tool is in Metasploit called Timestomp.",
+      "image": "../../shared/decks/expansion1/inject-6.webp",
+      "type": "inject",
+      "id": "020",
+      "details": "",
+      "notes": "The attackers can change the MACE for their malware to be in the future. What does this do to your handling of evidence? Can you trust timestamps at all?"
+    },
+    {
+      "name": "No Good Deed Goes Unpunished...",
+      "description": "The Purple Team uncovers another incident.",
+      "image": "../../shared/decks/expansion1/inject-7.webp",
+      "type": "inject",
+      "id": "021",
+      "details": "",
+      "notes": "When tuning your detection capabilities during a purple team engagement (unrelated to the incident at hand) your team detects another attack. You now have two compromises to deal with. Have the Incident Master pull another set of Attack Cards. The Defenders get five extra turns."
+    },
+    {
+      "name": "Our Friend “Hacky”",
+      "description": "You discover other attackers have been on your network for months.",
+      "image": "../../shared/decks/expansion1/inject-8.webp",
+      "type": "inject",
+      "id": "022",
+      "details": "",
+      "notes": "Have the Incident Master draw an additional Initial Compromise Card."
+    },
+    {
+      "name": "Is It Getting Hot in Here?",
+      "description": "HVAC systems are important... and they will fail at the worst times. This... is one of those times.",
+      "image": "../../shared/decks/expansion1/inject-9.webp",
+      "type": "inject",
+      "id": "023",
+      "details": "",
+      "notes": "Your data center HVAC system is infected with a worm. It's supposed to be air-gapped. It is 103°F outside, and the server temperatures are rising. All servers need to be shut down. RIGHT NOW! Hope you have a \"hot site.\""
+    },
+    {
+      "name": "\"Don't Forget to Smash the Subscribe Button!\"",
+      "description": "Some attackers just want to watch the world burn.",
+      "image": "../../shared/decks/expansion1/inject-10.webp",
+      "type": "inject",
+      "id": "024",
+      "details": "",
+      "notes": "The attackers post a YouTube video detailing the extent of their attack because it wasn't getting the press they thought it deserved."
+    },
+    {
+      "name": "Alethe Denis",
+      "description": "The Incident Master must reveal the Initial Compromise Card",
+      "image": "../../shared/decks/expansion1/consultant-1.webp",
+      "type": "consultant",
+      "id": "025",
+      "details": "",
+      "specialties": [
+        "OSINT",
+        "Social Engineering",
+        "Security Awareness Training",
+        "Policy and Compliance",
+        "Public Speaking",
+        "Comic Book Nerd"
+      ],
+      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" — Dan Erwin"
+    },
+    {
+      "name": "Tim Medin",
+      "description": "The Incident Master must reveal the Pivot and Escalate Card",
+      "image": "../../shared/decks/expansion1/consultant-2.webp",
+      "type": "consultant",
+      "id": "026",
+      "details": "",
+      "specialties": [
+        "Offensive Operations",
+        "Risk Management",
+        "Vulnerability Management",
+        "Infosec Instructor and Author",
+        "Public Speaking",
+        "PowerPoint... lots and lots of PowerPoint"
+      ],
+      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" — Tim Medin"
+    },
+    {
+      "name": "Jorge Orchilles",
+      "description": "The Incident Master must reveal the C2 and Exfil Card",
+      "image": "../../shared/decks/expansion1/consultant-3.webp",
+      "type": "consultant",
+      "id": "027",
+      "details": "",
+      "specialties": [
+        "Offensive Security",
+        "Purple Team",
+        "Detection Engineering",
+        "Co-creator of C2 Matrix",
+        "Infosec Instructor and Author",
+        "Public Speaking"
+      ],
+      "quote": "\"Offense informs defense and defense informs offense.\" — Jorge Orchilles"
+    },
+    {
+      "name": "Alissa Torres",
+      "description": "The Incident Master must reveal the Persistence Card",
+      "image": "../../shared/decks/expansion1/consultant-4.webp",
+      "type": "consultant",
+      "id": "028",
+      "details": "",
+      "specialties": [
+        "Executor of Host-based Triage",
+        "Performer of Memory Forensics",
+        "File System Metadata Summoner",
+        "Incident Response Kill Chain Slayer",
+        "Architect of Inspirational PPTX"
+      ],
+      "quote": "\"Heroism is often nothing more than the omission of details.\" — Asim Qureshi"
+    },
+    {
+      "name": "Dieter Smith",
+      "description": "(+5) Modifier for dice rolls for the next (3) turns",
+      "image": "../../shared/decks/expansion1/consultant-5.webp",
+      "type": "consultant",
+      "id": "029",
+      "details": "",
+      "specialties": [
+        "Blue Team",
+        "PowerShell Automator",
+        "Wicked Google-fu",
+        "Problem Solving",
+        "Game Aficionado",
+        "Geek Dad"
+      ],
+      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" — Mikko Hypponen"
+    },
+    {
+      "name": "Marcus J. Carey",
+      "description": "(+2) Modifier on all dice rolls for the rest of the session",
+      "image": "../../shared/decks/expansion1/consultant-6.webp",
+      "type": "consultant",
+      "id": "030",
+      "details": "",
+      "specialties": [
+        "Security Architecture",
+        "Incident Response",
+        "Security/Attack Tool Development",
+        "Mentoring",
+        "Motivational Speaking",
+        "Building Businesses"
+      ],
+      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" — Marcus J. Carey"
+    },
+    {
+      "name": "Robert M. Lee",
+      "description": "For the next (2) turns, each of the Defenders roll a D20 and use the highest number",
+      "image": "../../shared/decks/expansion1/consultant-7.webp",
+      "type": "consultant",
+      "id": "031",
+      "details": "",
+      "specialties": [
+        "ICS/OT Cybersecurity",
+        "Incident Response",
+        "Cyber Threat Intelligence",
+        "Building a Team of People Smarter Than Me",
+        "No One's Ever Wondered My Opinion"
+      ],
+      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" — Robert M. Lee"
+    },
+    {
+      "name": "Chloé Messdaghi",
+      "description": "The Defenders get an extra (3) turns to complete the session",
+      "image": "../../shared/decks/expansion1/consultant-8.webp",
+      "type": "consultant",
+      "id": "032",
+      "details": "",
+      "specialties": [
+        "Strategy",
+        "Cyber Risk Communicator",
+        "Damage Control",
+        "Public Speaking",
+        "Optimistic",
+        "Always Calm During a Storm"
+      ],
+      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" — Stéphane Nappo"
+    },
+    {
+      "name": "Eric Conrad",
+      "description": "(+3) Modifier for all Procedure Cards that mention DeepBlueCLI for the rest of the session",
+      "image": "../../shared/decks/expansion1/consultant-9.webp",
+      "type": "consultant",
+      "id": "033",
+      "details": "",
+      "specialties": [
+        "Threat Hunting",
+        "Incident Handling",
+        "Defensible Security Architecture",
+        "Public Speaking",
+        "Mentoring",
+        "Restoring Golden Age Arcade Machines"
+      ],
+      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" — Anonymous"
+    },
+    {
+      "name": "Traffic Signaling",
+      "image": "../../shared/decks/expansion1/exfil-1.webp",
+      "type": "exfil",
+      "id": "034",
+      "details": ""
+    },
+    {
+      "name": "Exfiltration Over Physical Medium",
+      "image": "../../shared/decks/expansion1/exfil-2.webp",
+      "type": "exfil",
+      "id": "035",
+      "details": ""
+    }
+  ]
+}

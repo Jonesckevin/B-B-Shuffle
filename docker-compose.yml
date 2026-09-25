@@ -1,7 +1,40 @@
 services:
-     b-b-shuffle:
-          build: .
-          container_name: b-b-shuffle
-          ports:
-               - "8080:80"
-          hostname: b-b-shuffle
+  bb-shuffle:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bb-shuffle
+    ports:
+      - "8180:80"
+      - "8001:8001"
+    hostname: bb-shuffle
+    restart: unless-stopped
+    # Debug configuration
+    #stdin_open: true # Keep STDIN open for shell access
+    #tty: true # Allocate a pseudo-TTY for better shell experience
+    # Persist the runtime data directory (scenarios, custom decks, uploads,
+    # ai-config.json). Required in production: `data/` is excluded from the
+    # build context, so without this mount a rebuild discards saved content.
+    volumes:
+      - ./data:/usr/share/nginx/html/data
+
+    # Optional: provide a shared AI key on the server so players of the AI
+    # Generator don't need to bring their own. Requests are proxied through the
+    # server and the key never reaches the browser. (Alternative: set it in the
+    # AI Generator UI -> "Shared key on this server", stored in data/ai-config.json.)
+    # environment:
+    #   - BB_AI_PROVIDER=openai
+    #   - BB_AI_API_KEY=sk-your-key-here
+    #   - BB_AI_MODEL=gpt-4o-mini
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1/api/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+          pids: 512

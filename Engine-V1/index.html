@@ -1,3 +1,288 @@
 <head>
-  <meta http-equiv="Refresh" content="0; URL=App/">
+  <meta charset="UTF-8">
+  <title>B&B Shuffle | Engine-V1</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="builder-styles.css">
+  <link rel="stylesheet" href="deck-styles.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Ubuntu:wght@300&display=swap"
+    rel="stylesheet">
+  <!-- jQuery needed for lightbox.js -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <link href="lightbox.css" rel="stylesheet" />
+
 </head>
+
+<!-- Collapsible Header -->
+<div id="collapsibleHeader" class="collapsible-header">
+  <div style="display: flex; align-items: stretch; width: 100%; position: relative;">
+    <a href="help.html" target="_blank" style="position: relative; z-index: 2; margin-right: -10px;"
+      onclick="event.stopPropagation();"><button class="open-button help-button" title="Card Reference Guide">❓
+        Help</button></a>
+    <button id="headerToggle" class="header-toggle" onclick="toggleHeader()" style="flex: 1; padding-left: 30px;">
+      <span id="toggleIcon">▼</span> Settings & Controls
+    </button>
+  </div>
+  <div id="headerContent" class="header-content">
+    <div class="header-section">
+      <div id="viewrec">
+        B&B Shuffle - Engine-V1<div id="version"><strong>Card list:</strong> </div>
+        <div id="date"><strong>Rev Date:</strong> </div>
+        <!-- Deck Selection (populated from CONFIG.decks by deck-script.js) -->
+        <div class="deck-selector">
+          <strong>Available Decks:</strong><br>
+          <div id="deck-list" class="deck-list"></div>
+        </div>
+      </div>
+    </div>
+    <div class="header-section header-section-center">
+      <div id="dm_scenario">
+        <strong>Scenario Tools</strong><br>
+        <button onClick="rando()">Random</button>
+        <button onClick="customtoggle()">Edit</button> |
+        <button onclick="flipBack()"> Hide Scenario</button>
+        <button onClick='window.location.href=window.location.href'>Clear</button>
+      </div>
+    </div>
+    <div class="header-section">
+      <div id="solution">
+        <strong>DM Controls/Toggles</strong><br>
+        <button onclick="diceboxtoggle()"> D20</button>
+        <button onclick="notestoggle()"> Notes</button>
+        |
+        <button onclick="injectstoggle()"> Injects</button>
+        |
+        <button onclick="solutiontoggle()"> Solution</button>
+        <div id="dm_solution" style="display:none;">
+          <div class="solution" id="dma">
+            <div class="warn">No Initial Compromise</div>
+          </div>
+          <div class="solution" id="dmb">
+            <div class="warn">No Pivot & Escalate</div>
+          </div>
+          <div class="solution" id="dmc">
+            <div class="warn">No C2 & Exfil</div>
+          </div>
+          <div class="solution" id="dmd">
+            <div class="warn">No Persistence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Wrapper -->
+<div class="main-content-wrapper">
+
+  <!--recommendations-->
+
+  <!-- Scenario Builder Menu -->
+  <div id="builder">
+    Scenario Builder
+    <button onclick="boxtoggle('ic');buildscenemenu('ic');">Initial Compromise</button>
+    <button onclick="boxtoggle('pv');buildscenemenu('pv');">Pivot</button>
+    <button onclick="boxtoggle('c2');buildscenemenu('c2');">C2</button>
+    <button onclick="boxtoggle('ps');buildscenemenu('ps');">Persist</button>
+    |
+    <button onclick="boxtoggle('proc');buildprocmenu();">Procedures</button>
+    <button onclick="boxtoggle('start');buildinjmenu();">Injects</button>
+    |
+    <button onClick="customtoggle()">Close</button>
+    <div id="ic">Inital Compromise</div>
+    <div id="pv">Pivot</div>
+    <div id="c2">C2 & Exfil</div>
+    <div id="ps">Persist</div>
+    <div id="proc">Procedures</div>
+    <div id="start">Injects</div>
+  </div>
+
+  <!-- SCENARIO CARDS -->
+  <header>
+    <h1 tabindex="0" class="title">SCENARIO</h1>
+  </header>
+  <section class="cards">
+
+
+
+    <div class="cards__single">
+      <div id="inita" class="cards__front">
+
+      </div>
+      <div class="cards__back">
+        <div class='init' id="a">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cards__single">
+      <div id="initb" class="cards__front">
+
+      </div>
+      <div class="cards__back">
+        <div class='init' id="b">
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="cards__single">
+      <div id="initc" class="cards__front">
+
+      </div>
+      <div class="cards__back">
+        <div class='init' id="c">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="cards__single">
+      <div id="initd" class="cards__front">
+
+      </div>
+      <div class="cards__back">
+        <div class='init' id="d">
+
+        </div>
+      </div>
+    </div>
+
+    <br>
+
+
+  </section>
+
+  <!-- PROCEDURE CARDS -->
+  <header>
+    <center>
+      <h1 tabindex="0" class="title">PROCEDURES</h1>
+  </header>
+
+  <strong>Established Procedures:</strong>
+  <div class="establishedprocs" id="output"></div>
+  <div style="clear:both; margin-bottom:10px;"></div>
+  <strong>Other Procedures:</strong>
+  <div class="otherprocs" id="remainder"></div>
+  </center>
+  <div style="clear:both; margin-bottom:10px;"></div>
+
+  <!--INJECT BOX-->
+  <div id="injectdiv">
+    <div id="injectdivheader">
+      <header>
+        <h1 tabindex="0" class="title">INJECTS</h1>
+      </header>
+    </div>
+    <button onClick="customtoggle();boxtoggle('start');buildinjmenu()">Custom Inject</button>
+    <input type="button" onclick="update_ins()" value="DRAW INJECT" />
+    <input type="button" onclick="rem_ins()" value="CLEAR" />
+    <div>
+      <div id="e">
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FLIP SCRIPT removed from here - loaded at bottom with other scripts -->
+
+  <hr>
+
+  <!-- Game Progress -->
+  <div id="mydiv">
+    <div id="mydivheader">
+      <header>
+        <h1 tabindex="0">GAME PROGRESS</h1>
+      </header>
+    </div>
+    <span id="button"><input type="button" onclick="roll_dice(0)" value="Roll Dice" /></span>
+    <span id="button2"><input type="button" onclick="roll_dice(3)" value="Roll Dice (+3)" /></span>
+    <span id="button3"><button onClick='addturn()'>Add Extra Turn</button></span>
+    <span id="button4"><button onClick='removeturn()'>Remove Turn</button></span>
+    <div class="dice">
+      <div id="dice">
+
+      </div>
+      <div id="message"></div>
+      <div id="fails"></div>
+    </div>
+    <hr>
+    <div class="turn">TURNS REMAINING#:
+      <div id="turn">10</div>
+      <div id="turn_message"></div>
+    </div>
+  </div>
+
+  <!-- Game Progress -->
+  <div id="dicebox">
+    <div id="diceboxheader">
+      <header>
+        <h1 tabindex="0">DiceBox</h1>
+      </header>
+    </div>
+    <span><input type="button" onclick="roll_d20(0)" value="Roll D20" /></span>
+    <div class="dice">
+      <div id="d20">
+      </div>
+    </div>
+  </div>
+
+  <!-- GM Notes -->
+  <div id="gmnotes">
+    <div id="gmnotesheader">
+      <header>
+        <h1 tabindex="0">NOTES</h1>
+      </header>
+    </div>
+    <hr>
+    <textarea id="notes" rows="2" cols="13">((Type Here))
+  </textarea>
+  </div>
+
+
+  <!-- COUNTERS -->
+  <div id="counter1" class="counter">1</div>
+  <div id="counter2" class="counter">2</div>
+  <div id="counter3" class="counter">3</div>
+
+  <!-- HOLD COUNTER -->
+  <div id="hold1" class="xcounter">x</div>
+  <div id="hold2" class="xcounter">x</div>
+  <div id="hold3" class="xcounter">x</div>
+
+
+  <!-- ATTRIBUTION -->
+  <div id="copyright">
+
+  </div>
+
+  <p class="bb-disclaimer" style="max-width:900px;margin:10px auto 20px;padding:0 12px;font-size:11.5px;line-height:1.4;color:#9aa4b2;text-align:center;">
+    Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training. Card artwork and game content remain the property of their respective owners.
+  </p>
+
+</div>
+<!-- End Main Content Wrapper -->
+
+<!-- 1. Configuration (must load first) -->
+<script type="text/javascript" src="config.js"></script>
+
+<!-- 2. Utilities (depends on config) -->
+<script type="text/javascript" src="utils.js"></script>
+
+<!-- 3. State management (depends on config and utils) -->
+<script type="text/javascript" src="game-state.js"></script>
+
+<!-- 4. Lightbox library -->
+<script src="lightbox.js"></script>
+
+<!-- 5. Application modules (depend on config, utils, and state) -->
+<script type="text/javascript" src="deck-script.js"></script>
+<script type="text/javascript" src="card-script.js"></script>
+<script type="text/javascript" src="ui-script.js"></script>
+<script type="text/javascript" src="ui-builder.js"></script>
+<script type="text/javascript" src="dice-script.js"></script>
+<script type="text/javascript" src="flip-script.js"></script>

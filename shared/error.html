@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Error - B&B Shuffle</title>
+  <link rel="icon" href="img/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body class="surface-felt">
+  <div class="main-content">
+    <div class="error-container">
+      <div class="error-icon">⚠️</div>
+      <div class="logo">B&B Shuffle</div>
+      <h1 class="error-title">Oops! Something went wrong</h1>
+      <p class="error-message">
+        We encountered an unexpected error. This could be due to:
+      </p>
+
+      <ul class="error-reasons">
+        <li>A temporary server issue</li>
+        <li>Missing or corrupted files</li>
+        <li>Network connectivity problems</li>
+        <li>Invalid page request</li>
+      </ul>
+
+      <div class="error-actions">
+        <a href="../index.html" class="action-button primary">
+          <span class="button-icon">🏠</span>
+          Back to Main Menu
+        </a>
+
+        <button onclick="location.reload()" class="action-button secondary">
+          <span class="button-icon">🔄</span>
+          Try Again
+        </button>
+
+        <button onclick="history.back()" class="action-button secondary">
+          <span class="button-icon">⬅️</span>
+          Go Back
+        </button>
+      </div>
+
+      <div class="error-details">
+        <p class="help-text">
+          If this problem persists, please check the console for more details or contact support.
+        </p>
+        <button onclick="toggleErrorInfo()" class="show-details-btn">
+          Show Technical Details
+        </button>
+        <div id="technical-details" class="technical-details" style="display: none;">
+          <h4>Technical Information:</h4>
+          <p><strong>Timestamp:</strong> <span id="error-timestamp"></span></p>
+          <p><strong>User Agent:</strong> <span id="user-agent"></span></p>
+          <p><strong>URL:</strong> <span id="current-url"></span></p>
+          <p><strong>Referrer:</strong> <span id="referrer-url"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer: the same legal footer as every other page (styles in css/base.css) -->
+  <footer class="app-legal">
+    <div class="app-legal-content">
+      <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
+        <img class="app-legal-logo" src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+        <span>B&amp;B Classic — play on the official site</span>
+      </a>
+      <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+      <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+        <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        <span>Jonesckevin</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    // Populate technical details
+    document.getElementById('error-timestamp').textContent = new Date().toLocaleString();
+    document.getElementById('user-agent').textContent = navigator.userAgent;
+    document.getElementById('current-url').textContent = window.location.href;
+    document.getElementById('referrer-url').textContent = document.referrer || 'Direct access';
+
+    // Toggle technical details
+    function toggleErrorInfo() {
+      const details = document.getElementById('technical-details');
+      const button = document.querySelector('.show-details-btn');
+
+      if (details.style.display === 'none') {
+        details.style.display = 'block';
+        button.textContent = 'Hide Technical Details';
+      } else {
+        details.style.display = 'none';
+        button.textContent = 'Show Technical Details';
+      }
+    }
+
+    // Handle URL parameters for custom error messages
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorType = urlParams.get('type');
+    const customMessage = urlParams.get('message');
+
+    if (customMessage) {
+      document.querySelector('.error-message').textContent = decodeURIComponent(customMessage);
+    }
+
+    // Update title based on error type
+    if (errorType) {
+      const titles = {
+        '404': 'Page Not Found',
+        '403': 'Access Forbidden',
+        '500': 'Internal Server Error',
+        'network': 'Network Error',
+        'timeout': 'Request Timeout'
+      };
+
+      if (titles[errorType]) {
+        document.querySelector('.error-title').textContent = titles[errorType];
+      }
+    }
+  </script>
+
+  <style>
+    /* Token-based (shared/css/base.css) dark styling — replaces the old light theme. */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 2rem;
+    }
+
+    .error-container {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+      border-radius: 1rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .error-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .error-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--color-danger);
+      margin-bottom: 1rem;
+    }
+
+    .error-message {
+      color: var(--color-text-secondary);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .error-reasons {
+      text-align: left;
+      max-width: 400px;
+      margin: 0 auto 2rem auto;
+      background: var(--color-bg-secondary);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border-left: 4px solid var(--color-danger);
+    }
+
+    .error-reasons li {
+      color: var(--color-text-secondary);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .error-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .action-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--color-border-hover);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      min-width: 140px;
+      justify-content: center;
+      background: var(--color-bg-tertiary);
+      color: var(--color-text);
+    }
+
+    .action-button.primary {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .action-button.primary:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .action-button.secondary {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-secondary);
+    }
+
+    .action-button.secondary:hover {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text);
+      border-color: var(--color-primary);
+    }
+
+    .button-icon {
+      font-size: 1rem;
+    }
+
+    .error-details {
+      border-top: 1px solid var(--color-border);
+      padding-top: 1.5rem;
+    }
+
+    .help-text {
+      color: var(--color-text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .show-details-btn {
+      background: none;
+      border: none;
+      color: var(--color-primary-light);
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      margin-bottom: 1rem;
+    }
+
+    .show-details-btn:hover {
+      color: var(--color-primary);
+    }
+
+    .technical-details {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      max-width: 100%;
+      overflow-wrap: break-word;
+    }
+
+    .technical-details h4 {
+      margin: 0 0 1rem 0;
+      color: var(--color-text);
+    }
+
+    .technical-details p {
+      margin: 0.5rem 0;
+      color: var(--color-text-secondary);
+    }
+
+    .technical-details strong {
+      color: var(--color-text);
+    }
+
+    @media (max-width: 640px) {
+      .error-container {
+        padding: 2rem 1.5rem;
+      }
+
+      .error-title {
+        font-size: 1.5rem;
+      }
+
+      .logo {
+        font-size: 1.75rem;
+      }
+
+      .error-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .action-button {
+        width: 100%;
+        max-width: 250px;
+      }
+
+      .error-icon {
+        font-size: 3rem;
+      }
+    }
+  </style>
+  <!-- Site navigation FAB (shared radial menu) -->
+  <script src="js/fab.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+.open-button {}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 221px;
+  z-index: 1001;
+  /* Higher than header (1000) */
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.6);
+  padding: 10px;
+}
+
+
+/* Set a style for the submit/login button */
+.form-container .btn {
+
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover,
+.open-button:hover {
+  opacity: 1;
+}
+
+/* ==================== DECK PICKER ==================== */
+/* Options are built from CONFIG.decks by deck-script.js, so every deck in the
+   project is selectable rather than a hardcoded pair. */
+.deck-selector .deck-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 10px;
+  margin-top: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.deck-selector .deck-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.deck-selector .deck-option input[type="radio"] {
+  margin: 0;
+}
+
+.deck-selector .deck-option-tag {
+  font-size: 10px;
+  font-style: italic;
+  opacity: 0.65;
+}

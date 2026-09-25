@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>B&amp;B Shuffle - Custom Card Creator</title>
+    <link rel="icon" href="../../../shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="../../../shared/img/favicon.png">
+
+    <link rel="stylesheet" href="../../../shared/css/base.css">
+    <link rel="stylesheet" href="../../../shared/css/modules.css">
+    <link rel="stylesheet" href="../../../shared/css/custom-cards.css">
+</head>
+<body>
+    <div class="module-layout">
+        <!-- Header -->
+        <header class="module-header">
+            <div class="header-left">
+                <a href="../../player.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Game
+                </a>
+                <h1 class="module-title">Custom Card Creator</h1>
+            </div>
+            <div class="header-right">
+                <a href="../../custom-cards.html" class="btn btn-ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    Custom Cards Library
+                </a>
+                <button id="cc-new-btn" class="btn btn-ghost" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    New Card
+                </button>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class="module-main cc-layout">
+            <!-- Form -->
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Card Details</h2>
+                    <div class="panel-actions">
+                        <span class="cc-status" id="cc-form-status"></span>
+                    </div>
+                </div>
+
+                <div class="cc-form">
+                    <!-- AI assist -->
+                    <details class="cc-ai" id="cc-ai">
+                        <summary>AI assist — generate the text</summary>
+                        <div class="cc-ai-body">
+                            <div class="cc-ai-mode" id="cc-ai-mode">Checking AI availability…</div>
+                            <div class="cc-field">
+                                <label class="cc-label" for="cc-ai-theme">Theme / topic</label>
+                                <input type="text" id="cc-ai-theme" class="form-input" placeholder="e.g. ransomware at a regional hospital">
+                            </div>
+                            <div class="cc-row">
+                                <div class="cc-field">
+                                    <label class="cc-label" for="cc-ai-difficulty">Difficulty</label>
+                                    <select id="cc-ai-difficulty" class="form-select">
+                                        <option value="">Any</option>
+                                        <option value="1">1 - Very Easy</option>
+                                        <option value="2">2 - Easy</option>
+                                        <option value="3">3 - Medium</option>
+                                        <option value="4">4 - Hard</option>
+                                        <option value="5">5 - Very Hard</option>
+                                    </select>
+                                </div>
+                                <div class="cc-field">
+                                    <label class="cc-label" for="cc-ai-context">Extra context</label>
+                                    <input type="text" id="cc-ai-context" class="form-input" placeholder="optional">
+                                </div>
+                            </div>
+                            <button id="cc-ai-generate" class="btn btn-secondary btn-sm" type="button">Generate fields</button>
+                            <div class="cc-status" id="cc-ai-status"></div>
+                        </div>
+                    </details>
+
+                    <!-- Type + id -->
+                    <div class="cc-row">
+                        <div class="cc-field">
+                            <label class="cc-label" for="cc-type">Card type</label>
+                            <select id="cc-type" class="form-select">
+                                <optgroup label="Scenario">
+                                    <option value="initial">Initial Compromise</option>
+                                    <option value="pivot">Pivot &amp; Escalate</option>
+                                    <option value="c2">C2 / Exfiltration</option>
+                                    <option value="persist">Persistence</option>
+                                </optgroup>
+                                <option value="procedure">Procedure</option>
+                                <option value="inject">Inject</option>
+                                <option value="consultant">Consultant</option>
+                            </select>
+                        </div>
+                        <div class="cc-field" style="flex:0 0 120px">
+                            <label class="cc-label" for="cc-id">Card ID</label>
+                            <input type="text" id="cc-id" class="form-input" placeholder="CC-001">
+                        </div>
+                    </div>
+
+                    <div class="cc-field">
+                        <label class="cc-label" for="cc-name">Name</label>
+                        <input type="text" id="cc-name" class="form-input" maxlength="60" placeholder="Card title">
+                    </div>
+
+                    <div class="cc-field">
+                        <label class="cc-label" for="cc-description">Description</label>
+                        <textarea id="cc-description" class="form-textarea" rows="4" placeholder="1-3 sentences shown on the card body"></textarea>
+                    </div>
+
+                    <!-- Detection (scenario only) -->
+                    <div class="cc-field cc-hidden" id="cc-detection-field">
+                        <label class="cc-label" for="cc-detection-input">Detection list</label>
+                        <div class="cc-chips" id="cc-detection-chips"></div>
+                        <div class="cc-autocomplete">
+                            <input type="text" id="cc-detection-input" class="form-input cc-chip-input" placeholder="Type a procedure, press Enter">
+                            <div class="cc-suggest cc-hidden" id="cc-detection-suggest"></div>
+                        </div>
+                        <p class="cc-hint">Procedures that would detect this scenario card.</p>
+                    </div>
+
+                    <!-- Tools (procedure only) -->
+                    <div class="cc-field cc-hidden" id="cc-tools-field">
+                        <label class="cc-label" for="cc-tools-input">Tools list</label>
+                        <div class="cc-chips" id="cc-tools-chips"></div>
+                        <input type="text" id="cc-tools-input" class="form-input cc-chip-input" placeholder="Type a tool or data source, press Enter">
+                        <p class="cc-hint">Tools or data sources the defenders would use.</p>
+                    </div>
+
+                    <!-- Resources -->
+                    <div class="cc-section">
+                        <h3 class="cc-section-title">Resources (optional)</h3>
+                        <div id="cc-resources"></div>
+                        <button id="cc-add-resource" class="btn btn-ghost btn-sm" type="button">+ Add link</button>
+                    </div>
+
+                    <!-- Artwork -->
+                    <div class="cc-section">
+                        <h3 class="cc-section-title">Artwork</h3>
+                        <div class="cc-drop" id="cc-drop">Click or drop an image here</div>
+                        <input type="file" id="cc-image-input" class="cc-file-input" accept="image/*">
+                        <div class="cc-thumb cc-hidden" id="cc-thumb">
+                            <img id="cc-thumb-img" alt="Artwork preview">
+                            <button id="cc-image-clear" class="btn btn-ghost btn-sm" type="button">Remove</button>
+                        </div>
+
+                        <div class="cc-field" style="margin-top:12px">
+                            <label class="cc-label">Placement</label>
+                            <div class="cc-seg" id="cc-artwork-seg">
+                                <label><input type="radio" name="cc-artwork" value="illustration" checked> Illustration panel</label>
+                                <label><input type="radio" name="cc-artwork" value="banner"> Top banner</label>
+                                <label><input type="radio" name="cc-artwork" value="none"> No image</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Style -->
+                    <div class="cc-section">
+                        <h3 class="cc-section-title">Card style</h3>
+                        <div class="cc-seg" id="cc-style-seg">
+                            <label><input type="radio" name="cc-style" value="app" checked> App theme (dark)</label>
+                            <label><input type="radio" name="cc-style" value="classic"> Classic (light)</label>
+                        </div>
+                        <p class="cc-hint">Classic is an original card face inspired by tabletop layouts — it does not reproduce the official artwork.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Preview</h2>
+                    <div class="panel-actions">
+                        <button id="cc-copy-json" class="btn btn-sm btn-ghost" type="button">Copy JSON</button>
+                    </div>
+                </div>
+                <div class="cc-preview-wrap">
+                    <img class="cc-preview-img" id="cc-preview-img" alt="Card preview">
+                    <div class="cc-preview-actions">
+                        <button id="cc-save" class="btn btn-primary" type="button">Save to Custom Deck</button>
+                        <button id="cc-export-svg" class="btn btn-secondary" type="button">Export SVG</button>
+                        <button id="cc-export-png" class="btn btn-secondary" type="button">Export PNG</button>
+                    </div>
+                    <div class="cc-status" id="cc-preview-status"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">
+                <img class="app-legal-logo" src="../../../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <span>B&amp;B Classic — play on the official site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training. Cards you create here are your own content.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="../../js/utils.js"></script>
+    <script src="../../js/card-renderer.js"></script>
+    <script src="../../js/ai-client.js"></script>
+    <script src="../../js/custom-card-io.js"></script>
+    <script src="card_creator.js"></script>
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="../../../shared/js/fab.js"></script>
+</body>
+</html>

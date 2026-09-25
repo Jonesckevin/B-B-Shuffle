@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>B&amp;B Shuffle - Scenario Editor</title>
+    <link rel="icon" href="../shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="../shared/img/favicon.png">
+    
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="../shared/css/base.css">
+    
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="surface-felt">
+    <div class="admin-layout">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <a href="player.html" id="admin-back-link" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Player View
+                </a>
+                <button id="admin-close-btn" class="btn btn-secondary btn-sm hidden" type="button">Close</button>
+                <h1 class="admin-title">Scenario Editor</h1>
+            </div>
+            <div class="header-right">
+                <a href="scenario-library.html" class="btn btn-ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                    </svg>
+                    Library
+                </a>
+                <a href="custom-cards.html" class="btn btn-ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <line x1="12" y1="8" x2="12" y2="16"/>
+                        <line x1="8" y1="12" x2="16" y2="12"/>
+                    </svg>
+                    Custom Cards
+                </a>
+                <button id="save-scenario-btn" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                        <polyline points="17,21 17,13 7,13 7,21"/>
+                        <polyline points="7,3 7,8 15,8"/>
+                    </svg>
+                    Save to Library
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Deck Selection -->
+            <section class="deck-section">
+                <h2 class="section-title">Select Deck</h2>
+                <div class="deck-row">
+                    <div class="deck-selector">
+                        <select id="deck-select" class="form-select">
+                            <option value="">Choose a deck...</option>
+                            <option value="core">Core Deck</option>
+                            <option value="core31">Core 3.1</option>
+                            <option value="ics-ot">ICS-OT</option>
+                            <option value="core-v1">Core v1</option>
+                            <option value="core-v3">Core v3</option>
+                            <option value="core-v22">Core v2.2</option>
+                            <option value="core-spanish">Core Spanish 1.0</option>
+                            <option value="cloud-security">Cloud Security</option>
+                            <option value="datadog">DataDog</option>
+                            <option value="huntress">Huntress</option>
+                            <option value="red-canary">Red Canary</option>
+                            <option value="densecure">DenSecure</option>
+                            <option value="trimarc">Trimarc</option>
+                            <option value="electrical-co-op">Electrical Co-Op</option>
+                            <option value="mega-deck">The MEGA Deck</option>
+                        </select>
+                        <button id="load-deck-btn" class="btn btn-secondary">Load Deck</button>
+                    </div>
+                    <div id="deck-info" class="deck-info hidden">
+                        <img id="deck-cover" class="deck-cover hidden" alt="" decoding="async">
+                        <div class="deck-info-text">
+                            <span id="deck-name" class="deck-name"></span>
+                            <span id="card-count" class="card-count"></span>
+                        </div>
+                    </div>
+                    <div id="deck-expansion" class="deck-expansion hidden" title="Merge expansion card packs into the loaded deck's pools">
+                        <div id="expansion-toggles" class="expansion-toggles"></div>
+                    </div>
+                </div>
+
+                <div class="deck-settings">
+                    <h3 class="config-strip-title">Round Settings</h3>
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <label for="initial-turns">Initial Turns</label>
+                            <input type="number" id="initial-turns" class="form-input" value="10" min="1" max="50">
+                        </div>
+                        <div class="config-item">
+                            <label for="max-strikes">Max Strikes</label>
+                            <input type="number" id="max-strikes" class="form-input" value="3" min="1" max="10">
+                        </div>
+                        <div class="config-item">
+                            <label for="success-target">Success Target</label>
+                            <input type="number" id="success-target" class="form-input" value="11" min="2" max="20" title="A roll whose total (incl. +3) is at or above this is a success">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scenario Builder -->
+            <section class="scenario-section">
+                <div class="section-head">
+                    <h2 class="section-title">Scenario Cards</h2>
+                    <div class="scenario-actions">
+                        <button id="random-all-btn" class="btn btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16,3 21,3 21,8"/>
+                                <line x1="4" y1="20" x2="21" y2="3"/>
+                                <polyline points="21,16 21,21 16,21"/>
+                                <line x1="15" y1="15" x2="21" y2="21"/>
+                                <line x1="4" y1="4" x2="9" y2="9"/>
+                            </svg>
+                            Randomize All
+                        </button>
+                        <button id="clear-all-btn" class="btn btn-ghost">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="scenario-builder">
+                    <!-- Initial Card -->
+                    <div class="scenario-slot" data-type="initial" data-filled="false">
+                        <div class="slot-header">
+                            <span class="slot-label">Initial</span>
+                            <span class="slot-actions">
+                                <button class="slot-swap-btn" data-type="initial" title="Choose a card" disabled>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20h9"/>
+                                        <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/>
+                                    </svg>
+                                </button>
+                                <button class="slot-random-btn" data-type="initial" title="Random">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="2"/>
+                                    <circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="8" r="1.5"/>
+                                    <circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="16" r="1.5"/>
+                                    <circle cx="12" cy="12" r="1.5"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="slot-card" id="initial-slot">
+                            <span class="slot-placeholder">Click to select</span>
+                        </div>
+                    </div>
+
+                    <!-- Pivot Card -->
+                    <div class="scenario-slot" data-type="pivot" data-filled="false">
+                        <div class="slot-header">
+                            <span class="slot-label">Pivot</span>
+                            <span class="slot-actions">
+                                <button class="slot-swap-btn" data-type="pivot" title="Choose a card" disabled>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20h9"/>
+                                        <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/>
+                                    </svg>
+                                </button>
+                                <button class="slot-random-btn" data-type="pivot" title="Random">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="2"/>
+                                    <circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="8" r="1.5"/>
+                                    <circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="16" r="1.5"/>
+                                    <circle cx="12" cy="12" r="1.5"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="slot-card" id="pivot-slot">
+                            <span class="slot-placeholder">Click to select</span>
+                        </div>
+                    </div>
+
+                    <!-- C2 Card -->
+                    <div class="scenario-slot" data-type="c2" data-filled="false">
+                        <div class="slot-header">
+                            <span class="slot-label">C2</span>
+                            <span class="slot-actions">
+                                <button class="slot-swap-btn" data-type="c2" title="Choose a card" disabled>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20h9"/>
+                                        <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/>
+                                    </svg>
+                                </button>
+                                <button class="slot-random-btn" data-type="c2" title="Random">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="2"/>
+                                    <circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="8" r="1.5"/>
+                                    <circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="16" r="1.5"/>
+                                    <circle cx="12" cy="12" r="1.5"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="slot-card" id="c2-slot">
+                            <span class="slot-placeholder">Click to select</span>
+                        </div>
+                    </div>
+
+                    <!-- Persist Card -->
+                    <div class="scenario-slot" data-type="persist" data-filled="false">
+                        <div class="slot-header">
+                            <span class="slot-label">Persist</span>
+                            <span class="slot-actions">
+                                <button class="slot-swap-btn" data-type="persist" title="Choose a card" disabled>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20h9"/>
+                                        <path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/>
+                                    </svg>
+                                </button>
+                                <button class="slot-random-btn" data-type="persist" title="Random">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="2"/>
+                                    <circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="8" r="1.5"/>
+                                    <circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="16" r="1.5"/>
+                                    <circle cx="12" cy="12" r="1.5"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="slot-card" id="persist-slot">
+                            <span class="slot-placeholder">Click to select</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Procedure Cards -->
+            <section class="procedure-section">
+                <div class="section-head">
+                    <h2 class="section-title">Procedure Cards</h2>
+                    <div class="procedure-actions">
+                        <button id="draw-procedure-btn" class="btn btn-secondary" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <line x1="12" y1="8" x2="12" y2="16"/>
+                                <line x1="8" y1="12" x2="16" y2="12"/>
+                            </svg>
+                            Draw Procedure
+                        </button>
+                        <button id="shuffle-procedures-btn" class="btn btn-ghost" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16,3 21,3 21,8"/>
+                                <line x1="4" y1="20" x2="21" y2="3"/>
+                                <polyline points="21,16 21,21 16,21"/>
+                                <line x1="15" y1="15" x2="21" y2="21"/>
+                                <line x1="4" y1="4" x2="9" y2="9"/>
+                            </svg>
+                            Shuffle
+                        </button>
+                        <button id="clear-procedures-btn" class="btn btn-ghost" disabled title="Clear all drawn procedure cards">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+                <div class="procedure-grid" id="procedure-grid">
+                    <!-- Procedure cards will be rendered here -->
+                </div>
+
+                <div class="proc-limits">
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <label for="procedure-count">Procedure Cards</label>
+                            <input type="number" id="procedure-count" class="form-input" value="7" min="1" max="12">
+                        </div>
+                        <div class="config-item">
+                            <label for="enhanced-count">Enhanced (+3)</label>
+                            <input type="number" id="enhanced-count" class="form-input" value="3" min="0" max="12" title="First N drawn procedures are Enhanced (+3)">
+                        </div>
+                    </div>
+                    <p class="hint config-hint">Enhanced procedures are the first N drawn (arm the +3 on the Player board).</p>
+                </div>
+            </section>
+
+            <!-- Injects (starting + queued pool) -->
+            <section class="inject-section">
+                <div class="inject-head">
+                    <h2 class="section-title">Injects</h2>
+                    <div class="inject-tools">
+                        <div class="inject-count-ctrl">
+                            <label class="form-label" for="inject-count">Count</label>
+                            <input type="number" id="inject-count" class="form-input inject-count-input" value="3" min="1" max="6" title="Starting inject + queued pool (1-6)">
+                        </div>
+                        <div class="inject-actions">
+                            <button id="draw-injects-btn" class="btn btn-secondary" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                Draw Injects
+                            </button>
+                            <button id="clear-injects-btn" class="btn btn-ghost" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="injects-grid" id="injects-grid">
+                    <span class="slot-placeholder">Draw to add injects</span>
+                </div>
+                <p class="hint inject-hint">The first inject is revealed when the game starts. During play, a natural 1, natural 20, or 3 failed rolls triggers the next one.</p>
+            </section>
+
+            <!-- Consultants (optional "Call a Consultant") -->
+            <section class="consultant-section">
+                <div class="section-head">
+                    <h2 class="section-title">Consultants</h2>
+                    <div class="procedure-actions">
+                        <button id="add-consultant-btn" class="btn btn-secondary" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <line x1="19" y1="8" x2="19" y2="14"/>
+                                <line x1="16" y1="11" x2="22" y2="11"/>
+                            </svg>
+                            Add Consultant
+                        </button>
+                        <button id="fill-consultants-btn" class="btn btn-ghost" disabled title="Add every consultant in the loaded deck">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 010 7.75"/>
+                            </svg>
+                            Add All
+                        </button>
+                        <button id="clear-consultants-btn" class="btn btn-ghost" disabled title="Empty the consultant pool">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 6h18"/>
+                                <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                                <path d="M10 11v6M14 11v6"/>
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="consultants-grid" id="consultants-grid">
+                    <span class="slot-placeholder">Optional — leave empty to let players call anyone from the deck</span>
+                </div>
+                <p class="hint consultant-hint">Optional. Players can call a consultant from this pool on the Player board. Star ★ one to seat it when the game starts — leave the pool empty to allow the whole deck.</p>
+            </section>
+
+        </main>
+
+        <!-- Sidebar: Card Picker -->
+        <aside class="card-picker" id="card-picker">
+            <div class="picker-header">
+                <h3 class="picker-title">Select <span id="picker-type">Card</span></h3>
+                <button id="picker-close" class="picker-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="picker-search">
+                <input type="text" id="picker-search-input" class="form-input" placeholder="Search cards...">
+            </div>
+            <div class="picker-cards" id="picker-cards">
+                <!-- Cards will be rendered here -->
+            </div>
+        </aside>
+    </div>
+
+    <!-- Save Modal -->
+    <div id="save-modal-backdrop" class="modal-backdrop hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Save Scenario</h2>
+                <button id="save-modal-close" class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="save-name" class="form-label">Scenario Name *</label>
+                    <input type="text" id="save-name" class="form-input" placeholder="Enter scenario name" required>
+                </div>
+                <div class="form-group">
+                    <label for="save-author" class="form-label">Author</label>
+                    <input type="text" id="save-author" class="form-input" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="save-description" class="form-label">Description</label>
+                    <textarea id="save-description" class="form-input form-textarea" rows="3" placeholder="Describe the scenario..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="save-difficulty" class="form-label">Difficulty</label>
+                        <select id="save-difficulty" class="form-select">
+                            <option value="1">1 - Very Easy</option>
+                            <option value="2">2 - Easy</option>
+                            <option value="3" selected>3 - Medium</option>
+                            <option value="4">4 - Hard</option>
+                            <option value="5">5 - Very Hard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="save-duration" class="form-label">Est. Duration</label>
+                        <input type="text" id="save-duration" class="form-input" placeholder="e.g., 30-45 min">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="save-tags-input" class="form-label">Tags</label>
+                    <div class="tags-input" id="save-tags-input">
+                        <input type="text" placeholder="Add tag and press Enter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="save-notes" class="form-label">Facilitator Notes</label>
+                    <textarea id="save-notes" class="form-input form-textarea" rows="4" placeholder="Notes for running this scenario..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-cancel-btn" class="btn btn-ghost">Cancel</button>
+                <button id="save-confirm-btn" class="btn btn-primary">Save Scenario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/game-state.js"></script>
+    <script src="js/session-sync.js"></script>
+    <script src="js/scenario-schema.js"></script>
+    <script src="js/scenario-io.js"></script>
+    <script src="../shared/js/card-viewer.js"></script>
+    <script src="js/admin.js"></script>
+
+    <script>
+        (function () {
+            // Popup-aware header: when admin.html runs in a GM popup window or inside the
+            // in-page GM overlay (iframe), swap the "Player View" deep-link for a Close
+            // button that returns to the live board.
+            const embedded = Boolean(window.opener) || window.self !== window.top;
+            const backLink = document.getElementById('admin-back-link');
+            const closeBtn = document.getElementById('admin-close-btn');
+            if (embedded && backLink && closeBtn) {
+                backLink.classList.add('hidden');
+                closeBtn.classList.remove('hidden');
+                closeBtn.addEventListener('click', () => {
+                    if (window.self !== window.top) {
+                        window.parent.postMessage({ type: 'bb-close-gm' }, '*');
+                    }
+                    if (window.opener) {
+                        window.opener.focus();
+                        window.close();
+                    }
+                });
+            }
+        })();
+    </script>
+    <!-- Legal footer: official B&B Classic link + unofficial disclaimer -->
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
+                <img class="app-legal-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <span>B&amp;B Classic — play on the official site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="../shared/js/fab.js"></script>
+</body>
+</html>

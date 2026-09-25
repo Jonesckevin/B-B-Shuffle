@@ -1,0 +1,208 @@
+{
+  "title": "Green Expansion v2",
+  "revdate": "09-04-2026",
+  "link": "https://home.backdoorsandbreaches.com/classic/green-expansion-v2",
+  "data": [
+    {
+      "name": "Exploitation of Missing HTTP Strict Transport Security (HSTS)",
+      "image": "../../shared/decks/green-expansion-v2/initial-1.webp",
+      "type": "initial",
+      "id": "001",
+      "description": "The attackers exploited the lack of HSTS to force the victim’s browser to downgrade from HTTPS to HTTP, gaining login credentials, session cookies, or to inject malicious content into the user's browsing session.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/IC/Exploitation_Of_Missing_HSTS.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/IC/Exploitation_Of_Missing_HSTS.md</a></li>",
+      "tools": [
+        "SSLStrip",
+        "SSLSplit"
+      ]
+    },
+    {
+      "name": "Supply Chain Attack",
+      "image": "../../shared/decks/green-expansion-v2/initial-2.webp",
+      "type": "initial",
+      "id": "002",
+      "description": "The attackers inserted malware in the update process of one of your key enterprise management tools.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/IC/Supply_Chain_Attack.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/IC/Supply_Chain_Attack.md</a></li>",
+      "tools": [
+        "SUNBURST",
+        "SUPERNOVA"
+      ]
+    },
+    {
+      "name": "Physical Access",
+      "image": "../../shared/decks/green-expansion-v2/initial-3.webp",
+      "type": "initial",
+      "id": "003",
+      "description": "The attackers gained physical access to a system, device, or facility in your organization.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/IC/Physical_Access.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/IC/Physical_Access.md</a></li>",
+      "tools": [
+        "Clipboard",
+        "Crowbar",
+        "RFID Badge Cloner",
+        "Lockpicks",
+        "Stolen Keys",
+        "Counterfeit Work ID",
+        "Brick",
+        "Ladder",
+        "Under the Door (UTD) Tool"
+      ]
+    },
+    {
+      "name": "Server Message Block (SMB) Abuse",
+      "image": "../../shared/decks/green-expansion-v2/pivot-1.webp",
+      "type": "pivot",
+      "id": "004",
+      "description": "The attackers exploit vulnerabilities in the SMB protocol, which is commonly used for file and printer sharing across your network.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/SMB_Abuse.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/SMB_Abuse.md</a></li>",
+      "tools": [
+        "NTLMRelayX",
+        "NetExec",
+        "Responder",
+        "Inveigh"
+      ]
+    },
+    {
+      "name": "Internal Spearphishing",
+      "image": "../../shared/decks/green-expansion-v2/pivot-2.webp",
+      "type": "pivot",
+      "id": "005",
+      "description": "The attackers leverage existing access to a compromised user account to send attack emails that appear trustworthy to other users within the organization.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/Internal_Spearphishing.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/Internal_Spearphishing.md</a></li>",
+      "tools": [
+        "Internal Existing Email Services",
+        "Gamaredon Group",
+        "Midnight Blizzard Group"
+      ]
+    },
+    {
+      "name": "Access Token Manipulation",
+      "image": "../../shared/decks/green-expansion-v2/pivot-3.webp",
+      "type": "pivot",
+      "id": "006",
+      "description": "The attackers alter or forge authentication tokens to impersonate legitimate users, including administrators.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/Access_Token_Manipulation.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/Access_Token_Manipulation.md</a></li>",
+      "tools": [
+        "PowerSploit",
+        "Empire",
+        "PoshC2"
+      ]
+    },
+    {
+      "name": "Stale Network Address Configurations (SNAC) Attack",
+      "image": "../../shared/decks/green-expansion-v2/pivot-4.webp",
+      "type": "pivot",
+      "id": "007",
+      "description": "The attackers exploit outdated or improperly cleaned-up network configurations such as old DNS, DHCP, or static IP entries that still reference decommissioned or reassigned systems.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/SNAC_Attack.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/SNAC_Attack.md</a></li>",
+      "tools": [
+        "Eavesarp"
+      ]
+    },
+    {
+      "name": "Cleartext Passwords in Files",
+      "image": "../../shared/decks/green-expansion-v2/pivot-5.webp",
+      "type": "pivot",
+      "id": "008",
+      "description": "The attackers locate and extract unencrypted (plain text) passwords stored in configuration files, scripts, logs, or documents on a system.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/Cleartext_Passwords_in_Files.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PE/Cleartext_Passwords_in_Files.md</a></li>",
+      "tools": [
+        "Snaffler",
+        "PowerShellEmpire"
+      ]
+    },
+    {
+      "name": "Third-Party Malware Injection",
+      "image": "../../shared/decks/green-expansion-v2/persist-1.webp",
+      "type": "persist",
+      "id": "009",
+      "description": "The attackers insert malicious code into software provided by a trusted third party such as libraries, plugins, or application updates which is then unknowingly distributed to end users or organizations.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Third-Party_Malware_Injection.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Third-Party_Malware_Injection.md</a></li>",
+      "tools": [
+        "Stuxnet",
+        "Bonadan"
+      ]
+    },
+    {
+      "name": "Malicious Email Rules",
+      "image": "../../shared/decks/green-expansion-v2/persist-2.webp",
+      "type": "persist",
+      "id": "010",
+      "description": "The attackers create rules to a user's inbox to hide, redirect, or delete incoming messages to secretly control the flow of emails.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Malicious_Email_Rules.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Malicious_Email_Rules.md</a></li>",
+      "tools": [
+        "Gamaredon Group"
+      ]
+    },
+    {
+      "name": "Service Recovery Hijacking",
+      "image": "../../shared/decks/green-expansion-v2/persist-3.webp",
+      "type": "persist",
+      "id": "011",
+      "description": "The attackers modify the recovery options of an existing service to execute malicious code when the service fails.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Service_Recovery_Hijacking.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Service_Recovery_Hijacking.md</a></li>",
+      "tools": [
+        "Windows Service Recovery Actions"
+      ]
+    },
+    {
+      "name": "Startup Registry Injection",
+      "image": "../../shared/decks/green-expansion-v2/persist-4.webp",
+      "type": "persist",
+      "id": "012",
+      "description": "The attackers modify or create specific registry keys to ensure their malicious code runs automatically during system startup or user login.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Startup_Registry_Injection.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/PER/Startup_Registry_Injection.md</a></li>",
+      "tools": [
+        "reg command"
+      ]
+    },
+    {
+      "name": "Physical Medium as Exfil",
+      "image": "../../shared/decks/green-expansion-v2/c2-1.webp",
+      "type": "c2",
+      "id": "013",
+      "description": "The attackers leverage physical devices such as USB flash drives, smartphones, portable SSDs, and Raspberry Pi's to smuggle data out of your secured environments.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/C2E/Physical_Medium_as_Exfil.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/C2E/Physical_Medium_as_Exfil.md</a></li>",
+      "tools": [
+        "USB drive/socks and a dream... a dream of evil."
+      ]
+    },
+    {
+      "name": "Call a Consultant",
+      "image": "../../shared/decks/green-expansion-v2/procedure-1.webp",
+      "type": "procedure",
+      "id": "014",
+      "description": "The Defenders hire an outside security consultant to help with the incident and uncover what your organization might have missed.\n\nChoose one Consultant Card and add their modifier on this turn"
+    },
+    {
+      "name": "Physical Security Review",
+      "image": "../../shared/decks/green-expansion-v2/procedure-2.webp",
+      "type": "procedure",
+      "id": "015",
+      "description": "The Defenders conduct a thorough review of badge systems, surveillance blind spots, unsecured entry points, and on-site access policies to uncover gaps that could be exploited by attackers.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/DET/Physical_Security_Review.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/DET/Physical_Security_Review.md</a></li>"
+    },
+    {
+      "name": "Site Walkthrough",
+      "image": "../../shared/decks/green-expansion-v2/procedure-3.webp",
+      "type": "procedure",
+      "id": "016",
+      "description": "The Defenders send personnel to the site to examine the written logs, look for wireless access points, physical ingress methods, and equipment stacks to identify abnormalities.",
+      "details": "<li><a target=\"_blank\" href=\"https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/DET/Site_Walkthrough.md\">https://github.com/blackhillsinfosec/FreeLabFriday_Labs/blob/main/Decks/Green_Expansion_v2/V2Deck/DET/Site_Walkthrough.md</a></li>",
+      "tools": [
+        "Personal Protective Equipment (PPE)",
+        "Recording Device",
+        "CCTV",
+        "Badge Readers",
+        "Ladder",
+        "Wireless Spectrum Analyzers",
+        "Eyeballs"
+      ]
+    }
+  ],
+  "red": "../../shared/decks/cardbacks/v1/init.webp",
+  "yellow": "../../shared/decks/cardbacks/v1/pivot.webp",
+  "brown": "../../shared/decks/cardbacks/v1/c2.webp",
+  "purple": "../../shared/decks/cardbacks/v1/persist.webp",
+  "grey": "../../shared/decks/cardbacks/v1/inject.webp",
+  "green": "",
+  "logo": ""
+}
