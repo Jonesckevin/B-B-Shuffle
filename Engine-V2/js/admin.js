@@ -222,8 +222,8 @@ const AdminController = {
 
     /**
      * Check if there's a scenario to load from the library or the AI generator.
-     * The AI generator hands off its output through the same storage slot and
-     * sets bb-ai-handoff so we can prefill the Save (library) form and open it.
+    * The AI Generator uses the same storage slot and sets `bb-ai-handoff` so
+    * the Save form can be prefilled and opened.
      */
     async checkForLoadedScenario() {
         const params = Utils.getQueryParams();

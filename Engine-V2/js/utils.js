@@ -5,11 +5,11 @@
 
 const Utils = {
     /**
-     * CANONICAL, ORDERED card-type list. The order is user-visible (card
-     * viewer tabs, filter chips, the favicon's colour edge) - do not reorder.
+    * Canonical ordered card-type list. The order is user-visible in card
+    * viewer tabs, filter chips, and the favicon; do not reorder.
      * ------------------------------------------------------------------
-     * This is THE single source of truth for Engine-V2: every copy that can
-     * reach `Utils` derives from here.
+    * This is the source of truth for Engine-V2; all copies that can access
+    * `Utils` derive their list from this property.
      *
      * Two copies deliberately keep their own list instead:
      *   - `shared/js/card-viewer.js` - must stay dependency-free because it
@@ -23,7 +23,7 @@ const Utils = {
     SCENARIO_TYPES: ['initial', 'pivot', 'c2', 'persist'],
 
     /**
-     * CANONICAL type -> human-readable label map. The label TEXT is
+    * Canonical type-to-label map. Label text is
      * user-visible and must stay byte-identical across the app.
      * `shared/js/card-viewer.js` + `shared/catalogue.html` keep their own copy
      * for the load-order reasons documented on CARD_TYPES above.

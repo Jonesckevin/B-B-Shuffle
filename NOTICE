@@ -23,11 +23,16 @@ This repository is a modified version of the following GPL-3.0 projects:
   * blackhillsinfosec/play.backdoorsandbreaches.com
       https://github.com/blackhillsinfosec/play.backdoorsandbreaches.com
       (fork of the project above)
+  * 0xJaeg3r/backdoorsandbreaches-socinvader
+      https://github.com/0xJaeg3r/backdoorsandbreaches-socinvader
+      (Engine-V1 derivative; its solo AI "SOC Invader" play mode is the
+       origin of Engine-V2's Solo AI (PvE) mode - see Engine-V2/js/solo-master.js)
 
 Original Engine-V1 code is preserved under Engine-V1/ and retains its original
 license and copyright notices. Engine-V2 is a refactored/rewritten version of
-that codebase, modified by the B&B Shuffle contributors. The entire work is
-distributed under GPL-3.0.
+that codebase, modified by the B&B Shuffle contributors. The software code in
+this repository is distributed under GPL-3.0. That license does not cover the
+third-party game content described below.
 
 ------------------------------------------------------------------------------
 Trademark / content notice
@@ -37,7 +42,9 @@ Antisyphon Training. This is an unofficial project. It is not
 affiliated with Black Hills Information Security
 or Antisyphon Training.
 
-Card artwork, card text, and game design are the property of Black Hills
-Information Security and their respective sponsors. They are NOT licensed
-under this project's GPL-3.0 license and require a separate content license
-from the rights holders to redistribute. See THIRD-PARTY-NOTICES.md.
+Card artwork, card text, and game design are separate from the GPL-licensed
+software code. Certain Backdoors & Breaches content is included under written
+permission from Black Hills Information Security for community-created uses,
+subject to the scope and terms of that permission. This permission does not
+cover sponsor marks or other third-party content unless expressly included.
+See THIRD-PARTY-NOTICES.md for the content inventory and permission scope.

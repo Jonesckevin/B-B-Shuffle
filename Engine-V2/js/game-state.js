@@ -41,6 +41,10 @@ const GameState = {
         persist: false
     },
 
+    // Procedure index -> the first turn on which the card is available again.
+    // Cooldowns apply regardless of outcome and align with the rendered hand.
+    cooldowns: {},
+
     // Sync state for admin/player communication
     sync: {
         enabled: true,
@@ -81,6 +85,8 @@ const GameState = {
             persist: false
         };
 
+        this.cooldowns = {};
+
         this.sync.version++;
         this.sync.lastUpdate = Date.now();
 
@@ -106,6 +112,74 @@ const GameState = {
             return true;
         }
         return false;
+    },
+
+    /* ------------------------------------------------------------------ */
+    /* Procedure cooldowns                                                 */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * The turn currently in progress, 1-based.
+     *
+    * Derived from `turnsRemaining` to keep turn state consistent across solo
+    * rolls and tabletop turn advances.
+     * @returns {number}
+     */
+    turnNumber() {
+        return Math.max(1, (this.game.maxTurns || 0) - this.game.turnsRemaining + 1);
+    },
+
+    /**
+     * Send a procedure card to the bench after it has been played.
+     *
+    * Apply the rule-book cooldown regardless of roll outcome.
+     * @param {number} index - Procedure index in the hand
+     * @param {number} [turns] - Cooldown length; defaults to CONFIG.game.cooldownTurns
+     * @param {number} [asOfTurn] - The turn the card was played on. Callers that
+     *   spend the turn as part of resolving the roll (Solo AI does) must pass the
+     *   turn captured BEFORE that spend, or the card ends up serving an extra turn
+     *   here than it does on the tabletop.
+     */
+    startCooldown(index, turns, asOfTurn) {
+        if (!(index >= 0)) return;
+        const length = Math.max(1, turns || CONFIG.game.cooldownTurns || 3);
+        const fromTurn = asOfTurn || this.turnNumber();
+        // Include the play turn so the card remains unavailable for `length`
+        // complete turns after it is played.
+        this.cooldowns[index] = fromTurn + length + 1;
+        this.sync.version++;
+        this.sync.lastUpdate = Date.now();
+        this.notifyChange('cooldown');
+    },
+
+    /**
+     * Turns a procedure still has to sit out, for display on its token.
+     *
+    * Clamp the displayed value to the configured cooldown length; the raw gap
+    * includes the turn on which the procedure was played.
+     * @param {number} index - Procedure index
+     * @returns {number} 0 when the card is usable again
+     */
+    cooldownRemaining(index) {
+        const until = this.cooldowns[index];
+        if (!until) return 0;
+        const gap = until - this.turnNumber();
+        if (gap <= 0) return 0;
+        return Math.min(CONFIG.game.cooldownTurns || 3, gap);
+    },
+
+    /**
+     * Is this procedure barred from being played this turn?
+     * @param {number} index - Procedure index
+     * @returns {boolean}
+     */
+    isOnCooldown(index) {
+        return this.cooldownRemaining(index) > 0;
+    },
+
+    /** Drop every cooldown (a fresh deal). */
+    clearCooldowns() {
+        this.cooldowns = {};
     },
 
     /**
@@ -148,6 +222,7 @@ const GameState = {
             selected: this.selected,
             game: this.game,
             revealed: this.revealed,
+            cooldowns: this.cooldowns,
             deck: {
                 key: this.deck.key,
                 name: this.deck.name
@@ -165,6 +240,7 @@ const GameState = {
             this.selected = state.selected || this.selected;
             this.game = state.game || this.game;
             this.revealed = state.revealed || this.revealed;
+            this.cooldowns = state.cooldowns || {};
             this.sync = state.sync;
             this.notifyChange('sync');
         }

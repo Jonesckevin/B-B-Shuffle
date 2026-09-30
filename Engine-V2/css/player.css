@@ -446,6 +446,65 @@
     color: #16130a;
 }
 
+/* A card that is not enhanced still gets a control: it can be played (and then
+   sits out its cooldown), it just carries no +3. The plain chip stays neutral
+   so the amber chip keeps meaning "enhanced"; selecting either one reads the
+   same amber, matching the active card ring. */
+.proc-arm-plain {
+    border-color: var(--color-border-hover);
+    background: rgba(15, 17, 23, 0.88);
+    color: var(--color-text-secondary);
+}
+
+.proc-arm-plain:hover,
+.procedure-cards .flip-card.active .proc-arm-plain {
+    background: #fbbf24;
+    border-color: #fbbf24;
+    color: #16130a;
+}
+
+/* ===== Procedure cooldown token =====
+   Rule book: "After a DETECTION has been played, regardless of outcome, that
+   card will have a 3-turn cooldown period during which it cannot be used again."
+   The token is that countdown, drawn on the card: it ticks down as turns are
+   consumed and is removed when the card is usable again. While it shows, the arm
+   chip is withdrawn (see updateProcedureCards), so the card carries nothing
+   clickable — the token is read, not pressed.
+
+   The dimming goes on the FACES, not on .flip-card or .flip-card-inner: a
+   `filter` on either of those flattens the 3D flip and the card would stop
+   turning over. */
+.procedure-cards .flip-card.on-cooldown .flip-card-front,
+.procedure-cards .flip-card.on-cooldown .flip-card-back {
+    filter: grayscale(0.6) brightness(0.72);
+    border-color: var(--color-border-hover);
+}
+
+.proc-token {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 999px;
+    /* The inner ring distinguishes the countdown from the arm control. */
+    background:
+        radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.22) 0 36%, transparent 37%),
+        rgba(18, 14, 4, 0.92);
+    border: 1px solid rgba(251, 191, 36, 0.9);
+    color: #fcd34d;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    pointer-events: none;   /* clicks belong to the card underneath */
+}
+
 /* ===== 1920x1080 fit (compact) ===== */
 .player-main {
     padding: var(--space-4);
@@ -1644,6 +1703,571 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 
 .procedure-cards .flip-card.flipped .flip-card-back img {
     object-position: center top;   /* keep the name banner, crop the rest away */
+}
+
+/* ============================================================
+   Solo AI (PvE) — Incident Master rail
+   (body.solo-match, added by js/solo-master.js from ?mode=solo)
+
+   Green is the "this is a Solo AI match" signal: the header badge,
+   the rail, the accuse button and the clue tiers all take it from
+   --color-success, so it stays in step with the design tokens.
+
+   The rail is a real grid column, not a body margin: the board
+   keeps its own width and the footer spans both columns.
+   ============================================================ */
+body.solo-match {
+    --im-rail-width: 340px;
+    --im-green: var(--color-success);
+    /* --color-success (#22c55e) at 14%, for fills behind green text */
+    --im-green-soft: rgba(34, 197, 94, 0.14);
+}
+
+body.solo-match .player-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--im-rail-width);
+    grid-template-areas:
+        "header header"
+        "main   rail"
+        "footer footer";
+    align-items: start;
+}
+
+body.solo-match .player-header { grid-area: header; }
+body.solo-match .player-main { grid-area: main; }
+body.solo-match .app-legal { grid-area: footer; }
+
+/* Solo badge in the header */
+.badge-solo {
+    background: var(--im-green-soft);
+    color: var(--im-green);
+    border: 1px solid var(--im-green);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.04em;
+}
+
+.solo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--im-green);
+    box-shadow: 0 0 0 3px var(--im-green-soft);
+}
+
+.deck-rev {
+    color: var(--color-text-tertiary);
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+
+/* Deck identity is one stack, not two chips on a line: the badge names the deck
+   and its revision date sits directly under it. */
+.header-deck {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+}
+
+/* --- The rail ------------------------------------------------------- */
+body.solo-match .im-rail {
+    grid-area: rail;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    /* A full green frame: the panel is the AI opponent, so it should read as
+       one bounded thing rather than blending into the board's right edge. */
+    border: 1px solid var(--im-green);
+}
+
+/* Activity light beside the title while a model call is in flight. */
+.im-spinner {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--im-green-soft);
+    border-top-color: var(--im-green);
+    border-radius: 50%;
+    animation: im-spin 0.9s linear infinite;
+}
+
+@keyframes im-spin {
+    to { transform: rotate(360deg); }
+}
+
+.im-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.im-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.im-title h2 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--im-green);
+}
+
+.im-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--im-green);
+    box-shadow: 0 0 0 3px var(--im-green-soft);
+}
+
+.im-target {
+    color: var(--color-text-tertiary);
+    font-size: 0.7rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* AI target + turn sit on their own row, so the labelled settings button never
+   has to share a line with them. */
+.im-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px var(--space-2);
+    flex-wrap: wrap;
+}
+
+/* Keep the AI settings control labeled and visually distinct. */
+.im-settings-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid var(--im-green);
+    border-radius: 999px;
+    background: var(--im-green-soft);
+    color: var(--im-green);
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.im-settings-btn:hover,
+.im-settings-btn:focus-visible {
+    background: var(--im-green);
+    color: var(--color-text-inverse);
+}
+
+.im-gear { flex: 0 0 auto; display: block; }
+
+/* Who is answering: the role and voice, under the target they answer from.
+   Tertiary and small - it is framing, not a control. */
+.im-persona {
+    margin: 0;
+    color: var(--color-text-tertiary);
+    font-size: 0.7rem;
+    letter-spacing: 0.01em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* --- Persona pickers in the AI target dialog ------------------------- */
+.im-persona-group {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin: 0 0 var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.im-persona-group .im-field { margin-bottom: 0; }
+.im-persona-group legend { padding: 0 4px; }
+
+.im-turn {
+    background: var(--im-green-soft);
+    color: var(--im-green);
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Transient line above the log: spinner + what it is doing. Hidden when idle. */
+.im-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: var(--im-green);
+    font-size: 0.75rem;
+}
+
+.im-log {
+    flex: 1 1 auto;
+    /* Without min-height:0 a flex child refuses to shrink below its content,
+       which pushed the rail's action row past the bottom of the 100vh panel. */
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-right: 2px;
+}
+
+.im-msg {
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    background: var(--color-bg-tertiary);
+    border-left: 3px solid var(--color-border);
+    color: var(--color-text);
+}
+
+/* Kind accents. The bubbles are built as `im-msg im-<kind>` (see log() in
+   js/solo-master.js) — these selectors must match that, or every tier colour
+   silently does nothing. `.im-msg-typing` is the one class set literally. */
+.im-msg.im-narrator { border-left-color: var(--im-green); }
+.im-msg.im-ok { border-left-color: var(--color-success); }
+.im-msg.im-warn { border-left-color: var(--color-warning); }
+.im-msg.im-fail { border-left-color: var(--color-danger); }
+.im-msg.im-inject { border-left-color: var(--color-inject); color: var(--color-text-secondary); }
+.im-msg.im-success { border-left-color: var(--im-green); background: var(--im-green-soft); color: var(--im-green); }
+.im-msg.im-reveal { border-left-color: var(--color-warning); color: var(--color-text-secondary); white-space: pre-line; }
+
+.im-msg.im-meta {
+    background: none;
+    border-left: none;
+    color: var(--color-text-tertiary);
+    font-size: 0.7rem;
+    padding: 0 0 0 var(--space-3);
+}
+
+/* Placeholder bubble in the log while a reply is on its way. */
+.im-msg-typing {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border-left-color: var(--im-green);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.im-actions {
+    display: flex;
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border);
+}
+
+.im-accuse-btn {
+    flex: 1 1 auto;
+    background: var(--im-green);
+    border-color: var(--im-green);
+    color: var(--color-text-inverse);
+    font-weight: 600;
+}
+
+.im-accuse-btn:hover {
+    background: var(--color-success-hover);
+    border-color: var(--color-success-hover);
+}
+
+/* Solo rules modal, shown on each entry to ?mode=solo. */
+.im-intro-modal { max-width: 620px; }
+
+/* Center the portal card fan and title; position the close control independently. */
+.im-intro-head {
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
+}
+
+.im-intro-head .modal-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+}
+
+.im-intro-head .modal-title { text-align: center; }
+
+.im-intro-fan {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: max-content;
+}
+
+.im-intro-fan img {
+    width: 30px;
+    aspect-ratio: 2.5 / 3.5;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    /* The portal's own edge treatment, at half the width. */
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: var(--shadow-card);
+}
+
+/* Same fan angles as .portal-fan, scaled to the smaller cards. */
+.im-intro-fan img:nth-child(1) { transform: rotate(-18deg) translateY(5px); margin-right: -4px; }
+.im-intro-fan img:nth-child(2) { transform: rotate(-9deg) translateY(2px); margin-right: -4px; }
+.im-intro-fan img:nth-child(3) { transform: translateY(-1px); }
+.im-intro-fan img:nth-child(4) { transform: rotate(9deg) translateY(2px); margin-left: -4px; }
+.im-intro-fan img:nth-child(5) { transform: rotate(18deg) translateY(5px); margin-left: -4px; }
+
+.im-intro-modal .modal-footer { justify-content: space-between; }
+
+.im-rules {
+    margin: var(--space-4) 0;
+    padding-left: 1.3em;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.im-rules li { padding-left: 2px; }
+.im-rules li::marker { color: var(--im-green); font-weight: 700; }
+.im-rules strong { color: var(--color-text); }
+
+/* --- Footer credit --------------------------------------------------
+   Solo AI grew out of the SOC Invader fork. Sits on the footer's own scenario
+   row (never a second <footer>) and shares the line with the scenario name, so
+   it costs the one-viewport shell no height. */
+.app-legal-scenario {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2px 16px;
+    flex-wrap: wrap;
+}
+
+.solo-credit {
+    font-size: 11.5px;
+    color: var(--color-text-tertiary);
+}
+
+.solo-credit a {
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+}
+
+.solo-credit a:hover { color: var(--im-green); }
+
+/* --- Modals (accusation + AI target) -------------------------------- */
+/* The AI target dialog uses the shared form primitives (.form-label,
+   .form-select, .form-input) so its controls match the rest of Engine-V2
+   instead of the browser default. `.form-hint` is referenced across the app
+   but had no definition anywhere - this is the Player's. */
+.im-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: var(--space-3);
+}
+
+.im-model-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.im-model-row .form-select {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.im-model-row .btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 4px;
+    color: var(--color-text-tertiary);
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+
+.form-hint.im-hint-ok { color: var(--im-green); }
+.form-hint.im-hint-error { color: var(--color-warning); }
+
+.im-keymode {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    margin: 0 0 var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.im-radio {
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.im-result {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+}
+
+/* Procedure chips take the solo green, and the plain "Use" chip (solo only —
+   a procedure that carries no +3) stays neutral until it is selected. */
+/* The selected procedure's ring follows the solo green, so the card and its
+   chip read as one selection. (The tabletop keeps the amber ring.) */
+body.solo-match .procedure-cards .flip-card.active {
+    box-shadow: 0 0 0 2px var(--im-green), 0 0 22px rgba(34, 197, 94, 0.55);
+}
+
+body.solo-match .proc-arm {
+    border-color: var(--im-green);
+    background: rgba(4, 18, 9, 0.88);   /* --color-bg tinted green, over card art */
+    color: var(--im-green);
+}
+
+body.solo-match .proc-arm:hover,
+body.solo-match .procedure-cards .flip-card.active .proc-arm {
+    background: var(--im-green);
+    color: var(--color-text-inverse);
+}
+
+body.solo-match .proc-arm-plain {
+    border-color: var(--color-border-hover);
+    background: rgba(15, 17, 23, 0.88);
+    color: var(--color-text-secondary);
+}
+
+body.solo-match .proc-arm-plain:hover,
+body.solo-match .procedure-cards .flip-card.active .proc-arm-plain {
+    background: var(--im-green);
+    border-color: var(--im-green);
+    color: var(--color-text-inverse);
+}
+
+/* The site-navigation FAB is fixed to the bottom-right — the same corner the
+   rail's actions occupy — so it sat on top of the accuse button and swallowed
+   the clicks. Shift it out of the rail's column. */
+body.solo-match .fab-container {
+    right: calc(var(--im-rail-width) + 24px);
+}
+
+/* --- One-viewport shell ---------------------------------------------
+   The rail used to be `height: 100vh` on a *scrolling* page, and it starts
+   BELOW the header — so header + 100vh + footer always overran the window.
+   The board stretched the page taller than the screen, the page scrolled,
+   and the rail's action row sat under the fold.
+
+   From the desktop breakpoint up, solo is a fixed-height app shell instead:
+   the layout is exactly one viewport tall, header/board/rail/footer split
+   that height, and the rail's own LOG is the only thing that scrolls. The
+   accuse button is therefore always on screen, on any window size. */
+@media (min-width: 1101px) {
+    body.solo-match {
+        height: 100vh;
+        height: 100dvh;      /* dvh where supported: the shell never under-hangs */
+        overflow: hidden;
+    }
+
+    body.solo-match .player-layout {
+        height: 100%;
+        min-height: 0;       /* one viewport, split - not one viewport, plus */
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        align-items: stretch;
+    }
+
+    /* The board is the row that can be too tall, so it scrolls internally
+       rather than dragging the rail's buttons off the bottom of the screen. */
+    body.solo-match .player-main {
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* The rail costs 340px, so the hand wraps where it used to fit. A face-up
+       procedure is a WIDE band (260px), and 7 of them at a 4-per-row wrap cost
+       ~400px of board height — the whole reason 1366x768 needed a scroll.
+       Sizing each band to a quarter of the row (never above 260px) makes the
+       hand land in two rows at every desktop width, and the band still shows
+       the name banner it exists for. */
+    body.solo-match .procedure-row .procedure-body .procedure-cards .flip-card.flipped {
+        width: min(260px, calc((100% - (3 * var(--space-3))) / 4));
+    }
+
+    body.solo-match .im-rail {
+        position: static;    /* nothing scrolls behind it any more */
+        align-self: stretch;
+        height: 100%;        /* = the middle row, i.e. viewport − header − footer */
+        min-height: 0;
+    }
+}
+
+/* Below the rail's breakpoint the board keeps its width and the rail
+   drops underneath it, scrollable, instead of squeezing both. */
+@media (max-width: 1100px) {
+    body.solo-match .player-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "header"
+            "main"
+            "rail"
+            "footer";
+    }
+
+    body.solo-match .im-rail {
+        position: static;
+        height: auto;
+        min-height: 0;
+    }
+
+    body.solo-match .im-log {
+        max-height: 45vh;
+    }
+
+    /* Rail is no longer on the right, so the FAB goes back to the corner. */
+    body.solo-match .fab-container {
+        right: 16px;
+    }
 }
 
 /* ============================================================

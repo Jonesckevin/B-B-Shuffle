@@ -6,10 +6,8 @@
  * library stays Mermaid itself.
  *
  * The token set is modelled on the TextMate scopes used by
- * bpruitt-goddard/vscode-mermaid-syntax-highlight. That grammar is followed in
- * spirit rather than ported verbatim: a TextMate grammar needs an oniguruma
- * engine plus nested begin/end scope resolution, whereas what actually reads
- * well on this dark UI is a flatter set of classes.
+ * bpruitt-goddard/vscode-mermaid-syntax-highlight. The scopes are adapted to a
+ * lightweight browser highlighter without Oniguruma or nested scope resolution.
  *
  *   keyword.control.mermaid      -> .hl-keyword / .hl-arrow / .hl-punct
  *   entity.name.function.mermaid -> .hl-direction / .hl-prop

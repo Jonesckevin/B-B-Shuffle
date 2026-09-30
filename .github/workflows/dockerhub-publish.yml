@@ -63,6 +63,7 @@ jobs:
             nginx.conf
             LICENSE
             NOTICE
+            THIRD-PARTY-NOTICES.md
             Engine-V1/index.html
             Engine-V2/player.html
             Engine-V2/admin.html
@@ -160,13 +161,14 @@ jobs:
 
           # Static assets worth 200ing: the portal, the Player (the biggest page
           # and the one that pulls every deck file), a deck carddb, the two
-          # docs/ payloads (rule book behind the header "?" button, card catalog
-          # behind the Catalogue/Card Creator/print sheet), and an API route
-          # behind the nginx proxy.
+          # docs/ legal notices, and an API route behind the nginx proxy.
           for path in \
             "/" \
             "/index.html" \
             "/Engine-V2/player.html" \
+            "/LICENSE" \
+            "/NOTICE" \
+            "/THIRD-PARTY-NOTICES.md" \
             "/shared/decks/core/carddb.json" \
             "/docs/rules.pdf" \
             "/docs/card-details.json" \
@@ -235,7 +237,7 @@ jobs:
           labels: |
             org.opencontainers.image.title=B&B Shuffle
             org.opencontainers.image.description=Self-hosted Backdoors & Breaches tabletop simulator (Player, Admin, scenario library and stdlib-only Python API).
-            org.opencontainers.image.licenses=GPL-3.0-only
+            org.opencontainers.image.documentation=https://github.com/Jonesckevin/B-B-Shuffle/blob/Engine-V2/THIRD-PARTY-NOTICES.md
 
       - name: Build and push
         id: push

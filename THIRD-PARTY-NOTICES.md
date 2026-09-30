@@ -29,12 +29,34 @@ Full license texts for each library are available at the links above.
 
 ---
 
-## Game content (NOT covered by this project's GPL license)
+## Upstream / derived projects
+
+This repository is a derivative work. The following projects are its
+provenance, and their code is distributed here under the same GPL-3.0 license.
+
+| Project | Relation to this repository | License |
+|---|---|---|
+| [p3hndrx/B-B-Shuffle](https://github.com/p3hndrx/B-B-Shuffle) | Original project this repository forks. | GPL-3.0 |
+| [blackhillsinfosec/play.backdoorsandbreaches.com](https://github.com/blackhillsinfosec/play.backdoorsandbreaches.com) | Fork of the project above; a further upstream source. | GPL-3.0 |
+| [0xJaeg3r/backdoorsandbreaches-socinvader](https://github.com/0xJaeg3r/backdoorsandbreaches-socinvader) | Engine-V1 derivative whose solo AI play mode is the origin of Engine-V2's **Solo AI (PvE)** mode (`Engine-V2/js/solo-master.js`, `player.html?mode=solo`). | GPL-3.0 |
+
+Original Engine-V1 code is preserved under `Engine-V1/` and retains its own
+copyright and license notices. Engine-V2 is a rewrite of that codebase.
+
+---
+
+## Game content and permission (separate from GPL)
 
 *Backdoors & Breaches* is a tabletop training game by **Black Hills Information
 Security** in collaboration with **Antisyphon Training** and **Active
-Countermeasures**. The following content is the property of its respective
-owners and is used here only by way of attribution/community use:
+Countermeasures**. This application includes and serves the content listed
+below; attribution alone does not grant rights to use or redistribute it.
+
+Black Hills Information Security has publicly granted written permission for
+community-created uses of Backdoors & Breaches content. This permission is
+separate from the GPL-3.0 license and is limited to the scope and terms of the
+written grant. Public website and container distribution must remain within
+those terms; this notice does not expand them.
 
 - Card artwork / card fronts (the `*.webp` files under `shared/decks/**` and
   `shared/decks/cardbase/**`)
@@ -45,13 +67,17 @@ owners and is used here only by way of attribution/community use:
   **DataDog**, **Huntress**, **Red Canary**, **DenSecure**, **Trimarc**,
   **Electrical Co-Op / NRECA**, and **ICS-OT**.
 
+Black Hills Information Security's permission does not by itself establish
+permission for sponsor marks or other third-party content unless those rights
+are expressly included in the grant. Confirm the applicable rights before
+distributing sponsor-branded materials.
+
 Official project and printable materials:
 <https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic>
 
-**Before republishing or distributing this project publicly, obtain written
-permission from Black Hills Information Security for the card content, and
-from the relevant sponsors for sponsor-branded decks.** Attribution does not
-grant redistribution rights.
+The written permission from Black Hills Information Security governs the
+permitted community use of the covered content. Attribution does not expand
+that permission or grant rights to content owned by other rights holders.
 
 ---
 

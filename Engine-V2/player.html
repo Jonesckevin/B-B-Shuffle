@@ -21,7 +21,16 @@
             <div class="header-left">
                 <img id="custom-logo" class="custom-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Table logo">
                 <h1 class="game-title">B&amp;B Shuffle</h1>
-                <span class="badge badge-primary" id="deck-badge">No Deck</span>
+                <!-- Deck identity reads as one stack: the badge names the deck,
+                     its revision date sits directly under it. The date line is
+                     ONLY the date - the badge above already carries the name. -->
+                <div class="header-deck">
+                    <span class="badge badge-primary" id="deck-badge">No Deck</span>
+                    <span class="deck-rev hidden" id="deck-rev"></span>
+                </div>
+                <span class="badge badge-solo hidden" id="solo-badge">
+                    <span class="solo-dot" aria-hidden="true"></span>SOLO AI
+                </span>
             </div>
             <div class="header-center">
                 <div class="game-stats">
@@ -272,6 +281,37 @@
 
         </main>
 
+        <!-- Solo AI (PvE): the Incident Master rail. Hidden unless the page was
+             opened with ?mode=solo - see js/solo-master.js. -->
+        <aside id="incident-master-panel" class="im-rail hidden" role="complementary" aria-label="Incident Master">
+            <div class="im-head">
+                <div class="im-title">
+                    <span class="im-dot" aria-hidden="true"></span>
+                    <h2>Incident Master</h2>
+                    <span class="im-spinner hidden" id="im-spinner" role="status" aria-label="Incident Master is working"></span>
+                </div>
+                 <!-- Label the AI settings control for discoverability. -->
+                <button type="button" id="im-settings-btn" class="im-settings-btn" title="AI settings — provider, model and API key" aria-label="AI target settings">
+                    <svg class="im-gear" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/>
+                    </svg>
+                    <span>AI Target</span>
+                </button>
+            </div>
+            <div class="im-meta">
+                <span class="im-target" id="im-target">Offline clues</span>
+                <span class="im-turn" id="im-turn">Turn 1/10</span>
+            </div>
+            <!-- Active Incident Master persona. -->
+            <p class="im-persona hidden" id="im-persona"></p>
+            <p class="im-status" id="im-status" role="status"></p>
+            <div class="im-log" id="im-log" role="log" aria-live="polite"></div>
+            <div class="im-actions">
+                <button type="button" id="im-accuse-btn" class="btn btn-sm im-accuse-btn">Make Accusation</button>
+            </div>
+        </aside>
+
         <!-- Footer: the shared legal footer, plus this page's scenario name.
              Site navigation moved into the floating action button. -->
         <footer class="app-legal">
@@ -303,6 +343,150 @@
             <div class="modal-footer">
                 <button id="gameover-restart-btn" class="btn btn-primary">Play Again</button>
                 <a href="scenario-library.html" class="btn btn-ghost">Choose Scenario</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- "No procedure selected". PlayerController owns this prompt for both modes
+         (see rollDice()); Solo AI (PvE) swaps the body copy via rollPromptHint. -->
+    <div id="roll-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="No procedure selected">
+        <div class="modal im-roll-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">No procedure selected</h2>
+                <button type="button" id="roll-modal-close" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint" id="roll-prompt-body">Rolling without a procedure still spends the turn, but it plays no DETECTION: no card goes on cooldown and no bonus is added. Pick a card to play, or roll anyway.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="roll-prompt-pick-btn" class="btn btn-secondary">Choose a card</button>
+                <button type="button" id="roll-prompt-anyway-btn" class="btn btn-primary">Roll anyway</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solo AI (PvE): identify the hidden attack chain -->
+    <div id="accusation-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Identify the attack chain">
+        <div class="modal accusation-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Identify the Attack Chain</h2>
+                <button type="button" id="accusation-close-btn" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint">Name the four cards hidden on the board. Get all four and the case closes — a wrong accusation costs a strike.</p>
+                <div class="im-field">
+                    <label class="form-label" for="accuse-initial">Initial Compromise</label>
+                    <select id="accuse-initial" class="form-select"></select>
+                </div>
+                <div class="im-field">
+                    <label class="form-label" for="accuse-pivot">Pivot &amp; Escalate</label>
+                    <select id="accuse-pivot" class="form-select"></select>
+                </div>
+                <div class="im-field">
+                    <label class="form-label" for="accuse-c2">C2 &amp; Exfil</label>
+                    <select id="accuse-c2" class="form-select"></select>
+                </div>
+                <div class="im-field">
+                    <label class="form-label" for="accuse-persist">Persistence</label>
+                    <select id="accuse-persist" class="form-select"></select>
+                </div>
+                <p class="im-result" id="accusation-result" role="status"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="accusation-cancel-btn" class="btn btn-secondary">Cancel</button>
+                <button type="button" id="accusation-submit-btn" class="btn btn-primary">Submit Accusation</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solo AI (PvE): the rules card. Shown on every entry to ?mode=solo, so it
+         doubles as the reference for how a solo game differs from the tabletop. -->
+    <div id="solo-intro-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="solo-intro-title">
+        <div class="modal im-intro-modal">
+            <!-- This modal introduces a MODE rather than a task, so its header
+                 borrows the portal's masthead: the same five card backs fanned
+                 the same way as index.html's .portal-fan, just smaller. -->
+            <div class="modal-header im-intro-head">
+                <div class="im-intro-fan" aria-hidden="true">
+                    <img src="../shared/decks/cardbacks/v2/initial.webp" alt="">
+                    <img src="../shared/decks/cardbacks/v2/pivot.webp" alt="">
+                    <img src="../shared/decks/cardbacks/v2/c2.webp" alt="">
+                    <img src="../shared/decks/cardbacks/v2/persist.webp" alt="">
+                    <img src="../shared/decks/cardbacks/v2/procedure.webp" alt="">
+                </div>
+                <h2 class="modal-title" id="solo-intro-title">Playing solo: the basics</h2>
+                <button type="button" id="solo-intro-close-btn" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint">The tabletop game, played alone. You are the responder. An <strong>Incident Master</strong> (an AI model, or the built-in offline clue tables) has hidden an attack chain on the board and answers your investigation with hints instead of a GM.</p>
+                <ol class="im-rules">
+                    <li><strong>Four phases are hidden:</strong> Initial Compromise, Pivot &amp; Escalate, C2 &amp; Exfil and Persistence. Your job is to name all four.</li>
+                    <li><strong>Pick a procedure, then roll the d20.</strong> Every roll spends one turn, and <strong>11 or higher</strong> succeeds.</li>
+                    <li><strong>The roll's quality sets the clue's quality.</strong> <strong>11–14 is a partial success</strong>: an indirect, suggestive read rather than a conclusive one. <strong>15+</strong> gives clear evidence, and a natural 20 all but names the technique. <strong>Below 11 fails</strong>, and the turn is simply gone.</li>
+                    <li><strong>A success earns the chain.</strong> Procedure detect certain phases. When one of yours covers a hidden phase, that card flips face-up and the technique is named, <strong>partial successes included</strong>.</li>
+                    <li><strong>Rolling with no card selected</strong> still gets you a phase-level hint, but no named technique, and it still spends the turn.</li>
+                    <li><strong>Accuse when ready.</strong> Name all four cards to close the case. A wrong accusation costs a strike.</li>
+                </ol>
+                <p class="hint">You have <strong>10 turns</strong> and <strong>3 strikes</strong>. The dice, the turn counter and the scoring all work exactly as they do on the tabletop. The only thing that changes is that the chain starts face-down and the Incident Master answers.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="solo-intro-settings-btn" class="btn btn-secondary">Set up the AI</button>
+                <button type="button" id="solo-intro-done-btn" class="btn btn-primary">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Solo AI (PvE): where the Incident Master runs -->
+    <div id="im-settings-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Incident Master AI settings">
+        <div class="modal im-settings-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Incident Master — AI Target</h2>
+                <button type="button" id="im-settings-close-btn" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint">Choose where the Incident Master runs. Without a key it still plays, using the offline clue tables.</p>
+                <fieldset class="im-keymode" id="im-keymode-field">
+                    <legend class="form-label">Key source</legend>
+                    <label class="im-radio"><input type="radio" name="im-keymode" value="shared"> This server's key</label>
+                    <label class="im-radio"><input type="radio" name="im-keymode" value="own"> My own key</label>
+                </fieldset>
+                <div class="im-field">
+                    <label class="form-label" for="im-provider">Provider</label>
+                    <select id="im-provider" class="form-select"></select>
+                </div>
+                <div class="im-field">
+                    <label class="form-label" for="im-model">Model</label>
+                    <div class="im-model-row">
+                        <select id="im-model" class="form-select"></select>
+                        <button type="button" id="im-model-refresh" class="btn btn-secondary btn-sm">Refresh</button>
+                    </div>
+                    <small class="form-hint" id="im-model-hint">Choose a provider to see its models.</small>
+                </div>
+                <div class="im-field" id="im-apikey-field">
+                    <label class="form-label" for="im-apikey">API key</label>
+                    <input type="password" id="im-apikey" class="form-input" autocomplete="off" placeholder="Stored in this browser only">
+                    <small class="form-hint">Sent straight to the provider from this browser — never to this server.</small>
+                </div>
+                 <!-- Role and voice are independent persona settings. -->
+                <fieldset class="im-persona-group">
+                    <legend class="form-label">Who runs the incident</legend>
+                    <div class="im-field">
+                        <label class="form-label" for="im-role">Job role</label>
+                        <select id="im-role" class="form-select"></select>
+                        <small class="form-hint" id="im-role-hint"></small>
+                    </div>
+                    <div class="im-field">
+                        <label class="form-label" for="im-personality">Personality</label>
+                        <select id="im-personality" class="form-select"></select>
+                        <small class="form-hint" id="im-personality-hint"></small>
+                    </div>
+                </fieldset>
+                <p class="im-result" id="im-settings-status" role="status"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="im-settings-clear-btn" class="btn btn-ghost">Clear key</button>
+                <button type="button" id="im-settings-test-btn" class="btn btn-secondary">Test</button>
+                <button type="button" id="im-settings-save-btn" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
@@ -361,13 +545,15 @@
                 <div class="theme-group">
                     <h3 class="theme-group-title">Background image</h3>
                     <div class="theme-preview" id="theme-bg-preview">
-                        <span class="theme-preview-empty">No background set</span>
+                        <span class="theme-preview-empty">Default background</span>
                     </div>
                     <label class="btn btn-secondary btn-sm">
                         <input type="file" id="theme-bg-file" accept="image/*" class="file-input-hidden">Choose image…
                     </label>
                     <button id="theme-bg-remove" class="btn btn-ghost btn-sm" type="button">Remove background</button>
+                    <button id="theme-bg-reset" class="btn btn-ghost btn-sm" type="button" title="Discard your uploaded background and show the bundled table image again">Reset to default</button>
                     <small class="form-hint">Auto-shrunk and stored locally.</small>
+                    <small class="form-hint" id="theme-bg-status">Using the default background.</small>
                 </div>
 
                 <div class="theme-group">
@@ -431,16 +617,14 @@
                     <img id="ps-mark-logo" class="ps-mark-logo" src="../shared/img/bb-logo-print.png" alt="Backdoors &amp; Breaches" decoding="sync">
                 </div>
                 <div class="ps-head-text" id="ps-head-text"></div>
-                <!-- The session's own logo (Theme -> logo), when one has been
-                     uploaded. Static like the rest of the masthead. -->
+                 <!-- Optional session logo configured through Theme. -->
                 <div class="ps-custom-mark" id="ps-custom-mark">
                     <img id="ps-custom-logo" alt="" decoding="sync">
                 </div>
             </div>
             <div class="ps-stats" id="ps-stats"></div>
             <div id="ps-body"></div>
-            <!-- Notes flex to fill whatever height is left above the footer, so
-                 the ruled lines follow the paper size instead of a fixed count. -->
+              <!-- The notes area fills the remaining page height. -->
             <div class="ps-notes">
                 <h3 class="ps-h">Notes</h3>
                 <div class="ps-note-lines" id="ps-note-lines"></div>
@@ -468,6 +652,9 @@
     <script src="js/player.js"></script>
     <script src="js/custom-theme.js"></script>
     <script src="js/print-sheet.js"></script>
+    <!-- Load the provider and Solo AI modules after PlayerController and GameState. -->
+    <script src="js/ai-client.js"></script>
+    <script src="js/solo-master.js"></script>
 
 
     <!-- Site navigation FAB (shared radial menu) -->

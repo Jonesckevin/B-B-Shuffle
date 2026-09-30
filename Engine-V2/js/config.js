@@ -170,7 +170,26 @@ const CONFIG = {
         maxStrikes: 3,
         procedureCount: 7,
         enhancedDefault: 3,
-        enhancedBonus: 3
+        enhancedBonus: 3,
+        // Rule book: "After a DETECTION has been played, regardless of outcome,
+        // that card will have a 3-turn cooldown period during which it cannot be
+        // used again." A card played on turn N is therefore unavailable on
+        // N+1..N+3 and usable again on N+4 — see GameState.startCooldown().
+        cooldownTurns: 3
+    },
+
+    // Solo AI (PvE) mode - see js/solo-master.js.
+    // The scenario is hidden from the player and the AI Incident Master narrates
+    // clues. Turns are spent by rolling a die and strikes come from a wrong
+    // accusation, so both halves stay on the existing GameState counters.
+    solo: {
+        maxTurns: 10,
+        maxStrikes: 3,
+        // How many previous investigations are sent back as prompt context.
+        clueHistoryLimit: 8,
+        // Wait this long between provider calls (ms) so a fast roller cannot
+        // queue a burst of requests.
+        minCallInterval: 1200
     },
 
     // Storage keys
@@ -187,6 +206,7 @@ const CONFIG = {
 // Freeze config to prevent accidental modifications
 Object.freeze(CONFIG);
 Object.freeze(CONFIG.game);
+Object.freeze(CONFIG.solo);
 Object.freeze(CONFIG.storage);
 Object.freeze(CONFIG.sync);
 Object.freeze(CONFIG.cardbackSets);

@@ -7,11 +7,20 @@
 (function () {
     'use strict';
 
-    var KEYS = { bg: 'bb-theme-bg', logo: 'bb-theme-logo', show: 'bb-theme-logoShow' };
+    var KEYS = {
+        bg: 'bb-theme-bg',
+        bgShow: 'bb-theme-bgShow',
+        logo: 'bb-theme-logo',
+        show: 'bb-theme-logoShow'
+    };
 
     // Shipped default for the header logo. Deliberately the same file the page
     // footer already loads, so showing it costs no extra download.
     var DEFAULT_LOGO = '../shared/img/bb-logo-transparent-w.png';
+
+    // Shipped default table background (1920x1080). Used whenever this browser
+    // has no custom background stored, so the board always sits on the felt.
+    var DEFAULT_BG = '../shared/img/background_default.png';
 
     function el(id) { return document.getElementById(id); }
 
@@ -65,11 +74,27 @@
 
     /* ---------------- apply to the page ---------------- */
 
-    function applyBackground(dataUrl) {
+    /**
+     * The background image to display, or '' when the table background is off.
+     * Three states, mirroring the logo: no stored image means the bundled
+     * default, and `bb-theme-bgShow = 0` means no image at all.
+     * @returns {string}
+     */
+    function backgroundSrc() {
+        if (storeGet(KEYS.bgShow) === '0') return '';
+        return storeGet(KEYS.bg) || DEFAULT_BG;
+    }
+
+    /**
+     * Paint the stored background onto the page. `has-custom-bg` means "an image
+     * is displayed": player.css drops the card-tray fills so the surface shows
+     * through instead of a stack of panels.
+     */
+    function applyBackground() {
         var body = document.body;
-        // Flagged so player.css can drop the card-tray fills and let the image through.
-        body.classList.toggle('has-custom-bg', !!dataUrl);
-        if (!dataUrl) {
+        var src = backgroundSrc();
+        body.classList.toggle('has-custom-bg', !!src);
+        if (!src) {
             body.style.backgroundImage = '';
             body.style.backgroundSize = '';
             body.style.backgroundRepeat = '';
@@ -79,7 +104,7 @@
         }
         // A translucent dark layer sits over the image so cards/text stay readable.
         body.style.backgroundImage =
-            'linear-gradient(rgba(8,10,15,0.62), rgba(8,10,15,0.62)), url("' + dataUrl + '")';
+            'linear-gradient(rgba(8,10,15,0.62), rgba(8,10,15,0.62)), url("' + src + '")';
         body.style.backgroundSize = 'cover';
         body.style.backgroundRepeat = 'no-repeat';
         body.style.backgroundPosition = 'center';
@@ -106,10 +131,10 @@
         if (!box) return;
 
         if (kind === 'bg') {
-            var url = storeGet(KEYS.bg);
-            box.innerHTML = url
-                ? '<img src="' + url + '" alt="">'
-                : '<span class="theme-preview-empty">No background set</span>';
+            var bgUrl = backgroundSrc();
+            box.innerHTML = bgUrl
+                ? '<img src="' + bgUrl + '" alt="">'
+                : '<span class="theme-preview-empty">No background</span>';
             return;
         }
 
@@ -132,7 +157,10 @@
         fileToDataUrl(file, maxDim).then(function (dataUrl) {
             storeSet(kind === 'bg' ? KEYS.bg : KEYS.logo, dataUrl);
             if (kind === 'bg') {
-                applyBackground(dataUrl);
+                // Choosing an image implies wanting to see it, even if the
+                // background had previously been removed.
+                storeSet(KEYS.bgShow, '1');
+                applyBackground();
             } else {
                 // Choosing a logo implies wanting to see it, even if it had
                 // previously been removed.
@@ -141,6 +169,7 @@
                 applyLogo(dataUrl, true);
             }
             renderPreview(kind);
+            refreshBgUI();
             refreshLogoUI();
             if (fileInput) fileInput.value = '';
         }).catch(function (err) {
@@ -148,10 +177,44 @@
         });
     }
 
-    function clearBackground() {
+    /** "Reset to default" - drop the upload and return to the bundled image. */
+    function resetBackground() {
         storeDel(KEYS.bg);
-        applyBackground(null);
+        storeSet(KEYS.bgShow, '1');
+        applyBackground();
         renderPreview('bg');
+        refreshBgUI();
+    }
+
+    /**
+     * "Remove background" - no image at all. The board sits on the plain table
+     * surface, which is the third state: default / uploaded / none.
+     */
+    function removeBackground() {
+        storeSet(KEYS.bgShow, '0');
+        applyBackground();
+        renderPreview('bg');
+        refreshBgUI();
+    }
+
+    /** Keep the background status line and button states in step with storage. */
+    function refreshBgUI() {
+        var custom = !!storeGet(KEYS.bg);
+        var off = storeGet(KEYS.bgShow) === '0';
+
+        var status = el('theme-bg-status');
+        if (status) {
+            status.textContent = off
+                ? 'No background image - the plain table surface is shown.'
+                : (custom ? 'Using your uploaded background.' : 'Using the default background.');
+        }
+
+        var reset = el('theme-bg-reset');
+        // Enabled whenever the table is not already on the bundled image, so
+        // removing the background does not strand the user with no way back.
+        if (reset) reset.disabled = !custom && !off;
+        var remove = el('theme-bg-remove');
+        if (remove) remove.disabled = off;            // already removed
     }
 
     /**
@@ -209,7 +272,8 @@
         el('theme-modal-done').addEventListener('click', closeModal);
         el('theme-bg-file').addEventListener('change', function () { pickAndApply('bg'); });
         el('theme-logo-file').addEventListener('change', function () { pickAndApply('logo'); });
-        el('theme-bg-remove').addEventListener('click', clearBackground);
+        el('theme-bg-remove').addEventListener('click', removeBackground);
+        el('theme-bg-reset').addEventListener('click', resetBackground);
         el('theme-logo-remove').addEventListener('click', removeLogo);
         el('theme-logo-reset').addEventListener('click', resetLogo);
         el('theme-logo-toggle').addEventListener('change', function (e) {
@@ -232,10 +296,11 @@
         if (!el('custom-logo')) return; // only on pages that include the theme UI
         var show = storeGet(KEYS.show) !== '0';
         el('theme-logo-toggle').checked = show;
-        applyBackground(storeGet(KEYS.bg));
+        applyBackground();
         applyLogo(storeGet(KEYS.logo), show);
         renderPreview('bg');
         renderPreview('logo');
+        refreshBgUI();
         refreshLogoUI();
         bind();
     }

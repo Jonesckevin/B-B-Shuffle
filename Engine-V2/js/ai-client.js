@@ -12,8 +12,9 @@
  * Public API
  *   AIClient.getSharedConfig()          -> Promise<{configured, provider, model, ...}>
  *   AIClient.getOwnSettings()           -> {provider, model, apiKey, ...}|null
- *   AIClient.isConfigured()             -> Promise<boolean>
- *   AIClient.chat(prompt, opts)         -> Promise<string>
+ *   AIClient.resolve()                  -> Promise<{ok, mode, label}>
+ *   AIClient.listModels(opts)           -> Promise<{models, source, error?}>
+ *   AIClient.chat(prompt)               -> Promise<string>
  *   AIClient.extractJson(text)          -> Object
  *   AIClient.generateCard(fields)       -> Promise<{name, description, detection, tools, details}>
  */
@@ -21,42 +22,163 @@
 const AIClient = {
     SHARED_CONFIG_ENDPOINT: '/api/ai/config',
     SHARED_CHAT_ENDPOINT: '/api/ai/chat',
+    SHARED_MODELS_ENDPOINT: '/api/ai/models',
     OWN_SETTINGS_KEY: 'bb-ai-settings',
+    KEY_SOURCE_KEY: 'bb-ai-key-source',
+    // A provider that stalls must not leave the UI waiting for ever; a real
+    // narration call takes a few seconds, so this is generous.
+    REQUEST_TIMEOUT_MS: 30000,
 
-    // Mirrors the provider table in scenario_ai.js (chat endpoints only — the
-    // creator never needs model listing).
+    /**
+     * fetch() with a deadline, so an unresponsive provider fails fast enough to
+     * fall back to the offline clue tables.
+     * @param {string} url
+     * @param {Object} [options] - fetch init
+     * @param {number} [timeoutMs]
+     * @returns {Promise<Response>}
+     */
+    async fetchWithTimeout(url, options = {}, timeoutMs = 30000) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            return await fetch(url, Object.assign({}, options, { signal: controller.signal }));
+        } catch (error) {
+            if (error && error.name === 'AbortError') {
+                throw new Error(`the provider did not answer within ${Math.round(timeoutMs / 1000)}s`);
+            }
+            throw error;
+        } finally {
+            clearTimeout(timer);
+        }
+    },
+
+    // Mirrors the provider table in scenario_ai.js. Each entry carries the chat
+    // endpoint, the sibling model-list endpoint, and a curated model list for
+    // when the live one is unavailable (offline, CORS, or no key yet).
     PROVIDERS: {
-        openai: { name: 'OpenAI', endpoint: 'https://api.openai.com/v1/chat/completions', defaultModel: 'gpt-4o-mini' },
-        anthropic: { name: 'Anthropic', endpoint: 'https://api.anthropic.com/v1/messages', defaultModel: 'claude-3-5-sonnet-20241022' },
-        mistral: { name: 'Mistral', endpoint: 'https://api.mistral.ai/v1/chat/completions', defaultModel: 'mistral-small-latest' },
-        xai: { name: 'xAI (Grok)', endpoint: 'https://api.x.ai/v1/chat/completions', defaultModel: 'grok-3-mini' },
-        perplexity: { name: 'Perplexity', endpoint: 'https://api.perplexity.ai/chat/completions', defaultModel: 'sonar' },
-        groq: { name: 'Groq', endpoint: 'https://api.groq.com/openai/v1/chat/completions', defaultModel: 'llama-3.3-70b-versatile' },
-        deepseek: { name: 'DeepSeek', endpoint: 'https://api.deepseek.com/chat/completions', defaultModel: 'deepseek-chat' },
-        gemini: { name: 'Google Gemini', endpoint: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', defaultModel: 'gemini-2.0-flash' },
-        ollama: { name: 'Ollama', endpoint: 'http://localhost:11434/api/generate', defaultModel: 'llama3' }
+        openai: {
+            name: 'OpenAI',
+            endpoint: 'https://api.openai.com/v1/chat/completions',
+            modelsEndpoint: 'https://api.openai.com/v1/models',
+            defaultModel: 'gpt-4o-mini',
+            models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']
+        },
+        anthropic: {
+            name: 'Anthropic',
+            endpoint: 'https://api.anthropic.com/v1/messages',
+            modelsEndpoint: 'https://api.anthropic.com/v1/models',
+            defaultModel: 'claude-3-5-sonnet-20241022',
+            models: ['claude-sonnet-4-20250514', 'claude-3-7-sonnet-20250219', 'claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022', 'claude-3-opus-20240229']
+        },
+        mistral: {
+            name: 'Mistral',
+            endpoint: 'https://api.mistral.ai/v1/chat/completions',
+            modelsEndpoint: 'https://api.mistral.ai/v1/models',
+            defaultModel: 'mistral-small-latest',
+            models: ['mistral-large-latest', 'mistral-small-latest', 'open-mistral-nemo', 'codestral-latest']
+        },
+        xai: {
+            name: 'xAI (Grok)',
+            endpoint: 'https://api.x.ai/v1/chat/completions',
+            modelsEndpoint: 'https://api.x.ai/v1/models',
+            defaultModel: 'grok-3-mini',
+            models: ['grok-3', 'grok-3-mini', 'grok-3-mini-fast', 'grok-2-latest']
+        },
+        perplexity: {
+            name: 'Perplexity',
+            endpoint: 'https://api.perplexity.ai/chat/completions',
+            modelsEndpoint: 'https://api.perplexity.ai/models',
+            defaultModel: 'sonar',
+            models: ['sonar', 'sonar-pro', 'sonar-reasoning']
+        },
+        groq: {
+            name: 'Groq',
+            endpoint: 'https://api.groq.com/openai/v1/chat/completions',
+            modelsEndpoint: 'https://api.groq.com/openai/v1/models',
+            defaultModel: 'llama-3.3-70b-versatile',
+            models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'llama-3.1-70b-versatile', 'gemma2-9b-it']
+        },
+        deepseek: {
+            name: 'DeepSeek',
+            endpoint: 'https://api.deepseek.com/chat/completions',
+            modelsEndpoint: 'https://api.deepseek.com/models',
+            defaultModel: 'deepseek-chat',
+            models: ['deepseek-chat', 'deepseek-reasoner']
+        },
+        gemini: {
+            name: 'Google Gemini',
+            endpoint: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+            modelsEndpoint: 'https://generativelanguage.googleapis.com/v1beta/openai/models',
+            // Dated model identifiers may not be available to every key; the
+            // alias tracks the current Flash model.
+            //
+            // Use the Lite alias by default. A free Gemini key
+            // gets ~20 requests per day *per model*, and a single solo game spends
+            // 12-15 (one call per roll, plus the opening) - so the flagship alias
+            // runs dry part-way through a case. Lite's allowance outlasts a full
+            // game; anyone who wants the bigger model picks it from the list.
+            defaultModel: 'gemini-flash-lite-latest',
+            models: [
+                'gemini-flash-lite-latest',
+                'gemini-flash-latest',
+                'gemini-3.1-flash-lite',
+                'gemini-3.5-flash',
+                'gemini-3.8-flash',
+                'gemini-pro-latest'
+            ]
+        },
+        ollama: {
+            name: 'Ollama',
+            endpoint: 'http://localhost:11434/api/generate',
+            modelsEndpoint: 'http://localhost:11434/api/tags',
+            defaultModel: 'llama3',
+            models: ['llama3', 'mistral', 'codellama']
+        }
     },
 
     /* ------------------------------------------------------------------ */
     /* Configuration                                                       */
     /* ------------------------------------------------------------------ */
 
-    /** The user's own AI settings (written by the AI Generator), if any. */
+    /**
+     * The user's own AI settings, if any.
+     * Ollama needs no key, so its record counts as usable without one.
+     */
     getOwnSettings() {
         try {
             const raw = localStorage.getItem(this.OWN_SETTINGS_KEY);
             if (!raw) return null;
             const parsed = JSON.parse(raw);
-            return (parsed && parsed.apiKey) ? parsed : null;
+            if (!parsed) return null;
+            return (parsed.apiKey || parsed.provider === 'ollama') ? parsed : null;
         } catch (e) {
             return null;
+        }
+    },
+
+    /**
+     * Did the user choose their own key over the server's?
+     *
+     * When no choice has been recorded yet, a stored key counts as the choice:
+     * it is what the user just typed, and it saves a pointless round trip to a
+     * server that may have no shared key at all.
+     * @returns {boolean}
+     */
+    ownPreferred() {
+        try {
+            const source = localStorage.getItem(this.KEY_SOURCE_KEY);
+            if (source) return source === 'own';
+            return !!this.getOwnSettings();
+        } catch (e) {
+            return false;
         }
     },
 
     /** Public info about the server-configured shared key. */
     async getSharedConfig() {
         try {
-            const res = await fetch(this.SHARED_CONFIG_ENDPOINT, { cache: 'no-store' });
+            // Short deadline: this is a probe, not a narration call.
+            const res = await this.fetchWithTimeout(this.SHARED_CONFIG_ENDPOINT, { cache: 'no-store' }, 8000);
             if (!res.ok) return { configured: false };
             const data = await res.json();
             return data && data.configured ? data : { configured: false };
@@ -67,9 +189,16 @@ const AIClient = {
 
     /**
      * Is any AI path usable?
+     *
+     * The user's explicit key-source choice wins: picking "my own key" must not
+     * be silently overridden by a shared key that happens to exist.
      * @returns {Promise<{ok: boolean, mode: 'shared'|'own'|'none', label: string}>}
      */
     async resolve() {
+        const own = this.getOwnSettings();
+        if (this.ownPreferred() && own) {
+            return { ok: true, mode: 'own', label: this.describeOwn(own) };
+        }
         const shared = await this.getSharedConfig();
         if (shared.configured) {
             return {
@@ -78,16 +207,123 @@ const AIClient = {
                 label: `${shared.providerName || shared.provider || 'Server'}${shared.model ? ' · ' + shared.model : ''}`
             };
         }
-        const own = this.getOwnSettings();
         if (own) {
-            const provider = this.PROVIDERS[own.provider];
-            return {
-                ok: true,
-                mode: 'own',
-                label: `${provider ? provider.name : own.provider}${own.model ? ' · ' + own.model : ''}`
-            };
+            return { ok: true, mode: 'own', label: this.describeOwn(own) };
         }
         return { ok: false, mode: 'none', label: 'Not configured' };
+    },
+
+    /** Human label for a set of the user's own settings. */
+    describeOwn(own) {
+        const provider = this.PROVIDERS[own.provider];
+        return `${provider ? provider.name : own.provider}${own.model ? ' · ' + own.model : ''}`;
+    },
+
+    /* ------------------------------------------------------------------ */
+    /* Model listing                                                       */
+    /* ------------------------------------------------------------------ */
+
+    /**
+     * List the models the given target can actually use.
+     *
+     * Never throws: a provider that cannot be reached (offline, CORS, or a
+     * service that exposes no model list) falls back to the curated names, so
+     * the dropdown is never empty.
+     * @param {Object} [opts]
+     * @param {'shared'|'own'} [opts.source] - Which key path to list
+     * @param {string} [opts.provider] - Provider key (own source)
+     * @param {string} [opts.apiKey] - Key held in the form, not yet saved
+     * @returns {Promise<{models: string[], source: 'server'|'provider'|'curated', error?: string}>}
+     */
+    async listModels(opts = {}) {
+        const source = (opts.source === 'shared') ? 'shared' : 'own';
+
+        if (source === 'shared') {
+            try {
+                const res = await this.fetchWithTimeout(this.SHARED_MODELS_ENDPOINT, { cache: 'no-store' }, 15000);
+                if (!res.ok) throw new Error(`the server returned ${res.status}`);
+                const models = this.normalizeModels(await res.json());
+                return models.length
+                    ? { models, source: 'server' }
+                    : { models: [], source: 'server', error: 'the server key has no models listed' };
+            } catch (error) {
+                return { models: [], source: 'server', error: error.message || 'request failed' };
+            }
+        }
+
+        const provider = opts.provider || (this.getOwnSettings() || {}).provider || 'openai';
+        const apiKey = opts.apiKey || '';
+        const cfg = this.PROVIDERS[provider];
+        if (!cfg) return { models: [], source: 'curated', error: 'unknown provider: ' + provider };
+
+        const curated = this.normalizeModels(cfg.models);
+
+        // Ollama is keyless: ask the local daemon, fall back to common names.
+        if (provider === 'ollama') {
+            try {
+                const res = await this.fetchWithTimeout(cfg.modelsEndpoint, { cache: 'no-store' }, 8000);
+                if (!res.ok) throw new Error(`Ollama returned ${res.status}`);
+                const models = this.normalizeModels(await res.json());
+                return models.length ? { models, source: 'provider' } : { models: curated, source: 'curated' };
+            } catch (error) {
+                return { models: curated, source: 'curated', error: 'Ollama is not reachable from this browser' };
+            }
+        }
+
+        if (!apiKey || !cfg.modelsEndpoint) return { models: curated, source: 'curated' };
+
+        const headers = { Accept: 'application/json' };
+        if (provider === 'anthropic') {
+            headers['x-api-key'] = apiKey;
+            headers['anthropic-version'] = '2023-06-01';
+        } else {
+            headers['Authorization'] = `Bearer ${apiKey}`;
+        }
+
+        try {
+            const res = await this.fetchWithTimeout(cfg.modelsEndpoint, { headers, cache: 'no-store' }, 15000);
+            if (!res.ok) {
+                let message = `the provider returned ${res.status}`;
+                try {
+                    const err = await res.json();
+                    const detail = err.error?.message || err.error || err.message;
+                    if (detail) message = typeof detail === 'string' ? detail : JSON.stringify(detail);
+                } catch (e) { /* non-JSON error body */ }
+                throw new Error(message);
+            }
+            const models = this.normalizeModels(await res.json());
+            return models.length
+                ? { models, source: 'provider' }
+                : { models: curated, source: 'curated', error: 'the provider listed no models' };
+        } catch (error) {
+            return { models: curated, source: 'curated', error: error.message || 'request failed' };
+        }
+    },
+
+    /**
+     * Flatten the provider list shapes into clean, deduplicated model ids.
+     * Gemini's OpenAI-compatible list returns ids as "models/gemini-…".
+     * @param {Object|Array} input - Raw provider response
+     * @returns {string[]} Sorted model ids
+     */
+    normalizeModels(input) {
+        let items = [];
+        if (Array.isArray(input)) items = input;
+        else if (Array.isArray(input?.models)) items = input.models;
+        else if (Array.isArray(input?.data)) items = input.data;
+        else if (Array.isArray(input?.data?.data)) items = input.data.data;
+
+        const seen = new Set();
+        const out = [];
+        items.forEach(item => {
+            if (!item) return;
+            const raw = typeof item === 'string' ? item : (item.id || item.name || item.model || item.model_name || '');
+            const id = String(raw).trim().replace(/^models\//, '');
+            if (!id || seen.has(id)) return;
+            seen.add(id);
+            out.push(id);
+        });
+        return out.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
     },
 
     /* ------------------------------------------------------------------ */
@@ -100,11 +336,14 @@ const AIClient = {
      * @returns {Promise<string>}
      */
     async chat(prompt) {
+        const own = this.getOwnSettings();
+        if (this.ownPreferred() && own) {
+            return await this.chatDirect(prompt, own);
+        }
         const shared = await this.getSharedConfig();
         if (shared.configured) {
             return await this.chatViaServer(prompt, shared);
         }
-        const own = this.getOwnSettings();
         if (own) {
             return await this.chatDirect(prompt, own);
         }
@@ -120,11 +359,11 @@ const AIClient = {
         };
         if (shared.model) body.model = shared.model;
 
-        const res = await fetch(this.SHARED_CHAT_ENDPOINT, {
+        const res = await this.fetchWithTimeout(this.SHARED_CHAT_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
-        });
+        }, this.REQUEST_TIMEOUT_MS);
 
         if (!res.ok) {
             let message = `AI request failed (${res.status})`;
@@ -149,18 +388,18 @@ const AIClient = {
         const maxTokens = settings.maxTokens || 1600;
 
         if (settings.provider === 'ollama') {
-            const res = await fetch(provider.endpoint, {
+            const res = await this.fetchWithTimeout(provider.endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ model, prompt, stream: false })
-            });
+            }, 60000);
             if (!res.ok) throw new Error('Ollama request failed — is Ollama running?');
             const data = await res.json();
             return data.response || '';
         }
 
         if (settings.provider === 'anthropic') {
-            const res = await fetch(provider.endpoint, {
+            const res = await this.fetchWithTimeout(provider.endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -168,16 +407,16 @@ const AIClient = {
                     'anthropic-version': '2023-06-01'
                 },
                 body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], max_tokens: maxTokens })
-            });
+            }, this.REQUEST_TIMEOUT_MS);
             if (!res.ok) {
                 const err = await res.json().catch(() => ({}));
-                throw new Error(err.error?.message || `AI request failed (${res.status})`);
+                throw new Error(this.apiError(res.status, err.error?.message));
             }
             const data = await res.json();
             return data.content?.[0]?.text || '';
         }
 
-        const res = await fetch(provider.endpoint, {
+        const res = await this.fetchWithTimeout(provider.endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -189,17 +428,48 @@ const AIClient = {
                 temperature,
                 max_tokens: maxTokens
             })
-        });
+        }, this.REQUEST_TIMEOUT_MS);
         if (!res.ok) {
-            let message = `AI request failed (${res.status})`;
+            let detail = '';
             try {
                 const err = await res.json();
-                message = err.error?.message || err.message || message;
+                // `error` may be a string (Gemini) or an object (OpenAI).
+                const value = err.error?.message || err.error || err.message;
+                if (value) detail = typeof value === 'string' ? value : JSON.stringify(value);
             } catch (e) { /* non-JSON error body */ }
-            throw new Error(message);
+            throw new Error(this.apiError(res.status, detail));
         }
         const data = await res.json();
         return data.choices?.[0]?.message?.content || data.response || data.text || '';
+    },
+
+    /**
+     * Turn a provider error body into something the player can act on.
+     *
+    * Provide actionable guidance for common quota and model-availability errors:
+     *
+     *  - 429 is a *quota* wall, not a bad key. Gemini's free tier is per-model
+     *    (~20/day), so the fix is a different model - which restores a full
+     *    allowance immediately - or billing, not a new key.
+     *  - 404 is almost always a model this key cannot reach (dated model names
+     *    get retired for new keys even while they stay in the catalogue).
+     *
+     * @param {number} status - HTTP status
+     * @param {string} [detail] - Provider-supplied message, if any
+     * @returns {string}
+     */
+    apiError(status, detail) {
+        const base = String(detail || '').trim() || `AI request failed (${status})`;
+        if (status === 429 || /RESOURCE_EXHAUSTED|quota|rate limit/i.test(base)) {
+            return base + ' — this model\'s free daily allowance is used up, which is a quota '
+                + 'limit and not a bad key. Free Gemini keys get ~20 requests per day PER MODEL, '
+                + 'so picking a different model from the list gives you a fresh allowance straight '
+                + 'away (or wait for the daily reset, or enable billing).';
+        }
+        if (status === 404 || /not found|no longer available|does not exist|unsupported/i.test(base)) {
+            return base + ' — that usually means the model is not available to this key. Pick one from the Model list.';
+        }
+        return base;
     },
 
     /* ------------------------------------------------------------------ */

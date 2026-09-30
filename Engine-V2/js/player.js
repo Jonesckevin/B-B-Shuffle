@@ -25,8 +25,10 @@ const PlayerController = {
     isRolling: false,
     successTarget: 11,
     loadMenuScenarios: [],
-    // "Call a Consultant": consultants[] is the pool available in this game's
-    // deck, consultant is the one currently sitting on the board.
+    // Solo AI (PvE) overrides this so the shared "no procedure selected" prompt
+    // explains that mode's untargeted sweep instead of the tabletop's roll.
+    rollPromptHint: null,
+    // `consultants` is the deck pool; `consultant` is the selected card.
     consultants: [],
     consultant: null,
 
@@ -88,7 +90,7 @@ const PlayerController = {
             this.chooseConsultant(this.consultants[parseInt(opt.dataset.index, 10)]);
         });
 
-        // Card viewing (flip + big readable preview) is handled by the shared CardViewer
+        // Card viewing and enlarged previews use the shared CardViewer
         // overlay (shared/js/card-viewer.js) - see flipCard()/openLightbox() below.
 
         // Game over
@@ -118,6 +120,14 @@ const PlayerController = {
         Utils.getElement('qs-cancel-btn')?.addEventListener('click', () => this.closeQuickStart());
         Utils.getElement('qs-start-btn')?.addEventListener('click', () => this.startQuickStart());
 
+        // "No procedure selected" prompt (shown by rollDice(); see rollPromptHint)
+        Utils.getElement('roll-modal')?.addEventListener('click', (e) => {
+            if (e.target.id === 'roll-modal') this.closeRollPrompt();
+        });
+        Utils.getElement('roll-modal-close')?.addEventListener('click', () => this.closeRollPrompt());
+        Utils.getElement('roll-prompt-pick-btn')?.addEventListener('click', () => this.closeRollPrompt());
+        Utils.getElement('roll-prompt-anyway-btn')?.addEventListener('click', () => this.rollAnyway());
+
         // Reveal / hide all scenario cards (GM quick view)
         Utils.getElement('reveal-cards-btn')?.addEventListener('click', () => this.toggleRevealScenario());
 
@@ -131,6 +141,7 @@ const PlayerController = {
                 this.closeQuickStart();
                 this.closeLightbox();
                 this.closeConsultantPicker();
+                this.closeRollPrompt();
                 if (typeof DiceFX !== 'undefined' && DiceFX.close) DiceFX.close();
             }
             if (e.key === 'r' || e.key === 'R') {
@@ -475,9 +486,8 @@ const PlayerController = {
     },
 
     /**
-     * Pick a consultant from the picker. Selecting is a done deal: the modal
-     * closes. Re-picking the consultant who is already seated just closes the
-     * picker — the selection is already good to go.
+    * Select a consultant and close the picker. Selecting the active consultant
+    * leaves the current selection unchanged.
      * @param {Object} card - Consultant card from the deck
      */
     chooseConsultant(card) {
@@ -810,11 +820,22 @@ const PlayerController = {
 
         container.innerHTML = procedures.map((card, index) => {
             const isActive = this.activeProcIndex === index;
-            const chip = card.enhanced
-                ? `<button type="button" class="proc-arm${isActive ? ' armed' : ''}" data-index="${index}" title="Enhanced (+3)${isActive ? ' — armed, click to disarm' : ' — click to arm for the next roll'}">${isActive ? '✓ +3' : '✦ +3'}</button>`
+            // The rule-book cooldown applies after every play, regardless of outcome.
+            // While blocked, show the countdown and hide the arm control.
+            const remaining = GameState.cooldownRemaining(index);
+            const blocked = remaining > 0;
+            const cooldownNote = `On cooldown — ${remaining} turn${remaining === 1 ? '' : 's'} until this procedure can be used again`;
+            // Every procedure is playable, so every card carries a control and
+            // can be put on cooldown; only an enhanced card adds the flat +3.
+            // Cooldown updates hide the rendered control while it sits out.
+            const chip = `<button type="button" class="proc-arm${isActive ? ' armed' : ''}${card.enhanced ? '' : ' proc-arm-plain'}" data-index="${index}" title="${card.enhanced
+                ? `Enhanced (+3)${isActive ? ' — armed, click to disarm' : ' — click to arm for the next roll'}`
+                : `Use this procedure${isActive ? ' — selected, click to clear' : ' — click to use for the next roll'}`}">${isActive ? (card.enhanced ? '✓ +3' : '✓ Use') : (card.enhanced ? '✦ +3' : '✦ Use')}</button>`;
+            const token = blocked
+                ? `<span class="proc-token" title="${cooldownNote}" aria-label="${cooldownNote}">${remaining}</span>`
                 : '';
             return `
-                <div class="flip-card${card.enhanced ? ' enhanced' : ''}${isActive ? ' active' : ''}" data-procedure-index="${index}">
+                <div class="flip-card${card.enhanced ? ' enhanced' : ''}${isActive ? ' active' : ''}${blocked ? ' on-cooldown' : ''}" data-procedure-index="${index}"${blocked ? ` title="${cooldownNote}"` : ''}>
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <img src="${this.procedureBackUrl()}" alt="Procedure Card Back">
@@ -823,6 +844,7 @@ const PlayerController = {
                             <img src="${Utils.assetPath(card.image)}" alt="${Utils.escapeHtml(card.name || 'Procedure')}" onerror="Utils.onImgError(event)">
                         </div>
                     </div>
+                    ${token}
                     ${chip}
                 </div>
             `;
@@ -841,20 +863,111 @@ const PlayerController = {
             btn.addEventListener('click', () => this.toggleEnhancedProc(parseInt(btn.dataset.index)));
         });
 
-        // A fresh render deals the hand back face-down
-        this.setProcedureRevealState(false);
+        // Preserve the current reveal state when repainting the procedure hand.
+        const revealBtn = Utils.getElement('reveal-procedures-btn');
+        const wasRevealed = !!(revealBtn && revealBtn.dataset.state === 'shown');
+        this.setProcedureRevealState(wasRevealed);
+        if (wasRevealed) {
+            Utils.$$('.procedure-cards .flip-card').forEach(card => card.classList.add('flipped'));
+        }
+
+        this.updateProcedureCooldowns();
     },
 
     /**
-     * Arm / disarm an enhanced procedure (only one active at a time)
+     * Select / clear the procedure a roll is made with (only one at a time).
+     *
+     * Every procedure in the hand is selectable, so any DETECTION can be played
+     * and then sits out its cooldown. Only an enhanced card adds the flat +3
+     * (getEnhancedBonus reads the same slot).
      * @param {number} index - Procedure index
      */
     toggleEnhancedProc(index) {
         const procedures = this.scenario?.procedures || [];
-        if (index < 0 || index >= procedures.length || !procedures[index].enhanced) return;
+        if (index < 0 || index >= procedures.length) return;
 
-        this.activeProcIndex = this.activeProcIndex === index ? -1 : index;
-        this.updateProcedureCards();
+        // Report blocked selections with a toast; the roll-status line persists
+        // until the next roll and could outlive the cooldown.
+        if (GameState.isOnCooldown(index)) {
+            const remaining = GameState.cooldownRemaining(index);
+            Utils.showToast(
+                `${procedures[index].name || 'That procedure'} is on cooldown — ${remaining} turn${remaining === 1 ? '' : 's'} to go.`,
+                'warning'
+            );
+            return;
+        }
+
+        const previous = this.activeProcIndex;
+        this.activeProcIndex = (previous === index) ? -1 : index;
+
+        // Update only the affected cards to preserve the hand's reveal state.
+        if (previous !== -1) this.updateProcedureSelection(previous);
+        this.updateProcedureSelection(index);
+    },
+
+    /**
+     * Repaint the selected-procedure affordances on ONE card, in place.
+     * @param {number} index - Procedure index
+     */
+    updateProcedureSelection(index) {
+        const card = (this.scenario?.procedures || [])[index];
+        if (!card) return;
+        const el = document.querySelector(`.procedure-cards .flip-card[data-procedure-index="${index}"]`);
+        if (!el) return;
+
+        const isActive = this.activeProcIndex === index;
+        const enhanced = !!card.enhanced;
+        el.classList.toggle('active', isActive);
+
+        const chip = el.querySelector('.proc-arm');
+        if (!chip) return;
+        chip.classList.toggle('armed', isActive);
+        chip.textContent = isActive ? (enhanced ? '✓ +3' : '✓ Use') : (enhanced ? '✦ +3' : '✦ Use');
+        chip.title = enhanced
+            ? `Enhanced (+3)${isActive ? ' — armed, click to disarm' : ' — click to arm for the next roll'}`
+            : `Use this procedure${isActive ? ' — selected, click to clear' : ' — click to use for the next roll'}`;
+    },
+
+    /**
+     * Repaint the cooldown tokens in place.
+     *
+    * Updates countdowns in place after each turn change, preserving the hand's
+    * current reveal state.
+     */
+    updateProcedureCooldowns() {
+        const cards = Utils.$$('.procedure-cards .flip-card');
+        if (!cards || !cards.length) return;
+
+        cards.forEach(el => {
+            const index = parseInt(el.dataset.procedureIndex, 10);
+            if (!(index >= 0)) return;
+
+            const remaining = GameState.cooldownRemaining(index);
+            const blocked = remaining > 0;
+            el.classList.toggle('on-cooldown', blocked);
+
+            // Hide rather than remove the chip so it returns when the cooldown ends.
+            const chip = el.querySelector('.proc-arm');
+            if (chip) (blocked ? Utils.hideElement(chip) : Utils.showElement(chip));
+
+            let token = el.querySelector('.proc-token');
+            if (remaining <= 0) {
+                if (token) token.remove();
+                el.removeAttribute('title');
+                return;
+            }
+
+            const note = `On cooldown — ${remaining} turn${remaining === 1 ? '' : 's'} until this procedure can be used again`;
+            if (!token) {
+                token = document.createElement('span');
+                token.className = 'proc-token';
+                el.appendChild(token);
+            }
+            token.textContent = remaining;
+            token.title = note;
+            token.setAttribute('aria-label', note);
+            el.title = note;
+        });
     },
 
     /**
@@ -864,6 +977,8 @@ const PlayerController = {
     getEnhancedBonus() {
         const procedures = this.scenario?.procedures || [];
         const active = procedures[this.activeProcIndex];
+        // A card on cooldown cannot contribute a bonus.
+        if (GameState.isOnCooldown(this.activeProcIndex)) return 0;
         return active && active.enhanced ? (CONFIG.game.enhancedBonus || 3) : 0;
     },
 
@@ -906,6 +1021,17 @@ const PlayerController = {
         const name = this.injectQueue[this.activeInjectIndex]?.name || 'inject';
         Utils.showToast(`Inject: ${name}`, 'warning');
         this.showRollStatus(`INJECT drawn (${name}) — ${source}`, 'warn');
+
+        // Solo AI (PvE): narrate the inject. The printed card text stays the
+        // authority - the Incident Master only sets the scene for it.
+        if (typeof SoloMaster !== 'undefined' && typeof SoloMaster.onInject === 'function') {
+            try {
+                SoloMaster.onInject(source);
+            } catch (error) {
+                console.error('SoloMaster.onInject failed:', error);
+            }
+        }
+
         return name;
     },
 
@@ -943,6 +1069,9 @@ const PlayerController = {
                 `<span class="strike-dot ${i < currentStrikes ? 'active' : ''}"></span>`
             ).join('');
         }
+
+        // Turns have moved, so any procedure sitting out its cooldown ticks down.
+        this.updateProcedureCooldowns();
     },
 
     /**
@@ -954,8 +1083,7 @@ const PlayerController = {
     },
 
     /**
-     * Flip a card. A single click flips it over AND opens a large, readable
-     * preview (shared CardViewer overlay) so card text is easy to read.
+    * Flip a card and open its large shared CardViewer preview.
      * @param {HTMLElement} card - Card element to flip
      */
     flipCard(card) {
@@ -1227,15 +1355,67 @@ const PlayerController = {
     },
 
     /**
+     * Is this roll missing a procedure?
+     *
+     * A bare roll is legal, but it plays no DETECTION: nothing goes on cooldown
+     * and no +3 applies, so it is worth confirming before the turn is spent.
+     * @returns {boolean}
+     */
+    needsProcedurePrompt() {
+        return !!this.scenario && this.activeProcIndex < 0;
+    },
+
+    /** Show the "no procedure selected" prompt (shared with Solo AI, PvE). */
+    openRollPrompt() {
+        const body = Utils.getElement('roll-prompt-body');
+        if (body && this.rollPromptHint) body.textContent = this.rollPromptHint;
+        Utils.showElement('roll-modal');
+    },
+
+    /** Hide the "no procedure selected" prompt. */
+    closeRollPrompt() {
+        Utils.hideElement('roll-modal');
+    },
+
+    /** The player chose to roll untargeted: run the die without asking again. */
+    rollAnyway() {
+        this.closeRollPrompt();
+        return this.performRoll();
+    },
+
+    /**
      * Roll the d20.
-     * When Dice FX is enabled this opens the big animated d20 modal, tosses the
-     * die to the natural roll, then applies and reveals the outcome. When it is
-     * off the game rolls instantly into the plain header readout as before.
+     *
+     * Asks first when no procedure is selected, so the player is not left
+     * wondering why nothing went on cooldown. `rollAnyway()` skips the question.
      */
     async rollDice() {
-        if (this.isRolling) return;
+        if (!this.canRoll()) return;
+        if (this.needsProcedurePrompt()) {
+            this.openRollPrompt();
+            return;
+        }
+        return this.performRoll();
+    },
+
+    /**
+     * Whether a roll may start (nothing already in flight).
+     * @returns {boolean}
+     */
+    canRoll() {
+        if (this.isRolling) return false;
         // Never stack rolls while the die modal is up
-        if (typeof DiceFX !== 'undefined' && DiceFX.isOpen && DiceFX.isOpen()) return;
+        if (typeof DiceFX !== 'undefined' && DiceFX.isOpen && DiceFX.isOpen()) return false;
+        return true;
+    },
+
+    /**
+     * Roll the d20 immediately, without the "no procedure selected" prompt.
+     * With Dice FX on this opens the animated d20 modal; off, the game rolls
+     * instantly into the plain header readout.
+     */
+    async performRoll() {
+        if (!this.canRoll()) return;
 
         this.isRolling = true;
         const rollBtn = Utils.getElement('roll-dice-btn');
@@ -1266,11 +1446,14 @@ const PlayerController = {
      * @param {number} base - Natural roll (1-20)
      * @param {number} bonus - Enhanced bonus added to the total
      * @param {Object} opts - Options
-     * @param {boolean} opts.headerTumble - Play the little header tumble first
+    * @param {boolean} opts.headerTumble - Animate the header result first
      * @returns {Object} Outcome meta (used by the Dice FX modal reveal)
      */
     resolveRoll(base, bonus, opts = {}) {
         const headerTumble = opts.headerTumble !== false;
+        // Capture before SoloMaster.onRoll spends the turn so cooldowns start
+        // from the same turn in solo and tabletop modes.
+        const turnAtRoll = GameState.turnNumber();
         const total = base + bonus;
         const target = this.successTarget || 11;
         const isCritFail = base === 1;
@@ -1346,13 +1529,35 @@ const PlayerController = {
         else if (injected) kind = 'inject';
         else if (!isSuccess) kind = 'fail';
 
-        return {
+        const meta = {
             base, bonus, total, target,
             isCritFail, isCritSuccess, isSuccess, injected,
             headline: base,
             kind,
             message
         };
+
+        // Solo AI (PvE): the Incident Master reads this outcome and answers with
+        // a clue. Guarded so a plain Player page never depends on the module.
+        if (typeof SoloMaster !== 'undefined' && typeof SoloMaster.onRoll === 'function') {
+            try {
+                SoloMaster.onRoll(meta);
+            } catch (error) {
+                console.error('SoloMaster.onRoll failed:', error);
+            }
+        }
+
+        // Apply cooldown after SoloMaster.onRoll reads the selected procedure;
+        // the rule applies regardless of roll outcome.
+        const played = this.activeProcIndex;
+        if (played >= 0 && this.scenario?.procedures?.[played]) {
+            GameState.startCooldown(played, undefined, turnAtRoll);
+            this.activeProcIndex = -1;
+            this.updateProcedureSelection(played);
+            this.updateProcedureCooldowns();
+        }
+
+        return meta;
     },
 
     /**
@@ -1401,6 +1606,12 @@ const PlayerController = {
                 icon.innerHTML = '⏰';
                 title.textContent = 'Time\'s Up';
                 message.textContent = 'You ran out of turns. The scenario has ended.';
+                break;
+            case 'win':
+                // Solo AI (PvE): the accusation identified the whole chain.
+                icon.innerHTML = '🎉';
+                title.textContent = 'Case Closed';
+                message.textContent = 'You identified the entire attack chain. The attackers are contained.';
                 break;
         }
 

@@ -48,7 +48,7 @@ const CardRenderer = {
 
     /**
      * Greedy word-wrap using an approximate character width.
-     * SVG has no automatic wrapping, so we measure with a heuristic:
+     * SVG has no automatic wrapping, so estimate the line breaks:
      * average glyph width ≈ 0.55 × font-size for the system sans stack.
      */
     wrapText(text, maxWidth, fontSize) {
@@ -138,8 +138,8 @@ const CardRenderer = {
     },
 
     /**
-     * Generic faceted hexagonal mark — our own artwork (deliberately neither
-     * the printed B&B logo nor any third-party mark). Reads as a d20 face.
+    * Project-authored faceted hexagonal mark, distinct from the B&B logo and
+    * third-party marks. Styled to resemble a d20 face.
      */
     facetMark(cx, cy, r, color) {
         const corners = [];

@@ -16,6 +16,7 @@
 .git
 .gitignore
 dockerupload.gitignore
+.github/
 
 # --- Docker files (not needed inside the image) ---
 # docker-compose.dev.yml carries a real provider API key; excluding it here
@@ -25,8 +26,10 @@ docker-compose.dev.yml
 .dockerignore
 Dockerfile
 
-# --- Markdown docs (never served) ---
+# --- Markdown docs (only the third-party notice is served) ---
 *.md
+**/*.md
+!THIRD-PARTY-NOTICES.md
 HowTo-*.md
 ChangeLog.md
 
@@ -78,14 +81,19 @@ Thumbs.db
 *.swo
 
 # --- Temporary files ---
+temp/
 *.tmp
 *.temp
+**/__pycache__/
+**/*.pyc
 
 # --- Development files ---
 node_modules/
 
 # --- Large image sources ---
 *.psd
+**/*.psd
 
 # Engine-V1 is intentionally kept (linked from the portal for comparison).
 # Engine-V1/
+Original_v1_B-B-Shuffle/

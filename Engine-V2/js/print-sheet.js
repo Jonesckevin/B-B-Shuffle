@@ -1,34 +1,20 @@
 /**
  * B&B Shuffle - Printable Session Sheet
  *
- * Builds a compact, print-only one-pager for the current game: the four
- * scenario cards WITH their DETECTION lists (card art is unreadable at print
- * size, so the Procedure names that detect each card are printed as text) and
- * their own scene-setting text, the procedure hand (with Enhanced/+3 markers and
- * tick boxes), the whole inject queue with each card's own text under its name,
- * the seated consultant with the action printed on their card, live turn/strike
- * state and a notes block that rules itself down to the footer.
+ * Builds a one-page session sheet with scenario descriptions and DETECTION lists,
+ * procedures, the inject queue, consultant action, game state, and notes.
  *
- * Why a separate DOM instead of printing the board:
- *   - only the CURRENT inject is ever in the board DOM, so a CSS-only print
- *     of the board could never list the rest of the inject queue;
- *   - the board relies on `backface-visibility` + 3D transforms to hide card
- *     faces, and those are unreliable in print;
- *   - text beats cropped card art on paper.
+ * A separate DOM is required because only the current inject is rendered on the
+ * board and 3D card transforms are unreliable in print.
  *
- * The sheet's FRAME is static markup in `player.html` - the deck cover (which
- * stands in for the B&B logo, its fallback), the session logo, the rules and the
- * notes box. Only `#ps-head-text`, `#ps-stats` and `#ps-body` are rewritten here,
- * and only when their HTML actually changed: an <img> created during the print
- * snapshot has not decoded yet and paints blank, which is what used to happen to
- * the masthead logo.
+ * The frame is static markup in `player.html`; only `#ps-head-text`, `#ps-stats`,
+ * and `#ps-body` are updated. Changed sections are replaced only when necessary
+ * to avoid recreating images before the print snapshot.
  *
- * Styles live in `Engine-V2/css/player.css` (tail, `@media print`). They only
- * hide the app when <body> carries `print-has-sheet`, so printing with no
- * scenario loaded falls back to the normal browser behaviour.
+ * Print styles live at the end of `Engine-V2/css/player.css` and hide the app
+ * only when `body.print-has-sheet` is active.
  *
- * Self-mounting like CardViewer: a page only needs `#print-sheet-btn` and
- * `#print-sheet` in its markup plus this script tag after `player.js`.
+ * Mounts only on pages containing `#print-sheet-btn` and `#print-sheet`.
  */
 (function (global) {
     'use strict';
@@ -338,16 +324,12 @@
     }
 
     /**
-     * The NAME to print for a card, keyed by its ART rather than by what the scenario
-     * recorded.
+     * Resolve the current card name by image path, falling back to the scenario's
+     * stored name for cards absent from the catalog.
      *
-     * A scenario stores each card's name when the game is dealt, so a saved game keeps
-     * whatever the deck said back then - and expansion1 shipped 35 placeholder names
-     * ("Inject 3", "Pivot 2") that are now the printed ones. The art path is stable, so
-     * the deck's current name for that image is the name on the face of the card the
-     * sheet is printing beside it. Resolution mirrors `detectionsFor`: this deck's art,
-     * then any deck's art; a card the catalog does not know (custom decks, the Custom
-     * Card Creator) keeps the name the scenario stored.
+     * Scenario snapshots retain names from deal time, so catalog updates would
+     * otherwise leave stale names on the sheet. Image paths are stable across
+     * name corrections and are also shared between decks.
      * @param {Object} card - Scenario/procedure/inject card data
      * @param {string} [fallback] - Used when the card has no name at all
      * @returns {string} Escapable card name
@@ -364,13 +346,8 @@
     }
 
     /**
-     * The card's OWN text - what the inject does, or what a procedure is - as printed
-     * on the card face.
-     *
-     * The sheet is meant to be playable on its own, so the GM can read the effect
-     * without the physical card to hand. A freshly dealt scenario carries the text (the
-     * deck's `description` is copied into the card); an older one does not, so the index
-     * is consulted by ART first and then by name, exactly like `cardNameFor`.
+     * Resolve the card-face text from the scenario or catalog. The scenario's
+     * description takes precedence; older snapshots fall back to image and name.
      * @param {Object} card - Scenario/procedure/inject card data
      * @returns {string} Escapable card text ('' when the catalog does not know it)
      */
@@ -417,11 +394,8 @@
     }
 
     /**
-     * The four live-state figures. The CONTAINER is `#ps-stats` in the static
-     * frame (it owns the `.ps-stats` class and the rule under the strip), so this
-     * returns the stats only — wrapping them again nested a second `.ps-stats`,
-     * and the inner flex row shrink-wrapped to its content, painting a short
-     * second line under the real one.
+    * Render the four live-state figures. The static `#ps-stats` element already
+    * owns the `.ps-stats` layout class, so return child content only.
      */
     function statsHtml(controllerObj) {
         const state = game() || {};
@@ -442,16 +416,8 @@
     }
 
     /**
-     * The four scenario slots, each with the card's own text and its DETECTION list
-     * underneath.
-     *
-     * The text is the paragraph printed on the card below its title ("The attackers
-     * gained unauthorized access to your organization's cloud infrastructure…"), so the
-     * GM can set the scene without the physical card in hand.
-     *
-     * A card with no list prints "Not yet recorded" rather than nothing: the catalog key
-     * is absent when the DETECTION section has not been read, and an empty gap reads as
-     * an omission.
+    * Render the four scenario cards with their printed descriptions and DETECTION
+    * lists. Show an explicit placeholder when a detection list is unavailable.
      */
     function scenarioCardsHtml(scenario) {
         const cards = SCENARIO_TYPES.map(function (type) {
@@ -507,10 +473,8 @@
     }
 
     /**
-     * The inject queue, in draw order. Each row carries the card's own text under the
-     * name, so the GM can read out what the inject does without the physical card.
-     * The inject currently in play is deliberately NOT labelled: the queue is worked
-     * top to bottom, and the badge was noise on paper.
+    * Render the inject queue in draw order with each card's printed text. The
+    * current inject is not separately marked because the queue is read top to bottom.
      */
     function injectRows(controllerObj) {
         const queue = controllerObj.injectQueue || [];
@@ -527,14 +491,8 @@
     }
 
     /**
-     * The seated consultant: the name, then the card's own ACTION line underneath.
-     *
-     * A consultant's entire effect is the one line of blue text printed under the
-     * name on the card face - "(+3) Modifier for dice rolls for the next (3) turns" -
-     * so the sheet carries it exactly the way it carries an inject's rules, and the
-     * GM can apply the modifier without hunting the card out of the box. Text comes
-     * from `cardTextFor()`, so a game where the consultant was seated before the deck
-     * data carried the text still prints it (resolved by art, then by name).
+    * Render the seated consultant and its printed action. Resolve the action
+    * through `cardTextFor()` so older scenario snapshots use catalog data.
      */
     function consultantHtml(card) {
         const text = card ? cardTextFor(card) : '';
@@ -568,9 +526,8 @@
         const controllerObj = controller();
         if (!out || !controllerObj || !controllerObj.scenario) return false;
 
-        // Write only what changed. Re-writing a half replaces the <img> elements
-        // inside it, and a freshly created image is not guaranteed to have
-        // decoded by the time the browser takes its print snapshot.
+        // Update changed sections only; replacing image elements can race print
+        // snapshot image decoding.
         const nextStats = statsHtml(controllerObj);
         const nextHead = headHtmlFor(controllerObj.scenario);
         const nextBody = bodyHtmlFor(controllerObj);
@@ -590,13 +547,11 @@
             bodyHtml = nextBody;
         }
 
-        // An over-long queue prints names only, so the sheet stays one page (the text is
-        // a convenience - the cards are on the table).
+        // Omit inject descriptions for long queues to keep the sheet to one page.
         const queue = (controllerObj.injectQueue || []).length;
         out.classList.toggle('ps-queue-long', queue > INJECT_TEXT_MAX);
 
-        // The ruled notes area takes whatever height is left, which the inject queue
-        // above has just changed.
+        // Recalculate notes lines after the queue changes available space.
         syncScenarioHeads();
         syncNoteLines();
 
@@ -606,17 +561,9 @@
     }
 
     /**
-     * Line the four scenario cards' DETECTION lists up.
-     *
-     * Each card prints its own text under the name, and those texts are different
-     * lengths - so the four DETECTION blocks used to start at four different heights
-     * (measured 371 / 340 / 353 / 331 px on a Letter sheet), which reads as a ragged,
-     * off-balance row. The heads are equalised to the tallest, which makes the
-     * DETECTION lists share one baseline however long the text is.
-     *
-     * Chrome has no `grid-template-rows: subgrid` fallback worth relying on for print,
-     * so this measures instead. It is a no-op outside print media, where the sheet is
-     * `display: none` and every head measures 0.
+    * Equalize card-header heights so DETECTION lists share a baseline. Measure
+    * rendered headers because print layout does not reliably support subgrid.
+    * The sheet is hidden outside print media, where measurements are zero.
      */
     function syncScenarioHeads() {
         if (!out) return;
@@ -626,33 +573,24 @@
         const tallest = heads.reduce(function (max, head) {
             return Math.max(max, head.getBoundingClientRect().height);
         }, 0);
-        if (tallest <= 0) return;   // not laid out (screen media)
+        if (tallest <= 0) return;   // The sheet is hidden outside print media.
         heads.forEach(function (head) { head.style.minHeight = tallest + 'px'; });
     }
 
     /**
-     * Give the sheet's notes area its writing lines. Each line has a preferred
-     * height and the box clips them (see .ps-note-line in css/player.css), so the
-     * lines share out whatever the paper leaves above the footer.
-     *
-     * The COUNT adapts: an inject row now carries the card's own text, so a six-inject
-     * game leaves only a strip of paper down here, and twelve hairlines is worse than
-     * four lines that can actually be written on. The box is `flex: 1 1 0`, so its
-     * height does not depend on how many lines are inside it - which is what makes
-     * measuring it before deciding safe.
+    * Fit ruled notes lines into the space remaining above the footer. Inject
+    * descriptions reduce that space, so scale the line count to the available height.
      */
     function syncNoteLines() {
         const box = byId(LINES_ID);
         if (!box) return;
         const available = box.getBoundingClientRect().height;
-        // Not laid out (the sheet is display:none outside print): leave the markup as
-        // it is rather than collapsing it to the floor.
+        // Preserve the current lines while the sheet is hidden outside print media.
         if (available <= 0) {
             if (!box.childElementCount) syncNoteLinesCount(NOTE_LINES);
             return;
         }
-        // 5.5mm is the pitch a hand needs; below ~4 lines the block stops being a
-        // notes area at all, so that is the floor.
+        // Use a 5.5 mm line pitch and retain at least four usable lines.
         const pitch = 5.5 * (96 / 25.4);
         const count = Math.max(4, Math.min(NOTE_LINES, Math.floor(available / pitch)));
         if (box.childElementCount !== count) syncNoteLinesCount(count);
@@ -669,10 +607,8 @@
     /**
      * Put this session's uploaded logo (Theme -> logo) in the sheet's masthead.
      *
-     * The <img> itself is static in player.html, so it is part of the document
-     * well before any print. A src assigned here is decoded before returning,
-     * because a fresh image that has not decoded yet paints blank in the print
-     * snapshot (which is what used to happen to the masthead logo).
+    * The image is static markup. Await decoding after changing its source so
+    * it is available in the print snapshot.
      * @returns {Promise<void>}
      */
     function syncLogo() {
@@ -700,14 +636,8 @@
     }
 
     /**
-     * Show the deck's box art at the head of the sheet - it REPLACES the
-     * standalone B&B logo, which the box art already carries.
-     *
-     * Like the logo the <img> is static markup in `player.html`, so it is part of
-     * the document long before any print; the src assigned here is decoded before
-     * returning, because an image that has not decoded yet paints blank on paper.
-     * Decks with no box art (and a board with no deck at all) fall back to the
-     * bundled print logo rather than leaving the corner empty.
+    * Display the deck cover in place of the standalone B&B logo. Await image
+    * decoding before print; use the bundled print logo when no cover is available.
      * @returns {Promise<void>}
      */
     function syncCover() {
@@ -776,22 +706,28 @@
             }
             return Promise.resolve();
         }
-        // Normally already resolved (refresh() prefetches it), so window.print()
-        // still runs inside the click; the first print of a session waits on the
-        // fetch.
+        // The catalog is normally prefetched by refresh(); the first print waits
+        // for the initial request.
         return loadCatalog().then(syncLogo).then(syncCover).then(function () {
             if (!build()) return;
-            // Most browsers use the document title for the print header and the
-            // suggested PDF filename.
+            // Set the print header and suggested PDF filename.
             prevTitle = document.title;
             const name = (controllerObj.scenario.metadata || {}).name;
             document.title = name ? 'Session Sheet — ' + name : 'Session Sheet';
-            // Give the freshly built thumbnails a frame to paint before the
-            // browser snapshots the page for the print preview.
+            // Allow newly built thumbnails to paint before opening print preview.
             requestAnimationFrame(function () {
                 setTimeout(function () { global.print(); }, 0);
             });
         });
+    }
+
+    /**
+    * Whether the sheet is available for this page and game. The disabled button
+    * also gates `beforeprint`, including browser-menu and Ctrl+P requests.
+     * @returns {boolean}
+     */
+    function sheetEnabled() {
+        return !!btn && !btn.disabled;
     }
 
     function restoreTitle() {
@@ -809,12 +745,13 @@
         if (!bound) {
             bound = true;
             btn.addEventListener('click', print);
-            // Rebuild for Ctrl+P / the browser menu too, not just the button.
-            global.addEventListener('beforeprint', function () { syncLogo(); syncCover(); build(); });
+            // Apply the same availability check to Ctrl+P and browser-menu prints.
+            global.addEventListener('beforeprint', function () {
+                if (!sheetEnabled()) return;
+                syncLogo(); syncCover(); build();
+            });
             global.addEventListener('afterprint', restoreTitle);
-            // `setupGame()` is the single funnel for starting a game (init,
-            // Quick Start and Load all reach it), so wrap it to rebuild the
-            // sheet once every field — including injectQueue — is populated.
+            // Rebuild after setupGame() populates scenario and inject queue state.
             const board = controller();
             if (board && typeof board.setupGame === 'function') {
                 const originalSetup = board.setupGame;
@@ -824,8 +761,7 @@
                     return result;
                 };
             }
-            // Keep the masthead logo in step with the Theme modal: by the time it
-            // closes, an upload's async storage write has landed.
+            // Refresh the logo after the Theme modal's storage update completes.
             ['theme-modal-done', 'theme-modal-close'].forEach(function (id) {
                 const el = byId(id);
                 if (el) el.addEventListener('click', syncLogo);
@@ -839,7 +775,7 @@
     }
 
     global.PrintSheet = {
-        isEnabled: function () { return !!btn && !btn.disabled; },
+        isEnabled: sheetEnabled,
         build: build,
         refresh: refresh,
         print: print

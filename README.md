@@ -4,17 +4,6 @@ Modern, responsive dashboard for conducting [Backdoors & Breaches](https://www.b
 
 Backdoors & Breaches is the property of [Black Hills InfoSec](https://www.blackhillsinfosec.com/). It is a cutting-edge tool for conducting incident response walkthroughs and cybersecurity training seminars.
 
-<table>
-  <tr>
-    <td><img src="shared/example-playerv2.png" alt="Player Example" width="400"/></td>
-    <td><img src="shared/example-editorv2.png" alt="Editor Example" width="400"/></td>
-  </tr>
-  <tr>
-    <td style="text-align: center;">Player Interface</td>
-    <td style="text-align: center;">Admin Interface</td>
-  </tr>
-</table>
-
 ## Primary Features
 
 1. New Look, Feel, and Logic
@@ -23,6 +12,21 @@ Backdoors & Breaches is the property of [Black Hills InfoSec](https://www.blackh
 4. Card Creator
 5. Printable DM/GM Worksheet
 6. Background and Logo Changer
+7. Solo AI (PvE), play the game alone against an AI Incident Master
+
+### Example Images
+
+<table>
+  <tr>
+    <td><img src="shared/example-playerv2.png" alt="Player Example"/><br/><div style="text-align: center;">Player Interface</div></td>
+    <td><img src="shared/example-soloaiv2.png" alt="V2 Port Example"/><br/><div style="text-align: center;">V2 Port from 0xJaeg3r / socinvader</div></td>
+  </tr>
+  <tr>
+    <td><img src="shared/example-editorv2.png" alt="Admin Example"/><br/><div style="text-align: center;">Admin Interface</div></td>
+    <td><img src="shared/example-printedv2.png" alt="Printed Sheet Example"/><br/><div style="text-align: center;">Printed Sheet</div></td>
+  </tr>
+</table>
+
 
 ## Docker Run Instructions
 
@@ -58,19 +62,18 @@ docker compose up --build -d
 
 ## License & Attribution
 
-This project is licensed under the **GNU General Public License v3.0** — see [`LICENSE`](LICENSE).
+The software code is licensed under the **GNU General Public License v3.0** — see [`LICENSE`](LICENSE).
 
 This repository is a derivative work of:
 
 - [`p3hndrx/B-B-Shuffle`](https://github.com/p3hndrx/B-B-Shuffle) and
 - [`blackhillsinfosec/play.backdoorsandbreaches.com`](https://github.com/blackhillsinfosec/play.backdoorsandbreaches.com)
+- [`0xJaeg3r/backdoorsandbreaches-socinvader`](https://github.com/0xJaeg3r/backdoorsandbreaches-socinvader)
 
-both released under GPL-3.0. Files derived from those projects retain the GPL-3.0
-license and their original copyright notices. `Engine-V2` is a modified/refactored
-version of that codebase and is likewise distributed under GPL-3.0. See [`NOTICE`](NOTICE)
-and [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md) for details.
 
-> **Trademark / content notice:** This is an **unofficial project**. *Backdoors & Breaches* is a game by Black Hills Information Security & Antisyphon Training. This project is **not affiliated with**, Black Hills Information Security or Antisyphon Training. Card artwork, card text, and game design are the property of Black Hills Information Security and their respective sponsors, and are **not** covered by this project's GPL license. A separate content license from the rights holders is required to redistribute those assets.
+See [`NOTICE`](NOTICE) and [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md) for details.
+
+> **Trademark / content notice:** This is an **unofficial project**. *Backdoors & Breaches* is a game by Black Hills Information Security & Antisyphon Training. This project is **not affiliated with**, Black Hills Information Security or Antisyphon Training. The card artwork, text, and game content are separate from the GPL-licensed software. Certain Backdoors & Breaches content is used under written permission from Black Hills Information Security for community-created uses, subject to that permission's scope and terms. See [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
 
 ## Support & Contributions
 

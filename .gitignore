@@ -1,17 +1,21 @@
 
-.DS_Store
-App/.DS_Store
-App/source/.DS_Store
-App/source/V2 Expansion/.DS_Store
-/.idea/.gitignore
-/.idea/B-B-Shuffle.iml
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/vcs.xml
-.idea/workspace.xml
-App/.DS_Store
-App/exp-index.html
-App/exp-styles.css
-App/.DS_Store
-App/.DS_Store
+**.gitignore
+**.xml
+data/
+scripts/*
+# Local-dev compose override: carries a real provider API key, never upload it.
+docker-compose.dev.yml
+# docs/ - publish the RUNTIME artefacts only. The app fetches card-details.json
+# (print sheet, Catalogue, card creator) and links rules.pdf (Player header), and
+# the Docker publish workflow aborts if either is missing from the checkout.
+docs/*
+!docs/*.pdf
+!docs/card-details.json
+
+# --- Local ---
+logs/
+*.log
+bb-shuffle-api.log
+.vscode/
+# Scratch copies for side-by-side draft experiments (never part of the app)
+temp/
