@@ -20,16 +20,28 @@
         <header class="player-header">
             <div class="header-left">
                 <img id="custom-logo" class="custom-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Table logo">
-                <h1 class="game-title">B&amp;B Shuffle</h1>
-                <!-- Deck identity reads as one stack: the badge names the deck,
-                     its revision date sits directly under it. The date line is
-                     ONLY the date - the badge above already carries the name. -->
-                <div class="header-deck">
-                    <span class="badge badge-primary" id="deck-badge">No Deck</span>
-                    <span class="deck-rev hidden" id="deck-rev"></span>
+                <!-- Title and deck identity are one stack to the right of the logo,
+                     so the badge reads as belonging to the title rather than
+                     floating on the same line as it. -->
+                <div class="header-titles">
+                    <h1 class="game-title">B&amp;B Shuffle</h1>
+                    <!-- The badge names the deck; its revision date sits directly
+                         under it. The date line is ONLY the date - the badge above
+                         already carries the name. -->
+                    <div class="header-deck">
+                        <span class="badge badge-primary" id="deck-badge">No Deck</span>
+                        <span class="deck-rev hidden" id="deck-rev"></span>
+                    </div>
                 </div>
                 <span class="badge badge-solo hidden" id="solo-badge">
                     <span class="solo-dot" aria-hidden="true"></span>SOLO AI
+                </span>
+                <!-- Shown while a GM Console holds authority and this page's own
+                     controls are disabled. Without it, a disabled "Use Turn" is a
+                     silent dead end on a projected screen (no hover, no tooltip),
+                     and the cooldown tokens look like they never tick. -->
+                <span class="badge badge-gm hidden" id="gm-badge" title="A GM Console is driving this board. Use the console to spend turns and change the game.">
+                    <span class="gm-dot" aria-hidden="true"></span>GM CONTROL
                 </span>
             </div>
             <div class="header-center">
@@ -79,21 +91,23 @@
                         <div class="load-menu-list" id="load-menu-list"></div>
                     </div>
                 </div>
-                <button id="gm-mode-btn" class="btn btn-ghost btn-sm header-action" title="Open Scenario Editor">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                    <span>Scenario Editor</span>
-                </button>
-                <button id="theme-custom-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Table theme — set a background image and a top-left logo (stored only in this browser)">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <path d="m21 15-5-5L5 21"/>
-                    </svg>
-                    <span>Theme</span>
-                </button>
+                <div class="header-stack">
+                    <button id="gm-mode-btn" class="btn btn-ghost btn-sm header-action" title="Open Scenario Editor">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <span>Scenario Editor</span>
+                    </button>
+                    <button id="gm-console-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Open the GM Console — answer key and live control on a second screen">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                        <span>GM Console</span>
+                    </button>
+                </div>
                 <div class="fx-toggle-col">
                     <button id="dice-fx-btn" class="btn btn-ghost btn-sm header-action dice-fx-btn" type="button" title="Dice FX on — rolls toss a big animated d20. Click to turn off." aria-pressed="true">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -116,14 +130,24 @@
                         <b class="fx-state" id="card-fx-btn-state" aria-hidden="true">on</b>
                     </button>
                 </div>
-                <button id="print-sheet-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Load a scenario first — the sheet prints the cards in play" disabled>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 6 2 18 2 18 9"/>
-                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-                        <rect x="6" y="14" width="12" height="8"/>
-                    </svg>
-                    <span>Print</span>
-                </button>
+                <div class="header-stack">
+                    <button id="print-sheet-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Load a scenario first — the sheet prints the cards in play" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"/>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                        <span>Print</span>
+                    </button>
+                    <button id="theme-custom-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Table theme — set a background image and a top-left logo (stored only in this browser)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <path d="m21 15-5-5L5 21"/>
+                        </svg>
+                        <span>Theme</span>
+                    </button>
+                </div>
                 <a id="rules-link" class="rules-btn header-action" href="../docs/rules.pdf" target="_blank" rel="noopener noreferrer" title="Open the B&amp;B Shuffle Rule Book (PDF)" aria-label="Rule Book (PDF)">?</a>
             </div>
         </header>
@@ -170,6 +194,13 @@
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>
                         <span>Reveal procedures</span>
                     </button>
+                    <!-- Couples a roll and a strike to the turn clock. On by default:
+                         the rule book describes one turn per roll, so the explicit
+                         "Use Turn" button is the opt-out, not the norm. -->
+                    <label class="turn-couple" id="turn-couple-label" for="turn-couple-cb" title="When on, rolling the d20 and adding a strike each spend a turn automatically. Turn off to spend turns only with the Use Turn button.">
+                        <input type="checkbox" id="turn-couple-cb" checked>
+                        <span>Roll &amp; strike</span>
+                    </label>
                 </div>
             </section>
 
@@ -642,14 +673,15 @@
     <!-- Scripts -->
     <script src="js/utils.js"></script>
     <script src="js/config.js"></script>
-    <script src="js/game-state.js"></script>
+    <script src="js/game-state.js?v=11"></script>
     <script src="js/session-sync.js"></script>
+    <script src="js/gm-link.js?v=13"></script>
     <script src="js/scenario-schema.js"></script>
     <script src="js/scenario-io.js"></script>
     <script src="../shared/js/card-viewer.js"></script>
     <script src="js/card-fx.js"></script>
     <script src="js/dice-fx.js"></script>
-    <script src="js/player.js"></script>
+    <script src="js/player.js?v=12"></script>
     <script src="js/custom-theme.js"></script>
     <script src="js/print-sheet.js"></script>
     <!-- Load the provider and Solo AI modules after PlayerController and GameState. -->

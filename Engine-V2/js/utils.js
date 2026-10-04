@@ -506,6 +506,27 @@ const Utils = {
     },
 
     /**
+     * Open the GM Console (answer key + live remote control of this page).
+     *
+     * Always a real popup window, never the in-page overlay `openGM()` falls back
+     * to. The console drives this page and needs a window of its own to keep on a
+     * second screen or a phone, and the overlay cannot host it: the console calls
+     * `window.open('player.html')`, which would focus THIS tab and detach the
+     * overlay, leaving the GM with nothing.
+     * @param {Object} opts - { url }
+     */
+    openGMConsole(opts = {}) {
+        const url = opts.url || 'gm-console.html';
+        const w = window.open(url, 'bb_gm_console', 'popup=yes,width=1180,height=900,resizable=yes,scrollbars=yes');
+        if (w) {
+            w.focus();
+            return w;
+        }
+        this.showToast('Allow popups to open the GM console in its own window.', 'warning');
+        return null;
+    },
+
+    /**
      * Parse URL query parameters
      * @returns {Object} Parsed parameters
      */

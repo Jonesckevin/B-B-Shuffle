@@ -52,6 +52,11 @@ const GameState = {
         version: 0
     },
 
+    // Highest sync version this document has ever seen, local or imported.
+    // `markAuthoritative()` uses it so a fresh deal always outranks a snapshot
+    // the GM console handed us earlier in the session.
+    _seenVersion: 0,
+
     /**
      * Initialize or reset game state
      * @param {Object} config - Optional config overrides
@@ -87,8 +92,7 @@ const GameState = {
 
         this.cooldowns = {};
 
-        this.sync.version++;
-        this.sync.lastUpdate = Date.now();
+        this.markAuthoritative();
 
         this.notifyChange('init');
     },
@@ -106,8 +110,7 @@ const GameState = {
                 this.game.status = 'completed';
             }
             
-            this.sync.version++;
-            this.sync.lastUpdate = Date.now();
+            this.bumpVersion();
             this.notifyChange('turn');
             return true;
         }
@@ -147,8 +150,7 @@ const GameState = {
         // Include the play turn so the card remains unavailable for `length`
         // complete turns after it is played.
         this.cooldowns[index] = fromTurn + length + 1;
-        this.sync.version++;
-        this.sync.lastUpdate = Date.now();
+        this.bumpVersion();
         this.notifyChange('cooldown');
     },
 
@@ -164,7 +166,15 @@ const GameState = {
         const until = this.cooldowns[index];
         if (!until) return 0;
         const gap = until - this.turnNumber();
-        if (gap <= 0) return 0;
+        if (gap <= 0) {
+            // The stamp has run out. Drop it rather than leave a stale "until"
+            // number behind: `cooldowns` is a plain map of expiry turns, and a
+            // consumer that tests for mere PRESENCE (the GM console's hand) would
+            // otherwise read an expired card as still cooling for the rest of the
+            // session. Deleting here means the map only ever holds live entries.
+            delete this.cooldowns[index];
+            return 0;
+        }
         return Math.min(CONFIG.game.cooldownTurns || 3, gap);
     },
 
@@ -177,9 +187,85 @@ const GameState = {
         return this.cooldownRemaining(index) > 0;
     },
 
-    /** Drop every cooldown (a fresh deal). */
+    /**
+     * Drop every cooldown (a fresh deal, or the GM console's clear-override).
+     *
+     * This used to mutate `cooldowns` silently, which meant a remote clear was
+     * visible only to the tab that issued it: no version bump, so no broadcast,
+     * so every other document kept rendering its stale tokens.
+     */
     clearCooldowns() {
         this.cooldowns = {};
+        this.bumpVersion();
+        this.notifyChange('cooldown');
+    },
+
+    /**
+     * Re-key cooldowns after a card leaves the hand.
+     *
+     * Cooldowns are keyed by hand INDEX, so removing a card shifts every later
+     * entry down one. Without this the token for a benched card jumps to
+     * whichever card now occupies the vacated slot - the GM would see a card
+     * cooling that was never played, while the real one silently freed up.
+     * @param {number} removedIndex - Index of the card that left the hand
+     */
+    shiftCooldowns(removedIndex) {
+        const next = {};
+        Object.keys(this.cooldowns).forEach((key) => {
+            const index = parseInt(key, 10);
+            if (!(index >= 0) || index === removedIndex) return;
+            next[index > removedIndex ? index - 1 : index] = this.cooldowns[key];
+        });
+        this.cooldowns = next;
+        this.bumpVersion();
+        this.notifyChange('cooldown');
+    },
+
+    /**
+     * Advance the sync clock by one and stamp the time.
+     *
+     * Every local mutation that a peer should hear about goes through here, so
+     * the version is the single ordering key for the whole session.
+     * @returns {number} The new version
+     */
+    bumpVersion() {
+        this.sync.version++;
+        this.sync.lastUpdate = Date.now();
+        return this.sync.version;
+    },
+
+    /**
+     * Make this document's state win the version race.
+     *
+     * A fresh deal (`init` / `fromScenario`) is the authority on what is on the
+     * board, but it used to land on whatever `version++` produced - which can be
+     * the SAME number a GM snapshot already carries, and the strict `>` gate in
+     * `importFromSync` then rejects the deal. Advancing past any version this
+     * document has ever seen (local or imported) keeps a new deal winning.
+     * @returns {number} The new version
+     */
+    markAuthoritative() {
+        this.sync.version = Math.max(this.sync.version, this._seenVersion || 0) + 1;
+        this.sync.lastUpdate = Date.now();
+        return this.sync.version;
+    },
+
+    /**
+     * Adopt a peer's version as the high-water mark without applying its state.
+     *
+     * The GM console is authoritative but does not own the board, so the Player
+     * takes the GM's clock and lets its own actions continue from there. Without
+     * this the next local action would be numbered below the GM's and silently
+     * rejected by every listener.
+     * @param {number} version - Version to accept
+     * @returns {number} The resulting version
+     */
+    acceptVersion(version) {
+        const next = Math.max(0, Number(version) || 0);
+        this._seenVersion = Math.max(this._seenVersion || 0, next);
+        this.sync.version = Math.max(this.sync.version, next);
+        this.sync.lastUpdate = Date.now();
+        return this.sync.version;
     },
 
     /**
@@ -195,8 +281,7 @@ const GameState = {
                 this.game.status = 'completed';
             }
             
-            this.sync.version++;
-            this.sync.lastUpdate = Date.now();
+            this.bumpVersion();
             this.notifyChange('strike');
             return this.game.isGameOver;
         }
@@ -208,8 +293,7 @@ const GameState = {
      * the caller; this only bumps the sync version and notifies listeners.
      */
     logDiceRoll() {
-        this.sync.version++;
-        this.sync.lastUpdate = Date.now();
+        this.bumpVersion();
         this.notifyChange('dice');
     },
 
@@ -232,18 +316,30 @@ const GameState = {
     },
 
     /**
-     * Import state from sync
+     * Import state from sync.
+     *
+     * The version gate is last-write-wins for the Editor <-> Player topology,
+     * where either side may legitimately move the clock. `force` exists for the
+     * GM console, which is authoritative and must be able to overwrite the board
+     * even when it has not out-raced it.
      * @param {Object} state - State to import
+     * @param {boolean} [force=false] - Apply regardless of the version gate
+     * @returns {boolean} Whether the state was applied
      */
-    importFromSync(state) {
-        if (state.sync?.version > this.sync.version) {
-            this.selected = state.selected || this.selected;
-            this.game = state.game || this.game;
-            this.revealed = state.revealed || this.revealed;
-            this.cooldowns = state.cooldowns || {};
-            this.sync = state.sync;
-            this.notifyChange('sync');
-        }
+    importFromSync(state, force = false) {
+        // `state` itself must be guarded: this runs inside a BroadcastChannel
+        // handler, so a malformed message used to throw rather than be ignored.
+        if (!state || !state.sync) return false;
+        if (!force && !(state.sync.version > this.sync.version)) return false;
+
+        this.selected = state.selected || this.selected;
+        this.game = state.game || this.game;
+        this.revealed = state.revealed || this.revealed;
+        this.cooldowns = state.cooldowns || {};
+        this.sync = state.sync;
+        this._seenVersion = Math.max(this._seenVersion || 0, state.sync.version || 0);
+        this.notifyChange('sync');
+        return true;
     },
 
     /**
@@ -286,8 +382,9 @@ const GameState = {
             }
         }
 
-        this.sync.version++;
-        this.sync.lastUpdate = Date.now();
+        // A deal is the authority on the board, so it must outrank any snapshot
+        // an earlier GM hand-off left in this document's version clock.
+        this.markAuthoritative();
         this.notifyChange('load');
     },
 

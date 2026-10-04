@@ -1512,6 +1512,20 @@
         if (reveal) Utils.hideElement(reveal);
         const gm = byId('gm-mode-btn');
         if (gm) Utils.hideElement(gm);
+        // The GM Console drives the turn clock and strike count directly, and the
+        // Incident Master spends both from inside its own roll handling - a console
+        // attached here would fight it. Hidden rather than removed, like the
+        // Scenario Editor button, so the `#gm-mode-btn` page-identity test in
+        // session-sync.js / gm-link.js still recognises this as the Player.
+        const console_btn = byId('gm-console-btn');
+        if (console_btn) Utils.hideElement(console_btn);
+
+        // The Incident Master spends the turn itself, from inside its roll
+        // handling, so the tabletop's roll/strike -> turn coupling does not apply.
+        // Hide the switch as well as ignore it, so solo never shows a control
+        // that would do nothing.
+        const coupleLabel = byId('turn-couple-label');
+        if (coupleLabel) Utils.hideElement(coupleLabel);
 
         const badge = byId(BADGE_ID);
         if (badge) Utils.showElement(badge);

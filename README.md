@@ -13,6 +13,7 @@ Backdoors & Breaches is the property of [Black Hills InfoSec](https://www.blackh
 5. Printable DM/GM Worksheet
 6. Background and Logo Changer
 7. Solo AI (PvE), play the game alone against an AI Incident Master
+8. GM Console, an answer key and live remote control for the projected Player, on a second screen
 
 ### Example Images
 

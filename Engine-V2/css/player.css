@@ -2291,6 +2291,84 @@ body.solo-match .fab-container {
 
 #print-sheet { display: none; }
 
+/* ============================================================
+   HEADER GROUPS (title stack + right-hand button stacks)
+   Appended here, after the "compact 1080p" overrides, so these
+   beat them. See the header markup in player.html.
+   ============================================================ */
+
+/* Title + deck badge are one block to the right of the logo. Before this the
+   badge shared a baseline with the title, which read as a separate chip rather
+   than as the deck the title names. */
+.header-titles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+}
+
+/* A vertical pair of buttons in the header (Scenario Editor / GM Console and
+   Print / Theme). `stretch` keeps both buttons the same width so the column
+   reads as one control group rather than two ragged chips. */
+.header-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.header-stack > .header-action {
+    justify-content: flex-start;
+}
+
+/* "GM CONTROL" badge: visible only while a GM Console holds authority over this
+   page. Blue rather than the solo badge's green, so the two read as different
+   states at a glance. */
+.badge-gm {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary-light);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.gm-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+}
+
+/* Roll/strike -> turn coupling toggle, sitting with the reveal controls. */
+.turn-couple {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0 0.3rem;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.turn-couple:hover {
+    color: var(--color-text);
+}
+
+.turn-couple input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+}
+
 /* Nothing to print yet (no game on the board) — leave the page alone and
    fall back to the browser's normal print behaviour. */
 @media print {

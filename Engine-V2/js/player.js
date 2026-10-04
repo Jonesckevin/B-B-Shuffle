@@ -28,6 +28,9 @@ const PlayerController = {
     // Solo AI (PvE) overrides this so the shared "no procedure selected" prompt
     // explains that mode's untargeted sweep instead of the tabletop's roll.
     rollPromptHint: null,
+    // Couple a roll and a strike to the turn clock (default on). Persisted so the
+    // table's choice survives a reload; see `#turn-couple-cb`.
+    turnCoupled: true,
     // `consultants` is the deck pool; `consultant` is the selected card.
     consultants: [],
     consultant: null,
@@ -37,6 +40,7 @@ const PlayerController = {
      */
     async init() {
         this.bindEvents();
+        this.restoreTurnCoupling();
         await this.loadScenario();
     },
 
@@ -46,6 +50,10 @@ const PlayerController = {
     bindEvents() {
         // Scenario Editor (opens admin as a popup window, or an in-page overlay fallback)
         Utils.getElement('gm-mode-btn')?.addEventListener('click', () => Utils.openGM());
+
+        // GM Console — the answer key + remote control surface. Always its own
+        // window: it drives this page and the GM keeps it on a second screen.
+        Utils.getElement('gm-console-btn')?.addEventListener('click', () => Utils.openGMConsole());
 
         // Card flips
         Utils.$$('.flip-card').forEach(card => {
@@ -1557,6 +1565,12 @@ const PlayerController = {
             this.updateProcedureCooldowns();
         }
 
+        // A coupled table spends the turn as part of the roll, so the clock keeps
+        // step without a separate "Use Turn" press. This runs AFTER the play hook
+        // above: the hook starts the cooldown from `turnAtRoll` (the turn the die
+        // was rolled on), so advancing the clock here cannot shift the countdown.
+        this.spendTurnForAction();
+
         return meta;
     },
 
@@ -1569,7 +1583,14 @@ const PlayerController = {
 
         if (gameOver) {
             this.showGameOver('lose');
+            return;
         }
+
+        // A strike is an action at the table, so it burns a turn too when the
+        // table has coupling on. Routing it through the same helper covers the
+        // manual button AND any automatic strike - Solo AI's wrong accusation
+        // comes through here as well.
+        this.spendTurnForAction();
     },
 
     /**
@@ -1732,6 +1753,453 @@ const PlayerController = {
             ? 'Hide all procedure cards (flip them back to card backs)'
             : 'Reveal all procedure cards for a quick look at the hand';
         btn.innerHTML = icon(show) + '<span>' + (show ? 'Hide procedures' : 'Reveal procedures') + '</span>';
+    },
+
+    /* ==================================================================== */
+    /* Remote control (GM Console)                                          */
+    /*                                                                      */
+    /* The GM Console drives the board through `applyRemote()`, which is a  */
+    /* thin registry of operations onto the mutators ABOVE rather than a    */
+    /* second implementation of them. Two rules govern everything here:     */
+    /*                                                                      */
+    /*  1. Never call `updateProcedureCards()`. It rebuilds the hand via    */
+    /*     innerHTML, which destroys flip state and cooldown tokens and     */
+    /*     drops the active selection. Reach for the in-place patchers      */
+    /*     (`updateProcedureSelection`, `updateProcedureCooldowns`) instead. */
+    /*  2. A remote operation must leave the board indistinguishable from   */
+    /*     the same operation performed by hand. That is what makes the     */
+    /*     GM's screen trustworthy as an answer key.                        */
+    /* ==================================================================== */
+
+    // The GM holds authority once it says hello; the local control surface is
+    // disabled so the two cannot diverge and fight over the board.
+    remoteControlled: false,
+
+    /**
+     * Enter or leave remote-controlled mode.
+     *
+     * The controls disabled here are exactly the ones the GM Console owns. Roll
+     * is deliberately NOT disabled on the Player: the established behaviour is
+     * that the GM rolls on the projected screen with real input (so the dice
+     * animation and `resolveRoll`'s `turnAtRoll` capture are authentic) and then
+     * spends the turn from the console.
+     * @param {boolean} managed - Whether a GM Console holds authority
+     */
+    setRemoteControl(managed) {
+        this.remoteControlled = !!managed;
+        document.body.classList.toggle('gm-managed', this.remoteControlled);
+
+        ['use-turn-btn', 'add-strike-btn', 'reveal-cards-btn', 'reveal-procedures-btn', 'quick-start-btn']
+            .forEach(id => {
+                const el = Utils.getElement(id);
+                if (!el) return;
+                if (this.remoteControlled) {
+                    el.disabled = true;
+                    el.title = 'Controlled by the GM console';
+                } else {
+                    el.title = '';
+                }
+            });
+
+        // Say so on screen. A disabled button with only a hover tooltip is
+        // invisible on a projected board, which makes "the cooldown never ticks"
+        // look like a bug when the real cause is that the turn was never spent.
+        const badge = Utils.getElement('gm-badge');
+        if (badge) {
+            if (this.remoteControlled) Utils.showElement(badge);
+            else Utils.hideElement(badge);
+        }
+
+        // Re-derive the reveal controls' own disabled state once the GM detaches,
+        // rather than blanket-enabling buttons that have nothing to act on.
+        if (!this.remoteControlled) this.syncRevealControl();
+    },
+
+    /**
+     * Restore the roll/strike -> turn coupling preference and wire its checkbox.
+     *
+     * Defaults ON: the rule book describes one turn per roll, so the explicit
+     * "Use Turn" button is the opt-out rather than the norm. Stored under
+     * `bb-turn-coupled` as '1'/'0' so "off" is distinguishable from "unset".
+     */
+    restoreTurnCoupling() {
+        const stored = Utils.getFromStorage('bb-turn-coupled', null);
+        this.turnCoupled = (stored === null) ? true : (stored === '1');
+
+        const cb = Utils.getElement('turn-couple-cb');
+        if (!cb) return;
+        cb.checked = this.turnCoupled;
+        cb.addEventListener('change', () => {
+            this.turnCoupled = !!cb.checked;
+            Utils.saveToStorage('bb-turn-coupled', this.turnCoupled ? '1' : '0');
+        });
+    },
+
+    /**
+     * Spend a turn as part of another action (a roll, a strike).
+     *
+     * Solo AI owns the turn clock itself - it spends one from inside
+     * `SoloMaster.onRoll` and its controls bar is gated off - so coupling is
+     * skipped there, otherwise a single solo roll would charge two turns. The
+     * checkbox is hidden in solo too, so a solo game cannot be left coupled with
+     * no way to switch it off.
+     * @returns {boolean} Whether a turn was spent
+     */
+    spendTurnForAction() {
+        if (!this.turnCoupled) return false;
+        if (typeof SoloMaster !== 'undefined' && SoloMaster.isSolo && SoloMaster.isSolo()) return false;
+        // Never spend into a finished game: `useTurn()` would be a no-op anyway,
+        // and the caller has already shown the relevant game-over modal.
+        if (GameState.game.isGameOver) return false;
+
+        const spent = GameState.useTurn();
+        // `useTurn()` raises a 'turn' change, which the GameState subscription
+        // above routes to `updateStats()`. Repainting here would double-render.
+        if (spent && GameState.game.isGameOver) this.showGameOver('timeout');
+        return spent;
+    },
+
+    /**
+     * Apply a command from the GM Console.
+     *
+     * @param {string} op - Operation name
+     * @param {Object} payload - Operation arguments
+     * @returns {boolean|{reason: string}} false / {reason} on refusal
+     */
+    applyRemote(op, payload) {
+        const args = payload || {};
+        const ops = this._remoteOps();
+        const handler = ops[op];
+        if (!handler) return { reason: 'Unknown operation: ' + op };
+        return handler.call(this, args);
+    },
+
+    /**
+     * The operation table.
+     *
+     * Built on first use so the closure can reference methods defined later in
+     * the object literal.
+     * @returns {Object<string, Function>}
+     */
+    _remoteOps() {
+        if (this.__remoteOps) return this.__remoteOps;
+
+        this.__remoteOps = {
+            // ---- reveal -------------------------------------------------
+            'reveal.set': function (a) {
+                const show = !!a.show;
+                Utils.$$('.scenario-row .card-wrapper').forEach(wrapper => {
+                    const card = wrapper.querySelector('.flip-card');
+                    const type = wrapper.dataset.type;
+                    if (!card) return;
+                    card.classList.toggle('flipped', show);
+                    if (type && this.revealed && Object.prototype.hasOwnProperty.call(this.revealed, type)) {
+                        this.revealed[type] = show;
+                    }
+                    if (show) GameState.revealed[type] = true;
+                });
+                this.setRevealState(show);
+                return true;
+            },
+
+            'reveal.procedures': function (a) {
+                const show = !!a.show;
+                Utils.$$('.procedure-cards .flip-card').forEach(card => card.classList.toggle('flipped', show));
+                this.setProcedureRevealState(show);
+                return true;
+            },
+
+            'flip.card': function (a) {
+                const wrapper = document.querySelector(`.scenario-row .card-wrapper[data-type="${a.type}"]`);
+                const card = wrapper && wrapper.querySelector('.flip-card');
+                if (!card) return { reason: 'No card of type "' + a.type + '".' };
+                // Directly rather than via flipCard(), which ALSO opens the
+                // CardViewer lightbox - a GM flipping the board must not throw a
+                // modal onto the projected screen.
+                const show = (a.show === undefined) ? !card.classList.contains('flipped') : !!a.show;
+                card.classList.toggle('flipped', show);
+                this.revealed[a.type] = show;
+                GameState.revealed[a.type] = show;
+                return true;
+            },
+
+            // ---- clock --------------------------------------------------
+            'roll.prompt': function () {
+                // Deliberately does NOT roll on the GM's behalf. The die is rolled
+                // on the projected screen so `DiceFX` animates where the players
+                // are looking and `resolveRoll` captures `turnAtRoll` from the
+                // real click. This just presses the Player's own Roll button, so
+                // the "no procedure selected" prompt still appears there (the
+                // players choose what to play, not the GM).
+                const btn = Utils.getElement('roll-dice-btn');
+                if (!btn) return { reason: 'The player has no Roll control.' };
+                if (!this.canRoll()) return { reason: 'The player is already rolling.' };
+                btn.click();
+                return true;
+            },
+
+            'turn.spend': function () {
+                if (GameState.game.isGameOver) return { reason: 'The game is already over.' };
+                // `useTurn()` raises a 'turn' change, which the subscription above
+                // routes to `updateStats()`. Repainting here too would double-render.
+                this.useTurn();
+                return true;
+            },
+
+            'turn.set': function (a) {
+                const max = GameState.game.maxTurns || 10;
+                const want = parseInt(a.turnsRemaining, 10);
+                if (!(want >= 0 && want <= max)) return { reason: 'Turns must be between 0 and ' + max + '.' };
+                GameState.game.turnsRemaining = want;
+                GameState.game.isGameOver = want === 0;
+                GameState.game.status = want === 0 ? 'completed' : 'active';
+                GameState.bumpVersion();
+                this.updateStats();
+                return true;
+            },
+
+            'strike.add': function () {
+                if (GameState.game.isGameOver) return { reason: 'The game is already over.' };
+                this.addStrike();
+                return true;
+            },
+
+            'strike.set': function (a) {
+                const max = GameState.game.maxStrikes || 3;
+                const want = parseInt(a.count, 10);
+                if (!(want >= 0 && want <= max)) return { reason: 'Strikes must be between 0 and ' + max + '.' };
+                GameState.game.strikeCount = want;
+                const over = want >= max;
+                GameState.game.isGameOver = over;
+                GameState.game.status = over ? 'completed' : 'active';
+                GameState.bumpVersion();
+                this.updateStats();
+                return true;
+            },
+
+            'game.over': function (a) {
+                const reason = ['win', 'lose', 'timeout'].indexOf(a.reason) >= 0 ? a.reason : 'lose';
+                this.showGameOver(reason);
+                return true;
+            },
+
+            'game.reset': function () {
+                this.restartGame();
+                return true;
+            },
+
+            // ---- inject queue -------------------------------------------
+            'inject.set': function (a) {
+                const want = parseInt(a.index, 10);
+                if (!(want >= 0 && want < this.injectQueue.length)) {
+                    return { reason: 'No inject at index ' + a.index + '.' };
+                }
+                this.activeInjectIndex = want;
+                this.updateInjectCard();
+                const name = this.injectQueue[want]?.name || 'inject';
+                Utils.showToast(`Inject: ${name}`, 'warning');
+                return true;
+            },
+
+            'inject.advance': function () {
+                return this.advanceInject('GM') ? true : { reason: 'No more injects in the queue.' };
+            },
+
+            // ---- procedures ---------------------------------------------
+            'procedure.select': function (a) {
+                const want = parseInt(a.index, 10);
+                const procedures = this.scenario?.procedures || [];
+                if (!(want >= 0 && want < procedures.length)) return { reason: 'No procedure at index ' + a.index + '.' };
+                if (GameState.isOnCooldown(want)) {
+                    return { reason: `${procedures[want].name} is on cooldown.` };
+                }
+                const previous = this.activeProcIndex;
+                this.activeProcIndex = (want === previous) ? -1 : want;
+                if (previous !== -1) this.updateProcedureSelection(previous);
+                this.updateProcedureSelection(want);
+                return true;
+            },
+
+            'procedure.clear': function () {
+                const previous = this.activeProcIndex;
+                this.activeProcIndex = -1;
+                if (previous !== -1) this.updateProcedureSelection(previous);
+                return true;
+            },
+
+            'procedure.add': function (a) {
+                if (!this.scenario || !a.card) return { reason: 'No scenario on the board.' };
+                if (!Array.isArray(this.scenario.procedures)) this.scenario.procedures = [];
+                // Guard against a double-add. The console filters its dropdown by
+                // what is already in hand, so a repeat means something went wrong
+                // upstream - and two identical cards is worse than a refusal.
+                const duplicate = a.card.id != null && this.scenario.procedures.some(function (c) {
+                    return c && String(c.id) === String(a.card.id);
+                });
+                if (duplicate) {
+                    return { reason: (a.card.name || 'That card') + ' is already in the hand.' };
+                }
+                this.scenario.procedures.push(a.card);
+                Utils.saveToStorage('bb-current-scenario', this.scenario);
+                // This one legitimately rebuilds the hand: the hand itself changed.
+                this.updateProcedureCards();
+                return true;
+            },
+
+            'procedure.remove': function (a) {
+                const want = parseInt(a.index, 10);
+                const procedures = this.scenario?.procedures || [];
+                if (!(want >= 0 && want < procedures.length)) return { reason: 'No procedure at index ' + a.index + '.' };
+                procedures.splice(want, 1);
+                if (this.activeProcIndex === want) this.activeProcIndex = -1;
+                else if (this.activeProcIndex > want) this.activeProcIndex--;
+                // Cooldowns are keyed by hand INDEX too, so every later entry has
+                // to move down one with the card.
+                GameState.shiftCooldowns(want);
+                Utils.saveToStorage('bb-current-scenario', this.scenario);
+                this.updateProcedureCards();
+                return true;
+            },
+
+            'cooldown.clear': function () {
+                GameState.clearCooldowns();
+                this.updateProcedureCooldowns();
+                return true;
+            },
+
+            // ---- consultant ---------------------------------------------
+            'consultant.set': function (a) {
+                const pool = this.consultants || [];
+                if (a.index === null || a.index === undefined) {
+                    this.setConsultant(null);
+                    return true;
+                }
+                const want = parseInt(a.index, 10);
+                if (!(want >= 0 && want < pool.length)) return { reason: 'No consultant at index ' + a.index + '.' };
+                this.setConsultant(pool[want]);
+                return true;
+            },
+
+            // ---- rules ---------------------------------------------------
+            'rules.set': function (a) {
+                const max = GameState.game.maxTurns || 10;
+                const target = parseInt(a.successTarget, 10);
+                if (!(target >= 2 && target <= 20)) return { reason: 'Success target must be between 2 and 20.' };
+                this.successTarget = target;
+                if (this.scenario?.gameConfig) {
+                    this.scenario.gameConfig.successTarget = target;
+                    Utils.saveToStorage('bb-current-scenario', this.scenario);
+                }
+                void max;
+                return true;
+            },
+
+            'rules.turns': function (a) {
+                const want = parseInt(a.maxTurns, 10);
+                if (!(want >= 1 && want <= 40)) return { reason: 'Turn limit must be between 1 and 40.' };
+                const spent = GameState.turnNumber() - 1;
+                GameState.game.maxTurns = want;
+                GameState.game.turnsRemaining = Math.max(0, want - spent);
+                if (this.scenario?.gameConfig) {
+                    this.scenario.gameConfig.initialTurns = want;
+                    Utils.saveToStorage('bb-current-scenario', this.scenario);
+                }
+                GameState.bumpVersion();
+                this.updateStats();
+                return true;
+            },
+
+            // ---- whole-scenario -------------------------------------------------
+            'scenario.load': function (a) {
+                // Deliberately the one op that reloads: a different scenario means a
+                // different board, and `setupGame()` re-derives everything anyway.
+                if (typeof SessionSync === 'undefined' || !SessionSync.broadcastScenario) {
+                    return { reason: 'Scenario hand-off is unavailable.' };
+                }
+                return { reason: 'Scenario loads are handled by the editor, not the console.' };
+            }
+        };
+
+        return this.__remoteOps;
+    },
+
+    /**
+     * Snapshot everything the GM Console needs to render its own board.
+     *
+     * `GameState.exportForSync()` covers the clock (turns, strikes, reveals,
+     * cooldowns) but knows nothing about the cards: the chain, names, detection
+     * text, the procedure hand and the inject pointer all live on
+     * `PlayerController.scenario`. The console needs both halves, so this
+     * carries the board half and the console merges the two.
+     * @returns {Object}
+     */
+    exportControlState() {
+        const scenario = this.scenario || null;
+        // Compute the remaining counts FIRST: reading them prunes stamps that have
+        // already expired, so the raw `cooldowns` snapshot below is already clean.
+        // Deriving them here (rather than on the console) keeps the cooldown rule
+        // in exactly one place - `GameState` - so the two screens cannot disagree.
+        const cooldownRemaining = {};
+        ((scenario && scenario.procedures) ? scenario.procedures : []).forEach(function (_, i) {
+            const left = GameState.cooldownRemaining(i);
+            if (left > 0) cooldownRemaining[i] = left;
+        });
+        return {
+            stamp: Date.now(),
+            deck: scenario ? scenario.deck : null,
+            info: scenario ? scenario.metadata : null,
+            notes: scenario ? scenario.notes : null,
+            gameConfig: scenario ? scenario.gameConfig : null,
+            // The hidden chain, as dealt. This is the answer key.
+            chain: scenario ? (scenario.scenario || {}) : {},
+            procedures: (scenario && scenario.procedures) ? scenario.procedures : [],
+            consultants: this.consultants || [],
+            consultantIndex: (function (list, active) {
+                if (!active) return -1;
+                // Object identity first: when the consultant was seated from the
+                // pool the controller holds that very object, so this is exact.
+                const byRef = list.indexOf(active);
+                if (byRef >= 0) return byRef;
+                // Otherwise the seated consultant is a parsed copy (a scenario
+                // reloaded from JSON), so match on id AND art. A deck can reuse an
+                // id across many cards - mega-deck ships 345 cards under 105
+                // distinct ids - and matching on id alone highlighted whichever
+                // consultant happened to share it, which is what lit up the wrong
+                // tiles for most of the middle of the list.
+                const key = String(active.id) + '|' + String(active.image || '');
+                return list.findIndex(function (c) {
+                    return (String(c.id) + '|' + String(c.image || '')) === key;
+                });
+            })(this.consultants || [], this.consultant),
+            injects: this.injectQueue || [],
+            activeInjectIndex: this.activeInjectIndex,
+            activeProcIndex: this.activeProcIndex,
+            // `revealed` here is the CONTROLLER's copy (what is actually face-up on
+            // the board), not GameState's - the two are separate and this is the
+            // one the GM can see.
+            flips: {
+                initial: !!(this.revealed && this.revealed.initial),
+                pivot: !!(this.revealed && this.revealed.pivot),
+                c2: !!(this.revealed && this.revealed.c2),
+                persist: !!(this.revealed && this.revealed.persist)
+            },
+            successTarget: this.successTarget,
+            game: {
+                turnsRemaining: GameState.game.turnsRemaining,
+                maxTurns: GameState.game.maxTurns,
+                strikeCount: GameState.game.strikeCount,
+                maxStrikes: GameState.game.maxStrikes,
+                isGameOver: GameState.game.isGameOver,
+                status: GameState.game.status,
+                turnNumber: GameState.turnNumber()
+            },
+            cooldowns: Object.assign({}, GameState.cooldowns),
+            cooldownRemaining: cooldownRemaining,
+            // Told to the console so it can warn that a roll or strike already
+            // spends the turn, rather than let the GM double-spend by hand.
+            turnCoupled: !!this.turnCoupled,
+            syncVersion: GameState.sync.version
+        };
     }
 };
 
