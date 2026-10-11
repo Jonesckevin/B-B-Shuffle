@@ -588,7 +588,6 @@
     align-items: center;
     gap: var(--space-2);
     padding-left: var(--space-3);
-    border-left: 1px solid var(--color-border);
 }
 
 .inject-rail .inject-card-wrapper {
@@ -725,6 +724,14 @@ body.has-custom-bg .procedure-row {
 
 .card-wrapper .flip-card { transition: transform 0.18s ease; }
 .card-wrapper:hover .flip-card { transform: translateY(-6px); }
+
+/* While a GM Console holds authority (js/gm-link.js -> setRemoteControl) the
+   scenario cards are the GM's answer key. The flip itself is refused in
+   js/player.js; here the cards stop reading as clickable at all - no lift, no
+   pointer - so the table never gets the "I clicked it and nothing happened"
+   feel of a live control that silently does nothing. */
+body.gm-managed .scenario-row .flip-card { cursor: default; }
+body.gm-managed .scenario-row .card-wrapper:hover .flip-card { transform: none; }
 
 .flip-card-front,
 .flip-card-back {
@@ -994,9 +1001,9 @@ body.surface-felt::after {
     width: 30px;
     height: 30px;
     border-radius: 999px;
-    border: 1px solid var(--color-border);
+    border: 1px solid color-mix(in srgb, var(--color-danger) 45%, var(--color-border));
     background: rgba(255, 255, 255, 0.03);
-    color: var(--color-text-secondary);
+    color: var(--color-danger);
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
@@ -1004,10 +1011,10 @@ body.surface-felt::after {
     transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 .rules-btn:hover {
-    color: var(--color-primary);
-    border-color: color-mix(in srgb, var(--color-primary) 55%, var(--color-border));
-    background: rgba(59, 130, 246, 0.1);
-    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--color-danger) 35%, transparent);
     text-decoration: none;
 }
 
@@ -1087,6 +1094,67 @@ body.surface-felt::after {
     font-size: 13px;
 }
 .theme-modal .modal-footer { justify-content: space-between; }
+
+/* ---- Procedure card backs (js/cardback-theme.js) ----
+   The gallery tiles are cut to the CARD's shape, so what the user scrolls past
+   is the back as it will actually print on the table. The picker's own preview
+   keeps the background preview's fixed-height box instead - it cannot grow the
+   modal - and fits the whole card inside it (no cover crop) like the logo does.
+   Cosmetic only: nothing here changes the board's geometry. */
+.theme-preview-cardback img { object-fit: contain; }
+.modal.cardback-modal { max-width: 720px; }   /* the tile grid needs the width */
+.modal.cardback-modal .modal-footer { justify-content: space-between; }
+.cb-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+}
+.cb-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    font: inherit;
+    color: var(--color-text-secondary);
+    text-align: center;
+    background: var(--color-bg-tertiary);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+.cb-tile:hover,
+.cb-tile:focus-visible { border-color: var(--color-border-hover); color: var(--color-text); }
+.cb-tile.is-active {
+    border-color: var(--color-primary);
+    color: var(--color-text);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+.cb-thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 1.4;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+}
+.cb-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cb-tile.is-active .cb-thumb::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+.cb-name { font-size: var(--text-xs); line-height: 1.3; }
 
 /* ============================================================
    Dice FX — big animated d20 modal (optional roll theatrics)
@@ -1475,7 +1543,6 @@ body.fx-enabled .flip-card.fx-click .card-holo { animation: fxClickFlash 0.5s ea
     align-items: center;
     gap: var(--space-2);
     padding-right: var(--space-3);
-    border-right: 1px solid var(--color-border);
 }
 .consultant-rail .consultant-card-wrapper {
     width: 100%;
@@ -1613,10 +1680,22 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
         padding-right: 0;
         border-right: 0;
         padding-bottom: var(--space-2);
-        border-bottom: 1px solid var(--color-border);
+        /*border-bottom: 1px solid var(--color-border);*/
     }
     .consultant-rail .consultant-card-wrapper { width: 86px; }
     .consultant-call-btn { width: auto; }
+
+    /* The collapsed head above is for the stacked (solo) row, where the three
+       labels centred in one column read as a little header. The compact shell
+       keeps .procedure-body as a real 3-column row at every width - and at
+       ≤700px the shell always applies, its query starts at 1024px - so there
+       the collapsed head left CONSULTANT and INJECT floating in the middle,
+       under the Procedures title and far from the rails they describe. Neither
+       earns its place on a screen this narrow: the consultant rail carries its
+       own Call button and the inject rail its own Draw next, so the two labels
+       are dropped and the title keeps the head to itself. */
+    body:not(.solo-match) .consultant-label,
+    body:not(.solo-match) .procedure-head .inject-label { display: none; }
 }
 
 /* Registered <number> so a card's aspect ratio can animate: aspect-ratio
@@ -1649,7 +1728,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 .scenario-row .card-wrapper[data-type] .flip-card {
     --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
     flex: 0 0 auto;
-    width: 150px;
+    width: 110px;
     max-width: 100%;
     aspect-ratio: var(--card-ar);
     transition:
@@ -1686,8 +1765,8 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 }
 
 .procedure-row .procedure-body .procedure-cards .flip-card {
-    --card-ar: 0.7143;          /* 2.5 / 3.5 — the portrait card back */
-    width: 132px;               /* a bit wider than the old 112px */
+    --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
+    width: 230px;               /* ~1.75x the old 132px (landscape reads bigger) */
     aspect-ratio: var(--card-ar);
     transition:
         width 0.6s cubic-bezier(0.85, 0, 0.15, 1),
@@ -2369,6 +2448,414 @@ body.solo-match .fab-container {
     accent-color: var(--color-primary);
 }
 
+/* Compact-mode menu toggle, the in-menu legal block and the landscape control
+   host. All hidden until the shell / landscape media queries reveal them;
+   without these base rules they would render in the desktop header. */
+.header-menu-btn { display: none; }
+.header-legal { display: none; }
+.header-controls { display: none; }
+
+/* ============================================================
+   MOBILE / TABLET SHELL  (phones + tablets, portrait + landscape)
+
+   Below the tablet breakpoint the Player becomes a one-screen app:
+   - the header centres and its actions collapse into a menu;
+   - the page itself never scrolls - only sub-panels (the procedure
+     hand, the solo log) scroll internally;
+   - the shared .app-legal footer is hidden here and its links move
+     into the menu (the footer element STAYS in the DOM - one per
+     page - and is only CSS-hidden).
+
+   The bare toggle button lives at the end of .header-left; it is
+   absolutely positioned against .player-header (its containing block),
+   so it anchors to the header's right edge in every orientation.
+
+   Excluded on purpose: ?mode=solo (body.solo-match) keeps its own
+   layout - the Incident Master spends turns itself and a shell would
+   fight it (see js/solo-master.js).
+   ============================================================ */
+@media (max-width: 1024px), (orientation: landscape) and (max-width: 1200px) {
+
+    /* ---- header: centred, with a menu toggle ---- */
+    body:not(.solo-match) .player-header {
+        position: relative;              /* anchors the dropdown + toggle */
+        height: auto;                    /* undo the desktop --header-bar pin */
+        flex-wrap: wrap;
+        justify-content: center;
+        row-gap: var(--space-2);
+        padding: var(--space-2) var(--space-3);
+    }
+    /* Higher specificity than `.player-header:has(.custom-logo:not([hidden]))`,
+       which pins the bar to --header-bar on wide screens. */
+    body:not(.solo-match) .player-header:has(.custom-logo:not([hidden])) { height: auto; }
+    body:not(.solo-match) .header-left {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-inline: 46px;            /* clears the centred content of the toggle */
+        gap: var(--space-2);
+    }
+    body:not(.solo-match) .header-titles { align-items: center; }
+    /* The deck badge (and its revision line) is dropped on the compact shell so
+       the logo has the header to itself; desktop still names the deck. */
+    body:not(.solo-match) .header-deck { display: none; }
+    body:not(.solo-match) .header-center {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+    }
+    /* The logo IS the header identity on the compact shell - the title and the
+       deck badge it stands in for are both dropped - so it is sized generously. */
+    body:not(.solo-match) .custom-logo { height: clamp(38px, 8dvh, 72px); max-width: min(320px, 76vw); }
+
+    /* When a header logo is shown it REPLACES the game title on the compact
+       shell: the logo already carries the name, and the two side by side waste
+       the little width there is. Keyed on the same `hidden` test the header
+       height uses, so removing the logo restores the title. */
+    body:not(.solo-match) .player-header:has(.custom-logo:not([hidden])) .game-title { display: none; }
+    body:not(.solo-match) .player-header:has(.custom-logo:not([hidden])) .custom-logo { max-width: min(340px, 80vw); }
+
+    body:not(.solo-match) .header-menu-btn {
+        display: inline-flex;
+        position: absolute;
+        top: var(--space-2);
+        right: var(--space-3);
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        z-index: 2;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-bg-tertiary);
+        color: var(--color-text);
+        cursor: pointer;
+    }
+    body:not(.solo-match) .header-menu-btn:hover { border-color: var(--color-border-hover); }
+    body:not(.solo-match) .header-menu-btn[aria-expanded="true"] {
+        color: var(--color-primary-light);
+        border-color: var(--color-primary);
+    }
+
+    /* ---- header actions -> dropdown panel ---- */
+    body:not(.solo-match) .header-right {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-2);
+        max-height: 72dvh;
+        overflow-y: auto;
+        padding: var(--space-3);
+        background: var(--color-bg-secondary);
+        border-bottom: 1px solid var(--color-border);
+        box-shadow: var(--shadow-lg);
+        z-index: var(--z-dropdown);
+    }
+    body:not(.solo-match) .player-header.menu-open .header-right { display: flex; }
+    body:not(.solo-match) .header-right .header-stack,
+    body:not(.solo-match) .header-right .fx-toggle-col {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    body:not(.solo-match) .header-right .header-action,
+    body:not(.solo-match) .header-right .header-legal-link {
+        width: 100%;
+        justify-content: flex-start;
+        text-align: left;
+    }
+    /* Labels come back: the desktop icon-only rule exists for the cramped bar. */
+    body:not(.solo-match) .header-right .header-action span { display: inline; }
+    body:not(.solo-match) .header-right .fx-state { display: inline; }
+    body:not(.solo-match) .header-right .load-wrap { width: 100%; }
+    body:not(.solo-match) .header-right .load-menu {
+        position: static;
+        width: 100%;
+        max-width: none;
+        max-height: 40dvh;
+    }
+    body:not(.solo-match) .header-right .rules-btn { justify-content: center; }
+
+    /* Legal links, relocated from the hidden footer. (The base rule above the
+       shell already hides .header-legal everywhere, so it is not repeated.) */
+    body:not(.solo-match) .header-legal {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        margin-top: var(--space-1);
+        padding-top: var(--space-2);
+        border-top: 1px solid var(--color-border);
+    }
+    .header-legal-link {
+        color: var(--color-text-secondary);
+        font-size: var(--text-sm);
+        text-decoration: none;
+    }
+    .header-legal-link:hover { color: var(--color-primary-light); }
+    .header-legal-disclaimer {
+        margin: 0;
+        color: var(--color-text-muted);
+        font-size: var(--text-xs);
+        line-height: 1.35;
+    }
+
+    /* ---- one-screen shell ---- */
+    body:not(.solo-match) { height: 100dvh; overflow: hidden; overscroll-behavior: none; }
+    body:not(.solo-match) .player-layout {
+        height: 100%;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+    body:not(.solo-match) .app-legal { display: none; }
+
+    body:not(.solo-match) .player-main {
+        min-height: 0;
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        gap: var(--space-2);
+        padding: var(--space-2);
+        max-width: none;
+    }
+
+    /* ---- controls: one compact block ---- */
+    body:not(.solo-match) .controls-bar {
+        grid-template-columns: 1fr;
+        gap: var(--space-1);
+        padding: var(--space-2);
+    }
+    body:not(.solo-match) .controls-actions { flex-wrap: wrap; gap: var(--space-1); }
+    body:not(.solo-match) .controls-actions .btn { padding: 6px 10px; }
+
+    /* ---- scenario cards: one row of four, scaled to the column ---- */
+    body:not(.solo-match) .scenario-row {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--space-2);
+    }
+    body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card,
+    body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card.flipped {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* ---- procedure row: fills the leftover height, scrolls internally ---- */
+    body:not(.solo-match) .procedure-row {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-2);
+    }
+    body:not(.solo-match) .procedure-body {
+        flex: 1 1 auto;
+        min-height: 0;
+        flex-direction: row;
+        align-items: stretch;
+        gap: var(--space-1);
+    }
+    body:not(.solo-match) .consultant-rail,
+    body:not(.solo-match) .inject-rail {
+        flex: 0 0 auto;
+        width: clamp(54px, 15vw, 88px);
+        flex-direction: column;
+        padding: var(--space-1);
+    }
+    body:not(.solo-match) .consultant-rail {
+        border-bottom: 0;
+        padding-right: var(--space-1);
+    }
+    body:not(.solo-match) .inject-rail {
+        border-top: 0;
+        padding-left: var(--space-1);
+    }
+    body:not(.solo-match) .consultant-rail .consultant-card-wrapper,
+    body:not(.solo-match) .inject-rail .inject-card-wrapper { width: 100%; }
+    body:not(.solo-match) .consultant-call-btn,
+    body:not(.solo-match) .inject-draw-btn { width: 100%; }
+
+    body:not(.solo-match) .procedure-cards {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: var(--space-1);
+        padding: var(--space-1);
+    }
+    body:not(.solo-match) .procedure-cards .empty-state { min-height: 0; }
+    body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card {
+        width: clamp(91px, 26vw, 168px);
+    }
+    body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card.flipped {
+        width: min(200px, 46vw);
+    }
+}
+
+/* ============================================================
+   CONTROLS RELOCATED INTO THE HEADER
+
+   The compact landscape shell has room in its header for the
+   roll/action controls, and moving them there frees the row the
+   separate bar was using for the board. The query is therefore
+   exactly the landscape half of the shell above - the same 1200
+   boundary, at ANY height - so the bar and the shell switch
+   together. js/landscape-controls.js adds `body.landscape-controls`
+   on this same query.
+
+   Above 1200 the bar is always its own row, however wide the
+   screen gets.
+   ============================================================ */
+@media (orientation: landscape) and (max-width: 1200px) {
+    body.landscape-controls .controls-bar { display: none; }
+    /* The bar owns the shell grid's first `auto` row; with it gone the two
+       survivors take the two rows and the hand keeps the leftover height. */
+    body.landscape-controls .player-main { grid-template-rows: auto minmax(0, 1fr); }
+    body.landscape-controls .header-controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: var(--space-1) var(--space-2);
+        min-width: 0;
+        order: 2;
+    }
+    body.landscape-controls .header-controls .controls-side { justify-content: flex-end; }
+    body.landscape-controls .header-controls .controls-actions { flex-wrap: nowrap; gap: var(--space-1); }
+    body.landscape-controls .header-controls .controls-actions .btn { padding: 5px 8px; font-size: var(--text-sm); }
+    body.landscape-controls .header-controls .controls-right { gap: var(--space-1); }
+    body.landscape-controls .header-controls .controls-right-btn span { display: none; }
+    body.landscape-controls .header-controls .turn-couple span { display: none; }
+    body.landscape-controls .header-controls .roll-status { font-size: var(--text-xs); text-align: right; }
+}
+
+/* Landscape phones/tablets are height-starved: single-row header, no logo, and
+   the decorative procedure head goes so the board keeps the little height left.
+   The roll/action controls are also relocated INTO the header (js/landscape-
+   controls.js adds `body.landscape-controls`), which kills their separate bar
+   and hands the freed row to the cards. */
+@media (orientation: landscape) and (max-height: 620px) and (max-width: 1200px) {
+    body:not(.solo-match) .player-header {
+        flex-wrap: wrap;
+        row-gap: var(--space-1);
+        gap: var(--space-2) var(--space-3);
+        /* A floor height for the row, so the logo below can size to a
+           percentage of it. The vertical padding goes so the logo can fill the
+           row; the horizontal padding stays. */
+        --lp-h: clamp(60px, 15dvh, 76px);
+        min-height: var(--lp-h);
+        padding-block: 0;
+    }
+    body:not(.solo-match) .header-left {
+        width: auto;
+        flex-wrap: nowrap;
+        padding-inline: 0;
+    }
+    /* The logo stands in for the game title here too, and maximises into the
+       header: 95% of the row height. */
+    body:not(.solo-match) .custom-logo { height: calc(var(--lp-h) * 0.95); max-width: min(340px, 50vw); }
+    body:not(.solo-match) .header-center { order: 0; width: auto; }
+    body:not(.solo-match) .header-menu-btn { top: 50%; transform: translateY(-50%); }
+    body:not(.solo-match) .game-title { font-size: var(--text-lg); }
+    body:not(.solo-match) .game-stats { gap: var(--space-3); }
+    body:not(.solo-match) .stat-item.roll { min-width: 0; }
+    body:not(.solo-match) .stat-value { font-size: var(--text-lg); }
+    body:not(.solo-match) .procedure-head { display: none; }
+
+    /* Headings cost vertical space on a short screen: drop the card labels. */
+    body:not(.solo-match) .card-label { display: none; }
+
+    /* The relocated controls are styled by the block above, which now covers every
+       landscape width up to 1200 whatever the height; a short screen only adds
+       this: the hamburger becomes a flex item, so the whole row centres as one
+       group instead of anchoring to the header's right edge. */
+    body.landscape-controls .header-menu-btn {
+        position: static;
+        top: auto;
+        right: auto;
+        transform: none;
+        margin-left: 0;      /* no auto margin: the whole row centres as one group */
+        order: 3;
+    }
+
+    /* Menu options as tiles: the landscape panel is wide, so the portrait
+       single column wastes it. Unwrapping the paired-button columns
+       (display:contents) makes every action one tile of a responsive grid. */
+    body:not(.solo-match) .player-header.menu-open .header-right {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+        gap: var(--space-2);
+        align-items: stretch;
+        align-content: start;
+    }
+    body:not(.solo-match) .header-right .header-stack,
+    body:not(.solo-match) .header-right .fx-toggle-col { display: contents; }
+    body:not(.solo-match) .header-right .header-action,
+    body:not(.solo-match) .header-right .rules-btn {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+        text-align: center;
+    }
+    /* The Load dropdown must float over the grid rather than stretch its cell. */
+    body:not(.solo-match) .header-right .load-wrap { position: relative; }
+    body:not(.solo-match) .header-right .load-menu {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: auto;
+        width: max(100%, 240px);
+        max-height: 50dvh;
+        z-index: var(--z-dropdown);
+    }
+    /* Legal links go full-width under the tiles, on one centred row. */
+    body:not(.solo-match) .header-right .header-legal {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-1) var(--space-4);
+    }
+    body:not(.solo-match) .header-right .header-legal-link { width: auto; }
+    body:not(.solo-match) .header-right .header-legal-disclaimer {
+        flex-basis: 100%;
+        text-align: center;
+    }
+
+    /* Shorter scenario cards: the freed height goes to the procedure hand. */
+    body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card,
+    body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card.flipped {
+        height: clamp(52px, 18dvh, 100px);
+        width: auto;
+        max-width: 100%;
+    }
+    /* ...and the hand gets a little more room of its own. */
+    body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card {
+        width: clamp(91px, 22vw, 180px);
+    }
+}
+
+/* Safe-area padding for notched devices (viewport-fit=cover is set in the page
+   head). Only the outer shell needs it. */
+@supports (padding: env(safe-area-inset-bottom)) {
+    @media (max-width: 1024px), (orientation: landscape) and (max-width: 1200px) {
+        body:not(.solo-match) .player-main {
+            padding-left: max(var(--space-2), env(safe-area-inset-left));
+            padding-right: max(var(--space-2), env(safe-area-inset-right));
+            padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+        }
+        body:not(.solo-match) .player-header {
+            padding-left: max(var(--space-3), env(safe-area-inset-left));
+            padding-right: max(var(--space-3), env(safe-area-inset-right));
+        }
+    }
+}
+
 /* Nothing to print yet (no game on the board) — leave the page alone and
    fall back to the browser's normal print behaviour. */
 @media print {
@@ -2379,6 +2866,15 @@ body.solo-match .fab-container {
        page. Board-only prints get their margin from the body padding here. */
     @page { size: portrait; margin: 0; }
     body { padding: 12mm; }
+
+    /* The compact shell's viewport lock (height:100dvh / overflow:hidden) is a
+       screen affordance - undo it so printing is normal paper flow. The sheet
+       path is unaffected: body.print-has-sheet hides .player-layout entirely
+       (display:none !important, below). */
+    body:not(.solo-match) { height: auto; overflow: visible; }
+    body:not(.solo-match) .player-layout { display: flex; flex-direction: column; height: auto; min-height: 0; }
+    body:not(.solo-match) .player-main { display: flex; flex-direction: column; height: auto; overflow: visible; }
+    body:not(.solo-match) .app-legal { display: block; }
 
     body.print-has-sheet { padding: 0; }
     body.print-has-sheet .player-layout,

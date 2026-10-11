@@ -1104,6 +1104,17 @@ const PlayerController = {
             return;
         }
 
+        // While a GM Console holds the board, the scenario cards are the GM's
+        // answer key and the table cannot turn them over. The console's own
+        // `reveal.set` / `flip.card` ops write the `flipped` class directly, so
+        // they are untouched by this. The lightbox below is part of the same
+        // reveal, so a refused flip must not open it either - that would give
+        // the card away by another route.
+        if (this._gmLocked(card)) {
+            Utils.showToast('The GM console is driving the board - scenario cards are locked', 'info');
+            return;
+        }
+
         if (!card.classList.contains('flipped')) {
             // Flip to show
             card.classList.add('flipped');
@@ -1129,6 +1140,10 @@ const PlayerController = {
      */
     unflipCard(card) {
         if (!card) return false;
+
+        // …and in the other direction: a player flipping a revealed card back
+        // down would leave the console's answer key disagreeing with the board.
+        if (this._gmLocked(card)) return false;
 
         // Right-clicking the consultant card stands the consultant down.
         if (this.cardTypeOf(card) === 'consultant') {
@@ -1184,6 +1199,20 @@ const PlayerController = {
         if (card.closest('.inject-card-wrapper') || card.id === 'inject-card') return 'inject';
         const idType = (card.id || '').replace('-card', '');
         return Utils.CARD_TYPES.includes(idType) ? idType : '';
+    },
+
+    /**
+     * Is this card off-limits to the table because a GM Console holds authority?
+     *
+     * The console's lease makes the Player read-only, and the scenario cards are
+     * the answer key: only the console may turn them over. This is the same lock
+     * `setRemoteControl()` puts on the buttons, expressed for the one control
+     * that has no button - the cards themselves.
+     * @param {HTMLElement} card - Flip card element
+     * @returns {boolean}
+     */
+    _gmLocked(card) {
+        return !!(this.remoteControlled && card && card.closest && card.closest('.scenario-row'));
     },
 
     /**

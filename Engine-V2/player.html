@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0f1117">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="B&amp;B Shuffle">
     <title>B&amp;B Shuffle - Player</title>
     <link rel="icon" href="../shared/img/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" href="../shared/img/favicon.png">
+    <link rel="apple-touch-icon" href="../shared/img/apple-touch-icon.png">
+    <link rel="manifest" href="../manifest.webmanifest">
     
     <!-- Shared CSS -->
     <link rel="stylesheet" href="../shared/css/base.css">
@@ -68,7 +75,11 @@
 
                 </div>
             </div>
-            <div class="header-right">
+            <!-- Landscape host for the roll/action controls: in horizontal mobile
+                 view they are relocated here so the board keeps the whole height
+                 (see js/landscape-controls.js). Empty and hidden otherwise. -->
+            <div class="header-controls" id="header-controls"></div>
+            <div class="header-right" id="header-menu">
                 <button id="quick-start-btn" class="btn btn-primary btn-sm header-action" type="button" title="Randomly deal a fresh game from any deck">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="16 3 21 3 21 8"/>
@@ -149,7 +160,31 @@
                     </button>
                 </div>
                 <a id="rules-link" class="rules-btn header-action" href="../docs/rules.pdf" target="_blank" rel="noopener noreferrer" title="Open the B&amp;B Shuffle Rule Book (PDF)" aria-label="Rule Book (PDF)">?</a>
+                <!-- Legal links + install action live in the compact menu on phone/
+                     tablet widths, where the shared .app-legal footer is hidden.
+                     The footer itself stays in the DOM (one per page) and is only
+                     CSS-hidden - never remove it. -->
+                <div class="header-legal">
+                    <button id="pwa-install-btn" class="btn btn-primary btn-sm header-action hidden" type="button">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                        <span>Install app</span>
+                    </button>
+                    <a class="header-legal-link" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">B&amp;B Classic — play on the official site</a>
+                    <a class="header-legal-link" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer">github.com/Jonesckevin</a>
+                    <p class="header-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+                </div>
             </div>
+            <!-- Compact-mode menu toggle. Shown only on phone/tablet widths (see
+                 js/header-menu.js); collapses the header actions into a dropdown
+                 so the board gets the whole screen height. A bare child of the
+                 header so the landscape layout can place it. -->
+            <button id="header-menu-btn" class="header-menu-btn" type="button" aria-expanded="false" aria-controls="header-menu" aria-label="Open menu" title="Menu">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
         </header>
 
         <!-- Main Content -->
@@ -602,9 +637,37 @@
                     </label>
                     <small class="form-hint theme-logo-status" id="theme-logo-status">Using the default logo.</small>
                 </div>
+
+                <div class="theme-group">
+                    <h3 class="theme-group-title">Procedure card backs</h3>
+                    <div class="theme-preview theme-preview-cardback" id="theme-cardback-preview">
+                        <span class="theme-preview-empty">Standard Procedures back</span>
+                    </div>
+                    <button id="theme-cardback-choose" class="btn btn-secondary btn-sm" type="button">Choose a back…</button>
+                    <button id="theme-cardback-reset" class="btn btn-ghost btn-sm" type="button" title="Go back to the standard blue Procedures art">Reset to default</button>
+                    <small class="form-hint theme-logo-status" id="theme-cardback-status">Using the default Procedure back.</small>
+                </div>
             </div>
             <div class="modal-footer">
                 <button id="theme-modal-done" class="btn btn-primary">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Procedure card-back picker (cosmetic: localStorage only, see js/cardback-theme.js) -->
+    <div id="cardback-modal" class="modal-backdrop hidden">
+        <div class="modal cardback-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Procedure card backs</h2>
+                <button id="cardback-modal-close" class="modal-close" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="hint theme-note">Pick the art printed on the back of your Procedure cards. Picking one only changes how they look on this device — it is cosmetic, stored in this browser, and never touches the deck, the scenario or the rules.</p>
+                <div class="cb-gallery" id="cb-gallery"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="cardback-modal-reset" class="btn btn-ghost btn-sm" type="button">Reset to default</button>
+                <button id="cardback-modal-done" class="btn btn-primary">Done</button>
             </div>
         </div>
     </div>
@@ -681,15 +744,19 @@
     <script src="../shared/js/card-viewer.js"></script>
     <script src="js/card-fx.js"></script>
     <script src="js/dice-fx.js"></script>
-    <script src="js/player.js?v=12"></script>
+    <script src="js/player.js?v=13"></script>
     <script src="js/custom-theme.js"></script>
     <script src="js/print-sheet.js"></script>
     <!-- Load the provider and Solo AI modules after PlayerController and GameState. -->
     <script src="js/ai-client.js"></script>
     <script src="js/solo-master.js"></script>
-
+    <script src="js/header-menu.js"></script>
+    <script src="js/landscape-controls.js"></script>
+    <script src="js/cardback-theme.js"></script>
 
     <!-- Site navigation FAB (shared radial menu) -->
     <script src="../shared/js/fab.js"></script>
+    <!-- PWA: service-worker registration + install prompt (no-op if unsupported) -->
+    <script src="../shared/js/pwa.js"></script>
 </body>
 </html>

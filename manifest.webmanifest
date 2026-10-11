@@ -1,0 +1,17 @@
+{
+  "name": "B&B Shuffle",
+  "short_name": "B&B Shuffle",
+  "description": "Self-hosted cyber-defense tabletop simulator — a Backdoors & Breaches companion for running incident-response walkthroughs.",
+  "start_url": "Engine-V2/player.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f1117",
+  "theme_color": "#0f1117",
+  "categories": ["games", "education", "productivity"],
+  "icons": [
+    { "src": "shared/img/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "shared/img/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "shared/img/pwa-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
