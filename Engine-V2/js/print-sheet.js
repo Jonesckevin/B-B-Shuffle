@@ -126,6 +126,15 @@
     const MASTER_ART_PREFIX = 'decks/cardbase/v31/';
 
     /**
+     * The Mega Deck ("The EVERYTHING DECK") carries the shared v3.1 master art and the
+     * fullest DETECTION lists. When a card also exists there its list is preferred over
+     * the deck in play's: Core 3.1 and its family reprint that art under their own
+     * filenames, and their own copy can be partial or stale - a single raw
+     * "NetFlow, Zeek/Bro, RITA Analysis" where the master prints four procedures.
+     */
+    const MEGA_DECK_KEY = 'mega-deck';
+
+    /**
      * Name keys for the cross-deck fallback, tolerant of how decks spell the same
      * printed card. The detection data and the deck JSONs are hand-written and drift:
      * "New Service Creation/Modification" vs "New Service Creation or Modification",
@@ -276,13 +285,20 @@
     /**
      * The DETECTION list for a scenario card, in resolution order:
      *   1. the card's own `detection` (decks that carry it inline)
-     *   2. the active deck's catalog entry for the same art
-     *   3. the active deck's catalog entry for the same name
-     *   4. ANY deck's catalog entry for the same art
-     *   5. ANY deck's catalog entry for the same name, ranked deck in play -> the
+     *   2. the Mega Deck's catalog entry for the same art, then the same name
+     *   3. the active deck's catalog entry for the same art
+     *   4. the active deck's catalog entry for the same name
+     *   5. ANY deck's catalog entry for the same art
+     *   6. ANY deck's catalog entry for the same name, ranked deck in play -> the
      *      shared v3.1 master art -> anything else
      *
-     * Step 5 is what rescues Core 3.1 (and any other deck that re-encodes the shared
+     * Step 2 is the tie-breaker for a card more than one deck prints: the Mega Deck is
+     * the shared v3.1 master set and carries the most complete lists, so it wins over
+     * the deck in play's own copy, which for Core 3.1 and its family is a reprint and
+     * can be partial or stale. The deck in play is still the source for cards the Mega
+     * Deck does not carry (deck-unique sponsor cards).
+     *
+     * Step 6 is what rescues Core 3.1 (and any other deck that re-encodes the shared
      * v3.1 master art under its own filenames): the detection for those physical cards
      * was read against `decks/cardbase/v31/*`, so the card NAME is the only link
      * between the two. A name is not an identity - core's "Insider Threat" and the
@@ -303,6 +319,17 @@
         const deck = catalog.byDeck.get(deckKey);
         const key = imageKey(card.image);
         const name = String(card.name || '').toLowerCase();
+
+        // The Mega Deck first, when it carries this card (see the note above): it is
+        // the shared v3.1 master set and prints the fullest lists, so a deck that
+        // reprints that art (Core 3.1 and family) picks up the master's list over its
+        // own partial/stale copy.
+        const mega = catalog.byDeck.get(MEGA_DECK_KEY);
+        if (mega) {
+            if (key && mega.byImage.has(key)) return mega.byImage.get(key);
+            if (name && mega.byName.has(name)) return mega.byName.get(name);
+        }
+
         if (deck) {
             if (key && deck.byImage.has(key)) return deck.byImage.get(key);
             if (deck.byName.has(name)) return deck.byName.get(name);
@@ -501,6 +528,44 @@
             + '</p>';
     }
 
+    /**
+    * Whether the scenario carries any printable notes (Description or Moderator
+    * Notes). When it does, the sheet drops its ruled handwriting box so the
+    * printed notes and the blank lines do not compete for the same space.
+    */
+    function hasPrintedNotes(scenario) {
+        const meta = (scenario && scenario.metadata) || {};
+        return Boolean(
+            String(meta.description || '').trim() ||
+            String((scenario && scenario.notes) || '').trim()
+        );
+    }
+
+    /**
+    * Scenario Description + Moderator Notes, side by side. Printed only when at
+    * least one is set; empty cells read "Not set" rather than printing a gap.
+    */
+    function notesBlockHtml(scenario) {
+        if (!hasPrintedNotes(scenario)) return '';
+        const meta = (scenario && scenario.metadata) || {};
+        const description = String(meta.description || '').trim();
+        const notes = String((scenario && scenario.notes) || '').trim();
+
+        function cell(label, text) {
+            return '<section>'
+                + '<h3 class="ps-h">' + esc(label) + '</h3>'
+                + (text
+                    ? '<p class="ps-note-text">' + esc(text) + '</p>'
+                    : '<p class="ps-detection-none">Not set</p>')
+                + '</section>';
+        }
+
+        return '<div class="ps-notes-block">'
+            + cell('Description', description)
+            + cell('Moderator Notes', notes)
+            + '</div>';
+    }
+
     function bodyHtmlFor(controllerObj) {
         const scenario = controllerObj.scenario;
         const procedures = scenario.procedures || [];
@@ -513,7 +578,8 @@
             + columnHtml('Inject Queue', injects.length, injectRows(controllerObj), 'No injects queued')
             + '</div>'
             + '<h3 class="ps-h">Consultant</h3>'
-            + consultantHtml(consultant);
+            + consultantHtml(consultant)
+            + notesBlockHtml(scenario);
     }
 
     // ------------------------------------------------------------------ API
@@ -550,6 +616,8 @@
         // Omit inject descriptions for long queues to keep the sheet to one page.
         const queue = (controllerObj.injectQueue || []).length;
         out.classList.toggle('ps-queue-long', queue > INJECT_TEXT_MAX);
+        // Real notes replace the ruled handwriting box (see has-printed-notes).
+        out.classList.toggle('has-printed-notes', hasPrintedNotes(controllerObj.scenario));
 
         // Recalculate notes lines after the queue changes available space.
         syncScenarioHeads();

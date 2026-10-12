@@ -477,6 +477,7 @@ const ScenarioLibrary = {
         Utils.getElement('edit-name').value = scenario.metadata?.name || '';
         Utils.getElement('edit-author').value = scenario.metadata?.author || '';
         Utils.getElement('edit-description').value = scenario.metadata?.description || '';
+        Utils.getElement('edit-notes').value = scenario.notes || '';
         Utils.getElement('edit-difficulty').value = scenario.metadata?.difficulty || 3;
         Utils.getElement('edit-duration').value = scenario.metadata?.estimatedDuration || '';
 
@@ -547,6 +548,8 @@ const ScenarioLibrary = {
 
         const updatedScenario = {
             ...this.selectedScenario,
+            // Moderator Notes are a top-level field, not metadata.
+            notes: Utils.getElement('edit-notes').value || '',
             metadata: {
                 ...this.selectedScenario.metadata,
                 name: Utils.getElement('edit-name').value || 'Untitled',

@@ -1385,6 +1385,31 @@ body.surface-felt::after {
     .dicefx-caption.dicefx-outcome { min-height: 112px; }
 }
 
+/* Height-starved screens (a phone held sideways, or a small window in
+   landscape): the scene is sized in px, so on its own it stands taller than the
+   window and the modal scrolls the die half off-screen. Everything here buys
+   the scene height back - the backdrop's 24px frame, the modal chrome and the
+   caption's reserved space - and then caps the scene by the viewport instead of
+   by its 430px default. dvh, not vh: the browser's own toolbars move the usable
+   height. */
+@media (max-height: 620px) {
+    .modal-backdrop { padding: 8px; }
+    #dice-modal .modal { max-height: calc(100dvh - 16px); }
+    .dice-modal .modal-header { padding: 6px 12px; }
+    .dice-modal .modal-body { padding: 4px 12px 2px; }
+    .dicefx-body { gap: 4px; }
+    /* 38% of the window: enough that the die reads at 270px tall, small enough
+       that the settled caption (number + modifier + message) still fits above
+       the footer without the modal starting to scroll internally. */
+    .dicefx-scene { width: min(300px, 100%, 38dvh); }
+    .dicefx-caption { min-height: 0; }
+    .dicefx-caption.dicefx-outcome { min-height: 0; }
+    /* The number is the outcome's headline, so it scales with the room rather
+       than sitting at a fixed 60px. */
+    .dicefx-big { font-size: clamp(20px, 9dvh, 60px); }
+    .dicefx-footer { padding: 6px 12px; }
+}
+
 /* ============================================================
    Card FX — holographic tilt / sheen / click burst (Player)
    Pointer-tracked, pure CSS + JS (js/card-fx.js). Scales from the
@@ -1696,6 +1721,12 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
        are dropped and the title keeps the head to itself. */
     body:not(.solo-match) .consultant-label,
     body:not(.solo-match) .procedure-head .inject-label { display: none; }
+
+    /* The three strike pips are the widest thing in the stat block, and that
+       block now shares the header line with the logo: shrinking them is what
+       keeps the row on one line down to a ~340px phone. */
+    body:not(.solo-match) .strike-dot { width: 13px; height: 13px; }
+    body:not(.solo-match) .strike-indicators { gap: var(--space-1); }
 }
 
 /* Registered <number> so a card's aspect ratio can animate: aspect-ratio
@@ -2476,23 +2507,37 @@ body.solo-match .fab-container {
    ============================================================ */
 @media (max-width: 1024px), (orientation: landscape) and (max-width: 1200px) {
 
-    /* ---- header: centred, with a menu toggle ---- */
+    /* ---- header: ONE line - brand, stats, menu toggle ----
+       A phone cannot spare two rows for the header, so the logo shares a row
+       with the stats and the toggle (absolutely placed against the header's
+       right edge, which is what the 46px right padding reserves). flex-wrap
+       stays on so a very narrow phone degrades to the old two rows instead of
+       squashing. */
     body:not(.solo-match) .player-header {
         position: relative;              /* anchors the dropdown + toggle */
         height: auto;                    /* undo the desktop --header-bar pin */
-        flex-wrap: wrap;
-        justify-content: center;
-        row-gap: var(--space-2);
-        padding: var(--space-2) var(--space-3);
+        align-items: center;
+        justify-content: space-between;  /* brand left, stats right */
+        column-gap: var(--space-2);
+        row-gap: var(--space-1);
+        /* The right padding is not decoration: it reserves the space for the
+           absolutely-placed menu toggle (40px at `right: var(--space-3)` plus a
+           gap), so the stats stop short of it instead of sliding underneath.
+           It is a custom property because the short-landscape header below
+           makes the toggle a flex item and wants the width back. */
+        --hdr-toggle-reserve: 60px;
+        padding: var(--space-1) var(--hdr-toggle-reserve) var(--space-1) var(--space-3);
     }
     /* Higher specificity than `.player-header:has(.custom-logo:not([hidden]))`,
        which pins the bar to --header-bar on wide screens. */
     body:not(.solo-match) .player-header:has(.custom-logo:not([hidden])) { height: auto; }
     body:not(.solo-match) .header-left {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        padding-inline: 46px;            /* clears the centred content of the toggle */
+        width: auto;                     /* one line: brand, then stats */
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        padding-inline: 0;
         gap: var(--space-2);
     }
     body:not(.solo-match) .header-titles { align-items: center; }
@@ -2500,25 +2545,30 @@ body.solo-match .fab-container {
        the logo has the header to itself; desktop still names the deck. */
     body:not(.solo-match) .header-deck { display: none; }
     body:not(.solo-match) .header-center {
-        order: 2;
-        width: 100%;
-        justify-content: center;
+        width: auto;
+        flex: 0 0 auto;
+        justify-content: flex-end;
     }
+    /* Tighter stat chips: the header is one line now, so they have to share the
+       width with the logo - and the phone does not need the desktop padding. */
+    body:not(.solo-match) .game-stats { gap: var(--space-1); }
+    body:not(.solo-match) .game-stats .stat-item { padding: 2px 6px 3px; }
     /* The logo IS the header identity on the compact shell - the title and the
-       deck badge it stands in for are both dropped - so it is sized generously. */
-    body:not(.solo-match) .custom-logo { height: clamp(38px, 8dvh, 72px); max-width: min(320px, 76vw); }
+       deck badge it stands in for are both dropped - but it now shares the line
+       with the stats, so it is sized to sit beside them, not to fill the header. */
+    body:not(.solo-match) .custom-logo { height: clamp(24px, 5.5dvh, 36px); max-width: min(150px, 34vw); }
 
     /* When a header logo is shown it REPLACES the game title on the compact
        shell: the logo already carries the name, and the two side by side waste
        the little width there is. Keyed on the same `hidden` test the header
        height uses, so removing the logo restores the title. */
     body:not(.solo-match) .player-header:has(.custom-logo:not([hidden])) .game-title { display: none; }
-    body:not(.solo-match) .player-header:has(.custom-logo:not([hidden])) .custom-logo { max-width: min(340px, 80vw); }
 
     body:not(.solo-match) .header-menu-btn {
         display: inline-flex;
         position: absolute;
-        top: var(--space-2);
+        top: 50%;
+        transform: translateY(-50%);
         right: var(--space-3);
         align-items: center;
         justify-content: center;
@@ -2623,14 +2673,19 @@ body.solo-match .fab-container {
         max-width: none;
     }
 
-    /* ---- controls: one compact block ---- */
+    /* ---- controls: one row ---- */
     body:not(.solo-match) .controls-bar {
-        grid-template-columns: 1fr;
-        gap: var(--space-1);
-        padding: var(--space-2);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-1) var(--space-2);
+        padding: var(--space-1) var(--space-2);
     }
-    body:not(.solo-match) .controls-actions { flex-wrap: wrap; gap: var(--space-1); }
+    body:not(.solo-match) .controls-actions { flex-wrap: nowrap; gap: var(--space-1); }
     body:not(.solo-match) .controls-actions .btn { padding: 6px 10px; }
+    body:not(.solo-match) .controls-side { flex: 0 1 auto; }
+    body:not(.solo-match) .controls-side.controls-right { flex-wrap: nowrap; gap: var(--space-1); justify-content: center; }
 
     /* ---- scenario cards: one row of four, scaled to the column ---- */
     body:not(.solo-match) .scenario-row {
@@ -2689,7 +2744,12 @@ body.solo-match .fab-container {
     }
     body:not(.solo-match) .procedure-cards .empty-state { min-height: 0; }
     body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card {
-        width: clamp(91px, 26vw, 168px);
+        /* Slightly narrower than the old 26vw: the cards are landscape (1.4), so
+           a narrower card is also a shorter one, and the hand has to fit a phone
+           screen without scrolling. With the header and controls bar back on one
+           row each this only has to buy a little headroom, so the reduction is
+           deliberately small. */
+        width: clamp(80px, 23vw, 168px);
     }
     body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card.flipped {
         width: min(200px, 46vw);
@@ -2724,13 +2784,48 @@ body.solo-match .fab-container {
         min-width: 0;
         order: 2;
     }
-    body.landscape-controls .header-controls .controls-side { justify-content: flex-end; }
+    body.landscape-controls .header-controls .controls-side { justify-content: flex-end; min-width: 0; }
     body.landscape-controls .header-controls .controls-actions { flex-wrap: nowrap; gap: var(--space-1); }
     body.landscape-controls .header-controls .controls-actions .btn { padding: 5px 8px; font-size: var(--text-sm); }
     body.landscape-controls .header-controls .controls-right { gap: var(--space-1); }
     body.landscape-controls .header-controls .controls-right-btn span { display: none; }
     body.landscape-controls .header-controls .turn-couple span { display: none; }
-    body.landscape-controls .header-controls .roll-status { font-size: var(--text-xs); text-align: right; }
+    /* The status line (roll outcome, failure streak, inject drawn) is the only
+       item in the row that can give: it is prose of unpredictable length, so it
+       shrinks and ellipsizes instead of pushing the menu toggle onto a second
+       row. It is a readout, not a control - the same outcome is revealed in the
+       Dice FX caption. */
+    body.landscape-controls .header-controls .roll-status {
+        min-width: 0;
+        max-width: 100%;
+        font-size: var(--text-xs);
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* ---- the two explicit turn controls, in the views that are squeezed ----
+   A phone, and the landscape shell (which folds the controls into the header)
+   both run out of room, and these two are the ones to sacrifice: with the
+   roll<->turn coupling on - the default - the roll already spends the turn and
+   adding a strike spends one too. A portrait tablet has the width and keeps
+   them at full size. */
+@media (max-width: 700px), (orientation: landscape) and (max-width: 1200px) {
+    /* Coupling ON: pure redundancy, so they go. The checkbox sits in the same
+       bar (or the same header row) as them, so unticking brings them back. */
+    body:not(.solo-match):has(#turn-couple-cb:checked) #use-turn-btn,
+    body:not(.solo-match):has(#turn-couple-cb:checked) #add-strike-btn { display: none; }
+
+    /* Coupling OFF: they have to stay reachable, so they shed their labels and
+       become icon-only like the reveal buttons beside them - which is also what
+       keeps the bar on one row on a phone. */
+    body:not(.solo-match) #use-turn-btn span,
+    body:not(.solo-match) #add-strike-btn span { display: none; }
+    /* An icon-only button does not need the label's horizontal padding. */
+    body:not(.solo-match) #use-turn-btn,
+    body:not(.solo-match) #add-strike-btn { padding-inline: 6px; }
 }
 
 /* Landscape phones/tablets are height-starved: single-row header, no logo, and
@@ -2740,9 +2835,16 @@ body.solo-match .fab-container {
    and hands the freed row to the cards. */
 @media (orientation: landscape) and (max-height: 620px) and (max-width: 1200px) {
     body:not(.solo-match) .player-header {
+        /* This layout turns the toggle into a flex item (covered below), so the
+           header does not have to reserve room for it. */
+        --hdr-toggle-reserve: var(--space-1);
+        /* One centred group, not the portrait header's brand-left/stats-right:
+           with the controls folded in, the row is a single run of items. */
+        justify-content: center;
         flex-wrap: wrap;
-        row-gap: var(--space-1);
-        gap: var(--space-2) var(--space-3);
+        /* Tight gaps: every pixel the row does not use is a pixel the menu
+           toggle has to be wrapped onto a second line for. */
+        gap: var(--space-1) var(--space-2);
         /* A floor height for the row, so the logo below can size to a
            percentage of it. The vertical padding goes so the logo can fill the
            row; the horizontal padding stays. */
@@ -2752,6 +2854,9 @@ body.solo-match .fab-container {
     }
     body:not(.solo-match) .header-left {
         width: auto;
+        /* No grow: the row is centred as one group, and an auto-growing brand
+           block would fill the line and push the group off-centre. */
+        flex: 0 1 auto;
         flex-wrap: nowrap;
         padding-inline: 0;
     }
@@ -2827,6 +2932,10 @@ body.solo-match .fab-container {
         text-align: center;
     }
 
+    /* The tray's own vertical padding goes: it is pure chrome, and the 38px it
+       costs buys the procedure hand the height it needs to show the hand. */
+    body:not(.solo-match) .scenario-row { padding: 0 var(--space-4); }
+
     /* Shorter scenario cards: the freed height goes to the procedure hand. */
     body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card,
     body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card.flipped {
@@ -2834,10 +2943,66 @@ body.solo-match .fab-container {
         width: auto;
         max-width: 100%;
     }
-    /* ...and the hand gets a little more room of its own. */
-    body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card {
-        width: clamp(91px, 22vw, 180px);
+    /* ...and the hand is sized the same way - from the height it is allowed, not
+       from the viewport width. Either axis can be the binding one (the hand
+       shares its row with the two rails above 700px, and the header and the
+       scenario tray own everything else), so the card takes the smaller of the
+       two: a height-driven width, and a seventh of the room a row of seven
+       cards leaves. The 1.4 landscape ratio then sets the height. The 1.4 is
+       written out because an `auto` width would kill the flip's width
+       transition. */
+    body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card:not(.flipped) {
+        width: min(calc(clamp(46px, 22dvh, 96px) * 1.4), calc((100vw - 190px) / 7));
+        max-width: 100%;
     }
+}
+
+/* Narrow landscape (a phone on its side) is the tightest header there is: the
+   brand, the stats, the folded-in controls and the menu toggle all share ONE
+   row, and with the roll<->turn coupling off the two turn buttons are back as
+   well. The trade the turn controls make above then applies one step further -
+   the primary action and the stat chips give width back, labels going but
+   titles staying. 900px is where the measured row stops fitting with them; at
+   915x412 the full row still fits. */
+@media (orientation: landscape) and (max-height: 620px) and (max-width: 900px) {
+    body:not(.solo-match) #roll-dice-btn span { display: none; }
+    body:not(.solo-match) #roll-dice-btn { padding-inline: 6px; }
+    /* The pips read as strikes on their own; the roll readout keeps its label
+       longest, because a bare "13" needs one to mean anything. */
+    body:not(.solo-match) .game-stats .stat-item:not(.roll) .stat-label { display: none; }
+}
+
+/* Below 700px the row is tighter again, and so is the window it sits in: the
+   header row, the logo in it and the hand card all shrink one more notch. */
+@media (orientation: landscape) and (max-height: 620px) and (max-width: 700px) {
+    body:not(.solo-match) .player-header {
+        /* A shorter row - the header is a sixth of a 270px-tall window and the
+           board wants the difference. The logo keeps its 95%-of-the-row rule;
+           it is the row that shrinks. */
+        --lp-h: clamp(44px, 16dvh, 76px);
+        gap: var(--space-1);
+    }
+    /* ...and the roll readout's own label goes with the rest of them. */
+    body:not(.solo-match) .game-stats { gap: var(--space-1); }
+    body:not(.solo-match) .game-stats .stat-label { display: none; }
+    /* At this width the two rails stack above and below the hand (the <=700px
+       rules), so all but the page's own padding is the hand's - the
+       width-driven half of the min() above would otherwise leave it far smaller
+       than it can be. */
+    body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card:not(.flipped) {
+        width: min(calc(clamp(46px, 22dvh, 96px) * 1.4), calc((100vw - 60px) / 7));
+    }
+}
+
+/* The narrowest landscape there is (a 568px phone on its side). With the
+   roll<->turn coupling ON the row still fits; with it OFF the two turn buttons
+   are back and the row is ~70px over budget, so something has to stand down.
+   The two reveal aids are the cheapest thing on the row: they are a GM
+   convenience, they only take effect on a card, and the GM Console carries the
+   same two ops (reveal.set / reveal.procedures). The turn controls are controls
+   the table asked for by unticking the box, so they win. */
+@media (orientation: landscape) and (max-height: 620px) and (max-width: 620px) {
+    body:not(.solo-match):not(:has(#turn-couple-cb:checked)) .controls-right .controls-right-btn { display: none; }
 }
 
 /* Safe-area padding for notched devices (viewport-fit=cover is set in the page
@@ -2849,9 +3014,12 @@ body.solo-match .fab-container {
             padding-right: max(var(--space-2), env(safe-area-inset-right));
             padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
         }
+        /* The right padding doubles as the toggle reservation on the shell's
+           one-line header (see --hdr-toggle-reserve), so it has to take the
+           larger of the two; a plain inset here clobbered it. */
         body:not(.solo-match) .player-header {
             padding-left: max(var(--space-3), env(safe-area-inset-left));
-            padding-right: max(var(--space-3), env(safe-area-inset-right));
+            padding-right: max(var(--hdr-toggle-reserve, 60px), env(safe-area-inset-right));
         }
     }
 }
@@ -3191,6 +3359,56 @@ body.solo-match .fab-container {
         line-height: 1.3;
         color: #334155;
     }
+
+    /* ---- Printed scenario notes (Description + Moderator Notes) ---- */
+    /* One under the other, full width. A two-column split halves each column, which
+       doubles its line count for the same text - and with the cards, the procedures
+       and the inject queue above, those extra lines overran the space above the
+       footer and clipped the note. Full width is the shortest the block can be, which
+       is what lets it reach the footer without cutting anything off. */
+    .ps-notes-block {
+        /* Explicit: a browser still holding the old grid rule would otherwise keep
+           the two columns, since a dropped declaration is not an override. */
+        display: block;
+        margin-top: 1mm;
+    }
+    .ps-notes-block section + section { margin-top: 3mm; }
+    .ps-notes-block .ps-h {
+        margin-top: 0;
+        margin-bottom: 1mm;
+    }
+    .ps-note-text {
+        margin: 0;
+        font-size: 9px;
+        line-height: 1.35;
+        color: #334155;
+        /* Preserve the author's line breaks. The notes block (below) clips rather
+           than spilling, so the text itself needs no height cap. */
+        white-space: pre-wrap;
+    }
+    /* Real notes replace the ruled handwriting box - they would otherwise fight
+       for the same strip above the footer. With no notes the ruled lines return. */
+    .print-sheet.has-printed-notes .ps-notes { display: none; }
+
+    /* The strip the ruled box vacated goes to the printed notes: the body stretches
+       to fill the sheet, the notes block fills the body, and the footer is pushed to
+       the bottom of the page. Before this the footer floated up and left a blank band
+       at the foot of the sheet, while the notes were clipped at a fixed 34mm however
+       much paper was free. `overflow: hidden` on the body and the block is what keeps
+       a long note to a single sheet. */
+    .print-sheet.has-printed-notes #ps-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+    }
+    .print-sheet.has-printed-notes .ps-notes-block {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+    }
+    .print-sheet.has-printed-notes .ps-foot { margin-top: auto; }
 
     /* Notes sit directly above the footer, and the ruled lines share out whatever
        height the paper leaves between the two. */

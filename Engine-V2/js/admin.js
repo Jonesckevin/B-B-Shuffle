@@ -17,6 +17,10 @@ const AdminController = {
     saveTags: [],
     // Metadata staged for the Save-to-Library form after an AI hand-off
     pendingSaveMeta: null,
+    // When the editor holds a scenario loaded from the Library, its id lets "Save"
+    // update in place (PUT) instead of creating a new one; createdAt is preserved.
+    loadedScenarioId: null,
+    loadedScenarioCreatedAt: null,
 
     /**
      * Initialize the admin interface
@@ -193,6 +197,7 @@ const AdminController = {
         Utils.getElement('save-modal-close')?.addEventListener('click', () => this.closeSaveModal());
         Utils.getElement('save-cancel-btn')?.addEventListener('click', () => this.closeSaveModal());
         Utils.getElement('save-confirm-btn')?.addEventListener('click', () => this.saveScenario());
+        Utils.getElement('save-as-btn')?.addEventListener('click', () => this.saveScenarioAs());
         Utils.getElement('save-modal-backdrop')?.addEventListener('click', (e) => {
             if (e.target.id === 'save-modal-backdrop') this.closeSaveModal();
         });
@@ -264,7 +269,10 @@ const AdminController = {
      * @param {Object} scenario - Scenario data
      */
     async loadScenario(scenario, opts = {}) {
-        // A fresh scenario build (manual or AI hand-off) starts without staged metadata.
+        // A scenario loaded from the Library keeps its id so "Save" updates it in
+        // place; an AI hand-off is a brand-new scenario, so it gets no id.
+        this.loadedScenarioId = opts.prefillSave ? null : (scenario.id || null);
+        this.loadedScenarioCreatedAt = scenario.metadata?.createdAt || null;
         this.pendingSaveMeta = null;
 
         // First load the deck
@@ -318,34 +326,35 @@ const AdminController = {
             this.renderInjects();
         }
 
-        // AI hand-off: stage metadata (name/description/difficulty/tags/notes) so
-        // the Save-to-Library form opens fully populated for final edits.
-        if (opts.prefillSave) this.captureSavePrefill(scenario);
+        // Always stage metadata + the page-level notes so the editor shows the
+        // loaded scenario's Description and Moderator Notes, and the Save form is
+        // populated for final edits (Library loads and AI hand-offs alike).
+        this.captureSavePrefill(scenario);
 
         Utils.showToast('Scenario loaded successfully', 'success');
     },
 
     /**
-     * Stage metadata from a handed-off scenario so the Save-to-Library modal
-     * opens pre-filled with the AI output (name, author, description, difficulty,
-     * estimated duration, tags and facilitator notes).
+     * Stage a loaded scenario's metadata so the Save-to-Library modal is
+     * pre-filled, and put its Description + Moderator Notes on the page's own
+     * Scenario Notes section (Library loads and AI hand-offs alike).
      * @param {Object} scenario - Scenario that was loaded into the editor
      */
     captureSavePrefill(scenario) {
         const meta = scenario.metadata || {};
-        const notesRaw = scenario.notes;
-        const notes = typeof notesRaw === 'string'
-            ? notesRaw
-            : (notesRaw && typeof notesRaw === 'object' ? (notesRaw.adminNotes || '') : '');
         this.pendingSaveMeta = {
             name: meta.name || '',
             author: meta.author || '',
-            description: meta.description || '',
             difficulty: meta.difficulty || 3,
             estimatedDuration: meta.estimatedDuration || '',
-            notes,
             tags: Array.isArray(meta.tags) ? [...meta.tags] : []
         };
+        // Description + Moderator Notes live on the page (their own section), so
+        // they are filled here rather than in the modal.
+        const descEl = Utils.getElement('editor-description');
+        if (descEl) descEl.value = meta.description || '';
+        const notesEl = Utils.getElement('editor-notes');
+        if (notesEl) notesEl.value = scenario.notes || '';
     },
 
     /**
@@ -357,12 +366,42 @@ const AdminController = {
 
         Utils.getElement('save-name').value = meta.name || '';
         Utils.getElement('save-author').value = meta.author || '';
-        Utils.getElement('save-description').value = meta.description || '';
         Utils.getElement('save-difficulty').value = String(meta.difficulty || 3);
         Utils.getElement('save-duration').value = meta.estimatedDuration || '';
-        Utils.getElement('save-notes').value = meta.notes || '';
         this.saveTags = Array.isArray(meta.tags) ? [...meta.tags] : [];
         this.renderSaveTags();
+    },
+
+    /**
+     * Adopt a just-saved scenario: keep editing it (so the next Save updates the
+     * same record) and refresh the staged modal metadata to match.
+     * @param {Object} saved - Scenario returned by the API
+     */
+    adoptSaved(saved) {
+        const meta = (saved && saved.metadata) || {};
+        this.loadedScenarioId = (saved && saved.id) || this.loadedScenarioId;
+        this.loadedScenarioCreatedAt = meta.createdAt || this.loadedScenarioCreatedAt;
+        this.pendingSaveMeta = {
+            name: meta.name || '',
+            author: meta.author || '',
+            difficulty: meta.difficulty || 3,
+            estimatedDuration: meta.estimatedDuration || '',
+            tags: Array.isArray(meta.tags) ? [...meta.tags] : []
+        };
+    },
+
+    /**
+     * Forget the loaded scenario: a fresh build carries no id and no metadata, and
+     * the on-page notes are cleared.
+     */
+    resetLoadedScenario() {
+        this.loadedScenarioId = null;
+        this.loadedScenarioCreatedAt = null;
+        this.pendingSaveMeta = null;
+        const descEl = Utils.getElement('editor-description');
+        if (descEl) descEl.value = '';
+        const notesEl = Utils.getElement('editor-notes');
+        if (notesEl) notesEl.value = '';
     },
 
     /**
@@ -624,8 +663,8 @@ const AdminController = {
             return;
         }
 
-        // Randomizing builds a brand-new scenario; drop any handed-off metadata.
-        this.pendingSaveMeta = null;
+        // Randomizing builds a brand-new scenario; drop any loaded identity/metadata.
+        this.resetLoadedScenario();
 
         ['initial', 'pivot', 'c2', 'persist'].forEach(type => {
             this.randomizeSlot(type);
@@ -638,8 +677,8 @@ const AdminController = {
      * Clear all slots
      */
     clearAll() {
-        // Clearing builds a brand-new scenario; drop any handed-off metadata.
-        this.pendingSaveMeta = null;
+        // Clearing builds a brand-new scenario; drop any loaded identity/metadata.
+        this.resetLoadedScenario();
 
         ['initial', 'pivot', 'c2', 'persist'].forEach(type => {
             const slot = Utils.getElement(`${type}-slot`);
@@ -1117,6 +1156,14 @@ const AdminController = {
             return;
         }
 
+        // Label the modal and its primary action for the mode: updating an
+        // existing scenario loaded from the Library, or creating a new one.
+        const editing = Boolean(this.loadedScenarioId);
+        const titleEl = Utils.getElement('save-modal-title');
+        if (titleEl) titleEl.textContent = editing ? 'Update Scenario' : 'Save Scenario';
+        const confirmBtn = Utils.getElement('save-confirm-btn');
+        if (confirmBtn) confirmBtn.textContent = editing ? 'Update Scenario' : 'Save Scenario';
+
         this.saveTags = [];
         this.renderSaveTags();
 
@@ -1132,13 +1179,12 @@ const AdminController = {
     closeSaveModal() {
         Utils.hideElement('save-modal-backdrop');
 
-        // Clear form
+        // Clear the modal fields. Description + Moderator Notes live on the page
+        // (their own section) and are deliberately left untouched here.
         Utils.getElement('save-name').value = '';
         Utils.getElement('save-author').value = '';
-        Utils.getElement('save-description').value = '';
         Utils.getElement('save-difficulty').value = '3';
         Utils.getElement('save-duration').value = '';
-        Utils.getElement('save-notes').value = '';
         this.saveTags = [];
     },
 
@@ -1186,9 +1232,11 @@ const AdminController = {
     },
 
     /**
-     * Save scenario to library
+     * Save the scenario to the library. Updates the loaded scenario in place when
+     * one was loaded from the Library; otherwise creates a new one.
+     * @param {boolean} [saveAs] - Force creating a new scenario (Save As New)
      */
-    async saveScenario() {
+    async saveScenario(saveAs = false) {
         const name = Utils.getElement('save-name')?.value?.trim();
         if (!name) {
             Utils.showToast('Please enter a scenario name', 'warning');
@@ -1203,6 +1251,9 @@ const AdminController = {
                 scenarioCards[type] = JSON.parse(slot.dataset.card);
             }
         });
+
+        const now = new Date().toISOString();
+        const updating = !saveAs && Boolean(this.loadedScenarioId);
 
         const scenario = ScenarioSchema.createEmpty();
         scenario.deck = this.deck;
@@ -1224,29 +1275,42 @@ const AdminController = {
         scenario.metadata = {
             name,
             author: Utils.getElement('save-author')?.value?.trim() || '',
-            description: Utils.getElement('save-description')?.value?.trim() || '',
+            description: Utils.getElement('editor-description')?.value?.trim() || '',
             difficulty: parseInt(Utils.getElement('save-difficulty')?.value) || 3,
             estimatedDuration: Utils.getElement('save-duration')?.value?.trim() || '',
             tags: [...this.saveTags],
-            createdAt: new Date().toISOString(),
-            modifiedAt: new Date().toISOString()
+            // An update keeps the original creation time; a new save stamps now.
+            createdAt: updating ? (this.loadedScenarioCreatedAt || now) : now,
+            modifiedAt: now
         };
-        scenario.notes = Utils.getElement('save-notes')?.value?.trim() || '';
+        scenario.notes = Utils.getElement('editor-notes')?.value?.trim() || '';
+
+        if (updating) scenario.id = this.loadedScenarioId;
 
         try {
-            await ScenarioIO.saveToServer(scenario);
+            const saved = updating
+                ? await ScenarioIO.updateOnServer(this.loadedScenarioId, scenario)
+                : await ScenarioIO.saveToServer(scenario);
+            const outgoing = saved || scenario;
+            // Keep editing the saved record: a following Save updates it in place.
+            this.adoptSaved(outgoing);
             this.closeSaveModal();
-            // The hand-off metadata has been committed; future saves start fresh.
-            this.pendingSaveMeta = null;
-            Utils.showToast('Scenario saved to library', 'success');
-            // Push the freshly built scenario to any open Player tab/window (GM -> board).
+            Utils.showToast(updating ? 'Scenario updated' : 'Scenario saved to library', 'success');
+            // Push the scenario to any open Player tab/window (GM -> board).
             if (window.SessionSync && typeof window.SessionSync.broadcastScenario === 'function') {
-                window.SessionSync.broadcastScenario(scenario);
+                window.SessionSync.broadcastScenario(outgoing);
             }
         } catch (error) {
             console.error('Failed to save scenario:', error);
-            Utils.showToast('Failed to save scenario', 'error');
+            Utils.showToast(updating ? 'Failed to update scenario' : 'Failed to save scenario', 'error');
         }
+    },
+
+    /**
+     * Save As New — always creates a new scenario, then keeps editing it.
+     */
+    async saveScenarioAs() {
+        return this.saveScenario(true);
     }
 };
 

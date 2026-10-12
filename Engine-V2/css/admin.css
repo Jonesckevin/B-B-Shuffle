@@ -1023,6 +1023,32 @@
     margin-bottom: var(--space-5);
 }
 
+/* ===== Scenario Notes (Description + Moderator Notes, kept on the page) ===== */
+.notes-section {
+    margin-bottom: var(--space-5);
+}
+
+.notes-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 16px;
+    align-items: start;
+}
+
+.notes-grid .form-textarea {
+    min-height: 88px;
+    resize: vertical;
+}
+
+.notes-section .hint {
+    margin: 8px 0 0;
+    max-width: 620px;
+}
+
+@media (max-width: 720px) {
+    .notes-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 .consultants-grid {
     display: flex;
     flex-wrap: wrap;

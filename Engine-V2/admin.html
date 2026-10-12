@@ -373,6 +373,25 @@
                 <p class="hint consultant-hint">Optional. Players can call a consultant from this pool on the Player board. Star ★ one to seat it when the game starts — leave the pool empty to allow the whole deck.</p>
             </section>
 
+            <!-- Scenario Notes: Description + Moderator Notes, kept on the page so they
+                 are visible while building (not only inside the save modal). -->
+            <section class="notes-section">
+                <div class="section-head">
+                    <h2 class="section-title">Scenario Notes</h2>
+                </div>
+                <div class="notes-grid">
+                    <div class="form-group">
+                        <label for="editor-description" class="form-label">Description</label>
+                        <textarea id="editor-description" class="form-input form-textarea" rows="3" placeholder="Describe the scenario..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editor-notes" class="form-label">Moderator Notes</label>
+                        <textarea id="editor-notes" class="form-input form-textarea" rows="5" placeholder="Notes for running this scenario..."></textarea>
+                    </div>
+                </div>
+                <p class="hint">Moderator notes appear in the Scenario Library editor, the GM Console and the printed session sheet.</p>
+            </section>
+
         </main>
 
         <!-- Sidebar: Card Picker -->
@@ -399,7 +418,7 @@
     <div id="save-modal-backdrop" class="modal-backdrop hidden">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">Save Scenario</h2>
+                <h2 class="modal-title" id="save-modal-title">Save Scenario</h2>
                 <button id="save-modal-close" class="modal-close">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"/>
@@ -415,10 +434,6 @@
                 <div class="form-group">
                     <label for="save-author" class="form-label">Author</label>
                     <input type="text" id="save-author" class="form-input" placeholder="Your name">
-                </div>
-                <div class="form-group">
-                    <label for="save-description" class="form-label">Description</label>
-                    <textarea id="save-description" class="form-input form-textarea" rows="3" placeholder="Describe the scenario..."></textarea>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -442,13 +457,10 @@
                         <input type="text" placeholder="Add tag and press Enter">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="save-notes" class="form-label">Facilitator Notes</label>
-                    <textarea id="save-notes" class="form-input form-textarea" rows="4" placeholder="Notes for running this scenario..."></textarea>
-                </div>
             </div>
             <div class="modal-footer">
                 <button id="save-cancel-btn" class="btn btn-ghost">Cancel</button>
+                <button id="save-as-btn" class="btn btn-secondary">Save As New</button>
                 <button id="save-confirm-btn" class="btn btn-primary">Save Scenario</button>
             </div>
         </div>

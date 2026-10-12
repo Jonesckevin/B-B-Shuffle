@@ -240,11 +240,15 @@
     dieEl.style.transform = 'scale(' + currentScale + ') rotateZ(' + cDeg + 'deg) rotateY(' + bDeg + 'deg) rotateX(' + aDeg + 'deg)';
   }
 
-  // Fit the fixed 430px die into whatever space the modal actually has.
+  // Fit the fixed 430px die into whatever space the modal actually has. Both
+  // axes count: the scene is square today, but a short window caps it by height
+  // (see the max-height block in player.css) and a width-only fit would then
+  // overflow it.
   function computeScale() {
     var scene = el(SCENE_ID);
-    var w = scene && scene.clientWidth ? scene.clientWidth : 430;
-    return Math.max(0.5, Math.min(1, w / 430));
+    var w = (scene && scene.clientWidth) || 430;
+    var h = (scene && scene.clientHeight) || 430;
+    return Math.max(0.18, Math.min(1, Math.min(w, h) / 430));
   }
 
   function refreshScale() {

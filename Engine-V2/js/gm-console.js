@@ -23,6 +23,10 @@
 
     const CATALOG_URL = '../docs/card-details.json';
     const MASTER_ART_PREFIX = 'decks/cardbase/v31/';
+    // The Mega Deck ("The EVERYTHING DECK"): the shared v3.1 master set, whose
+    // DETECTION lists are the fullest. Preferred over the deck in play for any card
+    // it also carries (see detectionsFor).
+    const MEGA_DECK_KEY = 'mega-deck';
 
     const SCENARIO_TYPES = ['initial', 'pivot', 'c2', 'persist'];
     const TYPE_LABELS = { initial: 'Initial', pivot: 'Pivot', c2: 'C2', persist: 'Persist' };
@@ -180,8 +184,10 @@
 
     /**
      * The DETECTION list for a scenario card, in resolution order:
-     * own -> this deck by art -> this deck by name -> any deck by art ->
-     * any deck by name ranked (deck in play > master art > anything).
+     * own -> the Mega Deck by art/name (the shared v3.1 master set, whose lists are
+     * the fullest; it wins for any card more than one deck prints) -> this deck by
+     * art -> this deck by name -> any deck by art -> any deck by name ranked
+     * (deck in play > master art > anything).
      * @returns {string[]} procedure names ([] when not recorded)
      */
     function detectionsFor(card) {
@@ -195,6 +201,15 @@
         const deck = catalog.byDeck.get(key);
         const art = imageKey(card.image);
         const name = String(card.name || '').toLowerCase();
+
+        // The Mega Deck first, when it carries this card: it is the shared v3.1
+        // master set and prints the fullest lists, so a deck that reprints that art
+        // (Core 3.1 and family) picks up the master's list over its own partial copy.
+        const mega = catalog.byDeck.get(MEGA_DECK_KEY);
+        if (mega) {
+            if (art && mega.byImage.has(art)) return mega.byImage.get(art);
+            if (name && mega.byName.has(name)) return mega.byName.get(name);
+        }
 
         if (deck) {
             if (art && deck.byImage.has(art)) return deck.byImage.get(art);
@@ -378,6 +393,35 @@
             (action ? '<p class="gmc-consultant-action">' + esc(action) + '</p>' : '');
     }
 
+    /**
+     * Scenario Description + Moderator Notes. Both ride in on the board payload
+     * (exportControlState sends `info` and `notes`) and are read-only here - the
+     * Player owns them, so the console only displays them.
+     */
+    function renderNotes() {
+        const host = byId('gmc-notes');
+        if (!host) return;
+        const info = (root && root.info) || {};
+        const description = String(info.description || '').trim();
+        const notes = String((root && root.notes) || '').trim();
+
+        if (!description && !notes) {
+            host.innerHTML = '<p class="gmc-empty">No notes for this scenario.</p>';
+            return;
+        }
+
+        function block(label, text) {
+            return '<div class="gmc-notes-block">' +
+                '<p class="gmc-notes-label">' + esc(label) + '</p>' +
+                (text
+                    ? '<p class="gmc-notes-text">' + esc(text) + '</p>'
+                    : '<p class="gmc-empty">Not set.</p>') +
+                '</div>';
+        }
+
+        host.innerHTML = block('Description', description) + block('Moderator Notes', notes);
+    }
+
     function renderHand() {
         const host = byId('gmc-hand');
         if (!host) return;
@@ -533,6 +577,7 @@
         renderChain();
         renderInjects();
         renderConsultant();
+        renderNotes();
         renderHand();
         renderConsultantPicker();
         renderChainToggles();

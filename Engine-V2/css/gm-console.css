@@ -368,6 +368,31 @@
     border-left: 2px solid var(--color-consultant);
 }
 
+/* ------------------------------------------------------------------ scenario notes */
+
+.gmc-notes-block + .gmc-notes-block {
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.gmc-notes-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    margin: 0 0 0.2rem;
+}
+
+.gmc-notes-text {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
 /* ------------------------------------------------------------------ buttons */
 
 .gmc-btn-row {
