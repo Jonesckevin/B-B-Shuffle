@@ -1759,7 +1759,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 .scenario-row .card-wrapper[data-type] .flip-card {
     --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
     flex: 0 0 auto;
-    width: 110px;
+    width: 180px;
     max-width: 100%;
     aspect-ratio: var(--card-ar);
     transition:
@@ -1797,7 +1797,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 
 .procedure-row .procedure-body .procedure-cards .flip-card {
     --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
-    width: 230px;               /* ~1.75x the old 132px (landscape reads bigger) */
+    width: 200px;
     aspect-ratio: var(--card-ar);
     transition:
         width 0.6s cubic-bezier(0.85, 0, 0.15, 1),
@@ -2695,7 +2695,7 @@ body.solo-match .fab-container {
     body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card,
     body:not(.solo-match) .scenario-row .card-wrapper[data-type] .flip-card.flipped {
         width: 100%;
-        max-width: 100%;
+        max-width: 80%;
     }
 
     /* ---- procedure row: fills the leftover height, scrolls internally ---- */
@@ -2752,7 +2752,7 @@ body.solo-match .fab-container {
         width: clamp(80px, 23vw, 168px);
     }
     body:not(.solo-match) .procedure-row .procedure-body .procedure-cards .flip-card.flipped {
-        width: min(200px, 46vw);
+        width: min(165px, 46vw);
     }
 }
 

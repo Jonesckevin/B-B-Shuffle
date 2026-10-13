@@ -72,8 +72,7 @@
                             <option value="groq">Groq</option>
                             <option value="deepseek">DeepSeek</option>
                             <option value="gemini">Google Gemini</option>
-                            <option value="ollama">Ollama (Local)</option>
-                            <option value="custom">Custom Endpoint</option>
+                            <option value="custom">Custom / Local Endpoint</option>
                         </select>
                     </div>
                     <div class="form-group" id="api-key-group">
@@ -85,10 +84,12 @@
                         <label for="api-model" class="form-label">Model</label>
                         <div class="model-row">
                             <select id="api-model" class="form-select">
-                                <option value="gpt-4o">GPT-4o</option>
-                                <option value="gpt-4o-mini" selected>GPT-4o Mini</option>
-                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                <option value="gpt-6-luna" selected>gpt-6-luna</option>
+                                <option value="gpt-6.1-sol">gpt-6.1-sol</option>
+                                <option value="gpt-6-astra">gpt-6-astra</option>
+                                <option value="gpt-6-sol">gpt-6-sol</option>
+                                <option value="gpt-5.6-luna">gpt-5.6-luna</option>
+                                <option value="gpt-5.6-sol">gpt-5.6-sol</option>
                             </select>
                             <button type="button" id="refresh-models-btn" class="btn btn-ghost model-refresh-btn"
                                 title="Load available models from this provider">
@@ -98,11 +99,15 @@
                                 </svg>
                             </button>
                         </div>
+                        <input type="text" id="api-model-manual" class="form-input hidden" autocomplete="off"
+                            placeholder="Model name served by the endpoint, e.g. llama3.2"
+                            title="Local servers need the exact model name they serve. Refresh lists them; type one here if the server does not expose a list.">
                         <small class="form-hint" id="model-hint">Enter your API key to load available models.</small>
                     </div>
                     <div class="form-group hidden" id="custom-endpoint-group">
-                        <label for="custom-endpoint" class="form-label">Custom Endpoint</label>
-                        <input type="url" id="custom-endpoint" class="form-input" placeholder="https://api.example.com/v1/chat/completions">
+                        <label for="custom-endpoint" class="form-label">Custom / local endpoint</label>
+                        <input type="url" id="custom-endpoint" class="form-input" placeholder="http://localhost:11434/v1/chat/completions">
+                        <small class="form-hint">Any OpenAI-compatible server. Offline options: Ollama <code>http://localhost:11434/v1/chat/completions</code> &middot; LM Studio <code>http://localhost:1234/v1/chat/completions</code>. A local server needs no API key.</small>
                     </div>
 
                     <details class="shared-config">
@@ -307,6 +312,16 @@
                         <pre id="result-json" class="json-output"></pre>
                     </details>
                 </div>
+
+                <!-- Raw model response. Kept whether or not it parsed, so a broken
+                     JSON reply can still be read and copied. -->
+                <details class="json-details raw-details hidden" id="raw-details">
+                    <summary>
+                        <span>Raw response</span>
+                        <button type="button" id="raw-copy-btn" class="btn btn-ghost btn-sm raw-copy-btn">Copy</button>
+                    </summary>
+                    <pre id="result-raw" class="json-output"></pre>
+                </details>
             </div>
         </main>
     </div>
@@ -351,7 +366,7 @@
     <script src="../../js/config.js"></script>
     <script src="../../js/scenario-schema.js"></script>
     <script src="../../js/scenario-io.js"></script>
-    <script src="scenario_ai.js"></script>
+    <script src="scenario_ai.js?v=7"></script>
 
     <style>
         /* AI-specific layout */
@@ -573,6 +588,33 @@
             border-radius: var(--radius-md);
             overflow-x: auto;
             font-size: var(--text-sm);
+        }
+
+        /* Raw model response - always reachable, parseable or not. */
+        .raw-details {
+            margin: var(--space-3);
+            padding: var(--space-3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+        }
+
+        .raw-details summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-3);
+        }
+
+        .raw-copy-btn {
+            flex: 0 0 auto;
+        }
+
+        .raw-details .json-output {
+            max-height: 320px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
         }
 
         /* Status messages */

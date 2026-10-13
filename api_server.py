@@ -673,16 +673,26 @@ class CustomCardManager:
 # ---------------------------------------------------------------------------
 # Provider metadata for the server-side proxy. 'custom' is handled separately
 # and requires an endpoint stored in the shared config.
+#
+# Defaults are kept in step with Engine-V2/modules/scenario-ai/scenario_ai.js.
+# Dated model names rot: the Anthropic claude-3 family and Gemini's 2.0 family
+# have been retired, and DeepSeek renamed its chat models, so a stale default
+# here fails with a 404 the moment a shared key is used.
 AI_PROVIDERS = {
-    'openai':     {'name': 'OpenAI',        'chat': 'https://api.openai.com/v1/chat/completions',                                                             'models': 'https://api.openai.com/v1/models',                            'defaultModel': 'gpt-4o-mini'},
-    'anthropic':  {'name': 'Anthropic',     'chat': 'https://api.anthropic.com/v1/messages',                                                                 'models': 'https://api.anthropic.com/v1/models',                          'defaultModel': 'claude-3-sonnet-20240229'},
-    'mistral':    {'name': 'Mistral',       'chat': 'https://api.mistral.ai/v1/chat/completions',                                                            'models': 'https://api.mistral.ai/v1/models',                             'defaultModel': 'mistral-small-latest'},
-    'xai':        {'name': 'xAI (Grok)',    'chat': 'https://api.x.ai/v1/chat/completions',                                                                  'models': 'https://api.x.ai/v1/models',                                   'defaultModel': 'grok-3-mini'},
+    'openai':     {'name': 'OpenAI',        'chat': 'https://api.openai.com/v1/chat/completions',                                                             'models': 'https://api.openai.com/v1/models',                            'defaultModel': 'gpt-6-luna'},
+    'anthropic':  {'name': 'Anthropic',     'chat': 'https://api.anthropic.com/v1/messages',                                                                 'models': 'https://api.anthropic.com/v1/models',                          'defaultModel': 'claude-sonnet-5-5'},
+    'mistral':    {'name': 'Mistral',       'chat': 'https://api.mistral.ai/v1/chat/completions',                                                            'models': 'https://api.mistral.ai/v1/models',                             'defaultModel': 'mistral-large-latest'},
+    'xai':        {'name': 'xAI (Grok)',    'chat': 'https://api.x.ai/v1/chat/completions',                                                                  'models': 'https://api.x.ai/v1/models',                                   'defaultModel': 'grok-4.7'},
     'perplexity': {'name': 'Perplexity',    'chat': 'https://api.perplexity.ai/chat/completions',                                                            'models': 'https://api.perplexity.ai/models',                             'defaultModel': 'sonar'},
     'groq':       {'name': 'Groq',          'chat': 'https://api.groq.com/openai/v1/chat/completions',                                                       'models': 'https://api.groq.com/openai/v1/models',                        'defaultModel': 'llama-3.3-70b-versatile'},
-    'deepseek':   {'name': 'DeepSeek',      'chat': 'https://api.deepseek.com/chat/completions',                                                             'models': 'https://api.deepseek.com/models',                              'defaultModel': 'deepseek-chat'},
-    'gemini':     {'name': 'Google Gemini', 'chat': 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',                                'models': 'https://generativelanguage.googleapis.com/v1beta/openai/models',    'defaultModel': 'gemini-2.0-flash'},
+    'deepseek':   {'name': 'DeepSeek',      'chat': 'https://api.deepseek.com/chat/completions',                                                             'models': 'https://api.deepseek.com/models',                              'defaultModel': 'deepseek-flash'},
+    'gemini':     {'name': 'Google Gemini', 'chat': 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',                                'models': 'https://generativelanguage.googleapis.com/v1beta/openai/models',    'defaultModel': 'gemini-flash-lite-latest'},
 }
+
+# Providers whose OpenAI-compatible endpoint accepts
+# `response_format: {"type": "json_object"}`. Perplexity and custom endpoints are
+# deliberately excluded: an unsupported parameter is a 400, not a hint.
+AI_JSON_MODE_PROVIDERS = {'openai', 'mistral', 'xai', 'groq', 'deepseek', 'gemini'}
 
 
 def _http_json(url: str, payload: Optional[Dict[str, Any]] = None,
@@ -1470,6 +1480,10 @@ class BBShuffleAPIHandler(BaseHTTPRequestHandler):
                     'temperature': temperature if temperature is not None else 0.7,
                     'max_tokens': max_tokens
                 }
+                # Ask the upstream for strict JSON when the client requests it and
+                # the provider accepts the parameter.
+                if body.get('responseFormat') and provider in AI_JSON_MODE_PROVIDERS:
+                    payload['response_format'] = body['responseFormat']
                 headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {key}'}
                 url = meta['chat']
 

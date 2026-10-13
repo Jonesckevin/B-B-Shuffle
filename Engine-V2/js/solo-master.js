@@ -1073,6 +1073,9 @@
         provider: '',
         model: '',
         apiKey: '',
+        // Address of a custom / local (OpenAI-compatible) endpoint, if one is
+        // configured in the AI Generator's settings. Empty for hosted providers.
+        endpoint: '',
         source: 'shared',
         // Literal defaults, not ROLES[0].key: this object is built before the
         // persona tables are evaluated, so touching them here would be a TDZ error.
@@ -1141,10 +1144,17 @@
     }
 
     function readSettings() {
-        const own = Utils.getFromStorage(AI_SETTINGS_KEY, null, true) || {};
+        const ai = (typeof AIClient !== 'undefined') ? AIClient : null;
+        let own = Utils.getFromStorage(AI_SETTINGS_KEY, null, true) || {};
+        // Ollama was folded into the Custom Endpoint, so an old record is
+        // migrated rather than treated as an unknown provider.
+        if (ai && typeof ai.migrateSettings === 'function') own = ai.migrateSettings(Object.assign({}, own));
         settings.provider = own.provider || 'openai';
         settings.model = own.model || '';
         settings.apiKey = own.apiKey || '';
+        // The address of a custom / local endpoint travels with the target: it is
+        // owned by the AI Generator's settings, and read here.
+        settings.endpoint = own.endpoint || '';
         // roleFor/voiceFor resolve an unknown or retired key to the default, so a
         // renamed persona never leaves the picker blank.
         settings.role = roleFor(own.role).key;
@@ -1358,13 +1368,18 @@
         const personality = byId('im-personality') ? byId('im-personality').value : settings.personality;
         const status = byId(SETTINGS_STATUS_ID);
 
-        const keyless = provider === 'ollama';
+        // A custom / local endpoint (Ollama, LM Studio...) needs no API key: the
+        // address is in the settings record instead.
+        const keyless = provider === 'custom';
         if (source === 'own' && !apiKey && !keyless) {
             if (!options.quiet && status) status.textContent = 'Enter your API key, or switch to this server\'s key.';
             return false;
         }
+        if (source === 'own' && keyless && !settings.endpoint && !options.quiet && status) {
+            status.textContent = 'A local server needs its address: set the Custom Endpoint in the AI Generator settings first.';
+        }
 
-        Utils.saveToStorage(AI_SETTINGS_KEY, { provider, model, apiKey, role, personality, temperature: 0.7, maxTokens: 900 });
+        Utils.saveToStorage(AI_SETTINGS_KEY, { provider, model, apiKey, endpoint: settings.endpoint || '', role, personality, temperature: 0.7, maxTokens: 900 });
         Utils.saveToStorage(AI_KEY_SOURCE_KEY, source);
 
         settings.provider = provider;
@@ -1424,6 +1439,9 @@
             provider: settings.provider,
             model: '',
             apiKey: '',
+            // The target's address is not the key: clearing one must not forget
+            // where the custom / local server lives.
+            endpoint: settings.endpoint || '',
             role: settings.role,
             personality: settings.personality,
             temperature: 0.7,
@@ -1455,7 +1473,7 @@
         const apiKey = byId('im-apikey') ? byId('im-apikey').value.trim() : '';
         const source = currentSource();
 
-        if (source === 'own' && provider !== 'ollama' && !apiKey) {
+        if (source === 'own' && provider !== 'custom' && !apiKey) {
             populateModels(curatedModels(provider), settings.model || select.value);
             setModelHint('Add your API key to load the models it can use.');
             return;
@@ -1466,7 +1484,7 @@
         if (!options.silent) setModelHint('Loading models…');
 
         try {
-            const result = await ai.listModels({ source, provider, apiKey });
+            const result = await ai.listModels({ source, provider, apiKey, endpoint: settings.endpoint });
             const chosen = settings.model || select.value || '';
             populateModels(result.models, chosen);
             if (result.source === 'provider' || result.source === 'server') {

@@ -60,50 +60,51 @@ const AIClient = {
             name: 'OpenAI',
             endpoint: 'https://api.openai.com/v1/chat/completions',
             modelsEndpoint: 'https://api.openai.com/v1/models',
-            defaultModel: 'gpt-4o-mini',
-            models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4-turbo', 'gpt-3.5-turbo']
+            defaultModel: 'gpt-6-luna',
+            models: ['gpt-6-luna', 'gpt-6.1-sol', 'gpt-6-astra', 'gpt-6-sol', 'gpt-5.6-luna', 'gpt-5.6-sol']
         },
         anthropic: {
             name: 'Anthropic',
             endpoint: 'https://api.anthropic.com/v1/messages',
             modelsEndpoint: 'https://api.anthropic.com/v1/models',
-            defaultModel: 'claude-3-5-sonnet-20241022',
-            models: ['claude-sonnet-4-20250514', 'claude-3-7-sonnet-20250219', 'claude-3-5-sonnet-20241022', 'claude-3-5-haiku-20241022', 'claude-3-opus-20240229']
+            defaultModel: 'claude-sonnet-5-5',
+            models: ['claude-sonnet-5-5', 'claude-haiku-5-5', 'claude-opus-5-5', 'claude-fable-5-1', 'claude-sonnet-5', 'claude-haiku-4-5']
         },
         mistral: {
             name: 'Mistral',
             endpoint: 'https://api.mistral.ai/v1/chat/completions',
             modelsEndpoint: 'https://api.mistral.ai/v1/models',
-            defaultModel: 'mistral-small-latest',
-            models: ['mistral-large-latest', 'mistral-small-latest', 'open-mistral-nemo', 'codestral-latest']
+            defaultModel: 'mistral-large-latest',
+            models: ['mistral-large-latest', 'mistral-medium-latest', 'mistral-small-latest', 'codestral-latest']
         },
         xai: {
             name: 'xAI (Grok)',
             endpoint: 'https://api.x.ai/v1/chat/completions',
             modelsEndpoint: 'https://api.x.ai/v1/models',
-            defaultModel: 'grok-3-mini',
-            models: ['grok-3', 'grok-3-mini', 'grok-3-mini-fast', 'grok-2-latest']
+            defaultModel: 'grok-4.7',
+            models: ['grok-4.7', 'grok-4.6', 'grok-4.5', 'grok-4.3', 'grok-4.20-0309-non-reasoning']
         },
         perplexity: {
             name: 'Perplexity',
             endpoint: 'https://api.perplexity.ai/chat/completions',
             modelsEndpoint: 'https://api.perplexity.ai/models',
             defaultModel: 'sonar',
-            models: ['sonar', 'sonar-pro', 'sonar-reasoning']
+            models: ['sonar', 'sonar-pro']
         },
         groq: {
             name: 'Groq',
             endpoint: 'https://api.groq.com/openai/v1/chat/completions',
             modelsEndpoint: 'https://api.groq.com/openai/v1/models',
             defaultModel: 'llama-3.3-70b-versatile',
-            models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'llama-3.1-70b-versatile', 'gemma2-9b-it']
+            models: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant']
         },
         deepseek: {
             name: 'DeepSeek',
             endpoint: 'https://api.deepseek.com/chat/completions',
             modelsEndpoint: 'https://api.deepseek.com/models',
-            defaultModel: 'deepseek-chat',
-            models: ['deepseek-chat', 'deepseek-reasoner']
+            // The legacy deepseek-chat / deepseek-reasoner names are retired.
+            defaultModel: 'deepseek-flash',
+            models: ['deepseek-flash', 'deepseek-v4-pro']
         },
         gemini: {
             name: 'Google Gemini',
@@ -121,18 +122,23 @@ const AIClient = {
             models: [
                 'gemini-flash-lite-latest',
                 'gemini-flash-latest',
-                'gemini-3.1-flash-lite',
-                'gemini-3.5-flash',
                 'gemini-3.8-flash',
-                'gemini-pro-latest'
+                'gemini-3.5-flash-lite',
+                'gemini-3.1-flash-lite'
             ]
         },
-        ollama: {
-            name: 'Ollama',
-            endpoint: 'http://localhost:11434/api/generate',
-            modelsEndpoint: 'http://localhost:11434/api/tags',
-            defaultModel: 'llama3',
-            models: ['llama3', 'mistral', 'codellama']
+        // Every local, self-hosted and gateway server is this one entry: Ollama,
+        // LM Studio and llama.cpp all speak the OpenAI-compatible API, so they
+        // differ only by address. The address is NOT here - it lives in the
+        // settings record (`endpoint`), set once in the AI Generator's settings
+        // where the field and its examples are, so the Card Creator and the Solo
+        // AI inherit it for free.
+        custom: {
+            name: 'Custom / Local Endpoint',
+            endpoint: '',
+            modelsEndpoint: '',
+            defaultModel: '',
+            models: []
         }
     },
 
@@ -141,19 +147,48 @@ const AIClient = {
     /* ------------------------------------------------------------------ */
 
     /**
+     * Bring a stored settings record up to date. The one migration: Ollama used
+     * to be a provider of its own, and is now the Custom Endpoint aimed at its
+     * OpenAI-compatible API - so an old record is rewritten to that shape and an
+     * existing setup keeps working without re-entry.
+     * @param {Object} record - Any settings record
+     * @returns {Object} The record to use (migrated in place)
+     */
+    migrateSettings(record) {
+        if (!record || record.provider !== 'ollama') return record;
+        record.provider = 'custom';
+        record.endpoint = record.endpoint || 'http://localhost:11434/v1/chat/completions';
+        return record;
+    },
+
+    /**
      * The user's own AI settings, if any.
-     * Ollama needs no key, so its record counts as usable without one.
+     * A custom (local) endpoint needs no key, so its record counts as usable
+     * without one.
      */
     getOwnSettings() {
         try {
             const raw = localStorage.getItem(this.OWN_SETTINGS_KEY);
             if (!raw) return null;
-            const parsed = JSON.parse(raw);
+            const parsed = this.migrateSettings(JSON.parse(raw));
             if (!parsed) return null;
-            return (parsed.apiKey || parsed.provider === 'ollama') ? parsed : null;
+            return (parsed.apiKey || parsed.provider === 'custom') ? parsed : null;
         } catch (e) {
             return null;
         }
+    },
+
+    /**
+     * The OpenAI-compatible address of a custom/local endpoint, if configured.
+     * Ollama used to be a provider of its own and its default address is kept as
+     * the fallback so an existing setting does not have to be re-entered.
+     * @param {Object} [record] - Settings record; defaults to the stored one
+     * @returns {string} Endpoint URL, or '' when none is known
+     */
+    customEndpoint(record) {
+        const saved = record || this.getOwnSettings() || {};
+        if (saved.endpoint) return saved.endpoint;
+        return saved.provider === 'ollama' ? 'http://localhost:11434/v1/chat/completions' : '';
     },
 
     /**
@@ -251,22 +286,29 @@ const AIClient = {
             }
         }
 
-        const provider = opts.provider || (this.getOwnSettings() || {}).provider || 'openai';
+        const raw = opts.provider || (this.getOwnSettings() || {}).provider || 'openai';
+        const provider = raw === 'ollama' ? 'custom' : raw;
         const apiKey = opts.apiKey || '';
         const cfg = this.PROVIDERS[provider];
         if (!cfg) return { models: [], source: 'curated', error: 'unknown provider: ' + provider };
 
         const curated = this.normalizeModels(cfg.models);
 
-        // Ollama is keyless: ask the local daemon, fall back to common names.
-        if (provider === 'ollama') {
+        // A custom endpoint (Ollama, LM Studio, llama.cpp or a gateway) is
+        // keyless: ask it directly and fall back to nothing else.
+        if (provider === 'custom') {
+            const endpoint = opts.endpoint || this.customEndpoint(this.getOwnSettings());
+            if (!endpoint) return { models: curated, source: 'curated', error: 'no custom endpoint configured' };
+            const url = endpoint.replace(/\/chat\/completions\/?$/, '/models');
+            const headers = { Accept: 'application/json' };
+            if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
             try {
-                const res = await this.fetchWithTimeout(cfg.modelsEndpoint, { cache: 'no-store' }, 8000);
-                if (!res.ok) throw new Error(`Ollama returned ${res.status}`);
+                const res = await this.fetchWithTimeout(url, { headers, cache: 'no-store' }, 8000);
+                if (!res.ok) throw new Error(`the endpoint returned ${res.status}`);
                 const models = this.normalizeModels(await res.json());
                 return models.length ? { models, source: 'provider' } : { models: curated, source: 'curated' };
             } catch (error) {
-                return { models: curated, source: 'curated', error: 'Ollama is not reachable from this browser' };
+                return { models: curated, source: 'curated', error: 'the custom endpoint is not reachable' };
             }
         }
 
@@ -380,6 +422,7 @@ const AIClient = {
 
     /** Direct call with the user's own key. */
     async chatDirect(prompt, settings) {
+        if (settings) this.migrateSettings(settings);
         const provider = this.PROVIDERS[settings.provider];
         if (!provider) throw new Error('Unknown AI provider: ' + settings.provider);
 
@@ -387,15 +430,33 @@ const AIClient = {
         const temperature = typeof settings.temperature === 'number' ? settings.temperature : 0.7;
         const maxTokens = settings.maxTokens || 1600;
 
-        if (settings.provider === 'ollama') {
-            const res = await this.fetchWithTimeout(provider.endpoint, {
+        // A custom / local endpoint: OpenAI-compatible, addressed by the settings
+        // record, and keyless unless the user supplied a key. Covers Ollama,
+        // LM Studio, llama.cpp and hosted gateways alike.
+        if (settings.provider === 'custom') {
+            const endpoint = settings.endpoint || this.customEndpoint(settings);
+            if (!endpoint) throw new Error('No custom endpoint configured — set it in the AI Generator settings.');
+            if (!model) throw new Error('No model name configured for the custom endpoint.');
+
+            const headers = { 'Content-Type': 'application/json' };
+            if (settings.apiKey) headers['Authorization'] = `Bearer ${settings.apiKey}`;
+
+            const res = await this.fetchWithTimeout(endpoint, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model, prompt, stream: false })
-            }, 60000);
-            if (!res.ok) throw new Error('Ollama request failed — is Ollama running?');
+                headers,
+                body: JSON.stringify({
+                    model,
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature,
+                    max_tokens: maxTokens
+                })
+            }, this.REQUEST_TIMEOUT_MS);
+
+            if (!res.ok) {
+                throw new Error(`The endpoint rejected the request (${res.status}) — is the server running and the model loaded?`);
+            }
             const data = await res.json();
-            return data.response || '';
+            return data.choices?.[0]?.message?.content || data.response || '';
         }
 
         if (settings.provider === 'anthropic') {
