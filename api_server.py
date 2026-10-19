@@ -405,10 +405,12 @@ class CustomCardManager:
 
     Cards are stored in data/custom-decks/custom-cards.json using the same
     envelope as every other deck (title / revdate / link / data + cardback
-    colour keys) so the game engine can load it unchanged. Rendered card PNGs
-    live in data/uploads/cards/. Extra per-card fields (detection, tools,
-    resources, artwork, style, enabled) are preserved so a card can be loaded
-    back into the creator for editing.
+    colour keys) so the game engine can load it unchanged. Uploaded ARTWORK
+    lives in data/uploads/cards/ – the card face itself is composed live from
+    shared/img/card-templates/<type>.webp by Engine-V2/js/card-face.js and is
+    never baked into a PNG. Extra per-card fields (detection, tools, notes,
+    specialties, template, resources, artwork, style, enabled) are preserved so
+    a card can be loaded back into the creator for editing.
     """
 
     DECK_ID = 'custom-cards'
@@ -418,8 +420,14 @@ class CustomCardManager:
     # vendor-only artwork and is deliberately not offered.
     VALID_TYPES = {'initial', 'pivot', 'c2', 'persist', 'procedure', 'inject', 'consultant'}
     VALID_ARTWORK = {'illustration', 'banner', 'none'}
-    VALID_STYLES = {'app', 'classic'}
-    MAX_IMAGE_BYTES = 6 * 1024 * 1024  # 6 MB rendered PNG ceiling
+    # Only 'template' is offered by the Creator now. 'app' survives so a card
+    # saved before the templates existed keeps its own stored art rather than
+    # being re-rendered (its `image` is a whole face, not artwork).
+    VALID_STYLES = {'template', 'app'}
+    # A template card records the template it is composed from
+    # (Engine-V2/js/card-face.js). That key is the card's own type, so it is
+    # validated against VALID_TYPES; '' means a legacy card with its own art.
+    MAX_IMAGE_BYTES = 6 * 1024 * 1024  # 6 MB artwork upload ceiling
 
     def __init__(self):
         self.decks_dir = Config.CUSTOM_DECKS_DIR
@@ -513,7 +521,7 @@ class CustomCardManager:
 
         style = str(incoming.get('style', existing.get('style', ''))).strip().lower()
         if style not in self.VALID_STYLES:
-            style = 'app'
+            style = 'template'
 
         raw_resources = incoming.get('resources', existing.get('resources', []))
         resources = []
@@ -528,7 +536,16 @@ class CustomCardManager:
 
         detection = self._string_list(incoming.get('detection', existing.get('detection', [])))
         tools = self._string_list(incoming.get('tools', existing.get('tools', [])))
+        specialties = self._string_list(incoming.get('specialties', existing.get('specialties', [])))
+        notes = str(incoming.get('notes', existing.get('notes', '')) or '').strip()
         is_scenario = ctype in ('initial', 'pivot', 'c2', 'persist')
+        is_procedure = ctype == 'procedure'
+
+        # The template the card is composed from. Everything except the "app"
+        # style is template-rendered, and the key is the card's own type.
+        template = str(incoming.get('template', existing.get('template', ''))).strip().lower()
+        if style == 'app' or template not in self.VALID_TYPES:
+            template = ''
 
         image = incoming.get('image', existing.get('image', ''))
         image = str(image).strip() if image else ''
@@ -543,7 +560,14 @@ class CustomCardManager:
             'details': self._details_html(resources),
             'resources': resources,
             'detection': detection if is_scenario else [],
-            'tools': tools if ctype == 'procedure' else [],
+            # The scenario templates print DETECTION *and* TOOLS; the procedure
+            # template prints TOOLS; the inject prints NOTES and the consultant
+            # prints SPECIALTIES. Real deck JSONs already carry `tools` on their
+            # scenario cards, so the lists are deliberately not type-exclusive.
+            'tools': tools if (is_scenario or is_procedure) else [],
+            'notes': notes if ctype == 'inject' else '',
+            'specialties': specialties if ctype == 'consultant' else [],
+            'template': template,
             'artwork': artwork,
             'style': style,
             'enabled': bool(incoming.get('enabled', existing.get('enabled', True))),

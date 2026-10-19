@@ -1,10 +1,11 @@
 /**
  * B&B Shuffle - landscape control relocation
  *
- * The landscape mobile shell has room in its header for the roll and action
- * controls, so they are moved OUT of their own bar and INTO it, which lets the
- * board take the freed row. The boundary is the shell's own 1200px landscape
- * width, at any height; wider than that the bar is left alone.
+ * The short mobile shell (width <= 1200px and height <= 700px) has room in its
+ * header for the roll and action controls, so they are moved OUT of their own
+ * bar and INTO it, which lets the board take the freed row. The test is about
+ * available height, not the window's aspect ratio: a wide-but-tall window keeps
+ * its own bar, because it has the room for it.
  *
  * This is a real DOM move, not a CSS trick: every control keeps its id, so
  * player.js, the GM Console and the reveal controls are unaffected, and the
@@ -20,10 +21,9 @@
 
     if (!window.matchMedia) return;
 
-    // Relocate for the whole landscape mobile shell - the same 1200px boundary as
-    // the shell in player.css, at any height - so the bar and the shell switch
-    // together. Above 1200 the bar keeps its own row.
-    var MQ = '(orientation: landscape) and (max-width: 1200px)';
+    // Relocate for the short shell - the same query as player.css - so the bar
+    // and the shell switch together. Taller (or wider) windows keep the bar.
+    var MQ = '(max-width: 1200px) and (max-height: 700px)';
     var mq = window.matchMedia(MQ);
 
     var bar = document.querySelector('.controls-bar');

@@ -4,13 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
-    <title>B&amp;B Shuffle - Custom Card Creator</title>
+    <title>Backdoors &amp; Breaches Custom Card Creator | B&amp;B Shuffle</title>
+    <meta name="description" content="Design Backdoors &amp; Breaches cards in your browser: pick a type, add artwork and text, then export as PNG, SVG or JSON for your own deck.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="B&amp;B Shuffle">
+    <meta property="og:title" content="Backdoors &amp; Breaches Custom Card Creator – B&amp;B Shuffle">
+    <meta property="og:description" content="Design Backdoors &amp; Breaches cards in your browser: pick a type, add artwork and text, then export as PNG, SVG or JSON for your own deck.">
+    <meta property="og:image" content="../../../shared/img/og-bbshuffle.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Backdoors &amp; Breaches Custom Card Creator – B&amp;B Shuffle">
+    <meta name="twitter:description" content="Design Backdoors &amp; Breaches cards in your browser: pick a type, add artwork and text, then export as PNG, SVG or JSON for your own deck.">
+    <meta name="twitter:image" content="../../../shared/img/og-bbshuffle.png">
     <link rel="icon" href="../../../shared/img/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" href="../../../shared/img/favicon.png">
 
     <link rel="stylesheet" href="../../../shared/css/base.css">
     <link rel="stylesheet" href="../../../shared/css/modules.css">
     <link rel="stylesheet" href="../../../shared/css/custom-cards.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "B&B Shuffle", "item": "../../../index.html" },
+        { "@type": "ListItem", "position": 2, "name": "Card Creator", "item": "card_creator.html" }
+      ]
+    }
+    </script>
 </head>
 <body>
     <div class="module-layout">
@@ -58,7 +82,7 @@
                 <div class="cc-form">
                     <!-- AI assist -->
                     <details class="cc-ai" id="cc-ai">
-                        <summary>AI assist — generate the text</summary>
+                        <summary>AI assist – generate the text</summary>
                         <div class="cc-ai-body">
                             <div class="cc-ai-mode" id="cc-ai-mode">Checking AI availability…</div>
                             <div class="cc-field">
@@ -130,12 +154,27 @@
                         <p class="cc-hint">Procedures that would detect this scenario card.</p>
                     </div>
 
-                    <!-- Tools (procedure only) -->
+                    <!-- Tools (procedure + the scenario cards, whose template prints TOOLS) -->
                     <div class="cc-field cc-hidden" id="cc-tools-field">
                         <label class="cc-label" for="cc-tools-input">Tools list</label>
                         <div class="cc-chips" id="cc-tools-chips"></div>
                         <input type="text" id="cc-tools-input" class="form-input cc-chip-input" placeholder="Type a tool or data source, press Enter">
                         <p class="cc-hint">Tools or data sources the defenders would use.</p>
+                    </div>
+
+                    <!-- Notes (inject only) -->
+                    <div class="cc-field cc-hidden" id="cc-notes-field">
+                        <label class="cc-label" for="cc-notes">Notes</label>
+                        <textarea id="cc-notes" class="form-textarea" rows="3" placeholder="Notes printed under NOTES"></textarea>
+                        <p class="cc-hint">GM guidance printed in the card's NOTES panel.</p>
+                    </div>
+
+                    <!-- Specialties (consultant only) -->
+                    <div class="cc-field cc-hidden" id="cc-specialties-field">
+                        <label class="cc-label" for="cc-specialties-input">Specialties list</label>
+                        <div class="cc-chips" id="cc-specialties-chips"></div>
+                        <input type="text" id="cc-specialties-input" class="form-input cc-chip-input" placeholder="Type a specialty, press Enter">
+                        <p class="cc-hint">Areas the consultant is printed as covering.</p>
                     </div>
 
                     <!-- Resources -->
@@ -145,8 +184,8 @@
                         <button id="cc-add-resource" class="btn btn-ghost btn-sm" type="button">+ Add link</button>
                     </div>
 
-                    <!-- Artwork -->
-                    <div class="cc-section">
+                    <!-- Artwork (scenario + procedure templates print an artwork panel) -->
+                    <div class="cc-section" id="cc-artwork-section">
                         <h3 class="cc-section-title">Artwork</h3>
                         <div class="cc-drop" id="cc-drop">Click or drop an image here</div>
                         <input type="file" id="cc-image-input" class="cc-file-input" accept="image/*">
@@ -165,14 +204,13 @@
                         </div>
                     </div>
 
-                    <!-- Style -->
+                    <!-- Card back (planned) -->
                     <div class="cc-section">
-                        <h3 class="cc-section-title">Card style</h3>
-                        <div class="cc-seg" id="cc-style-seg">
-                            <label><input type="radio" name="cc-style" value="app" checked> App theme (dark)</label>
-                            <label><input type="radio" name="cc-style" value="classic"> Classic (light)</label>
-                        </div>
-                        <p class="cc-hint">Classic is an original card face inspired by tabletop layouts — it does not reproduce the official artwork.</p>
+                        <h3 class="cc-section-title">Card back</h3>
+                        <p class="cc-hint">
+                            <span class="cc-soon-tag">Coming soon</span>
+                            Back-cover templates – print your own art on the reverse of the cards you create here.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -186,11 +224,10 @@
                     </div>
                 </div>
                 <div class="cc-preview-wrap">
-                    <img class="cc-preview-img" id="cc-preview-img" alt="Card preview">
+                    <div class="cc-preview" id="cc-preview" aria-label="Card preview"></div>
                     <div class="cc-preview-actions">
                         <button id="cc-save" class="btn btn-primary" type="button">Save to Custom Deck</button>
-                        <button id="cc-export-svg" class="btn btn-secondary" type="button">Export SVG</button>
-                        <button id="cc-export-png" class="btn btn-secondary" type="button">Export PNG</button>
+                        <button id="cc-export-png" class="btn btn-secondary" type="button">Download PNG</button>
                     </div>
                     <div class="cc-status" id="cc-preview-status"></div>
                 </div>
@@ -201,8 +238,8 @@
     <footer class="app-legal">
         <div class="app-legal-content">
             <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">
-                <img class="app-legal-logo" src="../../../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
-                <span>B&amp;B Classic — play on the official site</span>
+                <img class="app-legal-logo" src="../../../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" loading="lazy" decoding="async">
+                <span>B&amp;B Classic – Official Site</span>
             </a>
             <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training. Cards you create here are your own content.</p>
             <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
@@ -214,10 +251,13 @@
 
     <script src="../../js/utils.js"></script>
     <script src="../../js/card-renderer.js"></script>
+    <script src="../../js/card-face.js?v=2"></script>
+    <script src="../../js/webllm-provider.js"></script>
     <script src="../../js/ai-client.js"></script>
     <script src="../../js/custom-card-io.js"></script>
     <script src="card_creator.js"></script>
     <!-- Site navigation FAB (shared radial menu) -->
     <script src="../../../shared/js/fab.js"></script>
+    <script src="../../../shared/js/seo.js"></script>
 </body>
 </html>

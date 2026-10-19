@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0f1117">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="B&amp;B Shuffle">
+    <link rel="icon" href="shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="shared/img/favicon.png">
+    <link rel="apple-touch-icon" href="shared/img/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <title>How to Play Backdoors &amp; Breaches Online – B&amp;B Shuffle</title>
+    <meta name="description" content="Learn how to play Backdoors &amp; Breaches online: the four-card attack chain, 11+ dice rolls, procedures, injects and how to run a remote tabletop session.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="B&amp;B Shuffle">
+    <meta property="og:title" content="How to Play Backdoors &amp; Breaches Online – B&amp;B Shuffle">
+    <meta property="og:description" content="Learn how to play Backdoors &amp; Breaches online: the four-card attack chain, 11+ dice rolls, procedures, injects and how to run a remote tabletop session.">
+    <meta property="og:image" content="shared/img/og-bbshuffle.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How to Play Backdoors &amp; Breaches Online – B&amp;B Shuffle">
+    <meta name="twitter:description" content="Learn how to play Backdoors &amp; Breaches online: the four-card attack chain, 11+ dice rolls, procedures, injects and how to run a remote tabletop session.">
+    <meta name="twitter:image" content="shared/img/og-bbshuffle.png">
+    <link rel="stylesheet" href="shared/css/base.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--color-bg);
+            color: var(--color-text);
+        }
+        .guide {
+            flex: 1 0 auto;
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 26px 20px 40px;
+        }
+        .guide-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+        .guide-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+        .guide-brand img { height: 54px; width: auto; }
+        .guide-brand strong { display: block; font-size: 17px; }
+        .guide-brand span { display: block; color: var(--color-text-secondary); font-size: 12px; }
+        .guide-nav { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; }
+        .guide-nav a { color: var(--color-primary); text-decoration: none; }
+        .guide h1 { margin: 8px 0 6px; font-size: 32px; letter-spacing: -0.01em; }
+        .guide-lede { margin: 0 0 18px; color: var(--color-text-secondary); font-size: 17px; line-height: 1.6; }
+        .guide h2 { margin: 30px 0 8px; font-size: 21px; }
+        .guide h3 { margin: 22px 0 4px; font-size: 16px; }
+        .guide p, .guide li { font-size: 15px; line-height: 1.65; color: var(--color-text-secondary); }
+        .guide p { margin: 0 0 12px; }
+        .guide ul, .guide ol { margin: 0 0 14px; padding-left: 24px; }
+        .guide li { margin-bottom: 5px; }
+        .guide strong { color: var(--color-text); }
+        .guide a { color: var(--color-primary); }
+        .guide-cta { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0 6px; }
+        .guide-cta a {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            color: var(--color-text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .guide-cta a.primary {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: #fff;
+        }
+        .guide-note {
+            margin: 18px 0;
+            padding: 14px 16px;
+            border: 1px solid var(--color-border);
+            border-left: 3px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            background: var(--color-bg-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-text-secondary);
+        }
+        .guide-faq h3 { margin-top: 20px; }
+        .guide-faq p { margin-bottom: 4px; }
+        pre.guide-code {
+            margin: 0 0 14px;
+            padding: 12px 14px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            background: var(--color-surface);
+            color: var(--color-text);
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        @media (max-width: 620px) {
+            .guide h1 { font-size: 26px; }
+            .guide-lede { font-size: 15px; }
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "How to Play Backdoors & Breaches Online",
+      "description": "Learn how to play Backdoors & Breaches online: the four-card attack chain, 11+ dice rolls, procedures, injects and how to run a remote tabletop session.",
+      "url": "how-to-play.html",
+      "image": "shared/img/og-bbshuffle.png",
+      "datePublished": "2026-10-18",
+      "dateModified": "2026-10-18",
+      "author": { "@type": "Person", "name": "Jonesckevin", "url": "https://github.com/Jonesckevin" },
+      "isPartOf": { "@type": "WebSite", "name": "B&B Shuffle", "url": "./" },
+      "about": { "@type": "Game", "name": "Backdoors & Breaches" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is B&B Shuffle free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. B&B Shuffle is free and open source under the GPL-3.0 licence, with no account or payment. The self-hosted build keeps scenarios and custom cards in the data folder on your own server; the public demo at bbshuffle.com is read-only." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need the physical Backdoors & Breaches game?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The app ships with decks and scenarios, so you can play a full session in the browser. Owning the printed deck helps if you want to run the physical game alongside the app, and the official rule book is linked from the player board." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I play Backdoors & Breaches remotely?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Share the player board on a projector or screen share, keep the GM Console on a second screen for the answer key and turn control, and roll the d20 in the app so every player sees the same result." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is B&B Shuffle affiliated with Black Hills Information Security?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Backdoors & Breaches is published by Black Hills Information Security and Antisyphon Training. B&B Shuffle is an unofficial community project and is not affiliated with, endorsed by or sponsored by either company." }
+        },
+        {
+          "@type": "Question",
+          "name": "How many players does a session need?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A typical table is a crew of two to six defenders plus one Incident Master. If you are on your own, Solo AI mode plays the Incident Master and hides the attack chain from you." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the app work on a phone or offline?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The player board has a compact landscape layout for phones and tablets, and the site is a PWA, so the player shell can load from cache after a first visit. Card images and scenarios still need a connection the first time." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I make my own cards and scenarios?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The Scenario Editor builds scenarios. Custom cards are designed in the built-in Card Creator and exported as PNG, SVG or JSON; a self-hosted instance saves scenarios and imported cards under data/." }
+        }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "B&B Shuffle", "item": "index.html" },
+        { "@type": "ListItem", "position": 2, "name": "How to play", "item": "how-to-play.html" }
+      ]
+    }
+    </script>
+</head>
+<body class="surface-felt">
+    <div class="guide">
+        <header class="guide-top">
+            <a class="guide-brand" href="index.html">
+                <img src="shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999">
+                <span>
+                    <strong>B&amp;B Shuffle</strong>
+                    <span>Unofficial Backdoors &amp; Breaches companion</span>
+                </span>
+            </a>
+            <nav class="guide-nav" aria-label="Site">
+                <a href="index.html">Home</a>
+                <a href="Engine-V2/scenario-library.html">Scenario library</a>
+                <a href="shared/catalogue.html">Card catalogue</a>
+            </nav>
+        </header>
+
+        <main>
+            <h1>How to play Backdoors &amp; Breaches online</h1>
+            <p class="guide-lede">
+                Backdoors &amp; Breaches is a tabletop incident-response game from Black Hills Information
+                Security. A crew of defenders faces a hidden attack chain and has to find the right
+                procedures before the clock runs out. B&amp;B Shuffle is a free, self-hosted, unofficial
+                companion that deals the cards, tracks turns and strikes, and lets a group play the same
+                session from different rooms.
+            </p>
+
+            <div class="guide-cta">
+                <a class="primary" href="Engine-V2/player.html">Open player board</a>
+                <a href="Engine-V2/scenario-library.html">Browse scenarios</a>
+                <a href="docs/rules.pdf" target="_blank" rel="noopener">Official Rules (PDF)</a>
+            </div>
+
+            <h2>What you need</h2>
+            <ul>
+                <li><strong>Two to six defenders</strong> and one Incident Master (the GM).</li>
+                <li><strong>A d20</strong> – or just use the roller on the player board.</li>
+                <li><strong>A browser.</strong> No account, no install for players and no payment.</li>
+                <li><strong>Optionally, the physical game</strong> for the printed cards and rule book.</li>
+            </ul>
+
+            <h2>The attack chain: four cards</h2>
+            <p>
+                The Incident Master lays out four attack cards face-down: <strong>Initial Compromise</strong>,
+                <strong>Pivot &amp; Escalate</strong>, <strong>C2 &amp; Exfiltration</strong> and
+                <strong>Persistence</strong>. Each one hides a specific technique. The defenders can see that
+                an attack happened in each phase, but not which technique was used – that is what the
+                investigation has to uncover.
+            </p>
+
+            <h2>Your hand: procedures, injects and consultants</h2>
+            <ul>
+                <li><strong>Procedure cards</strong> are the defenders' tools. Each lists the attack phases or
+                    techniques it can detect, plus its TOOLS and DETECTION text.</li>
+                <li><strong>Inject cards</strong> are complications. The GM plays one when the crew fails a
+                    roll, stalls, or the story needs a push.</li>
+                <li><strong>Consultant cards</strong> are specialists who add help, abilities or a one-off
+                    effect to the team.</li>
+            </ul>
+
+            <h2>A turn, step by step</h2>
+            <ol>
+                <li>The Incident Master frames the scene. The crew agrees on a <strong>Procedure</strong> and
+                    commits to it.</li>
+                <li><strong>Roll the d20</strong> against the scenario's target – 11 by default in the app.</li>
+                <li><strong>11 or higher succeeds.</strong> Read the procedure's detection, and flip any attack
+                    card it covers face-up.</li>
+                <li><strong>Below 11 fails.</strong> The turn is still spent, and the GM may play an Inject.</li>
+                <li>A <strong>natural 20</strong> is a critical success. A <strong>natural 1</strong>, or three
+                    misses in a row, draws an Inject.</li>
+                <li>Use <strong>Turn</strong> when the round moves on. <strong>Three strikes</strong> ends the
+                    session; the board tracks turns and strikes for you.</li>
+            </ol>
+            <div class="guide-note">
+                <strong>Solo mode changes the odds slightly.</strong> The AI Incident Master uses partial
+                success: 11-14 gives an indirect clue, 15 or higher gives clear evidence, and a natural 20 all
+                but names the technique. A solo session runs for <strong>10 turns</strong> and allows
+                <strong>3 strikes</strong>.
+            </div>
+
+            <h2>Running a remote session</h2>
+            <p>
+                Put the <strong>player board</strong> on the shared screen, projector or video call, and keep the
+                <strong>GM Console</strong> on the Incident Master's own screen. The console shows the answer key
+                and can spend turns, apply strikes and push board updates, while the player screen keeps control
+                of the dice animation and the turn record. When you are in the same room, the print sheet builds
+                a paper copy of the cards in play.
+            </p>
+            <p>
+                Prepare ahead in the <a href="Engine-V2/admin.html">Scenario Editor</a>, save or export the
+                scenario, and open it from the <a href="Engine-V2/scenario-library.html">Scenario Library</a>.
+                The app ships with ready-made scenarios and a guided tour for first-time tables.
+            </p>
+
+            <h2>Playing solo against the AI Incident Master</h2>
+            <p>
+                <a href="Engine-V2/player.html?mode=solo">Solo AI mode</a> hides the attack chain and answers your
+                investigations with clues. A successful procedure reveals a phase; enough successes name the
+                technique. When you think you know all four cards, make an accusation – a wrong accusation costs
+                a strike. The mode works with a configured AI provider, and falls back to built-in offline clue
+                tables when no provider is available, so the game stays playable without an API key.
+            </p>
+
+            <h2>Browsing the cards</h2>
+            <p>
+                The <a href="shared/catalogue.html">card catalogue</a> shows every deck loaded by the app – Core,
+                Core 3.1, ICS-OT, the sponsor expansions and the MEGA deck – with card faces, text, TOOLS and
+                DETECTION sections.
+            </p>
+
+            <h2>Frequently asked questions</h2>
+            <div class="guide-faq">
+                <h3>Is B&amp;B Shuffle free?</h3>
+                <p>Yes. It is free and open source under the GPL-3.0 licence, with no account or payment. The
+                    self-hosted build keeps scenarios and custom cards in the <code>data/</code> folder on your
+                    server; the public demo is read-only.</p>
+
+                <h3>Do I need the physical Backdoors &amp; Breaches game?</h3>
+                <p>No. The app ships with decks and scenarios, so you can play a full session in the browser.
+                    Owning the printed game helps if you want to run it alongside the app.</p>
+
+                <h3>Can I play Backdoors &amp; Breaches remotely?</h3>
+                <p>Yes. Share the player board, keep the GM Console on a second screen, and roll in the app so
+                    every player sees the same result.</p>
+
+                <h3>Is B&amp;B Shuffle affiliated with Black Hills Information Security?</h3>
+                <p>No. Backdoors &amp; Breaches is published by Black Hills Information Security and Antisyphon
+                    Training. This is an unofficial community project, not affiliated with, endorsed by or
+                    sponsored by either company.</p>
+
+                <h3>How many players does a session need?</h3>
+                <p>A typical table is two to six defenders plus one Incident Master. Solo AI mode plays the
+                    Incident Master when you are on your own.</p>
+
+                <h3>Does the app work on a phone or offline?</h3>
+                <p>The player board has a compact landscape layout for phones and tablets, and the site is a PWA,
+                    so the player shell can load from cache after a first visit. Card images and scenarios still
+                    need a connection the first time.</p>
+
+                <h3>Can I make my own cards and scenarios?</h3>
+                <p>Yes. The Scenario Editor builds scenarios. Custom cards are designed in the
+                    <a href="Engine-V2/modules/card-creator/card_creator.html">Card Creator</a>
+                    and exported as PNG, SVG or JSON; a self-hosted instance saves scenarios and imported
+                    cards under <code>data/</code>.</p>
+            </div>
+
+            <h2>Where to go next</h2>
+            <ul>
+                <li><a href="Engine-V2/player.html">Open player board</a></li>
+                <li><a href="Engine-V2/scenario-library.html">Browse the scenario library</a></li>
+                <li><a href="shared/catalogue.html">Search the card catalogue</a></li>
+                <li><a href="Engine-V2/modules/card-creator/card_creator.html">Design a custom card</a></li>
+                <li><a href="Engine-V2/modules/scenario-ai/scenario_ai.html">Generate a scenario with AI</a></li>
+                <li><a href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">Backdoors &amp; Breaches – Classic</a> (official site)</li>
+            </ul>
+        </main>
+    </div>
+
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches – Classic (official site)">
+                <img class="app-legal-logo" src="shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" loading="lazy" decoding="async">
+                <span>B&amp;B Classic | Official site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+    <script src="shared/js/fab.js"></script>
+    <script src="shared/js/seo.js"></script>
+</body>
+</html>

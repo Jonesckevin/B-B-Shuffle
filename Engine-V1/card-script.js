@@ -214,8 +214,20 @@ async function initializeCards() {
   try {
     captureDmDefaults();
 
+    // The remembered deck can be unreadable - a deck removed from CONFIG, or
+    // (for "Custom Cards") a data/custom-decks/custom-cards.json that this
+    // install has not written yet. Starting on a dead board is worse than
+    // starting on the default deck, so fall back rather than give up.
+    if (!(await loadDeck())) {
+      const key = CONFIG.defaultDeck;
+      const deck = CONFIG.decks[key];
+      Utils.saveToStorage("deckKey", key);
+      GameState.setDeck(key, deck.path);
+      syncDeckSelector(key);
+      if (!(await loadDeck())) throw new Error(`${deck.name} could not be read`);
+    }
+
     // Load the deck's card backs, then its card data
-    await loadDeck();
     await loadCards();
   } catch (error) {
     console.error('Error initializing cards:', error);

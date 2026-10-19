@@ -4,13 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
-    <title>B&amp;B Shuffle - AI Scenario Generator</title>
+    <title>AI Backdoors &amp; Breaches Scenario Generator | B&amp;B Shuffle</title>
+    <meta name="description" content="Generate a Backdoors &amp; Breaches scenario from a prompt with your own AI provider key, then edit and play it in B&amp;B Shuffle.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="B&amp;B Shuffle">
+    <meta property="og:title" content="AI Backdoors &amp; Breaches Scenario Generator – B&amp;B Shuffle">
+    <meta property="og:description" content="Generate a Backdoors &amp; Breaches scenario from a prompt with your own AI provider key, then edit and play it in B&amp;B Shuffle.">
+    <meta property="og:image" content="../../../shared/img/og-bbshuffle.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Backdoors &amp; Breaches Scenario Generator – B&amp;B Shuffle">
+    <meta name="twitter:description" content="Generate a Backdoors &amp; Breaches scenario from a prompt with your own AI provider key, then edit and play it in B&amp;B Shuffle.">
+    <meta name="twitter:image" content="../../../shared/img/og-bbshuffle.png">
     <link rel="icon" href="../../../shared/img/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" href="../../../shared/img/favicon.png">
     
     <!-- Shared CSS -->
     <link rel="stylesheet" href="../../../shared/css/base.css">
     <link rel="stylesheet" href="../../../shared/css/modules.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "B&B Shuffle", "item": "../../../index.html" },
+        { "@type": "ListItem", "position": 2, "name": "AI Scenario Generator", "item": "scenario_ai.html" }
+      ]
+    }
+    </script>
 </head>
 <body>
     <div class="module-layout">
@@ -73,6 +97,7 @@
                             <option value="deepseek">DeepSeek</option>
                             <option value="gemini">Google Gemini</option>
                             <option value="custom">Custom / Local Endpoint</option>
+                            <option value="webllm">In-browser model (no API key)</option>
                         </select>
                     </div>
                     <div class="form-group" id="api-key-group">
@@ -108,6 +133,14 @@
                         <label for="custom-endpoint" class="form-label">Custom / local endpoint</label>
                         <input type="url" id="custom-endpoint" class="form-input" placeholder="http://localhost:11434/v1/chat/completions">
                         <small class="form-hint">Any OpenAI-compatible server. Offline options: Ollama <code>http://localhost:11434/v1/chat/completions</code> &middot; LM Studio <code>http://localhost:1234/v1/chat/completions</code>. A local server needs no API key.</small>
+                    </div>
+
+                    <!-- In-browser model (WebLLM): the panel is built and
+                         maintained by webllm-provider.js and only shown for the
+                         webllm target. -->
+                    <div class="form-group hidden" id="webllm-host-group">
+                        <span class="form-label">In-browser model</span>
+                        <div id="webllm-host"></div>
                     </div>
 
                     <details class="shared-config">
@@ -262,6 +295,17 @@
                     <p class="loading-subtext">This may take a few seconds</p>
                 </div>
 
+                <!-- Live stream (in-browser model): tokens appear as they are written -->
+                <div class="ai-live hidden" id="result-live">
+                    <div class="ai-live-head">
+                        <div class="loading-spinner ai-live-spinner"></div>
+                        <span>Streaming from the in-browser model…</span>
+                        <span class="ai-live-spacer"></span>
+                        <button type="button" id="result-stop-btn" class="btn btn-ghost btn-sm">Stop</button>
+                    </div>
+                    <pre class="ai-live-text" id="result-live-text"></pre>
+                </div>
+
                 <!-- Empty State -->
                 <div class="result-empty" id="result-empty">
                     <div class="empty-icon">🎯</div>
@@ -366,7 +410,8 @@
     <script src="../../js/config.js"></script>
     <script src="../../js/scenario-schema.js"></script>
     <script src="../../js/scenario-io.js"></script>
-    <script src="scenario_ai.js?v=7"></script>
+    <script src="../../js/webllm-provider.js"></script>
+    <script src="scenario_ai.js?v=8"></script>
 
     <style>
         /* AI-specific layout */
@@ -774,9 +819,9 @@
     <!-- Legal footer: official B&B Classic link + unofficial disclaimer -->
     <footer class="app-legal">
         <div class="app-legal-content">
-            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
-                <img class="app-legal-logo" src="../../../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
-                <span>B&amp;B Classic — play on the official site</span>
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches – Classic (official site)">
+                <img class="app-legal-logo" src="../../../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" loading="lazy" decoding="async">
+                <span>B&amp;B Classic – Official Site</span>
             </a>
             <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
             <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
@@ -787,5 +832,6 @@
     </footer>
     <!-- Site navigation FAB (shared radial menu) -->
     <script src="../../../shared/js/fab.js"></script>
+    <script src="../../../shared/js/seo.js"></script>
 </body>
 </html>

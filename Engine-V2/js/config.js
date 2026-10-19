@@ -4,10 +4,16 @@
  */
 
 const CONFIG = {
+    // Public origin used for canonical and social URLs by shared/js/seo.js.
+    // Leave empty to use the browser's current origin. Set it to scheme + host
+    // only (for example 'https://shuffle.example.com') when the deployment is
+    // reached through a proxy or a different public hostname.
+    seoOrigin: '',
+
     // Deck paths (relative to shared)
     //
     // Each deck: { name, path, cardbackPath, cover?, expansion?, expansionPrefix? }.
-    // `cover` is the deck's box art in `shared/img/decks/<key>.webp` — shown in
+    // `cover` is the deck's box art in `shared/img/decks/<key>.webp` – shown in
     // the Card Catalogue, the Scenario Editor's loaded-deck panel and the
     // Scenario Library's deck filter. Decks with no box art upstream (core-v1,
     // green-expansion-v2, custom) simply omit it and render without an image.
@@ -133,8 +139,8 @@ const CONFIG = {
 
     // Card-back art per generation, keyed by CARD TYPE.
     //
-    // A deck names its generation with `cardbackPath` (…/cardbacks/<set>/) — the same
-    // split Engine-V1 carries — and the Player looks its backs up here. Engine-V1
+    // A deck names its generation with `cardbackPath` (…/cardbacks/<set>/) – the same
+    // split Engine-V1 carries – and the Player looks its backs up here. Engine-V1
     // stores this by card COLOUR (its board labels the rows red/yellow/brown/purple/
     // grey); Engine-V2 works in card TYPES, hence the different key.
     //
@@ -174,7 +180,7 @@ const CONFIG = {
         // Rule book: "After a DETECTION has been played, regardless of outcome,
         // that card will have a 3-turn cooldown period during which it cannot be
         // used again." A card played on turn N is therefore unavailable on
-        // N+1..N+3 and usable again on N+4 — see GameState.startCooldown().
+        // N+1..N+3 and usable again on N+4 – see GameState.startCooldown().
         cooldownTurns: 3
     },
 

@@ -14,16 +14,50 @@ async function updateDeck(deckKey) {
     return;
   }
 
+  // Remember what is actually on the board: a deck whose JSON cannot be read
+  // must not leave the selector and the "Card list" line naming a deck nobody
+  // loaded.
+  const previousKey = getSelectedDeckKey();
+
   Utils.saveToStorage("deckKey", deckKey);
   GameState.setDeck(deckKey, deck.path);
   syncDeckSelector(deckKey);
 
   try {
-    await loadDeck();
+    // loadDeck() reports an unreadable deck by returning false, not by
+    // throwing, so both kinds of failure are checked here.
+    if (!(await loadDeck())) throw new Error(`${deck.name} could not be read`);
     await loadCards();
     resetBoard();
   } catch (error) {
-    console.error('Error switching deck:', error);
+    console.error(`Error switching to deck "${deckKey}":`, error);
+    await revertToDeck(previousKey, deck.name);
+  }
+}
+
+/**
+ * Put the board back on a deck that does load, after a failed switch, and say
+ * which deck was unavailable.
+ * @param {string} deckKey - Deck to fall back to
+ * @param {string} failedName - Display name of the deck that failed
+ */
+async function revertToDeck(deckKey, failedName) {
+  const key = CONFIG.decks[deckKey] ? deckKey : CONFIG.defaultDeck;
+  const deck = CONFIG.decks[key];
+
+  Utils.saveToStorage("deckKey", key);
+  GameState.setDeck(key, deck.path);
+  syncDeckSelector(key);
+
+  try {
+    await loadDeck();
+    await loadCards();
+    Utils.setElementContent(
+      CONFIG.elementIds.version,
+      `<strong>Card list:</strong> ${deck.name} &mdash; ${failedName} is not available in this build`
+    );
+  } catch (error) {
+    console.error('Could not fall back to a readable deck either:', error);
   }
 }
 
@@ -104,6 +138,7 @@ function renderDeckSelector() {
 
 /**
  * Load deck card backs and metadata
+ * @returns {Promise<boolean>} - False when the deck JSON could not be read
  */
 async function loadDeck() {
   // Get selected deck from storage or default to first deck
@@ -112,7 +147,7 @@ async function loadDeck() {
 
   if (!deck) {
     console.error(`Deck not found: ${selectedDeck}`);
-    return;
+    return false;
   }
 
   GameState.setDeck(selectedDeck, deck.path);
@@ -138,9 +173,12 @@ async function loadDeck() {
 
     // Update copyright/logo
     updateCopyright(deckData);
+    return true;
 
   } catch (error) {
+    // Report, never swallow: the caller decides what the board should show.
     console.error('Error loading deck:', error);
+    return false;
   }
 }
 

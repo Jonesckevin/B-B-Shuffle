@@ -28,10 +28,22 @@
 
     var ROOT = rootPrefix();
 
-    // Register after load so it never competes with the first paint.
+    // Register after load so it never competes with the first paint. The worker
+    // precaches the full site from sw-manifest.json; asking for persistent
+    // storage keeps those cards from being evicted under storage pressure.
     window.addEventListener('load', function () {
         navigator.serviceWorker
             .register(ROOT + 'sw.js', { updateViaCache: 'none' })
+            .then(function () {
+                if (navigator.storage && navigator.storage.persist) {
+                    navigator.storage.persist().catch(function () {});
+                }
+                return navigator.serviceWorker.ready;
+            })
+            .then(function (registration) {
+                // Cheap retry: precache() skips files already in the cache.
+                if (registration.active) registration.active.postMessage({ type: 'PRECACHE_ALL' });
+            })
             .catch(function () { /* http origin, private mode, etc. */ });
     });
 
@@ -69,6 +81,11 @@
     // Public seam (tests / other modules).
     window.PWA = {
         root: ROOT,
-        get installAvailable() { return !!deferredPrompt; }
+        get installAvailable() { return !!deferredPrompt; },
+        precacheAll: function () {
+            return navigator.serviceWorker.ready.then(function (registration) {
+                if (registration.active) registration.active.postMessage({ type: 'PRECACHE_ALL' });
+            });
+        }
     };
 })();

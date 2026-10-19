@@ -6,7 +6,7 @@
  *
  * Transport: BroadcastChannel (same-origin), with a localStorage 'storage' event
  * fallback. State only ever moves forward via GameState.sync.version
- * (last-write-wins — safe for the single-presenter topology).
+ * (last-write-wins – safe for the single-presenter topology).
  */
 (function () {
     'use strict';
@@ -59,7 +59,7 @@
         function handle(msg) {
             if (!msg || msg.sender === senderId) return; // ignore our own messages
             if (msg.type === 'hello') {
-                // A new document joined — share our current snapshot with it.
+                // A new document joined – share our current snapshot with it.
                 post({ type: 'state', state: GameState.exportForSync() });
             } else if (msg.type === 'state' && msg.state) {
                 GameState.importFromSync(msg.state);

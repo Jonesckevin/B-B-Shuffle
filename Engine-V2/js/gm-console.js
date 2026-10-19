@@ -265,7 +265,7 @@
             if (!card) {
                 return '<div class="gmc-chain-card" data-type="' + type + '">' +
                     '<span class="gmc-chain-type">' + esc(TYPE_LABELS[type]) + '</span>' +
-                    '<span class="gmc-chain-name">— not dealt —</span>' +
+                    '<span class="gmc-chain-name">– not dealt –</span>' +
                     '</div>';
             }
 
@@ -287,7 +287,7 @@
                 (flips[type] ? 'true' : 'false') + '">' +
                 '<span class="gmc-chain-type">' + esc(TYPE_LABELS[type]) +
                 (flips[type] ? ' · face-up' : ' · face-down') + '</span>' +
-                '<span class="gmc-chain-name">' + esc(card.name || '—') + '</span>' +
+                '<span class="gmc-chain-name">' + esc(card.name || '–') + '</span>' +
                 (card.image ? '<img class="gmc-chain-art" src="' + esc(asset(card.image)) +
                     '" alt="' + esc(card.name || '') + '" loading="lazy">' : '') +
                 (body ? '<p class="gmc-chain-body">' + esc(body) + '</p>' : '') +
@@ -301,7 +301,7 @@
         const turnEl = byId('gmc-turn');
         const noteEl = byId('gmc-turn-note');
         if (turnEl) {
-            turnEl.textContent = (g.turnNumber != null ? g.turnNumber : '—') +
+            turnEl.textContent = (g.turnNumber != null ? g.turnNumber : '–') +
                 (g.maxTurns ? ' / ' + g.maxTurns : '');
         }
         if (noteEl) {
@@ -309,7 +309,7 @@
         }
 
         const strikeEl = byId('gmc-strikes');
-        if (strikeEl) strikeEl.textContent = (g.strikeCount != null ? g.strikeCount : '—') +
+        if (strikeEl) strikeEl.textContent = (g.strikeCount != null ? g.strikeCount : '–') +
             (g.maxStrikes ? ' / ' + g.maxStrikes : '');
 
         const dots = byId('gmc-strike-dots');
@@ -322,7 +322,7 @@
         }
 
         const targetEl = byId('gmc-target');
-        if (targetEl) targetEl.textContent = (root && root.successTarget) || '—';
+        if (targetEl) targetEl.textContent = (root && root.successTarget) || '–';
 
         const deckEl = byId('gmc-deck-name');
         if (deckEl) {
@@ -345,7 +345,7 @@
         const coupleHint = byId('gmc-couple-hint');
         if (coupleHint) {
             coupleHint.textContent = (root && root.turnCoupled)
-                ? 'Rolls and strikes spend a turn on their own — do not also press Spend turn.'
+                ? 'Rolls and strikes spend a turn on their own – do not also press Spend turn.'
                 : 'Turns are spent by hand: use Spend turn after the roll.';
         }
     }
@@ -451,7 +451,7 @@
                 // The chip reads "cooling N" rather than a bare number: a lone "3"
                 // beside the "+3" enhanced chip would be read as a bonus.
                 const chip = cooling
-                    ? '<span class="gmc-chip is-cooldown" title="On cooldown — ' + left +
+                    ? '<span class="gmc-chip is-cooldown" title="On cooldown – ' + left +
                       ' turn' + (left === 1 ? '' : 's') + ' until this procedure can be used again">cooling ' +
                       left + '</span>'
                     : '';
@@ -732,13 +732,13 @@
         }
 
         GMLink.onBoard(function (next) {
-            setLinkState('connected', 'Connected — controlling the player');
+            setLinkState('connected', 'Connected – controlling the player');
             render(next);
         });
 
         GMLink.onRoster(function (info) {
             if (info && info.connected) {
-                setLinkState('connected', 'Connected — controlling the player');
+                setLinkState('connected', 'Connected – controlling the player');
                 // Ask for the board straight away so the answer key is populated
                 // before the GM has to do anything.
                 GMLink.requestBoard();

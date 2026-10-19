@@ -5,7 +5,7 @@ Legacy original single-page engine, kept for comparison against the current
 nginx container as the rest of the app.
 
 - **URL:** http://localhost:8180/Engine-V1/
-- **Layout:** flat folder, classic `<script>` tags — no bundler, no ES modules.
+- **Layout:** flat folder, classic `<script>` tags – no bundler, no ES modules.
   Load order is fixed by the script tags at the bottom of `index.html`.
 - **Decks:** the 18 bundled decks plus the user-created Custom Cards deck, all
   registered in `CONFIG.decks` (`config.js`). Each points at a

@@ -750,7 +750,7 @@
         btn.disabled = !ready;
         btn.title = ready
             ? 'Print a one-page session sheet (scenario cards, their detection lists, the hand and the inject queue)'
-            : 'Load a scenario first — the sheet prints the cards in play';
+            : 'Load a scenario first – the sheet prints the cards in play';
         if (!ready) return;
 
         if (force) {
@@ -781,7 +781,7 @@
             // Set the print header and suggested PDF filename.
             prevTitle = document.title;
             const name = (controllerObj.scenario.metadata || {}).name;
-            document.title = name ? 'Session Sheet — ' + name : 'Session Sheet';
+            document.title = name ? 'Session Sheet – ' + name : 'Session Sheet';
             // Allow newly built thumbnails to paint before opening print preview.
             requestAnimationFrame(function () {
                 setTimeout(function () { global.print(); }, 0);

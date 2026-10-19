@@ -635,7 +635,7 @@
     },
     {
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "type": "inject",
       "id": "046",
@@ -683,7 +683,7 @@
     },
     {
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "type": "inject",
       "id": "052",
@@ -1734,7 +1734,7 @@
         "Janitorial Services",
         "F-Bomb Enthusiast"
       ],
-      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" — Kyle Hanslovan"
+      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" – Kyle Hanslovan"
     },
     {
       "name": "John Hammond",
@@ -1753,7 +1753,7 @@
         "Runs On Monster™",
         "Co-Creator of Dinosaurs"
       ],
-      "quote": "\"Show, not tell; facts, not fear.\" — John Hammond"
+      "quote": "\"Show, not tell; facts, not fear.\" – John Hammond"
     },
     {
       "name": "Matthew Brennan",
@@ -1771,7 +1771,7 @@
         "Home Chef",
         "Seer of Things Unseen"
       ],
-      "quote": "\"Decode all the things.\" — Matthew Brennan"
+      "quote": "\"Decode all the things.\" – Matthew Brennan"
     },
     {
       "name": "Jamie Levy",
@@ -1788,7 +1788,7 @@
         "Published Author",
         "Technical Instructor"
       ],
-      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" — Jamie Levy"
+      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" – Jamie Levy"
     },
     {
       "name": "Harlan Carvey",
@@ -1805,7 +1805,7 @@
         "Being Pedantic",
         "Napping Enthusiast"
       ],
-      "quote": "\"Keep calm and DFIR on.\" — Harlan Carvey"
+      "quote": "\"Keep calm and DFIR on.\" – Harlan Carvey"
     },
     {
       "name": "Cat Contillo",
@@ -1823,7 +1823,7 @@
         "Champion of Diversity, Equity, Inclusion, and Belonging",
         "Bakes a Mean Banana Bread"
       ],
-      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" — Cat Contillo"
+      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" – Cat Contillo"
     },
     {
       "name": "Vendor Portal",
@@ -2662,7 +2662,7 @@
     },
     {
       "name": "Bluetooth as Exfil",
-      "description": "The attackers knew you were watching that wired connection closely and got crafty—they exfiltrate all that valuable data via a Bluetooth-enabled device.",
+      "description": "The attackers knew you were watching that wired connection closely and got crafty–they exfiltrate all that valuable data via a Bluetooth-enabled device.",
       "image": "../../shared/decks/red-canary/REDCANARY__17.webp",
       "type": "c2",
       "id": "068",
@@ -2820,7 +2820,7 @@
         "Open Source Security Tools",
         "Privacy and Encryption"
       ],
-      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" — Adam Mashinchi"
+      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" – Adam Mashinchi"
     },
     {
       "name": "Carrie Roberts",
@@ -2835,7 +2835,7 @@
         "Adversary Emulation",
         "Training"
       ],
-      "quote": "\"Prevention is ideal, but detection is a must.\" — Anonymous"
+      "quote": "\"Prevention is ideal, but detection is a must.\" – Anonymous"
     },
     {
       "name": "Mike Haag",
@@ -2851,7 +2851,7 @@
         "Detection and Response",
         "Meme Connoisseur"
       ],
-      "quote": "\"I am everywhere and nowhere.\" — The Haag"
+      "quote": "\"I am everywhere and nowhere.\" – The Haag"
     },
     {
       "name": "Cloud Event Log Analysis",
@@ -3193,7 +3193,7 @@
         "Public Speaking",
         "Lifting Heavy Things"
       ],
-      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" — Will Durant"
+      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" – Will Durant"
     },
     {
       "name": "Dev Badlu",
@@ -3209,7 +3209,7 @@
         "Building Tools to Help Combat Human Trafficking",
         "Playing Table-Top Games"
       ],
-      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" — Dev"
+      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" – Dev"
     },
     {
       "name": "Sean Metcalf",
@@ -3225,7 +3225,7 @@
         "Public Speaking",
         "Community Support"
       ],
-      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" — Sean"
+      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" – Sean"
     },
     {
       "name": "Brandon Colley",
@@ -3242,7 +3242,7 @@
         "Community Contributor",
         "Beer Brewer"
       ],
-      "quote": "\"Make a decision, even if it’s wrong.\" — Dad"
+      "quote": "\"Make a decision, even if it’s wrong.\" – Dad"
     },
     {
       "name": "SEANbot",
@@ -3946,7 +3946,7 @@
         "Public Speaking",
         "Comic Book Nerd"
       ],
-      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" — Dan Erwin"
+      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" – Dan Erwin"
     },
     {
       "name": "Tim Medin",
@@ -3963,7 +3963,7 @@
         "Public Speaking",
         "PowerPoint... lots and lots of PowerPoint"
       ],
-      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" — Tim Medin"
+      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" – Tim Medin"
     },
     {
       "name": "Jorge Orchilles",
@@ -3980,7 +3980,7 @@
         "Infosec Instructor and Author",
         "Public Speaking"
       ],
-      "quote": "\"Offense informs defense and defense informs offense.\" — Jorge Orchilles"
+      "quote": "\"Offense informs defense and defense informs offense.\" – Jorge Orchilles"
     },
     {
       "name": "Alissa Torres",
@@ -3996,7 +3996,7 @@
         "Incident Response Kill Chain Slayer",
         "Architect of Inspirational PPTX"
       ],
-      "quote": "\"Heroism is often nothing more than the omission of details.\" — Asim Qureshi"
+      "quote": "\"Heroism is often nothing more than the omission of details.\" – Asim Qureshi"
     },
     {
       "name": "Dieter Smith",
@@ -4013,7 +4013,7 @@
         "Game Aficionado",
         "Geek Dad"
       ],
-      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" — Mikko Hypponen"
+      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" – Mikko Hypponen"
     },
     {
       "name": "Marcus J. Carey",
@@ -4030,7 +4030,7 @@
         "Motivational Speaking",
         "Building Businesses"
       ],
-      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" — Marcus J. Carey"
+      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" – Marcus J. Carey"
     },
     {
       "name": "Robert M. Lee",
@@ -4046,7 +4046,7 @@
         "Building a Team of People Smarter Than Me",
         "No One's Ever Wondered My Opinion"
       ],
-      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" — Robert M. Lee"
+      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" – Robert M. Lee"
     },
     {
       "name": "Chloe Messdaghi",
@@ -4063,7 +4063,7 @@
         "Optimistic",
         "Always Calm During a Storm"
       ],
-      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" — Stéphane Nappo"
+      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" – Stéphane Nappo"
     },
     {
       "name": "Eric Conrad",
@@ -4080,7 +4080,7 @@
         "Mentoring",
         "Restoring Golden Age Arcade Machines"
       ],
-      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" — Anonymous"
+      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" – Anonymous"
     },
     {
       "name": "John Strand",
@@ -4097,7 +4097,7 @@
         "Loud Angry Rock n' Roll",
         "Mountain Biking Terrifying Distances"
       ],
-      "quote": "\"Things are only fragile till they break.\" — Dovetail Joint"
+      "quote": "\"Things are only fragile till they break.\" – Dovetail Joint"
     },
     {
       "name": "Joff Thyer",
@@ -4115,7 +4115,7 @@
         "Husband and Father",
         "Amateur Woodworker"
       ],
-      "quote": "\"It's not a bug, it's a feature!\" — Unknown"
+      "quote": "\"It's not a bug, it's a feature!\" – Unknown"
     },
     {
       "name": "Beau Bullock",
@@ -4134,7 +4134,7 @@
         "Magic: The Gathering",
         "Parenting"
       ],
-      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" — John Strand"
+      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" – John Strand"
     },
     {
       "name": "Richard Phung",
@@ -4151,7 +4151,7 @@
         "Pathfinding",
         "Bass Fishing"
       ],
-      "quote": "\"It's always easier to hack a human than a computer.\" — Kevin Mitnick"
+      "quote": "\"It's always easier to hack a human than a computer.\" – Kevin Mitnick"
     },
     {
       "name": "Edward Miro",
@@ -4168,7 +4168,7 @@
         "Knows \"TheBlindHacker\"",
         "Wilderness Survival"
       ],
-      "quote": "\"To some people, I'll always be the bad guy.\" — Kevin Mitnick"
+      "quote": "\"To some people, I'll always be the bad guy.\" – Kevin Mitnick"
     }
   ],
   "red": "img/bb-back-init.png",

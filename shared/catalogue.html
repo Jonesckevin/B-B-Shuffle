@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
-    <title>B&amp;B Shuffle — Card Catalogue</title>
+    <title>Backdoors &amp; Breaches Card Catalogue | Decks</title>
+    <meta name="description" content="Browse every Backdoors &amp; Breaches deck – Core, Core 3.1, ICS-OT, sponsor expansions and the MEGA deck – with card text, detection and tools.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="B&amp;B Shuffle">
+    <meta property="og:title" content="Backdoors &amp; Breaches Card Catalogue – Every Deck">
+    <meta property="og:description" content="Browse every Backdoors &amp; Breaches deck – Core, Core 3.1, ICS-OT, sponsor expansions and the MEGA deck – with card text, detection and tools.">
+    <meta property="og:image" content="img/og-bbshuffle.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Backdoors &amp; Breaches Card Catalogue – Every Deck">
+    <meta name="twitter:description" content="Browse every Backdoors &amp; Breaches deck – Core, Core 3.1, ICS-OT, sponsor expansions and the MEGA deck – with card text, detection and tools.">
+    <meta name="twitter:image" content="img/og-bbshuffle.png">
     <link rel="icon" href="img/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" href="img/favicon.png">
     <link rel="stylesheet" href="css/base.css">
@@ -149,14 +163,58 @@
             .deck-hero { flex-direction: column; gap: 12px; }
             .deck-hero-cover { width: 100%; max-width: 320px; }
         }
+
     </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Backdoors & Breaches Card Catalogue",
+      "url": "catalogue.html",
+      "description": "Every Backdoors & Breaches deck loaded by B&B Shuffle, with card text, detection and tools.",
+      "isPartOf": { "@type": "WebSite", "name": "B&B Shuffle", "url": "../index.html" },
+      "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": 17,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Core Deck", "url": "card-index.html#deck-core" },
+          { "@type": "ListItem", "position": 2, "name": "Core 3.1", "url": "card-index.html#deck-core31" },
+          { "@type": "ListItem", "position": 3, "name": "Green Expansion v2", "url": "card-index.html#deck-green-expansion-v2" },
+          { "@type": "ListItem", "position": 4, "name": "Expansion 1", "url": "card-index.html#deck-expansion1" },
+          { "@type": "ListItem", "position": 5, "name": "ICS-OT", "url": "card-index.html#deck-ics-ot" },
+          { "@type": "ListItem", "position": 6, "name": "Core v1", "url": "card-index.html#deck-core-v1" },
+          { "@type": "ListItem", "position": 7, "name": "Core v3", "url": "card-index.html#deck-core-v3" },
+          { "@type": "ListItem", "position": 8, "name": "Core v2.2", "url": "card-index.html#deck-core-v22" },
+          { "@type": "ListItem", "position": 9, "name": "Core Spanish 1.0", "url": "card-index.html#deck-core-spanish" },
+          { "@type": "ListItem", "position": 10, "name": "Cloud Security", "url": "card-index.html#deck-cloud-security" },
+          { "@type": "ListItem", "position": 11, "name": "DataDog", "url": "card-index.html#deck-datadog" },
+          { "@type": "ListItem", "position": 12, "name": "Huntress", "url": "card-index.html#deck-huntress" },
+          { "@type": "ListItem", "position": 13, "name": "Red Canary", "url": "card-index.html#deck-red-canary" },
+          { "@type": "ListItem", "position": 14, "name": "DenSecure", "url": "card-index.html#deck-densecure" },
+          { "@type": "ListItem", "position": 15, "name": "Trimarc", "url": "card-index.html#deck-trimarc" },
+          { "@type": "ListItem", "position": 16, "name": "Electrical Co-Op", "url": "card-index.html#deck-electrical-co-op" },
+          { "@type": "ListItem", "position": 17, "name": "The MEGA Deck", "url": "card-index.html#deck-mega-deck" }
+        ]
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "B&B Shuffle", "item": "../index.html" },
+        { "@type": "ListItem", "position": 2, "name": "Card Catalogue", "item": "catalogue.html" }
+      ]
+    }
+    </script>
 </head>
 <body class="surface-felt">
     <div class="cat">
         <!-- Header -->
         <div class="cat-top">
             <a class="cat-brand" href="../index.html">
-                <img src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
+                <img src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" decoding="async">
                 <span>
                     <h1>Card Catalogue</h1>
                     <span class="sub">B&amp;B Shuffle · every deck &amp; card (shared)</span>
@@ -188,14 +246,15 @@
 
         <!-- Cards -->
         <div id="cards" class="loading">Loading…</div>
+
     </div>
 
     <!-- Legal footer -->
     <footer class="app-legal">
         <div class="app-legal-content">
-            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
-                <img class="app-legal-logo" src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
-                <span>B&amp;B Classic — play on the official site</span>
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches – Classic (official site)">
+                <img class="app-legal-logo" src="img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" loading="lazy" decoding="async">
+                <span>B&amp;B Classic | Official site</span>
             </a>
             <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
             <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
@@ -206,12 +265,13 @@
     </footer>
 
     <script src="js/card-viewer.js"></script>
+    <script src="../shared/js/seo.js"></script>
     <script>
         const DECKS = [
             { key: 'core',               name: 'Core Deck',     note: 'Original Core deck used by the legacy Engine-V1 style builds.', cover: 'core.webp' },
-            { key: 'core31',             name: 'Core 3.1',      note: 'Official Core Deck v3.1 — downloaded from backdoorsandbreaches.com.', cover: 'core31.webp' },
-            { key: 'green-expansion-v2', name: 'Green Expansion v2', note: 'Expansion set — toggle it on in the Engine-V2 Scenario Editor to merge into any loaded deck.', expansion: true },
-            { key: 'expansion1',         name: 'Expansion 1',   note: 'Expansion pack — toggle it on in the Engine-V2 Scenario Editor to merge into any loaded deck.', expansion: true, cover: 'expansion1.webp' },
+            { key: 'core31',             name: 'Core 3.1',      note: 'Official Core Deck v3.1 – downloaded from backdoorsandbreaches.com.', cover: 'core31.webp' },
+            { key: 'green-expansion-v2', name: 'Green Expansion v2', note: 'Expansion set – toggle it on in the Engine-V2 Scenario Editor to merge into any loaded deck.', expansion: true },
+            { key: 'expansion1',         name: 'Expansion 1',   note: 'Expansion pack – toggle it on in the Engine-V2 Scenario Editor to merge into any loaded deck.', expansion: true, cover: 'expansion1.webp' },
             { key: 'ics-ot',             name: 'ICS-OT',        note: 'ICS/OT focused deck.', cover: 'ics-ot.webp' },
             { key: 'core-v1',            name: 'Core v1',       note: 'Original v1 Core deck (dev-site archive).' },
             { key: 'core-v3',            name: 'Core v3',       note: 'Core v3 deck (dev-site archive).', cover: 'core-v3.webp' },
@@ -228,7 +288,7 @@
         ];
 
         // Deck box art, generated into shared/img/decks/<key>.webp. Entries without
-        // a `cover` have no box art upstream — the pills and the header just omit
+        // a `cover` have no box art upstream – the pills and the header just omit
         // the image for those.
         const COVER_BASE = 'img/decks/';
 
@@ -283,7 +343,7 @@
            Detection cross-reference (docs/card-details.json)
            Loaded lazily + memoised, and prefetched in the background
            after the first deck so a card click is normally instant.
-           Indexed by the shared-relative image path — exactly what
+           Indexed by the shared-relative image path – exactly what
            imgUrl() produces and what card-details.json stores.
            Deck-keyed joins would miss core-v31-expansion (absent from
            DECKS) and decks that reuse another deck's card art.
@@ -455,7 +515,7 @@
 
             if (!list.length) {
                 const note = (coverage && coverage.of)
-                    ? 'Not yet recorded for this card — the deck\'s card faces are ' + coverage.filled + ' of ' + coverage.of + ' scenario cards read.'
+                    ? 'Not yet recorded for this card – the deck\'s card faces are ' + coverage.filled + ' of ' + coverage.of + ' scenario cards read.'
                     : 'Not yet recorded for this card.';
                 return `<p class="det-lead">${esc(note)}</p>`;
             }
@@ -556,7 +616,7 @@
             cardsEl.className = 'loading';
             cardsEl.textContent = 'Loading…';
             renderDeckHero(deck);
-            noteEl.textContent = deck ? deck.note + (deck.expansion ? ' (This is an expansion deck — its cards merge into a base deck rather than stand alone.)' : '') : '';
+            noteEl.textContent = deck ? deck.note + (deck.expansion ? ' (This is an expansion deck – its cards merge into a base deck rather than stand alone.)' : '') : '';
             summaryEl.textContent = '';
 
             try {
@@ -622,7 +682,7 @@
 
             const active = !!(q || filter.type);
             countEl.textContent = active
-                ? (none ? 'No cards match — showing 0 of ' + deckCardCount
+                ? (none ? 'No cards match – showing 0 of ' + deckCardCount
                         : 'Showing ' + visibleTotal + ' of ' + deckCardCount + ' cards')
                 : deckCardCount + ' cards in this deck';
             countEl.classList.toggle('is-empty', none);
@@ -645,7 +705,7 @@
             });
 
             deckCardCount = data.length;
-            summaryEl.textContent = db.title + ' — ' + data.length + ' cards';
+            summaryEl.textContent = db.title + ' – ' + data.length + ' cards';
             cardsEl.className = '';
             cardsEl.innerHTML = TYPE_ORDER.filter(t => byType[t]).map(type => {
                 const list = byType[type];
@@ -653,7 +713,7 @@
                     <div class="type-group" data-type="${esc(type)}">
                         <div class="type-head"><h2>${esc(TYPE_LABEL[type] || type)}</h2><span class="count">${list.length}</span></div>
                         <div class="card-grid">${list.map(card => `
-                            <div class="card-tile" data-type="${esc(type)}" data-name="${esc(card.name || '')}" data-card-id="${esc(card.id || '')}" data-image="${esc(imgUrl(card.image))}" title="${esc(card.name || '')} — click to enlarge">
+                            <div class="card-tile" data-type="${esc(type)}" data-name="${esc(card.name || '')}" data-card-id="${esc(card.id || '')}" data-image="${esc(imgUrl(card.image))}" title="${esc(card.name || '')} – click to enlarge">
                                 <div class="frame"><img loading="lazy" src="${imgUrl(card.image)}" alt="${esc(card.name || 'Card')}" onerror="this.style.opacity=0.15"></div>
                                 <span class="name">${esc(card.name || '')}</span>
                             </div>`).join('')}

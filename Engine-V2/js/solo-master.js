@@ -38,7 +38,7 @@
     // different here, so this mode supplies its own wording.
     const ROLL_PROMPT_HINT = 'Rolling without a procedure sweeps everything at once: a good roll still tells ' +
         'you which phase looks loudest, but it cannot use a card\'s DETECTION list to name the technique ' +
-        '— and it still spends a turn.';
+        '– and it still spends a turn.';
     const INTRO_MODAL_ID = 'solo-intro-modal';
     const CREDIT_ID = 'solo-credit';
     const SETTINGS_MODAL_ID = 'im-settings-modal';
@@ -185,7 +185,7 @@
                     });
                 });
             } catch (error) {
-                console.warn('[SoloMaster] detection catalog unavailable — clues lose relevance', error);
+                console.warn('[SoloMaster] detection catalog unavailable – clues lose relevance', error);
             }
             return { byImage, byName };
         })();
@@ -280,7 +280,7 @@
         {
             key: 'soc-lead',
             name: 'SOC Shift Lead',
-            blurb: 'Alert triage and the overnight queue — the SIEM\'s point of view.',
+            blurb: 'Alert triage and the overnight queue – the SIEM\'s point of view.',
             knows: 'You live in the alert queue: which rule fired, in what order, what the console showed, ' +
                 'how the shift escalated it. You speak in triage, severity, timing and noise.',
             limits: 'you are not the forensic examiner. When a question needs memory, disk or registry ' +
@@ -306,7 +306,7 @@
         {
             key: 'network',
             name: 'Network Security Analyst',
-            blurb: 'Flows, DNS, proxy and TLS metadata — what crossed the wire.',
+            blurb: 'Flows, DNS, proxy and TLS metadata – what crossed the wire.',
             knows: 'You read traffic: NetFlow, DNS resolution, proxy logs, TLS metadata, beacon timing ' +
                 'and jitter, and where the segmentation boundaries are.',
             limits: 'you cannot see inside a host. When a question is about files, memory or the registry, ' +
@@ -315,10 +315,10 @@
         {
             key: 'threat-intel',
             name: 'Threat Intelligence Analyst',
-            blurb: 'Actor tradecraft and campaign context — patterns, not confirmed facts.',
+            blurb: 'Actor tradecraft and campaign context – patterns, not confirmed facts.',
             knows: 'You think in pattern and likelihood: what this class of tradecraft usually implies, ' +
                 'who normally uses it, and how it fits a wider campaign.',
-            limits: 'you speak in inference, never in confirmed local findings — you say what is typical ' +
+            limits: 'you speak in inference, never in confirmed local findings – you say what is typical ' +
                 'and lean on the evidence others collect to rule it in or out.'
         },
         {
@@ -333,7 +333,7 @@
         {
             key: 'ciso',
             name: 'CISO / Executive Sponsor',
-            blurb: 'Risk, exposure and the regulatory clock — technical detail in plain language.',
+            blurb: 'Risk, exposure and the regulatory clock – technical detail in plain language.',
             knows: 'You speak in risk and consequence: exposure, customer impact, breach-notification ' +
                 'clocks, and what you would have to tell the board.',
             limits: 'you are not technical. You translate what the team says into plain language and never ' +
@@ -349,46 +349,46 @@
             key: 'plain',
             name: 'Matter-of-Fact',
             blurb: 'Clear and professional, with no particular colour.',
-            voice: 'even, clear and professional — no jokes, no drama, no filler'
+            voice: 'even, clear and professional – no jokes, no drama, no filler'
         },
         {
             key: 'veteran',
             name: 'Grizzled Veteran',
             blurb: 'Terse and dry; has seen this before.',
-            voice: 'terse and dry, with the weariness of someone who has done this many times — short ' +
+            voice: 'terse and dry, with the weariness of someone who has done this many times – short ' +
                 'sentences and understated humour'
         },
         {
             key: 'mentor',
             name: 'Encouraging Mentor',
             blurb: 'Patient and instructive; explains the why.',
-            voice: 'patient and encouraging — you explain why a clue matters and what it rules in or out, ' +
+            voice: 'patient and encouraging – you explain why a clue matters and what it rules in or out, ' +
                 'without ever being condescending'
         },
         {
             key: 'bybook',
             name: 'By the Book',
             blurb: 'Precise and procedural; cites the process.',
-            voice: 'precise and procedural — you name the step you are on and what the playbook says next'
+            voice: 'precise and procedural – you name the step you are on and what the playbook says next'
         },
         {
             key: 'deadpan',
             name: 'Deadpan',
             blurb: 'Flat delivery and heavy understatement.',
-            voice: 'flat and unexcitable — facts arrive with no emotional colour and the occasional ' +
+            voice: 'flat and unexcitable – facts arrive with no emotional colour and the occasional ' +
                 'deadpan aside'
         },
         {
             key: 'blunt',
             name: 'Blunt',
             blurb: 'Direct, no pleasantries, says the hard thing.',
-            voice: 'blunt and impatient — no pleasantries, and you say the uncomfortable thing plainly'
+            voice: 'blunt and impatient – no pleasantries, and you say the uncomfortable thing plainly'
         },
         {
             key: 'enthusiast',
             name: 'Enthusiast',
             blurb: 'Animated; genuinely enjoys the puzzle.',
-            voice: 'animated and genuinely interested in the puzzle — visibly invested when a lead lands'
+            voice: 'animated and genuinely interested in the puzzle – visibly invested when a lead lands'
         }
     ];
 
@@ -406,21 +406,28 @@
     /**
      * The framing block every prompt opens with.
      *
-    * Explicit knowledge limits reduce unsupported claims when evidence is outside
-    * the selected role's scope.
+     * The output rules come first in spirit even though they are listed after
+     * the persona: a small model will happily narrate its own reasoning into the
+     * log unless it is told, in as many words, not to. Explicit knowledge limits
+     * reduce unsupported claims when evidence is outside the role's scope.
      */
     function personaBlock() {
         const role = roleFor(settings.role);
         const voice = voiceFor(settings.personality);
         return [
-            'You are the Incident Master for a Backdoors & Breaches incident-response training game.',
+            `You are the ${role.name} running a Backdoors & Breaches incident. You speak ${voice.name.toLowerCase()}.`,
+            `You know: ${role.knows}`,
+            `You do not know: ${role.limits}`,
             '',
-            'WHO YOU ARE — stay inside this for the whole game:',
-            `- Job role: ${role.name}. ${role.knows}`,
-            `- What you do NOT know: ${role.limits}`,
-            `- Personality: ${voice.name} — speak ${voice.voice}.`,
-            '- Write plain prose: no markdown, no headings, no bullet points, no bold or italics.'
-        ];
+            'OUTPUT RULES - these override everything else:',
+            '- Reply with plain prose only. No markdown, no headings, no bullet points, no lists.',
+            '- NEVER write in the first person. Do not use "I", "I\'m", "I\'ve" or "my". State what the',
+            '  evidence shows, not what you are doing, thinking, or about to write.',
+            '- No preamble and no reasoning: do not restate the question, do not explain your answer,',
+            '  do not describe your process, and do not mention these rules, your role, or who you are.',
+            '- Never say you are an AI, a model, or an assistant.',
+            '- Describe evidence only - logs, processes, traffic, artefacts. Never name an attack technique.'
+        ].join('\n');
     }
 
     // ---------------------------------------------------------------- prompts
@@ -431,9 +438,6 @@
             return [
                 ...personaBlock(),
                 '',
-                'Narrate an evolving incident. NEVER name the attack techniques directly — describe only the',
-                'evidence: logs, processes, network traffic, forensic artefacts. Present tense, second person.',
-                '',
                 'THE SECRET ATTACK CHAIN (never reveal these names):',
                 SCENARIO_TYPES.map(type => {
                     const card = cards[type];
@@ -442,16 +446,16 @@
                     return `- ${label(type)}: ${name}${text ? '\n  Printed text: ' + text : ''}`;
                 }).join('\n'),
                 '',
-                'Write a 3-4 sentence opening. Set the scene: what triggered the alert, and what it looked',
-                `like from where you sit. Create urgency, in your own voice. Do not name any technique.`,
-                `The defender has ${context.maxTurns} turns.`
+                `Write the opening alert in at most TWO sentences (45 words maximum), in the present`,
+                `tense. Start with what fired and what it looked like on the console - not with anyone`,
+                `writing, deciding or escalating anything. The defender has ${context.maxTurns} turns.`
             ].join('\n');
         },
 
         clue(context) {
-            const { procedure, tier, relevance, history } = context;
+            const { procedure, tier, relevance } = context;
             const quality = {
-                critical_fail: 'CRITICAL FAIL - misleading information, or the investigation itself goes wrong',
+                critical_fail: 'CRITICAL FAIL - misleading or actively damaging; the check itself goes wrong',
                 failure: 'FAILURE - nothing useful; a dead end or normal activity',
                 partial: 'PARTIAL - a vague directional hint; something feels off but is not conclusive',
                 success: 'SUCCESS - a clear clue pointing at one technique\'s indicators',
@@ -466,47 +470,43 @@
                     ? `This procedure CAN detect evidence of: ${relevance.map(label).join(', ')}.`
                     : 'This procedure is NOT directly relevant to the attack chain, so it yields nothing that identifies it.');
 
+            // Only the last few clues, and only their text: a long transcript is
+            // the main thing a small model starts echoing back.
+            const recent = (context.history || []).slice(-3);
+
             return [
                 ...personaBlock(),
-                'Describe only evidence — NEVER name an attack technique directly.',
                 '',
                 `TURN ${context.turn}/${context.maxTurns}`,
-                '',
-                'INVESTIGATION SO FAR:',
-                history.length
-                    ? history.map(h => `Turn ${h.turn}: ${h.procedure} — roll ${h.total} (${h.tier})\n  Clue given: "${h.clue}"`).join('\n')
-                    : 'Nothing yet.',
-                '',
-                'THIS TURN:',
-                `- Procedure used: ${procedure ? procedure.name : 'Unknown procedure'}`,
-                procedure && procedure.description ? `- What it does: ${procedure.description}` : '',
-                `- Roll: ${context.roll} (natural) with +${context.bonus} enhanced = ${context.total}`,
-                `- Result quality: ${quality}`,
-                `- ${relevanceLine}`,
+                `Procedure: ${procedure ? procedure.name : 'an untargeted sweep'}`,
+                `Roll: ${context.roll} (natural), +${context.bonus} enhanced = ${context.total}`,
+                `Result: ${quality}`,
+                relevanceLine,
                 context.confirmed
-                    ? `- This investigation CONFIRMS the ${context.confirmed} phase. The evidence should land that` +
-                      ' identification clearly, without ever naming a technique.'
+                    ? `The ${context.confirmed} phase IS confirmed - land that identification clearly, without ever naming a technique.`
+                    : '',
+                recent.length
+                    ? 'Earlier clues (for consistency only, do not repeat them):\n' + recent.map(h => '- ' + h.clue).join('\n')
                     : '',
                 '',
-                'Write 2-4 sentences. Match the quality to the roll. Keep it consistent with the clues above;',
-                'build on earlier evidence rather than contradicting it. Stay in character and in your lane —',
-                'if the answer belongs to another discipline, say whose console it is.',
-                context.turn >= context.maxTurns - 2 ? 'Time is nearly up — add tension.' : ''
+                'Answer the roll in ONE sentence, or TWO at the very most (35 words maximum). Lead with',
+                'what the check turned up: on a failure say what was found instead, on a success name the',
+                'evidence and the phase it points at. Do not summarise the turn, do not recap the roll, and',
+                'do not explain the reasoning.'
             ].filter(Boolean).join('\n');
         },
 
         inject(context) {
             return [
                 ...personaBlock(),
-                'Describe only evidence — never name an attack technique.',
                 '',
-                `An INJECT card has been drawn because of: ${context.source}.`,
+                `An INJECT card was drawn because of: ${context.source}.`,
                 `Inject card: ${context.inject ? context.inject.name : 'unknown'}`,
                 context.inject && context.inject.description ? `Printed rule: ${context.inject.description}` : '',
-                context.inject && context.inject.notes ? `Notes: ${context.inject.notes}` : '',
                 '',
-                `Turn ${context.turn}/${context.maxTurns}. Write 2-3 sentences on how this complication lands`,
-                'on the investigation team, then the GM applies the printed rule.'
+                `Turn ${context.turn}/${context.maxTurns}. In ONE or TWO sentences (35 words maximum) say`,
+                'how this complication lands on the investigation team. Do not restate the card name or the',
+                'printed rule - the GM applies that.'
             ].filter(Boolean).join('\n');
         },
 
@@ -523,36 +523,129 @@
                     return `- ${label(type)}: ${card ? card.name : 'Unknown'}`;
                 }).join('\n'),
                 '',
-                'INVESTIGATION:',
-                context.history.length
-                    ? context.history.map(h => `Turn ${h.turn}: ${h.procedure} — roll ${h.total} (${h.tier})`).join('\n')
-                    : 'No investigations were recorded.',
-                '',
-                'Write a 4-5 sentence educational debrief: how the chain fitted together, which clues pointed at',
-                'each phase, which procedures would have been most effective here, and one real-world IR lesson.',
-                'Be encouraging either way, and stay in your own voice — but here you MAY name the techniques,',
-                'because the case is closed.',
+                'Here you MAY name the techniques, because the case is closed. Write the debrief in THREE',
+                'sentences (70 words maximum): how the chain fitted together, and the one procedure that',
+                'would have exposed it fastest. Be encouraging either way.'
             ].join('\n');
         }
     };
+
+    // ------------------------------------------------ reply shape and cleanup
+
+    /**
+     * How short each kind of reply must be. The sentence and character caps are
+     * enforced after the fact by tidyReply(); the token budget keeps the model
+     * from writing an essay that then has to be trimmed away, and the stop
+     * sequences end generation at the first paragraph break so a rambling model
+     * is cut off early rather than mid-sentence.
+     */
+    const BRIEF = {
+        opening: { sentences: 2, chars: 260, maxTokens: 160, temperature: 0.4, stop: ['\n\n'] },
+        clue: { sentences: 2, chars: 240, maxTokens: 120, temperature: 0.3, stop: ['\n\n', '\n'] },
+        inject: { sentences: 2, chars: 240, maxTokens: 120, temperature: 0.3, stop: ['\n\n', '\n'] },
+        debrief: { sentences: 3, chars: 420, maxTokens: 260, temperature: 0.4, stop: ['\n\n'] }
+    };
+
+    /**
+     * Reduce a model reply to the short, plain line the rail is meant to show.
+     *
+     * Removes a reasoning scratchpad, code fences, list markers, a "Speaker:"
+     * lead-in and markdown emphasis, then keeps at most `maxSentences` sentences
+     * within `maxChars`. Returns '' when nothing usable is left.
+     * @param {string} text - Raw model output
+     * @param {number} maxSentences - Sentence cap
+     * @param {number} maxChars - Hard character cap
+     * @returns {string}
+     */
+    function tidyReply(text, maxSentences, maxChars) {
+        let out = String(text == null ? '' : text);
+
+        // 1. Reasoning scratchpads:  thinking…<｜end▁of▁thinking｜>, <reasoning>…</reasoning>, or a
+        //    never-closed one that runs to the end of the reply.
+        out = out.replace(/<(think|thinking|reasoning|analysis|scratchpad)>[\s\S]*?<\/\1>/gi, ' ');
+        out = out.replace(/<(think|thinking|reasoning|analysis|scratchpad)>[\s\S]*$/i, ' ');
+
+        // 2. Code fences and list markers are never narration.
+        out = out.replace(/```[\s\S]*?```/g, ' ');
+        out = out.replace(/^\s*(?:[-*\u2022]|\d+[.)])\s+/gm, ' ');
+
+        // 3. A "Clue:" / "SOC Shift Lead:" lead-in is scaffolding the model added,
+        //    as is the bare quality label the prompt used ("PARTIAL - …").
+        out = out.replace(/^\s*[A-Za-z][A-Za-z0-9 /'_-]{0,24}:\s*/, ' ');
+        out = out.replace(/^\s*[A-Za-z][A-Za-z0-9 /'-]{0,24}\s*[\u2013\u2014-]\s+/, ' ');
+
+        // 4. Markdown emphasis and stray table/heading characters.
+        out = out.replace(/\*\*(.+?)\*\*/g, '$1').replace(/[*_`#>|]/g, ' ');
+        out = out.replace(/\s+/g, ' ').trim();
+
+        // 5. Sentence cap.
+        const sentences = out.match(/[^.!?]+[.!?]+|\S[^.!?]*$/g) || (out ? [out] : []);
+        if (sentences.length > maxSentences) out = sentences.slice(0, maxSentences).join(' ').trim();
+
+        // 6. Character cap, trimmed back to a sentence boundary when there is one.
+        if (out.length > maxChars) {
+            const cut = out.slice(0, maxChars);
+            const boundary = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('! '), cut.lastIndexOf('? '));
+            out = (boundary > 40 ? cut.slice(0, boundary + 1) : cut.replace(/\s+\S*$/, '') + '\u2026').trim();
+        }
+        return out;
+    }
+
+    /**
+     * Did the model actually answer? Guards the rail against the failure modes
+     * small models fall into: echoing the prompt back, meta-commentary about
+     * their own role, or a degenerate repeated token. A rejected reply falls
+     * back to the offline tables, which are short, on-point and always there.
+     * @param {string} text - A tidied reply
+     * @returns {boolean}
+     */
+    function replyIsUsable(text) {
+        const out = String(text || '').trim();
+        if (out.length < 15) return false;
+        // Leaked scratchpad tags.
+        if (/<\/?(think|thinking|reasoning|analysis|scratchpad)>/i.test(out)) return false;
+        // Prompt echo or meta-commentary: the model talking about the task
+        // (or about itself) instead of answering it.
+        if (/(as an ai|language model|incident master|who you are|job role|personality|output rules|do not name any technique|input:|output:|prompt|instruction|the procedure|this procedure|the technique is identified|positive turn|enhanced to|complete the answer|which can be confirmed)/i.test(out)) {
+            return false;
+        }
+        // The prompt's own result wording coming back verbatim.
+        if (/(vague directional hint|not conclusive|dead end or normal activity|the check itself goes wrong|nearly identifies the technique|pointing at one technique|nothing useful;)/i.test(out)) {
+            return false;
+        }
+        // A bare quality label at the front ("PARTIAL - …") is the prompt, not a clue.
+        if (/^\s*(critical fail(ure)?|critical success|failure|partial|success)\b/i.test(out)) return false;
+        // First-person process talk ("I've started writing an alert…"), which the
+        // prompt forbids outright.
+        if (/\b(i|i'm|i've|i'll|i'd|my|me|myself|let me|here's)\b/i.test(out)) return false;
+        // Narration about the act of analysing rather than the finding.
+        if (/\b(after analyz|after review|after examin|having analyz|having review|based on the analysis|to answer this)/i.test(out)) return false;
+        // Arithmetic and turn counters belong to the roll read-out above the
+        // clue, not to the clue: seeing them means the prompt came back.
+        if (/\+\s*\d/.test(out) || /\bturn\s*\d/i.test(out) || /\b\d+\s*\/\s*\d+\b/.test(out)) return false;
+        // A handful of words repeated over and over is not a clue.
+        const words = out.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
+        if (words.length >= 8 && (new Set(words).size / words.length) < 0.34) return false;
+        return true;
+    }
 
     // ---------------------------------------------------------- offline clues
 
     const OFFLINE = {
         critical_fail: [
             'Your query floods the SIEM with false positives and you burn the window filtering noise.',
-            'The evidence you were examining gets overwritten — the chain of custody is now compromised.',
+            'The evidence you were examining gets overwritten – the chain of custody is now compromised.',
             'You follow a promising lead that turns out to be routine administrative activity.'
         ],
         failure: [
             'The data is either too noisy to read or the attacker covered their tracks well.',
-            'The logs for this window are suspiciously sparse — nothing stands out.',
+            'The logs for this window are suspiciously sparse – nothing stands out.',
             'Your search is too broad to be useful. You need a more targeted question.'
         ],
         partial: [
             'Something looks off, but you cannot yet say what. An anomaly in the timing, perhaps.',
             'You find indirect evidence of suspicious activity. Suggestive, not conclusive.',
-            'The pattern is there but faint — someone was here, but the picture stays unclear.'
+            'The pattern is there but faint – someone was here, but the picture stays unclear.'
         ],
         generic_success: [
             'Solid evidence uncovered. You are making real progress on the attack.',
@@ -562,7 +655,7 @@
         relevant_success: [
             'The logs show behaviour that clearly is not normal business traffic.',
             'You have found artefacts the attacker almost certainly left behind.',
-            'This is exactly the evidence you needed — it points squarely at one technique.'
+            'This is exactly the evidence you needed – it points squarely at one technique.'
         ]
     };
 
@@ -585,7 +678,7 @@
         if (tier === 'critical_success') {
             const card = context.bestCard;
             if (card && card.description) {
-                return `${pick(OFFLINE.relevant_success)} The printed scenario text reads: "${card.description}" — that is the clearest possible read on this phase.`;
+                return `${pick(OFFLINE.relevant_success)} The printed scenario text reads: "${card.description}" – that is the clearest possible read on this phase.`;
             }
             return pick(OFFLINE.relevant_success);
         }
@@ -689,6 +782,43 @@
         el.textContent = `Turn ${Math.max(1, display)}/${g.maxTurns}`;
     }
 
+    /**
+     * What is safe to show while the reply is still being written: everything
+     * except a reasoning scratchpad. A model that opens  thinking and has not
+     * closed it yet shows nothing (the "thinking…" placeholder stays put), and a
+     * completed scratchpad is dropped from the visible text.
+     * @param {string} text - Everything generated so far
+     * @returns {string}
+     */
+    function previewText(text) {
+        let out = String(text == null ? '' : text);
+        out = out.replace(/<(think|thinking|reasoning|analysis|scratchpad)>[\s\S]*?<\/\1>/gi, '');
+        const open = out.search(/<(think|thinking|reasoning|analysis|scratchpad)>/i);
+        if (open !== -1) out = out.slice(0, open);
+        return out.replace(/\s+/g, ' ').trim();
+    }
+
+    /**
+     * Replace the typing bubble's placeholder with the text generated so far, so
+     * a local model shows its work instead of an indeterminate spinner. Called
+     * once per streamed chunk by AIClient; a no-op when no bubble is up (which is
+     * the case for every provider that does not stream).
+     * @param {string} text - Everything generated so far
+     */
+    function streamPreview(text) {
+        const typing = byId(TYPING_ID);
+        if (!typing) return;
+        const label = typing.querySelector('.im-typing-text');
+        if (!label) return;
+        const shown = previewText(text);
+        // Nothing outside a scratchpad yet: keep the "thinking…" wording rather
+        // than blanking the bubble.
+        if (!shown) return;
+        label.textContent = shown;
+        const box = byId(LOG_ID);
+        if (box) box.scrollTop = box.scrollHeight;
+    }
+
     // ------------------------------------------------------------------- LLM
 
     /**
@@ -712,9 +842,23 @@
                 if (!resolved || !resolved.ok) return null;
             }
             state.lastCall = Date.now();
-            const text = await ai.chat(prompts[kind](context));
+            const brief = BRIEF[kind] || { sentences: 2, chars: 240, maxTokens: 160, temperature: 0.3, stop: [] };
+            // Stream the in-browser model's tokens into the typing bubble as they
+            // arrive; the hosted providers ignore the hook and return the whole
+            // string, so this is a no-op for them.
+            const text = await ai.chat(prompts[kind](context), {
+                onToken: (delta, full) => streamPreview(full),
+                maxTokens: brief.maxTokens,
+                temperature: brief.temperature,
+                stop: brief.stop
+            });
             state.consecutiveFailures = 0;
-            return (text && String(text).trim()) || null;
+            // The rail is a one-line read-out, not a script. Trim to the brief, and
+            // reject a reply that never actually answered (a prompt echo, model
+            // navel-gazing, a repeated token) so the caller falls back to the
+            // offline table instead of showing the model's thinking.
+            const tidy = tidyReply(text, brief.sentences, brief.chars);
+            return replyIsUsable(tidy) ? tidy : null;
         } catch (error) {
             console.warn('[SoloMaster] AI call failed, using offline clues:', error);
             state.consecutiveFailures = (state.consecutiveFailures || 0) + 1;
@@ -722,7 +866,7 @@
             if (!state.warnedProvider) {
                 state.warnedProvider = true;
                 log('The Incident Master could not be reached (' + scrub(error && error.message ? error.message : 'request failed') +
-                    ') — falling back to offline clues.', 'meta');
+                    ') – falling back to offline clues.', 'meta');
             }
             if (state.consecutiveFailures >= 2) {
                 state.providerDown = true;
@@ -792,14 +936,14 @@
             cards: hiddenCards()
         };
         if (entry.general) {
-            log('Untargeted sweep — no procedure selected, so this is a general hint.', 'meta');
+            log('Untargeted sweep – no procedure selected, so this is a general hint.', 'meta');
         }
 
         // Spend the turn now so the board agrees with the roll immediately, even
         // while the Incident Master is still composing its answer.
         spendTurn();
 
-        log(`Roll ${meta.base}${meta.bonus ? ' +' + meta.bonus : ''} = ${meta.total} — ${tierLabel(tier)}` +
+        log(`Roll ${meta.base}${meta.bonus ? ' +' + meta.bonus : ''} = ${meta.total} – ${tierLabel(tier)}` +
             (procedure ? ` · ${procedure.name}` : ''), 'meta');
 
         state.queue.push(entry);
@@ -828,9 +972,9 @@
                     if (entry.confirm) {
                         const card = entry.cards[entry.confirm];
                         log(`DETECTION CONFIRMED · ${TYPE_LABELS[entry.confirm] || entry.confirm}` +
-                            (card ? ' — ' + card.name : ''), 'success');
+                            (card ? ' – ' + card.name : ''), 'success');
                     } else if (entry.alreadyKnown) {
-                        log('Nothing new — the phases this procedure covers are already identified.', 'meta');
+                        log('Nothing new – the phases this procedure covers are already identified.', 'meta');
                     }
                     state.history.push({
                         turn: entry.turn,
@@ -988,7 +1132,7 @@
         setBusy(true, 'The Incident Master is writing the debrief…');
         const text = await ask('debrief', { won, cards, history: state.history });
         if (text) log(text, 'narrator');
-        else if (!won) log('Review the clues against the chain above — the evidence for each phase was there.', 'narrator');
+        else if (!won) log('Review the clues against the chain above – the evidence for each phase was there.', 'narrator');
         setBusy(false);
     }
 
@@ -1011,7 +1155,7 @@
                 seen.add(key);
                 return true;
             }).sort((a, b) => String(a.name).localeCompare(String(b.name)));
-            select.innerHTML = '<option value="">— Select —</option>' + options
+            select.innerHTML = '<option value="">– Select –</option>' + options
                 .map(card => `<option value="${esc(card.id != null ? card.id : card.name)}">${esc(card.name)}</option>`)
                 .join('');
         });
@@ -1052,7 +1196,7 @@
         // solvable by enumeration, which is what the strikes are there to stop.
         if (correct === SCENARIO_TYPES.length) {
             closeAccusation();
-            log(`ACCUSATION: ${correct}/${SCENARIO_TYPES.length} correct — case closed.`, 'success');
+            log(`ACCUSATION: ${correct}/${SCENARIO_TYPES.length} correct – case closed.`, 'success');
             const pc = controller();
             if (pc) pc.showGameOver('win');
             void endGame(true);
@@ -1097,6 +1241,16 @@
     }
 
     /**
+     * The in-browser model's curated ids. webllm-provider.js owns the list and
+     * filters it against the engine once that has loaded, so a model a WebLLM
+     * release has retired is dropped rather than offered.
+     */
+    function localModels() {
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        return local ? local.catalog() : curatedModels('webllm');
+    }
+
+    /**
     * Whether this build exposes the server-side AI key path. Static demos do
     * not provide `/api/ai/*`, so `AIClient.getSharedConfig` is absent there.
      */
@@ -1129,7 +1283,7 @@
         if (!select) return;
         const list = Array.isArray(models) ? models.slice() : [];
         const wanted = preferred || settings.model || '';
-        select.innerHTML = '<option value="">— provider default —</option>' +
+        select.innerHTML = '<option value="">– provider default –</option>' +
             list.map(m => `<option value="${esc(m)}">${esc(m)}</option>`).join('');
         if (wanted && list.includes(wanted)) {
             select.value = wanted;
@@ -1210,11 +1364,13 @@
             }
         }
 
+        const isLocal = settings.provider === 'webllm';
+
         // Populate the dropdown from the curated list before fetching live models.
-        populateModels(curatedModels(settings.provider), settings.model);
+        populateModels(isLocal ? localModels() : curatedModels(settings.provider), settings.model);
 
         const keyField = byId('im-apikey-field');
-        if (keyField) (settings.source === 'own' ? Utils.showElement(keyField) : Utils.hideElement(keyField));
+        if (keyField) ((settings.source === 'own' && !isLocal) ? Utils.showElement(keyField) : Utils.hideElement(keyField));
         const apiKey = byId('im-apikey');
         if (apiKey) apiKey.value = settings.apiKey || '';
 
@@ -1223,11 +1379,35 @@
         });
 
         // No server, no server key: drop the whole choice instead of showing a
-        // radio that cannot be honoured.
+        // radio that cannot be honoured. The in-browser model has no key at all,
+        // so it drops the choice too.
         const keymode = byId('im-keymode-field');
-        if (keymode) (hasSharedKeyPath() ? Utils.showElement(keymode) : Utils.hideElement(keymode));
+        if (keymode) ((hasSharedKeyPath() && !isLocal) ? Utils.showElement(keymode) : Utils.hideElement(keymode));
 
+        renderLocalPanel(isLocal);
         populatePersona();
+    }
+
+    /**
+     * Show and refresh the in-browser model panel. The panel itself (status,
+     * download, eject, delete) is built by webllm-provider.js; this only decides
+     * whether the target warrants it and where the chosen model comes from.
+     * @param {boolean} isLocal - Whether the webllm target is selected
+     */
+    function renderLocalPanel(isLocal) {
+        const field = byId('im-webllm-field');
+        const host = byId('im-webllm-host');
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        if (!field || !host || !local) return;
+        if (!isLocal) {
+            Utils.hideElement(field);
+            return;
+        }
+        local.mount(host, {
+            getModel: () => (byId('im-model') ? byId('im-model').value : '') || settings.model || local.pickDefault(),
+            getSelect: () => byId('im-model')
+        });
+        Utils.showElement(field);
     }
 
     async function describeTarget() {
@@ -1259,7 +1439,7 @@
      * Deal an empty board, or leave a running game alone.
      *
      * Only ever called from a user gesture (the intro or the AI target closing),
-     * so `loadScenario()` has long since settled — unlike init(), where the board
+     * so `loadScenario()` has long since settled – unlike init(), where the board
      * is still loading and "no scenario" cannot yet be told from "not loaded".
      */
     function promptForDeal() {
@@ -1287,7 +1467,7 @@
         await openSettings();
         const status = byId(SETTINGS_STATUS_ID);
         if (status) {
-            status.textContent = 'No AI target set yet — add a key for full narration, '
+            status.textContent = 'No AI target set yet – add a key for full narration, '
                 + 'or close this to play with the offline clue tables.';
         }
     }
@@ -1363,19 +1543,23 @@
         const provider = byId('im-provider') ? byId('im-provider').value : settings.provider;
         const model = byId('im-model') ? byId('im-model').value : '';
         const apiKey = byId('im-apikey') ? byId('im-apikey').value.trim() : '';
-        const source = currentSource();
+        // The in-browser model cannot be proxied by the server, so it is always
+        // the user's own (keyless) target.
+        let source = currentSource();
+        if (provider === 'webllm') source = 'own';
         const role = byId('im-role') ? byId('im-role').value : settings.role;
         const personality = byId('im-personality') ? byId('im-personality').value : settings.personality;
         const status = byId(SETTINGS_STATUS_ID);
 
-        // A custom / local endpoint (Ollama, LM Studio...) needs no API key: the
-        // address is in the settings record instead.
-        const keyless = provider === 'custom';
+        // A custom / local endpoint (Ollama, LM Studio...) and the in-browser
+        // model need no API key: the address lives in the settings record, and
+        // the in-browser model has no address at all.
+        const keyless = provider === 'custom' || provider === 'webllm';
         if (source === 'own' && !apiKey && !keyless) {
             if (!options.quiet && status) status.textContent = 'Enter your API key, or switch to this server\'s key.';
             return false;
         }
-        if (source === 'own' && keyless && !settings.endpoint && !options.quiet && status) {
+        if (source === 'own' && provider === 'custom' && !settings.endpoint && !options.quiet && status) {
             status.textContent = 'A local server needs its address: set the Custom Endpoint in the AI Generator settings first.';
         }
 
@@ -1393,7 +1577,7 @@
         state.warnedProvider = false;
 
         const target = await describeTarget();
-        if (!options.quiet && status) status.textContent = 'Saved — clues will come from ' + target + '.';
+        if (!options.quiet && status) status.textContent = 'Saved – clues will come from ' + target + '.';
         await refreshStatus();
         // Re-evaluate the model list so a stale "not offered by this key" warning
         // clears as soon as the choice is fixed.
@@ -1420,7 +1604,7 @@
             const reply = await AIClient.chat('Reply with exactly one word: ready');
             const spoken = scrub(String(reply || '').trim().replace(/\s+/g, ' ').slice(0, 60));
             if (status) status.textContent = spoken
-                ? `Connection OK — the model replied “${spoken}”.`
+                ? `Connection OK – the model replied “${spoken}”.`
                 : 'Connection OK, but the model returned no text.';
             Utils.showToast('Incident Master connection OK', 'success');
         } catch (error) {
@@ -1473,6 +1657,14 @@
         const apiKey = byId('im-apikey') ? byId('im-apikey').value.trim() : '';
         const source = currentSource();
 
+        // The in-browser model has no key and no live list: show the curated set
+        // (filtered once the engine has loaded) and explain the download.
+        if (provider === 'webllm') {
+            populateModels(localModels(), settings.model || select.value);
+            setModelHint('Runs in your browser – download the selected model below, then play offline.');
+            return;
+        }
+
         if (source === 'own' && provider !== 'custom' && !apiKey) {
             populateModels(curatedModels(provider), settings.model || select.value);
             setModelHint('Add your API key to load the models it can use.');
@@ -1496,7 +1688,7 @@
                     setModelHint(`${result.models.length} model${result.models.length === 1 ? '' : 's'} available from ${origin}.`, 'ok');
                 }
             } else if (result.error) {
-                setModelHint('Showing common models — ' + result.error + '.', 'error');
+                setModelHint('Showing common models – ' + result.error + '.', 'error');
             } else {
                 setModelHint('Showing common models for this provider.');
             }
@@ -1651,6 +1843,12 @@
         if (token !== readyToken) return;
         syncTurnDisplay();
 
+        // An in-browser model may still need its one-time download, so surface
+        // that progress in the rail rather than an opaque pause before the
+        // opening narration. Never fatal: a failure leaves the offline tables.
+        await preloadLocalModel();
+        if (token !== readyToken) return;
+
         const cards = hiddenCards();
         setBusy(true, 'The Incident Master is opening the incident…');
         let opening = await ask('opening', { cards, maxTurns: soloConfig().maxTurns });
@@ -1658,13 +1856,47 @@
         if (token !== readyToken) return;
         if (!opening) {
             opening = [
-                'ALERT — your SOC escalates an incident and the overnight analyst\'s notes mention',
+                'ALERT – your SOC escalates an incident and the overnight analyst\'s notes mention',
                 '"anomalous network traffic" and "possible lateral movement". The attack chain is hidden',
                 'from you: investigate with procedure cards to earn clues, then accuse four cards to close the case.'
             ].join(' ');
         }
         log(opening, 'narrator');
         log('Pick a procedure card, then roll the d20. Every roll spends one turn. A success on a procedure that covers a phase flips that scenario card, and a partial success (11–14) flips it too, with a vaguer clue.', 'meta');
+    }
+
+    /**
+     * Load the in-browser model before the game needs it, relaying its download
+     * progress to the rail's status line. A no-op for every other target, and
+     * never fatal: any failure simply leaves the offline clue tables in play.
+     * @returns {Promise<void>}
+     */
+    async function preloadLocalModel() {
+        if (settings.provider !== 'webllm') return;
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        if (!local) return;
+
+        const avail = await local.available();
+        if (!avail.ok) {
+            log('In-browser models are unavailable here (' + avail.reason + '). The offline clue tables will run this incident.', 'meta');
+            return;
+        }
+        if (local.state().ready) return;
+
+        const unsubscribe = local.subscribe(snap => {
+            if (snap.status !== 'downloading') return;
+            const pct = snap.progress ? ' ' + snap.progress + '%' : '';
+            setStatus('Loading the in-browser model…' + pct);
+        });
+        try {
+            await local.ensure(settings.model || local.pickDefault());
+        } catch (error) {
+            log('The in-browser model could not be loaded (' + scrub(error && error.message ? error.message : 'unknown error') +
+                '). The offline clue tables will run this incident.', 'meta');
+        } finally {
+            unsubscribe();
+            setStatus('');
+        }
     }
 
     function wrapSetupGame() {
@@ -1704,7 +1936,7 @@
             if (e.target.id === ACCUSATION_MODAL_ID) closeAccusation();
         });
 
-        // Rules card — every exit runs the same follow-up (see afterIntro)
+        // Rules card – every exit runs the same follow-up (see afterIntro)
         byId('solo-intro-done-btn')?.addEventListener('click', dismissIntro);
         byId('solo-intro-close-btn')?.addEventListener('click', dismissIntro);
         byId('solo-intro-settings-btn')?.addEventListener('click', introToSettings);
@@ -1724,8 +1956,12 @@
         });
         byId('im-provider')?.addEventListener('change', (e) => {
             settings.provider = e.target.value;
-            settings.model = '';
-            populateModels(curatedModels(settings.provider), '');
+            const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+            // The in-browser model always has a sensible default to preselect.
+            settings.model = (settings.provider === 'webllm' && local) ? local.pickDefault() : '';
+            // Re-render rather than repopulating by hand: it also swaps the model
+            // source and shows or hides the in-browser panel.
+            renderSettings();
             setModelHint('Loading models…');
             void refreshModels({ silent: true });
         });
@@ -1734,6 +1970,12 @@
         // the choice on Save - browsing the list should not change the game.
         byId('im-role')?.addEventListener('change', syncPersonaHints);
         byId('im-personality')?.addEventListener('change', syncPersonaHints);
+
+        // The in-browser panel quotes the chosen model's download size, so it has
+        // to be re-rendered when the model selection changes.
+        byId('im-model')?.addEventListener('change', () => {
+            if (settings.provider === 'webllm') renderLocalPanel(true);
+        });
 
         // Auto-load the model list once the key looks complete, like the AI Generator.
         let keyTimer = null;
@@ -1765,6 +2007,48 @@
         });
     }
 
+    /**
+     * Pick a sensible default AI target the first time solo runs: the in-browser
+     * model, but only for a player who has never chosen a target, holds no key,
+     * is not covered by a server shared key, and has WebGPU. The choice is
+     * persisted so the rail's target label and the settings dialog agree.
+     * @returns {Promise<void>}
+     */
+    async function chooseDefaultTarget() {
+        const stored = Utils.getFromStorage(AI_SETTINGS_KEY, null, true);
+        if (stored && stored.provider) return;   // an existing choice wins
+        if (settings.apiKey) return;             // a key already answers the question
+
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        if (!local) return;
+        const avail = await local.available();
+        if (!avail.ok) return;                   // no WebGPU: stay on the offline tables
+
+        // A server that already provides a shared key is a better default here.
+        if (hasSharedKeyPath()) {
+            try {
+                const shared = await AIClient.getSharedConfig();
+                if (shared && shared.configured) return;
+            } catch (error) { /* treat an unreachable server as unconfigured */ }
+        }
+
+        const model = local.pickDefault();
+        settings.provider = 'webllm';
+        settings.model = model;
+        settings.source = 'own';
+        Utils.saveToStorage(AI_SETTINGS_KEY, {
+            provider: 'webllm',
+            model,
+            apiKey: '',
+            endpoint: '',
+            role: settings.role,
+            personality: settings.personality,
+            temperature: 0.7,
+            maxTokens: 900
+        });
+        Utils.saveToStorage(AI_KEY_SOURCE_KEY, 'own');
+    }
+
     function init() {
         if (!isSoloRequest()) return;              // normal board: stay out of the way
         const panel = byId(PANEL_ID);
@@ -1774,6 +2058,9 @@
         document.body.classList.add('solo-match');
         Utils.showElement(panel);
         readSettings();
+        // Offer the in-browser model as the default target for a player who has
+        // never configured one and has the hardware for it (see chooseDefaultTarget).
+        void chooseDefaultTarget();
         bindPanel();
         wrapSetupGame();
         // The "no procedure selected" prompt belongs to PlayerController; hand it

@@ -50,20 +50,15 @@ cd b-b-shuffle
 docker compose up --build -d
 ```
 
----
-
-## Migration from Engine-V1
-
-**Engine-V2** maintains compatibility with Engine-V1 game sessions while offering enhanced features. Both engines are available in this deployment for comparison and transition purposes.
-
-- **Engine-V1** : `http://localhost:8180/Engine-V1/`
-- **Engine-V2** : `http://localhost:8180/Engine-V2/`
+The image is built from a comment-stripped, whitespace-compacted copy of the
+app (`tools/minify.py`, run inside the Docker build). The readable source in
+the checkout is never modified.
 
 ---
 
 ## License & Attribution
 
-The software code is licensed under the **GNU General Public License v3.0** — see [`LICENSE`](LICENSE).
+The software code is licensed under the **GNU General Public License v3.0** – see [`LICENSE`](LICENSE).
 
 This repository is a derivative work of:
 

@@ -51,7 +51,7 @@ const PlayerController = {
         // Scenario Editor (opens admin as a popup window, or an in-page overlay fallback)
         Utils.getElement('gm-mode-btn')?.addEventListener('click', () => Utils.openGM());
 
-        // GM Console — the answer key + remote control surface. Always its own
+        // GM Console – the answer key + remote control surface. Always its own
         // window: it drives this page and the GM keeps it on a second screen.
         Utils.getElement('gm-console-btn')?.addEventListener('click', () => Utils.openGMConsole());
 
@@ -246,8 +246,10 @@ const PlayerController = {
                 image: c && c.image, description: (c && c.description) || '',
                 details: (c && c.details) || ''
             };
-            // Card-face text read off the art (tools / notes / specialties / quote / cost)
-            ['tools', 'notes', 'specialties', 'quote', 'cost'].forEach(field => {
+            // Card-face text read off the art (tools / notes / specialties /
+            // quote / cost) plus `template`, which marks a Custom Card the board
+            // composes live from a WebP template (Engine-V2/js/card-face.js).
+            ['tools', 'notes', 'specialties', 'quote', 'cost', 'template'].forEach(field => {
                 if (c && c[field]) o[field] = c[field];
             });
             return extra ? { ...o, ...extra } : o;
@@ -280,7 +282,7 @@ const PlayerController = {
             id: this.quickStartId(),
             version: '1.0',
             exportDate: now,
-            metadata: { name: `Quick Start — ${cfg.name || deckKey}`, author: 'Quick Start', createdAt: now, modifiedAt: now },
+            metadata: { name: `Quick Start – ${cfg.name || deckKey}`, author: 'Quick Start', createdAt: now, modifiedAt: now },
             deck: { key: deckKey, name: cfg.name || deckKey, path: cfg.path },
             scenario,
             procedures,
@@ -334,7 +336,8 @@ const PlayerController = {
                     description: (c && c.description) || '',
                     details: (c && c.details) || '',
                     tools: (c && c.tools) || undefined,
-                    cost: (c && c.cost) || undefined
+                    cost: (c && c.cost) || undefined,
+                    template: (c && c.template) || undefined
                 }));
             if (!pool.length) return 0;
 
@@ -400,7 +403,8 @@ const PlayerController = {
                     description: (c && c.description) || '',
                     details: (c && c.details) || '',
                     specialties: (c && c.specialties) || undefined,
-                    quote: (c && c.quote) || undefined
+                    quote: (c && c.quote) || undefined,
+                    template: (c && c.template) || undefined
                 }));
             this.consultant = (this.scenario && this.scenario.consultant) || null;
             return this.consultants;
@@ -423,14 +427,16 @@ const PlayerController = {
         const active = this.consultant;
 
         if (img) {
-            img.src = (active && active.image) ? Utils.assetPath(active.image) : Utils.cardPlaceholder('Consultant');
             img.alt = (active && active.name) || 'Consultant';
+            if (!this.paintCardFace(img.parentElement, active)) {
+                img.src = (active && active.image) ? Utils.assetPath(active.image) : Utils.cardPlaceholder('Consultant');
+            }
         }
         if (card) card.classList.toggle('flipped', !!active);
         if (btn) {
             btn.textContent = active ? 'Swap' : 'Call';
             btn.title = active
-                ? `Consulting: ${active.name || 'Consultant'} — click to swap`
+                ? `Consulting: ${active.name || 'Consultant'} – click to swap`
                 : 'Call a consultant from this deck';
         }
     },
@@ -491,6 +497,12 @@ const PlayerController = {
                 </div>
             `;
         }).join('');
+
+        // Compose the live face for any template consultant tile.
+        Utils.$$('#consultant-grid .consultant-option').forEach(btn => {
+            const card = list[parseInt(btn.dataset.index, 10)];
+            if (card) this.paintCardFace(btn, card);
+        });
     },
 
     /**
@@ -525,9 +537,11 @@ const PlayerController = {
         if (details) sections.push({ label: 'Details', html: details });
         sections.push({ label: 'Info', html: this.buildCardInfoHtml(card, 'consultant') });
 
-        this.openLightbox(Utils.assetPath(card.image), {
+        const template = typeof CardFace !== 'undefined' && CardFace.isTemplateCard(card);
+        this.openLightbox(template ? '' : Utils.assetPath(card.image), {
             name: card.name || 'Consultant',
             type: 'consultant',
+            face: template ? CardFace.build(card) : null,
             sections,
             action: isActive
                 ? { label: 'Selected ✓', onClick: () => this.closeConsultantPicker() }
@@ -683,7 +697,7 @@ const PlayerController = {
             this.setupGame();
             if (dealt) {
                 const name = (this.scenario.metadata && this.scenario.metadata.name) || this.scenario.deck?.name || 'Scenario';
-                Utils.showToast(`${name}: no procedures saved — dealt ${dealt} from the deck`, 'info');
+                Utils.showToast(`${name}: no procedures saved – dealt ${dealt} from the deck`, 'info');
             }
         } else {
             // No game loaded - show empty state and inline-SVG placeholders
@@ -765,7 +779,7 @@ const PlayerController = {
      * Point the board's card backs at the deck in play.
      *
      * The static markup ships the 2.0 art; a deck that names another generation
-     * (`CONFIG.decks[].cardbackPath` — resolved by Utils.cardbackFor) gets its own
+     * (`CONFIG.decks[].cardbackPath` – resolved by Utils.cardbackFor) gets its own
      * backs for the four scenario slots and the inject rail, and the Procedure hand
      * picks it up when it is rendered. The CONSULTANT back is only swapped when the
      * deck actually has consultant cards: a deck without them (core 3.1, for one)
@@ -794,6 +808,38 @@ const PlayerController = {
     },
 
     /**
+     * Paint a card face into a host element.
+     *
+     * A "template card" - a Custom Card carrying `template` - is composed live
+     * from the deck artwork plus its own text (Engine-V2/js/card-face.js). The
+     * host's <img> is kept in the DOM but hidden, so every id and `img` selector
+     * elsewhere keeps working; the face takes its place in the flow. Any other
+     * card keeps its own art.
+     * @param {HTMLElement|null} host - Element that holds the face
+     * @param {Object} card - Card record
+     * @returns {boolean} true when a composed face was applied
+     */
+    paintCardFace(host, card) {
+        if (!host) return false;
+
+        const stale = host.querySelector('.card-face');
+        if (stale) stale.remove();
+
+        const useFace = typeof CardFace !== 'undefined' && CardFace.isTemplateCard(card);
+        const img = host.querySelector('img');
+        if (img) {
+            img.classList.toggle('is-face', useFace);
+            if (useFace) img.removeAttribute('src');
+        }
+        host.classList.toggle('has-card-face', useFace);
+
+        if (!useFace) return false;
+        const face = CardFace.build(card);
+        if (img) img.after(face); else host.appendChild(face);
+        return true;
+    },
+
+    /**
      * Update scenario card images
      */
     updateScenarioCards() {
@@ -801,6 +847,10 @@ const PlayerController = {
             const card = this.scenario?.scenario?.[type];
             const img = Utils.getElement(`${type}-card-img`);
             if (!img) return;
+            if (this.paintCardFace(img.parentElement, card)) {
+                img.alt = card?.name || type;
+                return;
+            }
             if (card?.image) {
                 img.src = Utils.assetPath(card.image);
                 img.alt = card.name || type;
@@ -832,13 +882,13 @@ const PlayerController = {
             // While blocked, show the countdown and hide the arm control.
             const remaining = GameState.cooldownRemaining(index);
             const blocked = remaining > 0;
-            const cooldownNote = `On cooldown — ${remaining} turn${remaining === 1 ? '' : 's'} until this procedure can be used again`;
+            const cooldownNote = `On cooldown – ${remaining} turn${remaining === 1 ? '' : 's'} until this procedure can be used again`;
             // Every procedure is playable, so every card carries a control and
             // can be put on cooldown; only an enhanced card adds the flat +3.
             // Cooldown updates hide the rendered control while it sits out.
             const chip = `<button type="button" class="proc-arm${isActive ? ' armed' : ''}${card.enhanced ? '' : ' proc-arm-plain'}" data-index="${index}" title="${card.enhanced
-                ? `Enhanced (+3)${isActive ? ' — armed, click to disarm' : ' — click to arm for the next roll'}`
-                : `Use this procedure${isActive ? ' — selected, click to clear' : ' — click to use for the next roll'}`}">${isActive ? (card.enhanced ? '✓ +3' : '✓ Use') : (card.enhanced ? '✦ +3' : '✦ Use')}</button>`;
+                ? `Enhanced (+3)${isActive ? ' – armed, click to disarm' : ' – click to arm for the next roll'}`
+                : `Use this procedure${isActive ? ' – selected, click to clear' : ' – click to use for the next roll'}`}">${isActive ? (card.enhanced ? '✓ +3' : '✓ Use') : (card.enhanced ? '✦ +3' : '✦ Use')}</button>`;
             const token = blocked
                 ? `<span class="proc-token" title="${cooldownNote}" aria-label="${cooldownNote}">${remaining}</span>`
                 : '';
@@ -857,6 +907,13 @@ const PlayerController = {
                 </div>
             `;
         }).join('');
+
+        // Compose the live face for any procedure that carries a template. Done
+        // after the hand is in the DOM because CardFace.build() returns an element.
+        Utils.$$('.procedure-cards .flip-card').forEach(el => {
+            const card = procedures[parseInt(el.dataset.procedureIndex, 10)];
+            if (card) this.paintCardFace(el.querySelector('.flip-card-back'), card);
+        });
 
         // Bind flips (ignore clicks on the arm chip)
         Utils.$$('.procedure-cards .flip-card').forEach(card => {
@@ -899,7 +956,7 @@ const PlayerController = {
         if (GameState.isOnCooldown(index)) {
             const remaining = GameState.cooldownRemaining(index);
             Utils.showToast(
-                `${procedures[index].name || 'That procedure'} is on cooldown — ${remaining} turn${remaining === 1 ? '' : 's'} to go.`,
+                `${procedures[index].name || 'That procedure'} is on cooldown – ${remaining} turn${remaining === 1 ? '' : 's'} to go.`,
                 'warning'
             );
             return;
@@ -932,8 +989,8 @@ const PlayerController = {
         chip.classList.toggle('armed', isActive);
         chip.textContent = isActive ? (enhanced ? '✓ +3' : '✓ Use') : (enhanced ? '✦ +3' : '✦ Use');
         chip.title = enhanced
-            ? `Enhanced (+3)${isActive ? ' — armed, click to disarm' : ' — click to arm for the next roll'}`
-            : `Use this procedure${isActive ? ' — selected, click to clear' : ' — click to use for the next roll'}`;
+            ? `Enhanced (+3)${isActive ? ' – armed, click to disarm' : ' – click to arm for the next roll'}`
+            : `Use this procedure${isActive ? ' – selected, click to clear' : ' – click to use for the next roll'}`;
     },
 
     /**
@@ -965,7 +1022,7 @@ const PlayerController = {
                 return;
             }
 
-            const note = `On cooldown — ${remaining} turn${remaining === 1 ? '' : 's'} until this procedure can be used again`;
+            const note = `On cooldown – ${remaining} turn${remaining === 1 ? '' : 's'} until this procedure can be used again`;
             if (!token) {
                 token = document.createElement('span');
                 token.className = 'proc-token';
@@ -999,10 +1056,14 @@ const PlayerController = {
         const label = Utils.getElement('inject-label');
         const drawBtn = Utils.getElement('draw-inject-btn');
 
-        if (img && inject?.image) {
+        if (img && this.paintCardFace(img.parentElement, inject)) {
+            img.alt = inject?.name || 'Inject';
+        } else if (img && inject?.image) {
             img.src = Utils.assetPath(inject.image);
             img.alt = inject.name || 'Inject';
         } else if (img) {
+            // Clear a face left over from the previous inject card.
+            this.paintCardFace(img.parentElement, null);
             img.src = Utils.cardPlaceholder('No inject');
             img.alt = 'No inject';
         }
@@ -1028,7 +1089,7 @@ const PlayerController = {
         this.updateInjectCard();
         const name = this.injectQueue[this.activeInjectIndex]?.name || 'inject';
         Utils.showToast(`Inject: ${name}`, 'warning');
-        this.showRollStatus(`INJECT drawn (${name}) — ${source}`, 'warn');
+        this.showRollStatus(`INJECT drawn (${name}) – ${source}`, 'warn');
 
         // Solo AI (PvE): narrate the inject. The printed card text stays the
         // authority - the Incident Master only sets the scene for it.
@@ -1176,12 +1237,25 @@ const PlayerController = {
      */
     previewCardFace(card) {
         if (!card) return;
+        const back = card.querySelector('.flip-card-back');
         const backImg = card.querySelector('.flip-card-back img');
-        if (!backImg?.src || backImg.src.startsWith('data:image/svg')) return;
-
         const type = this.cardTypeOf(card);
-        const name = backImg.alt && backImg.alt !== 'Card' ? backImg.alt : '';
         const sections = this.cardSectionsFor(card, type);
+
+        // A composed face is handed to the viewer directly; its <img> is hidden.
+        const data = this.resolveCardData(card, type);
+        if (typeof CardFace !== 'undefined' && CardFace.isTemplateCard(data)) {
+            this.openLightbox('', {
+                name: data.name || '',
+                type,
+                sections,
+                face: CardFace.build(data)
+            });
+            return;
+        }
+
+        if (!backImg?.src || backImg.src.startsWith('data:image/svg')) return;
+        const name = backImg.alt && backImg.alt !== 'Card' ? backImg.alt : '';
         this.openLightbox(backImg.src, { name, type, sections });
     },
 
@@ -1519,7 +1593,7 @@ const PlayerController = {
                 diceResult.classList.toggle('fail', isCritFail);
             };
             if (headerTumble) {
-                // The big d20 already tumbled — no need for the mini header tumble
+                // The big d20 already tumbled – no need for the mini header tumble
                 diceResult.classList.add('rolling');
                 setTimeout(finish, 640);
             } else {
@@ -1542,9 +1616,9 @@ const PlayerController = {
         if (injected) {
             message = `INJECT drawn (${injected})`;
         } else if (isCritFail) {
-            message = 'Natural 1 — critical failure!';
+            message = 'Natural 1 – critical failure!';
         } else if (isCritSuccess) {
-            message = 'Natural 20 — critical success!';
+            message = 'Natural 20 – critical success!';
         } else if (this.consecutiveFails > 0) {
             message = `Failure streak ${this.consecutiveFails}/3`;
         } else {

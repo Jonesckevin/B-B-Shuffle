@@ -1,31 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>B&B Shuffle | Engine-V1</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="builder-styles.css">
-  <link rel="stylesheet" href="deck-styles.css">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Ubuntu:wght@300&display=swap"
-    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, follow">
+  <title>B&amp;B Shuffle | Engine-V1</title>
+  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="builder-styles.css?v=1">
+  <link rel="stylesheet" href="deck-styles.css?v=1">
   <!-- jQuery needed for lightbox.js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <link href="lightbox.css" rel="stylesheet" />
+  <link href="lightbox.css?v=1" rel="stylesheet" />
 
 </head>
 
+<body>
 <!-- Collapsible Header -->
 <div id="collapsibleHeader" class="collapsible-header">
-  <div style="display: flex; align-items: stretch; width: 100%; position: relative;">
+  <div class="header-bar">
     <a href="help.html" target="_blank" style="position: relative; z-index: 2; margin-right: -10px;"
-      onclick="event.stopPropagation();"><button class="open-button help-button" title="Card Reference Guide">❓
-        Help</button></a>
+      onclick="event.stopPropagation();"><button class="open-button help-button" title="Card Reference Guide">Help</button></a>
     <button id="headerToggle" class="header-toggle" onclick="toggleHeader()" style="flex: 1; padding-left: 30px;">
       <span id="toggleIcon">▼</span> Settings & Controls
     </button>
   </div>
   <div id="headerContent" class="header-content">
-    <div class="header-section">
+    <div class="header-section header-section-deck">
       <div id="viewrec">
         B&B Shuffle - Engine-V1<div id="version"><strong>Card list:</strong> </div>
         <div id="date"><strong>Rev Date:</strong> </div>
@@ -36,38 +37,45 @@
         </div>
       </div>
     </div>
-    <div class="header-section header-section-center">
-      <div id="dm_scenario">
-        <strong>Scenario Tools</strong><br>
-        <button onClick="rando()">Random</button>
-        <button onClick="customtoggle()">Edit</button> |
-        <button onclick="flipBack()"> Hide Scenario</button>
-        <button onClick='window.location.href=window.location.href'>Clear</button>
+    <!-- Controls column: the DM toggles on top with the Scenario Tools beneath
+         them, so the deck picker keeps the first row to itself. -->
+    <div class="header-column">
+      <div class="header-section header-section-center">
+        <div id="solution">
+          <strong>DM Controls/Toggles</strong><br>
+          <button onclick="diceboxtoggle()"> D20</button>
+          <button onclick="notestoggle()"> Notes</button>
+          |
+          <button onclick="injectstoggle()"> Injects</button>
+          |
+          <button onclick="solutiontoggle()"> Solution</button>
+        </div>
+      </div>
+      <div class="header-section header-section-center">
+        <div id="dm_scenario">
+          <strong>Scenario Tools</strong><br>
+          <button onClick="rando()">Random</button>
+          <button onClick="customtoggle()">Edit</button> |
+          <button onclick="flipBack()"> Hide Scenario</button>
+          <button onClick='window.location.href=window.location.href'>Clear</button>
+        </div>
       </div>
     </div>
-    <div class="header-section">
-      <div id="solution">
-        <strong>DM Controls/Toggles</strong><br>
-        <button onclick="diceboxtoggle()"> D20</button>
-        <button onclick="notestoggle()"> Notes</button>
-        |
-        <button onclick="injectstoggle()"> Injects</button>
-        |
-        <button onclick="solutiontoggle()"> Solution</button>
-        <div id="dm_solution" style="display:none;">
-          <div class="solution" id="dma">
-            <div class="warn">No Initial Compromise</div>
-          </div>
-          <div class="solution" id="dmb">
-            <div class="warn">No Pivot & Escalate</div>
-          </div>
-          <div class="solution" id="dmc">
-            <div class="warn">No C2 & Exfil</div>
-          </div>
-          <div class="solution" id="dmd">
-            <div class="warn">No Persistence</div>
-          </div>
-        </div>
+    <!-- DM answer key. Deliberately a full-width row of #headerContent rather
+         than a child of #solution, so the four cards can sit side by side. The
+         ids are unchanged, so solutiontoggle() and card-script.js still work. -->
+    <div id="dm_solution" style="display:none;">
+      <div class="solution" id="dma">
+        <div class="warn">No Initial Compromise</div>
+      </div>
+      <div class="solution" id="dmb">
+        <div class="warn">No Pivot & Escalate</div>
+      </div>
+      <div class="solution" id="dmc">
+        <div class="warn">No C2 & Exfil</div>
+      </div>
+      <div class="solution" id="dmd">
+        <div class="warn">No Persistence</div>
       </div>
     </div>
   </div>
@@ -159,7 +167,7 @@
   <!-- PROCEDURE CARDS -->
   <header>
     <center>
-      <h1 tabindex="0" class="title">PROCEDURES</h1>
+      <h2 tabindex="0" class="title">PROCEDURES</h2>
   </header>
 
   <strong>Established Procedures:</strong>
@@ -174,7 +182,7 @@
   <div id="injectdiv">
     <div id="injectdivheader">
       <header>
-        <h1 tabindex="0" class="title">INJECTS</h1>
+        <h2 tabindex="0" class="title">INJECTS</h2>
       </header>
     </div>
     <button onClick="customtoggle();boxtoggle('start');buildinjmenu()">Custom Inject</button>
@@ -196,7 +204,7 @@
   <div id="mydiv">
     <div id="mydivheader">
       <header>
-        <h1 tabindex="0">GAME PROGRESS</h1>
+        <h2 tabindex="0">GAME PROGRESS</h2>
       </header>
     </div>
     <span id="button"><input type="button" onclick="roll_dice(0)" value="Roll Dice" /></span>
@@ -221,7 +229,7 @@
   <div id="dicebox">
     <div id="diceboxheader">
       <header>
-        <h1 tabindex="0">DiceBox</h1>
+        <h2 tabindex="0">DiceBox</h2>
       </header>
     </div>
     <span><input type="button" onclick="roll_d20(0)" value="Roll D20" /></span>
@@ -235,7 +243,7 @@
   <div id="gmnotes">
     <div id="gmnotesheader">
       <header>
-        <h1 tabindex="0">NOTES</h1>
+        <h2 tabindex="0">NOTES</h2>
       </header>
     </div>
     <hr>
@@ -268,21 +276,23 @@
 <!-- End Main Content Wrapper -->
 
 <!-- 1. Configuration (must load first) -->
-<script type="text/javascript" src="config.js"></script>
+<script type="text/javascript" src="config.js?v=1"></script>
 
 <!-- 2. Utilities (depends on config) -->
-<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="utils.js?v=1"></script>
 
 <!-- 3. State management (depends on config and utils) -->
-<script type="text/javascript" src="game-state.js"></script>
+<script type="text/javascript" src="game-state.js?v=1"></script>
 
 <!-- 4. Lightbox library -->
-<script src="lightbox.js"></script>
+<script src="lightbox.js?v=1"></script>
 
 <!-- 5. Application modules (depend on config, utils, and state) -->
-<script type="text/javascript" src="deck-script.js"></script>
-<script type="text/javascript" src="card-script.js"></script>
-<script type="text/javascript" src="ui-script.js"></script>
-<script type="text/javascript" src="ui-builder.js"></script>
-<script type="text/javascript" src="dice-script.js"></script>
-<script type="text/javascript" src="flip-script.js"></script>
+<script type="text/javascript" src="deck-script.js?v=1"></script>
+<script type="text/javascript" src="card-script.js?v=1"></script>
+<script type="text/javascript" src="ui-script.js?v=1"></script>
+<script type="text/javascript" src="ui-builder.js?v=1"></script>
+<script type="text/javascript" src="dice-script.js?v=1"></script>
+<script type="text/javascript" src="flip-script.js?v=1"></script>
+</body>
+</html>

@@ -851,7 +851,7 @@
 }
 
 /* ============================================================
-   Card-table polish (admin) — physical "workbench" feel
+   Card-table polish (admin) – physical "workbench" feel
    ============================================================ */
 
 /* Header console bar */
@@ -1151,7 +1151,7 @@
    Only decks that have art upstream show it; the <img> ships with the `hidden`
    class and admin.js flips it (and drops the src) for decks with no cover.
    Sized off the HEIGHT on purpose: the panel is about which deck is loaded, so
-   the cover is a thumbnail beside the name, not a poster — and the covers are
+   the cover is a thumbnail beside the name, not a poster – and the covers are
    not all the same aspect ratio, so a fixed height keeps the row even. */
 .deck-info .deck-cover {
     flex: 0 0 auto;

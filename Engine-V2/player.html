@@ -9,7 +9,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="B&amp;B Shuffle">
-    <title>B&amp;B Shuffle - Player</title>
+    <title>B&amp;B Shuffle Player | Play Backdoors &amp; Breaches Online</title>
+    <meta name="description" content="Open the B&amp;B Shuffle player board: deal a Backdoors &amp; Breaches scenario, play procedures, roll dice and track turns on a remote incident-response tabletop.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="B&amp;B Shuffle">
+    <meta property="og:title" content="B&amp;B Shuffle Player – Play Backdoors &amp; Breaches Online">
+    <meta property="og:description" content="Open the B&amp;B Shuffle player board: deal a Backdoors &amp; Breaches scenario, play procedures, roll dice and track turns on a remote incident-response tabletop.">
+    <meta property="og:image" content="../shared/img/og-bbshuffle.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="B&amp;B Shuffle Player – Play Backdoors &amp; Breaches Online">
+    <meta name="twitter:description" content="Open the B&amp;B Shuffle player board: deal a Backdoors &amp; Breaches scenario, play procedures, roll dice and track turns on a remote incident-response tabletop.">
+    <meta name="twitter:image" content="../shared/img/og-bbshuffle.png">
     <link rel="icon" href="../shared/img/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" href="../shared/img/favicon.png">
     <link rel="apple-touch-icon" href="../shared/img/apple-touch-icon.png">
@@ -20,13 +34,23 @@
     
     <!-- Page-specific CSS -->
     <link rel="stylesheet" href="css/player.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "B&B Shuffle", "item": "../index.html" },
+        { "@type": "ListItem", "position": 2, "name": "Player", "item": "player.html" }
+      ]
+    }
+    </script>
 </head>
 <body class="surface-felt">
     <div class="player-layout">
         <!-- Header -->
         <header class="player-header">
             <div class="header-left">
-                <img id="custom-logo" class="custom-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Table logo">
+                <img id="custom-logo" class="custom-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Table logo" width="2518" height="999" decoding="async">
                 <!-- Title and deck identity are one stack to the right of the logo,
                      so the badge reads as belonging to the title rather than
                      floating on the same line as it. -->
@@ -53,7 +77,7 @@
             </div>
             <div class="header-center">
                 <div class="game-stats">
-                    <div class="stat-item roll" title="The d20 readout — the last roll and the target it needed">
+                    <div class="stat-item roll" title="The d20 readout – the last roll and the target it needed">
                     <span class="stat-label">Roll</span>
                         <div class="dice-result hidden" id="dice-result">
                             <span class="dice-value" id="dice-value">0</span>
@@ -64,7 +88,7 @@
                         <span class="stat-label">Turns</span>
                         <span class="stat-value" id="turns-remaining">10</span>
                     </div>
-                    <div class="stat-item strikes" title="Strikes against the table — three and the game is over">
+                    <div class="stat-item strikes" title="Strikes against the table – three and the game is over">
                         <span class="stat-label">Strikes</span>
                         <div class="strike-indicators" id="strike-indicators">
                             <span class="strike-dot"></span>
@@ -110,7 +134,7 @@
                         </svg>
                         <span>Scenario Editor</span>
                     </button>
-                    <button id="gm-console-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Open the GM Console — answer key and live control on a second screen">
+                    <button id="gm-console-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Open the GM Console – answer key and live control on a second screen">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="3" width="20" height="14" rx="2"/>
                             <line x1="8" y1="21" x2="16" y2="21"/>
@@ -120,7 +144,7 @@
                     </button>
                 </div>
                 <div class="fx-toggle-col">
-                    <button id="dice-fx-btn" class="btn btn-ghost btn-sm header-action dice-fx-btn" type="button" title="Dice FX on — rolls toss a big animated d20. Click to turn off." aria-pressed="true">
+                    <button id="dice-fx-btn" class="btn btn-ghost btn-sm header-action dice-fx-btn" type="button" title="Dice FX on – rolls toss a big animated d20. Click to turn off." aria-pressed="true">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="2" width="20" height="20" rx="2"/>
                             <circle cx="8" cy="8" r="1.5"/>
@@ -132,7 +156,7 @@
                         <span>Dice FX</span>
                         <b class="fx-state" id="dice-fx-btn-state" aria-hidden="true">on</b>
                     </button>
-                    <button id="card-fx-btn" class="btn btn-ghost btn-sm header-action card-fx-btn" type="button" title="Card FX on — holographic tilt on cards. Click to turn off." aria-pressed="true">
+                    <button id="card-fx-btn" class="btn btn-ghost btn-sm header-action card-fx-btn" type="button" title="Card FX on – holographic tilt on cards. Click to turn off." aria-pressed="true">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 3l1.7 4.3L18 9l-4.3 1.7L12 15l-1.7-4.3L6 9l4.3-1.7z"/>
                             <path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9z"/>
@@ -142,7 +166,7 @@
                     </button>
                 </div>
                 <div class="header-stack">
-                    <button id="print-sheet-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Load a scenario first — the sheet prints the cards in play" disabled>
+                    <button id="print-sheet-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Load a scenario first – the sheet prints the cards in play" disabled>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 6 2 18 2 18 9"/>
                             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
@@ -150,7 +174,7 @@
                         </svg>
                         <span>Print</span>
                     </button>
-                    <button id="theme-custom-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Table theme — set a background image and a top-left logo (stored only in this browser)">
+                    <button id="theme-custom-btn" class="btn btn-ghost btn-sm header-action" type="button" title="Table theme – set a background image and a top-left logo (stored only in this browser)">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
                             <circle cx="8.5" cy="8.5" r="1.5"/>
@@ -169,7 +193,7 @@
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
                         <span>Install app</span>
                     </button>
-                    <a class="header-legal-link" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">B&amp;B Classic — play on the official site</a>
+                    <a class="header-legal-link" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">B&amp;B Classic – Official Site</a>
                     <a class="header-legal-link" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer">github.com/Jonesckevin</a>
                     <p class="header-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
                 </div>
@@ -357,7 +381,7 @@
                     <span class="im-spinner hidden" id="im-spinner" role="status" aria-label="Incident Master is working"></span>
                 </div>
                  <!-- Label the AI settings control for discoverability. -->
-                <button type="button" id="im-settings-btn" class="im-settings-btn" title="AI settings — provider, model and API key" aria-label="AI target settings">
+                <button type="button" id="im-settings-btn" class="im-settings-btn" title="AI settings – provider, model and API key" aria-label="AI target settings">
                     <svg class="im-gear" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
                         <circle cx="12" cy="12" r="3"/>
                         <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/>
@@ -385,9 +409,9 @@
                 <span class="scenario-name" id="scenario-name">No scenario loaded</span>
             </div>
             <div class="app-legal-content">
-                <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches — Classic (official site)">
-                    <img class="app-legal-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo">
-                    <span>B&amp;B Classic — play on the official site</span>
+                <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer" title="Backdoors &amp; Breaches – Classic (official site)">
+                    <img class="app-legal-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" loading="lazy" decoding="async">
+                    <span>B&amp;B Classic | Official site</span>
                 </a>
                 <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training.</p>
                 <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
@@ -439,7 +463,7 @@
                 <button type="button" id="accusation-close-btn" class="modal-close" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="hint">Name the four cards hidden on the board. Get all four and the case closes — a wrong accusation costs a strike.</p>
+                <p class="hint">Name the four cards hidden on the board. Get all four and the case closes – a wrong accusation costs a strike.</p>
                 <div class="im-field">
                     <label class="form-label" for="accuse-initial">Initial Compromise</label>
                     <select id="accuse-initial" class="form-select"></select>
@@ -506,7 +530,7 @@
     <div id="im-settings-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Incident Master AI settings">
         <div class="modal im-settings-modal">
             <div class="modal-header">
-                <h2 class="modal-title">Incident Master — AI Target</h2>
+                <h2 class="modal-title">Incident Master – AI Target</h2>
                 <button type="button" id="im-settings-close-btn" class="modal-close" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
@@ -531,7 +555,13 @@
                 <div class="im-field" id="im-apikey-field">
                     <label class="form-label" for="im-apikey">API key</label>
                     <input type="password" id="im-apikey" class="form-input" autocomplete="off" placeholder="Stored in this browser only">
-                    <small class="form-hint">Sent straight to the provider from this browser — never to this server.</small>
+                    <small class="form-hint">Sent straight to the provider from this browser – never to this server.</small>
+                </div>
+                <!-- In-browser model (WebLLM) – the panel is built and maintained
+                     by webllm-provider.js and only shown for the webllm target. -->
+                <div class="im-field hidden" id="im-webllm-field">
+                    <div class="form-label">In-browser model</div>
+                    <div id="im-webllm-host"></div>
                 </div>
                  <!-- Role and voice are independent persona settings. -->
                 <fieldset class="im-persona-group">
@@ -557,7 +587,7 @@
         </div>
     </div>
 
-    <!-- Call a Consultant — pick one from the active deck -->
+    <!-- Call a Consultant – pick one from the active deck -->
     <div id="consultant-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Call a Consultant">
         <div class="modal consultant-modal">
             <div class="modal-header">
@@ -575,7 +605,7 @@
         </div>
     </div>
 
-    <!-- Animated d20 roll (Dice FX — the big die modal; toggle off in the header) -->
+    <!-- Animated d20 roll (Dice FX – the big die modal; toggle off in the header) -->
     <div id="dice-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-label="Roll the d20">
         <div class="modal dice-modal">
             <div class="modal-header">
@@ -606,7 +636,7 @@
                 <button id="theme-modal-close" class="modal-close" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="hint theme-note">Set a background image and/or a logo for this table. Both are stored only in this browser (localStorage) and are never uploaded — handy for personal touches or event sessions.</p>
+                <p class="hint theme-note">Set a background image and/or a logo for this table. Both are stored only in this browser (localStorage) and are never uploaded – handy for personal touches or event sessions.</p>
 
                 <div class="theme-group">
                     <h3 class="theme-group-title">Background image</h3>
@@ -662,7 +692,7 @@
                 <button id="cardback-modal-close" class="modal-close" aria-label="Close">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="hint theme-note">Pick the art printed on the back of your Procedure cards. Picking one only changes how they look on this device — it is cosmetic, stored in this browser, and never touches the deck, the scenario or the rules.</p>
+                <p class="hint theme-note">Pick the art printed on the back of your Procedure cards. Picking one only changes how they look on this device – it is cosmetic, stored in this browser, and never touches the deck, the scenario or the rules.</p>
                 <div class="cb-gallery" id="cb-gallery"></div>
             </div>
             <div class="modal-footer">
@@ -727,7 +757,7 @@
                 <img class="ps-bhis" src="../shared/img/blackhills-logo-print.png" alt="Black Hills Information Security" decoding="sync">
                 <div class="ps-foot-text">
                     <p>B&amp;B Shuffle session sheet · card art © Black Hills Information Security &amp; Antisyphon Training · This is an unofficial project</p>
-                    <p><a href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">B&amp;B Classic — play on the official site</a> · <a href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer">github.com/Jonesckevin</a></p>
+                    <p><a href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">B&amp;B Classic – Official Site</a> · <a href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer">github.com/Jonesckevin</a></p>
                 </div>
             </div>
         </div>
@@ -742,12 +772,14 @@
     <script src="js/scenario-schema.js"></script>
     <script src="js/scenario-io.js"></script>
     <script src="../shared/js/card-viewer.js"></script>
+    <script src="js/card-face.js?v=2"></script>
     <script src="js/card-fx.js"></script>
     <script src="js/dice-fx.js"></script>
-    <script src="js/player.js?v=13"></script>
+    <script src="js/player.js?v=14"></script>
     <script src="js/custom-theme.js"></script>
     <script src="js/print-sheet.js"></script>
     <!-- Load the provider and Solo AI modules after PlayerController and GameState. -->
+    <script src="js/webllm-provider.js"></script>
     <script src="js/ai-client.js"></script>
     <script src="js/solo-master.js"></script>
     <script src="js/header-menu.js"></script>
@@ -758,5 +790,6 @@
     <script src="../shared/js/fab.js"></script>
     <!-- PWA: service-worker registration + install prompt (no-op if unsupported) -->
     <script src="../shared/js/pwa.js"></script>
+    <script src="../shared/js/seo.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /**
- * B&B Shuffle — Custom Cards library
+ * B&B Shuffle – Custom Cards library
  * ------------------------------------------------------------------
  * Lists the user-created cards from the "Custom Cards" deck and lets you
  * preview, enable/disable, edit, duplicate, delete and import/export them.
@@ -43,7 +43,7 @@ const CustomCardsLibrary = {
             this.setStatus(this.cards.length ? `${this.cards.length} card${this.cards.length === 1 ? '' : 's'}` : '');
         } catch (e) {
             this.cards = [];
-            this.setStatus('Could not reach the API — ' + e.message, 'err');
+            this.setStatus('Could not reach the API – ' + e.message, 'err');
         }
         this.render();
     },
@@ -82,11 +82,15 @@ const CustomCardsLibrary = {
         const frame = document.createElement('div');
         frame.className = 'cc-card-frame';
         frame.title = 'Preview';
-        const img = document.createElement('img');
-        img.alt = card.name || 'Custom card';
-        img.src = Utils.assetPath(card.image || '');
-        img.onerror = () => { img.src = Utils.cardPlaceholder('No image'); };
-        frame.appendChild(img);
+        if (typeof CardFace !== 'undefined' && CardFace.isTemplateCard(card)) {
+            frame.appendChild(CardFace.build(card));
+        } else {
+            const img = document.createElement('img');
+            img.alt = card.name || 'Custom card';
+            img.src = Utils.assetPath(card.image || '');
+            img.onerror = () => { img.src = Utils.cardPlaceholder('No image'); };
+            frame.appendChild(img);
+        }
         frame.addEventListener('click', () => this.preview(card));
         tile.appendChild(frame);
 
@@ -145,9 +149,11 @@ const CustomCardsLibrary = {
 
     preview(card) {
         if (typeof CardViewer === 'undefined') return;
-        CardViewer.open(Utils.assetPath(card.image || ''), {
+        const template = typeof CardFace !== 'undefined' && CardFace.isTemplateCard(card);
+        CardViewer.open(template ? '' : Utils.assetPath(card.image || ''), {
             name: card.name || 'Untitled Card',
-            type: card.type || ''
+            type: card.type || '',
+            face: template ? CardFace.build(card) : null
         });
     },
 
@@ -204,8 +210,11 @@ const CustomCardsLibrary = {
                 resources: card.resources || [],
                 detection: card.detection || [],
                 tools: card.tools || [],
+                notes: card.notes || '',
+                specialties: card.specialties || [],
+                template: card.template || '',
                 artwork: card.artwork || 'illustration',
-                style: card.style || 'app',
+                style: card.style || 'template',
                 enabled: true
             });
             this.setStatus(`Created ${copy.id}`, 'ok');

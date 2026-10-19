@@ -1,7 +1,35 @@
+/* ==================== DESIGN TOKENS ==================== */
+/* The header chrome below is themed to match Engine-V2 (shared/css/base.css).
+   Engine-V1 is a self-contained legacy page set and deliberately does NOT load
+   base.css – its global reset would fight this page's float/absolute board
+   layout – so the Engine-V2 palette is mirrored here as local variables.
+   Keep these values in step with shared/css/base.css :root. */
+:root {
+  --v1-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --v1-bg: #0f1117;
+  --v1-bg-secondary: #161a23;
+  --v1-bg-tertiary: #1e2430;
+  --v1-surface: #171b25;
+  --v1-surface-hover: #1c2230;
+  --v1-border: #2a3140;
+  --v1-border-hover: #333c4d;
+  --v1-text: #e7eaf0;
+  --v1-text-secondary: #9aa4b5;
+  --v1-text-tertiary: #6b7688;
+  --v1-text-inverse: #ffffff;
+  --v1-primary: #3b82f6;
+  --v1-primary-soft: rgba(59, 130, 246, 0.15);
+  --v1-danger: #ef4444;
+  --v1-radius-sm: 6px;
+  --v1-radius-md: 7px;
+  --v1-radius-lg: 10px;
+  --v1-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --v1-transition-fast: 150ms ease;
+}
+
 body {
   background: #eceee5;
-  font-family: 'Architects Daughter', cursive;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: var(--v1-font);
   background-image: url(../shared/img/page-back.png);
   background-position: top center;
   background-repeat: no-repeat;
@@ -30,7 +58,13 @@ h1 {
   font-weight: 900;
 }
 
-/* Collapsible Header Styles */
+/* Secondary pane titles use h2 so the page keeps one h1. */
+h2 {
+  margin: 20px 0 10px 0;
+  font-weight: 900;
+}
+
+/* ==================== HEADER (Engine-V2 chrome) ==================== */
 .collapsible-header {
   position: fixed;
   top: 0;
@@ -41,49 +75,61 @@ h1 {
   box-shadow: none;
 }
 
+/* The top strip: a flat toolbar holding Help and the panel toggle. */
+.header-bar {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  position: relative;
+  background-color: var(--v1-bg-secondary);
+  border-bottom: 1px solid var(--v1-border);
+  box-shadow: var(--v1-shadow-md);
+}
+
 .header-toggle {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: transparent;
+  color: var(--v1-text);
   border: none;
-  padding: 14px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
   text-align: left;
-  transition: all 0.3s ease;
-  font-family: 'Ubuntu', sans-serif;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  min-height: 50px;
+  transition: background-color var(--v1-transition-fast);
+  font-family: var(--v1-font);
+  min-height: 48px;
   display: flex;
   align-items: center;
 }
 
 .header-toggle:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background-color: var(--v1-surface-hover);
 }
 
+/* Ghost button, matching the Engine-V2 secondary button. */
 .help-button {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-  color: white;
-  border: none;
-  padding: 14px 20px;
-  font-size: 16px;
-  font-weight: bold;
+  background-color: transparent;
+  color: var(--v1-text-secondary);
+  border: 1px solid var(--v1-border);
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Ubuntu', sans-serif;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  min-height: 50px;
+  transition: background-color var(--v1-transition-fast), border-color var(--v1-transition-fast), color var(--v1-transition-fast);
+  font-family: var(--v1-font);
+  border-radius: var(--v1-radius-sm);
+  min-height: 32px;
+  margin: 8px 0 8px 10px;
   align-items: center;
   white-space: nowrap;
 }
 
 .help-button:hover {
-  background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background-color: var(--v1-primary-soft);
+  border-color: var(--v1-primary);
+  color: var(--v1-text);
 }
 
 #toggleIcon {
@@ -104,18 +150,23 @@ h1 {
   overflow-y: auto;
   overflow-x: hidden;
   transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
-  padding: 10px;
-  background-color: #f8f9fa;
+  padding: 12px;
+  background-color: var(--v1-bg-secondary);
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   justify-content: space-around;
   position: relative;
   z-index: 999;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border-left: 2px solid #667eea;
-  border-right: 2px solid #667eea;
-  border-bottom: 2px solid #667eea;
+  box-shadow: var(--v1-shadow-md);
+  border-bottom: 1px solid var(--v1-border);
+}
+
+/* Section labels are micro-labels in Engine-V2 (11px, uppercase, tracked).
+   Each is paired with a <br> in the markup; the label is a block now, so the
+   stray break would otherwise add an empty line. */
+.header-content strong + br {
+  display: none;
 }
 
 .header-content.collapsed {
@@ -129,19 +180,65 @@ h1 {
   flex: 1;
   min-width: 200px;
   max-width: 400px;
+  background-color: var(--v1-surface);
+  border: 1px solid var(--v1-border);
+  border-radius: var(--v1-radius-lg);
+  padding: 12px;
+}
+
+/* First row: the deck picker takes the wider share now that the two control
+   panels have moved into a column of their own beside it. */
+.header-section-deck {
+  flex: 1.2 1 0;
+  min-width: 320px;
+  max-width: none;
+}
+
+/* Controls column: the DM toggles on top, the Scenario Tools beneath them. */
+.header-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 0;
+  min-width: 280px;
+}
+
+/* Both members of the column share its height and span its full width. The
+   column is as tall as the deck panel beside it, so centre their contents
+   rather than stranding them at the top of a mostly empty box. */
+.header-column .header-section {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 45px;
 }
 
 /* Deck selector in header */
 .deck-selector {
   margin-top: 10px;
-  padding: 8px;
-  background-color: #f0f0f0;
-  border-radius: 8px;
+  padding: 8px 10px;
+  background-color: var(--v1-bg-tertiary);
+  border: 1px solid var(--v1-border);
+  border-radius: var(--v1-radius-md);
+}
+
+.deck-selector strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v1-text-secondary);
 }
 
 .deck-selector input[type="radio"] {
-  margin: 5px 5px 5px 10px;
+  margin: 5px 5px 5px 0;
   cursor: pointer;
+  accent-color: var(--v1-primary);
 }
 
 .deck-selector label {
@@ -152,10 +249,10 @@ h1 {
 .header-section-center {
   flex: 1.5;
   min-width: 250px;
-  background-color: #e8eaf6;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 2px solid #667eea;
+  background-color: var(--v1-bg-tertiary);
+  border: 1px solid var(--v1-border);
+  border-radius: var(--v1-radius-lg);
+  padding: 12px;
   text-align: center;
 }
 
@@ -166,34 +263,50 @@ h1 {
 #dm_scenario strong {
   display: block;
   margin-bottom: 8px;
-  font-size: 14px;
-  color: #764ba2;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v1-text-secondary);
 }
 
 #dm_scenario button {
-  margin: 0 3px 5px 0;
-  padding: 6px 10px;
-  background-color: #667eea;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  margin: 0 4px 4px 0;
+  padding: 5px 10px;
+  background-color: var(--v1-bg-tertiary);
+  color: var(--v1-text);
+  border: 1px solid var(--v1-border);
+  border-radius: var(--v1-radius-sm);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-family: 'Ubuntu', sans-serif;
+  transition: background-color var(--v1-transition-fast), border-color var(--v1-transition-fast);
+  font-family: var(--v1-font);
   font-size: 12px;
+  font-weight: 500;
 }
 
 #dm_scenario button:hover {
-  background-color: #764ba2;
+  background-color: var(--v1-surface-hover);
+  border-color: var(--v1-border-hover);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
+    /* A column container that wraps lays its items out in extra horizontal
+       columns rather than stacking them, which pushes the answer key off the
+       side of the panel. Scroll instead. */
+    flex-wrap: nowrap;
   }
 
   .header-section {
+    max-width: 100%;
+  }
+
+  /* Stacked, every row is its own full-width block again. */
+  .header-column,
+  .header-section-deck {
+    flex: 0 0 auto;
     max-width: 100%;
   }
 }
@@ -206,48 +319,67 @@ h1 {
   background-color: transparent;
   border-radius: 0;
   box-shadow: none;
-  padding: 10px;
+  padding: 0;
 }
 
 #solution strong {
   display: block;
   margin-bottom: 8px;
-  font-size: 14px;
-  color: #764ba2;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--v1-text-secondary);
 }
 
 #solution button {
-  margin: 0 3px 5px 0;
-  padding: 6px 10px;
-  background-color: #667eea;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  margin: 0 4px 4px 0;
+  padding: 5px 10px;
+  background-color: var(--v1-bg-tertiary);
+  color: var(--v1-text);
+  border: 1px solid var(--v1-border);
+  border-radius: var(--v1-radius-sm);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-family: 'Ubuntu', sans-serif;
+  transition: background-color var(--v1-transition-fast), border-color var(--v1-transition-fast);
+  font-family: var(--v1-font);
   font-size: 12px;
+  font-weight: 500;
 }
 
 #solution button:hover {
-  background-color: #764ba2;
+  background-color: var(--v1-surface-hover);
+  border-color: var(--v1-border-hover);
 }
 
+/* Deck panel: the engine name is the heading, the two metadata lines a caption. */
 #viewrec {
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--v1-text);
   z-index: auto;
   position: relative;
   top: auto;
   left: auto;
-  font-weight: bold;
   background-color: transparent;
   border-radius: 0;
   box-shadow: none;
-  padding: 10px;
+  padding: 0;
   width: auto;
 }
 
-.decks-header {
+#version,
+#date {
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--v1-text-tertiary);
+}
+
+#version strong,
+#date strong {
+  font-weight: 600;
+  color: var(--v1-text-secondary);
+}
 
 #dm_solution img {
   max-width: 250px;
@@ -257,9 +389,37 @@ h1 {
   clear: both;
 }
 
+/* DM answer key. The row is a full-width child of .header-content and is shown
+   with an inline display:block by solutiontoggle(), so the four cards are laid
+   out as inline-blocks – a grid on #dm_solution itself could never apply. */
+#dm_solution {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 10px 12px;
+  background-color: var(--v1-surface);
+  border: 1px solid var(--v1-border);
+  border-radius: var(--v1-radius-lg);
+  text-align: center;
+}
+
 .solution {
-  max-width: 250px;
-  float: left;
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+  width: min(calc(25% - 12px), 190px);
+  max-width: none;
+  margin: 4px 4px 0;
+  font-size: 12px;
+}
+
+#dm_solution img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--v1-radius-sm);
+  box-shadow: var(--v1-shadow-md);
 }
 
 .title {
@@ -421,19 +581,23 @@ li {
   width: 150px;
 }
 
-#injectdiv h1 {
+#injectdiv h1,
+#injectdiv h2 {
   margin: 0px;
 }
 
-#mydiv h1 {
+#mydiv h1,
+#mydiv h2 {
   margin: 0px;
 }
 
-#gmnotes h1 {
+#gmnotes h1,
+#gmnotes h2 {
   margin: 0px;
 }
 
-#dicebox h1 {
+#dicebox h1,
+#dicebox h2 {
   margin: 0px;
 }
 
@@ -644,6 +808,20 @@ li {
 
 .warn {
   padding: 10px;
-  margin: 10px;
-  background-color: #FF3333;
+  margin: 0;
+  background-color: var(--v1-danger);
+  color: var(--v1-text-inverse);
+  border-radius: var(--v1-radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* On a phone the four-across answer key would be unreadably small, so pair the
+   cards up instead. Scoped to #dm_solution so it beats the base `.solution`
+   rule above it – an equal-specificity override placed up with the other media
+   queries loses to a rule defined later in the file. */
+@media (max-width: 560px) {
+  #dm_solution .solution {
+    width: min(calc(50% - 12px), 190px);
+  }
 }

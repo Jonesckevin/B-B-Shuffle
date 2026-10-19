@@ -351,7 +351,7 @@
     }
     
     .player-main {
-        padding: var(--space-4);
+        padding: var(--space-1);
     }
     
     .scenario-row {
@@ -469,7 +469,7 @@
    The token is that countdown, drawn on the card: it ticks down as turns are
    consumed and is removed when the card is usable again. While it shows, the arm
    chip is withdrawn (see updateProcedureCards), so the card carries nothing
-   clickable — the token is read, not pressed.
+   clickable – the token is read, not pressed.
 
    The dimming goes on the FACES, not on .flip-card or .flip-card-inner: a
    `filter` on either of those flattens the 3D flip and the card would stop
@@ -507,7 +507,7 @@
 
 /* ===== 1920x1080 fit (compact) ===== */
 .player-main {
-    padding: var(--space-4);
+    padding: var(--space-1);
     gap: var(--space-4);
     max-width: 1560px;
 }
@@ -1157,7 +1157,7 @@ body.surface-felt::after {
 .cb-name { font-size: var(--text-xs); line-height: 1.3; }
 
 /* ============================================================
-   Dice FX — big animated d20 modal (optional roll theatrics)
+   Dice FX – big animated d20 modal (optional roll theatrics)
    On/off via the "Dice FX" header control or the "Turn off
    animated dice" link inside the modal. The die itself is built
    by js/dice-fx.js (pure CSS 3D icosahedron).
@@ -1236,7 +1236,7 @@ body.surface-felt::after {
     */
 }
 
-/* The die (0x0 origin; faces hang off it via matrix3d — see Dice.html) */
+/* The die (0x0 origin; faces hang off it via matrix3d – see Dice.html) */
 #dice-fx-die {
     position: relative;
     width: 0;
@@ -1411,7 +1411,7 @@ body.surface-felt::after {
 }
 
 /* ============================================================
-   Card FX — holographic tilt / sheen / click burst (Player)
+   Card FX – holographic tilt / sheen / click burst (Player)
    Pointer-tracked, pure CSS + JS (js/card-fx.js). Scales from the
    single --fx-intensity knob. body.fx-enabled is only set when a
    fine hover pointer is present and reduced-motion is not asked
@@ -1535,7 +1535,7 @@ body.fx-enabled .cv-stage.fx-click .fx-burst { animation: fxBurstRing 0.55s ease
 body.fx-enabled .flip-card.fx-click .card-holo { animation: fxClickFlash 0.5s ease-out; }
 
 /* ============================================================
-   Call a Consultant — rail on the board + selection modal
+   Call a Consultant – rail on the board + selection modal
    The rail mirrors the Inject rail on the opposite side, so the
    Procedures end up in the middle of the row.
    ============================================================ */
@@ -1746,7 +1746,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
    being cropped into portrait slots, so face-down scenario cards take
    the card-back's own shape: 2.5/3.5 inverted = 1.4.
    The revealed card face is 2.5:3.5, so its top third is a
-   2.5:1.1667 band — the card has to get wider for that crop to
+   2.5:1.1667 band – the card has to get wider for that crop to
    actually magnify the text, hence the width increase on reveal.
    The wrapper is left uncapped so the wider band can borrow its grid
    column, with max-width clamping it instead of overlapping a
@@ -1757,7 +1757,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 }
 
 .scenario-row .card-wrapper[data-type] .flip-card {
-    --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
+    --card-ar: 1.4;             /* 3.5 / 2.5 – landscape, matches the card back */
     flex: 0 0 auto;
     width: 180px;
     max-width: 100%;
@@ -1769,7 +1769,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 }
 
 .scenario-row .card-wrapper[data-type] .flip-card.flipped {
-    --card-ar: 2.1429;          /* 2.5 / (3.5 / 3) — the top 1/3 band */
+    --card-ar: 2.1429;          /* 2.5 / (3.5 / 3) – the top 1/3 band */
     width: 300px;
 }
 
@@ -1781,7 +1781,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
    Procedure cards: wider, wrapping, and face-up cards open into a
    readable band showing the top 1/5 of the card face (the name
    banner + the first line) instead of the whole card shrunk small.
-   The card face is 2.5:3.5, so the top fifth is a 2.5:0.7 band — the
+   The card face is 2.5:3.5, so the top fifth is a 2.5:0.7 band – the
    card has to get wider for that crop to actually magnify the text,
    hence the width increase on reveal.
    The shape is driven by the shared registered --card-ar so the ratio
@@ -1796,7 +1796,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 }
 
 .procedure-row .procedure-body .procedure-cards .flip-card {
-    --card-ar: 1.4;             /* 3.5 / 2.5 — landscape, matches the card back */
+    --card-ar: 1.4;             /* 3.5 / 2.5 – landscape, matches the card back */
     width: 200px;
     aspect-ratio: var(--card-ar);
     transition:
@@ -1807,7 +1807,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 
 /* Face-up: the top fifth of the card face, at a size you can read */
 .procedure-row .procedure-body .procedure-cards .flip-card.flipped {
-    --card-ar: 3.5714;          /* 2.5 / (3.5 / 5) — the top 1/5 band */
+    --card-ar: 3.5714;          /* 2.5 / (3.5 / 5) – the top 1/5 band */
     width: min(260px, 100%);
 }
 
@@ -1816,7 +1816,7 @@ body.fx-enabled .card-wrapper[data-type="consultant"] .flip-card { --fx-c1: #ec4
 }
 
 /* ============================================================
-   Solo AI (PvE) — Incident Master rail
+   Solo AI (PvE) – Incident Master rail
    (body.solo-match, added by js/solo-master.js from ?mode=solo)
 
    Green is the "this is a Solo AI match" signal: the header badge,
@@ -2065,7 +2065,7 @@ body.solo-match .im-rail {
 }
 
 /* Kind accents. The bubbles are built as `im-msg im-<kind>` (see log() in
-   js/solo-master.js) — these selectors must match that, or every tier colour
+   js/solo-master.js) – these selectors must match that, or every tier colour
    silently does nothing. `.im-msg-typing` is the one class set literally. */
 .im-msg.im-narrator { border-left-color: var(--im-green); }
 .im-msg.im-ok { border-left-color: var(--color-success); }
@@ -2262,7 +2262,7 @@ body.solo-match .im-rail {
     font-size: 0.8rem;
 }
 
-/* Procedure chips take the solo green, and the plain "Use" chip (solo only —
+/* Procedure chips take the solo green, and the plain "Use" chip (solo only –
    a procedure that carries no +3) stays neutral until it is selected. */
 /* The selected procedure's ring follows the solo green, so the card and its
    chip read as one selection. (The tabletop keeps the amber ring.) */
@@ -2295,8 +2295,8 @@ body.solo-match .procedure-cards .flip-card.active .proc-arm-plain {
     color: var(--color-text-inverse);
 }
 
-/* The site-navigation FAB is fixed to the bottom-right — the same corner the
-   rail's actions occupy — so it sat on top of the accuse button and swallowed
+/* The site-navigation FAB is fixed to the bottom-right – the same corner the
+   rail's actions occupy – so it sat on top of the accuse button and swallowed
    the clicks. Shift it out of the rail's column. */
 body.solo-match .fab-container {
     right: calc(var(--im-rail-width) + 24px);
@@ -2304,7 +2304,7 @@ body.solo-match .fab-container {
 
 /* --- One-viewport shell ---------------------------------------------
    The rail used to be `height: 100vh` on a *scrolling* page, and it starts
-   BELOW the header — so header + 100vh + footer always overran the window.
+   BELOW the header – so header + 100vh + footer always overran the window.
    The board stretched the page taller than the screen, the page scrolled,
    and the rail's action row sat under the fold.
 
@@ -2336,7 +2336,7 @@ body.solo-match .fab-container {
 
     /* The rail costs 340px, so the hand wraps where it used to fit. A face-up
        procedure is a WIDE band (260px), and 7 of them at a 4-per-row wrap cost
-       ~400px of board height — the whole reason 1366x768 needed a scroll.
+       ~400px of board height – the whole reason 1366x768 needed a scroll.
        Sizing each band to a quarter of the row (never above 260px) makes the
        hand land in two rows at every desktop width, and the band still shows
        the name banner it exists for. */
@@ -2487,7 +2487,18 @@ body.solo-match .fab-container {
 .header-controls { display: none; }
 
 /* ============================================================
-   MOBILE / TABLET SHELL  (phones + tablets, portrait + landscape)
+   MOBILE / TABLET SHELL  (narrow, or short-and-wide)
+
+   Two independent triggers, both about running out of room rather than the
+   window's aspect ratio:
+     - width <= 1024px  : phones and narrow windows, any height;
+     - height <= 700px  : landscape phones/tablets and short windows, up to
+                          1200px wide.
+   A desktop window that is merely wider than it is tall (e.g. 1100x800) keeps
+   the desktop layout, because it has the room for it; the previous
+   `orientation: landscape` test switched at width == height, so the design
+   flipped to the mobile shell the moment the window was widened past its
+   height - even though there was more space, not less.
 
    Below the tablet breakpoint the Player becomes a one-screen app:
    - the header centres and its actions collapse into a menu;
@@ -2505,7 +2516,7 @@ body.solo-match .fab-container {
    layout - the Incident Master spends turns itself and a shell would
    fight it (see js/solo-master.js).
    ============================================================ */
-@media (max-width: 1024px), (orientation: landscape) and (max-width: 1200px) {
+@media (max-width: 1024px), (max-width: 1200px) and (max-height: 700px) {
 
     /* ---- header: ONE line - brand, stats, menu toggle ----
        A phone cannot spare two rows for the header, so the logo shares a row
@@ -2759,18 +2770,14 @@ body.solo-match .fab-container {
 /* ============================================================
    CONTROLS RELOCATED INTO THE HEADER
 
-   The compact landscape shell has room in its header for the
-   roll/action controls, and moving them there frees the row the
-   separate bar was using for the board. The query is therefore
-   exactly the landscape half of the shell above - the same 1200
-   boundary, at ANY height - so the bar and the shell switch
-   together. js/landscape-controls.js adds `body.landscape-controls`
-   on this same query.
-
-   Above 1200 the bar is always its own row, however wide the
-   screen gets.
+   The short shell (height <= 700px, up to 1200px wide) has room in its header
+   for the roll/action controls, and moving them there frees the row the
+   separate bar was using for the board. js/landscape-controls.js adds
+   `body.landscape-controls` on the same query, so the bar and the shell switch
+   together. A window with plenty of height keeps the bar in its own row, even
+   when it is <= 1200px wide - it has the room.
    ============================================================ */
-@media (orientation: landscape) and (max-width: 1200px) {
+@media (max-width: 1200px) and (max-height: 700px) {
     body.landscape-controls .controls-bar { display: none; }
     /* The bar owns the shell grid's first `auto` row; with it gone the two
        survivors take the two rows and the hand keeps the leftover height. */
@@ -2812,7 +2819,7 @@ body.solo-match .fab-container {
    roll<->turn coupling on - the default - the roll already spends the turn and
    adding a strike spends one too. A portrait tablet has the width and keeps
    them at full size. */
-@media (max-width: 700px), (orientation: landscape) and (max-width: 1200px) {
+@media (max-width: 700px), (max-width: 1200px) and (max-height: 700px) {
     /* Coupling ON: pure redundancy, so they go. The checkbox sits in the same
        bar (or the same header row) as them, so unticking brings them back. */
     body:not(.solo-match):has(#turn-couple-cb:checked) #use-turn-btn,
@@ -2833,7 +2840,7 @@ body.solo-match .fab-container {
    The roll/action controls are also relocated INTO the header (js/landscape-
    controls.js adds `body.landscape-controls`), which kills their separate bar
    and hands the freed row to the cards. */
-@media (orientation: landscape) and (max-height: 620px) and (max-width: 1200px) {
+@media (max-width: 1200px) and (max-height: 620px) {
     body:not(.solo-match) .player-header {
         /* This layout turns the toggle into a flex item (covered below), so the
            header does not have to reserve room for it. */
@@ -2874,10 +2881,10 @@ body.solo-match .fab-container {
     /* Headings cost vertical space on a short screen: drop the card labels. */
     body:not(.solo-match) .card-label { display: none; }
 
-    /* The relocated controls are styled by the block above, which now covers every
-       landscape width up to 1200 whatever the height; a short screen only adds
-       this: the hamburger becomes a flex item, so the whole row centres as one
-       group instead of anchoring to the header's right edge. */
+    /* The relocated controls are styled by the block above, which covers every
+       short viewport up to 1200x700; a really short screen only adds this: the
+       hamburger becomes a flex item, so the whole row centres as one group
+       instead of anchoring to the header's right edge. */
     body.landscape-controls .header-menu-btn {
         position: static;
         top: auto;
@@ -2964,7 +2971,7 @@ body.solo-match .fab-container {
    the primary action and the stat chips give width back, labels going but
    titles staying. 900px is where the measured row stops fitting with them; at
    915x412 the full row still fits. */
-@media (orientation: landscape) and (max-height: 620px) and (max-width: 900px) {
+@media (max-width: 900px) and (max-height: 620px) {
     body:not(.solo-match) #roll-dice-btn span { display: none; }
     body:not(.solo-match) #roll-dice-btn { padding-inline: 6px; }
     /* The pips read as strikes on their own; the roll readout keeps its label
@@ -2974,7 +2981,7 @@ body.solo-match .fab-container {
 
 /* Below 700px the row is tighter again, and so is the window it sits in: the
    header row, the logo in it and the hand card all shrink one more notch. */
-@media (orientation: landscape) and (max-height: 620px) and (max-width: 700px) {
+@media (max-width: 700px) and (max-height: 620px) {
     body:not(.solo-match) .player-header {
         /* A shorter row - the header is a sixth of a 270px-tall window and the
            board wants the difference. The logo keeps its 95%-of-the-row rule;
@@ -3001,14 +3008,14 @@ body.solo-match .fab-container {
    convenience, they only take effect on a card, and the GM Console carries the
    same two ops (reveal.set / reveal.procedures). The turn controls are controls
    the table asked for by unticking the box, so they win. */
-@media (orientation: landscape) and (max-height: 620px) and (max-width: 620px) {
+@media (max-width: 620px) and (max-height: 620px) {
     body:not(.solo-match):not(:has(#turn-couple-cb:checked)) .controls-right .controls-right-btn { display: none; }
 }
 
 /* Safe-area padding for notched devices (viewport-fit=cover is set in the page
    head). Only the outer shell needs it. */
 @supports (padding: env(safe-area-inset-bottom)) {
-    @media (max-width: 1024px), (orientation: landscape) and (max-width: 1200px) {
+    @media (max-width: 1024px), (max-width: 1200px) and (max-height: 700px) {
         body:not(.solo-match) .player-main {
             padding-left: max(var(--space-2), env(safe-area-inset-left));
             padding-right: max(var(--space-2), env(safe-area-inset-right));
@@ -3024,7 +3031,7 @@ body.solo-match .fab-container {
     }
 }
 
-/* Nothing to print yet (no game on the board) — leave the page alone and
+/* Nothing to print yet (no game on the board) – leave the page alone and
    fall back to the browser's normal print behaviour. */
 @media print {
     /* Zero page margin on purpose: the sheet supplies it as padding, so its own

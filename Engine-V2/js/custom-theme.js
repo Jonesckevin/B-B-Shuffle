@@ -1,7 +1,7 @@
 /**
- * B&B Shuffle — Browser-only table theme (Player page)
+ * B&B Shuffle – Browser-only table theme (Player page)
  * Lets the user set a background image and a top-left logo for their session.
- * Everything is stored in localStorage (data-URLs) — nothing is uploaded to the
+ * Everything is stored in localStorage (data-URLs) – nothing is uploaded to the
  * server and nothing is written into scenarios/decks.
  */
 (function () {

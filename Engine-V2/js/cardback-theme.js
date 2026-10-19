@@ -1,9 +1,9 @@
 /**
- * B&B Shuffle — Procedure card-back picker (Player page)
+ * B&B Shuffle – Procedure card-back picker (Player page)
  *
  * Lets the player choose what is printed on the BACK of their Procedure cards:
  * the shipped blue PROCEDURES art, or any deck's box art from
- * `shared/img/decks/`. Purely cosmetic — a localStorage preference
+ * `shared/img/decks/`. Purely cosmetic – a localStorage preference
  * (`bb-theme-procedureBack`) that repaints the hand and touches nothing else.
  * No scenario, deck or game rule is affected, and a board dealt without it
  * looks exactly as it did before.
@@ -15,7 +15,7 @@
  *    a rebuild drops the player's flips, and the method is documented as
  *    off-limits unless the hand itself changed.
  *  - With no choice stored, `PlayerController.procedureBackUrl()` decides, so
- *    "reset to default" is whatever the deck in play already asked for — the
+ *    "reset to default" is whatever the deck in play already asked for – the
  *    default blue Procedure art for every deck shipped today.
  *
  * Self-mounting: a no-op on any page without the theme picker markup.
@@ -85,8 +85,8 @@
     function stored() { return storeGet(STORE_KEY) || ''; }
 
     /**
-     * The art the hand should show right now. No choice — or an id the registry
-     * no longer carries — falls through to the Player's own answer for the deck
+     * The art the hand should show right now. No choice – or an id the registry
+     * no longer carries – falls through to the Player's own answer for the deck
      * in play.
      * @returns {string} page-relative URL
      */
@@ -181,7 +181,7 @@
 
     /**
      * The gallery REPLACES the Theme modal rather than stacking on it, so only
-     * one modal is ever open — which also keeps custom-theme.js's Escape handler
+     * one modal is ever open – which also keeps custom-theme.js's Escape handler
      * from closing the modal underneath.
      */
     function openGallery() {

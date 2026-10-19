@@ -39,7 +39,7 @@ const ScenarioLibrary = {
         if (difficultyFilter) difficultyFilter.addEventListener('change', () => this.filterScenarios());
 
         // Box art beside the deck filter, for the deck that is selected (comes
-        // from CONFIG.decks[].cover — shared/img/decks/<key>.webp). "All Decks"
+        // from CONFIG.decks[].cover – shared/img/decks/<key>.webp). "All Decks"
         // and the few decks with no art upstream show no image.
         const deckCover = Utils.getElement('deck-filter-cover');
         const updateDeckCover = () => {
@@ -336,8 +336,13 @@ const ScenarioLibrary = {
         const types = ['initial', 'pivot', 'c2', 'persist'];
         return types.map(type => {
             const card = scenario.scenario?.[type];
-            if (card?.image) {
-                return `<div class="mini-card"><img src="${Utils.assetPath(card.image)}" alt="${card.name || type}" onerror="Utils.onImgError(event)"></div>`;
+            if (card?.image || card?.template) {
+                // The mini strip is only ~40px wide, so a template card shows its
+                // template art here rather than a composed face.
+                const src = (typeof CardFace !== 'undefined' && CardFace.isTemplateCard(card))
+                    ? CardFace.templateUrl(card.type)
+                    : Utils.assetPath(card.image);
+                return `<div class="mini-card"><img src="${src}" alt="${card.name || type}" onerror="Utils.onImgError(event)"></div>`;
             }
             return `<div class="mini-card" style="background: var(--color-${type})"></div>`;
         }).join('');

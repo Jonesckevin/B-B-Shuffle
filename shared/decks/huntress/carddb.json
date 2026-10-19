@@ -635,7 +635,7 @@
     },
     {
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "type": "inject",
       "id": "046",
@@ -683,7 +683,7 @@
     },
     {
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "type": "inject",
       "id": "052",
@@ -991,7 +991,7 @@
         "Janitorial Services",
         "F-Bomb Enthusiast"
       ],
-      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" — Kyle Hanslovan"
+      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" – Kyle Hanslovan"
     },
     {
       "name": "John Hammond",
@@ -1010,7 +1010,7 @@
         "Runs On Monster™",
         "Co-Creator of Dinosaurs"
       ],
-      "quote": "\"Show, not tell; facts, not fear.\" — John Hammond"
+      "quote": "\"Show, not tell; facts, not fear.\" – John Hammond"
     },
     {
       "name": "Matthew Brennan",
@@ -1028,7 +1028,7 @@
         "Home Chef",
         "Seer of Things Unseen"
       ],
-      "quote": "\"Decode all the things.\" — Matthew Brennan"
+      "quote": "\"Decode all the things.\" – Matthew Brennan"
     },
     {
       "name": "Jamie Levy",
@@ -1045,7 +1045,7 @@
         "Published Author",
         "Technical Instructor"
       ],
-      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" — Jamie Levy"
+      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" – Jamie Levy"
     },
     {
       "name": "Harlan Carvey",
@@ -1062,7 +1062,7 @@
         "Being Pedantic",
         "Napping Enthusiast"
       ],
-      "quote": "\"Keep calm and DFIR on.\" — Harlan Carvey"
+      "quote": "\"Keep calm and DFIR on.\" – Harlan Carvey"
     },
     {
       "name": "Cat Contillo",
@@ -1080,7 +1080,7 @@
         "Champion of Diversity, Equity, Inclusion, and Belonging",
         "Bakes a Mean Banana Bread"
       ],
-      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" — Cat Contillo"
+      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" – Cat Contillo"
     }
   ],
   "red": "img/bb-back-init.png",

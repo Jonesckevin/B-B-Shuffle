@@ -1,4 +1,29 @@
-# Use the official Nginx image from the Docker Hub
+# ---------------------------------------------------------------------------
+# B&B Shuffle - self-hosted Player/Admin/library front-end plus the stdlib-only
+# Python API.
+#
+# The app is plain HTML/CSS/JS with no bundler. `tools/minify.py` strips every
+# comment and compacts the text assets, and the runtime image receives only its
+# output - so the published container never serves source comments, indentation
+# or pretty-printed JSON. The minifier also runs `node --check` on every script,
+# so a broken strip fails the build instead of shipping.
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Stage 1: comment-free web root.
+# ---------------------------------------------------------------------------
+FROM alpine:3.20 AS webroot
+
+RUN apk add --no-cache python3 nodejs
+
+WORKDIR /app
+COPY . /app/
+RUN python3 tools/minify.py /app /webroot
+
+
+# ---------------------------------------------------------------------------
+# Stage 2: runtime image.
+# ---------------------------------------------------------------------------
 FROM nginx:alpine
 
 # Runtime dependencies only (see the notes below before adding more):
@@ -21,8 +46,8 @@ RUN apk add --no-cache \
 # Create data directories
 RUN mkdir -p /usr/share/nginx/html/data/{uploads,logs}
 
-# Copy the application files to the Nginx html directory
-COPY . /usr/share/nginx/html/
+# Web root from the builder stage: comments stripped, text assets compacted.
+COPY --from=webroot /webroot/ /usr/share/nginx/html/
 
 # Copy custom nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf

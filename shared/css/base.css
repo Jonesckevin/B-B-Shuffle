@@ -4,8 +4,21 @@
  *
  * Visual language adopted from Cross-Canvas-Art-Studio (App/static/style.css):
  * a fixed dark, matte "developer tool" theme with a blue/indigo accent.
- * No light theme — the theme toggle was removed.
+ * No light theme – the theme toggle was removed.
  */
+
+/* ===== Self-hosted card font (Teko, SIL OFL 1.1) =====
+   The card templates are typeset in Teko, so the live overlay text uses the
+   same face. The URL is relative to this stylesheet, so it resolves at any
+   page depth. Engine-V2/js/card-face.js awaits document.fonts.ready before it
+   rasterises a face, so a swap-in font can never land after the pixels. */
+@font-face {
+  font-family: 'Teko';
+  src: url('../fonts/Teko-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ===== CSS Custom Properties (Design Tokens) ===== */
 :root {
@@ -46,7 +59,7 @@
   --color-danger-hover: #dc2626;
   --color-info: #38bdf8;
 
-  /* Card type colors (semantic — kept for gameplay clarity) */
+  /* Card type colors (semantic – kept for gameplay clarity) */
   --color-initial: #ef4444;
   --color-pivot: #f59e0b;
   --color-c2: #b45309;     /* warm amber-brown (retuned from #8b4513 for vividness) */
@@ -582,13 +595,13 @@ a:hover {
 .app-legal-gh-logo { flex: 0 0 auto; display: block; }
 
 .app-legal-disclaimer {
-  flex: 1 1 460px;
+  flex: 1 1 320px;
   min-width: 0;
-  margin: 0;
+  margin: 0 auto;             /* fills the space between brand and credit */
   color: var(--color-text-secondary);
   font-size: 11.5px;
   line-height: 1.4;
-  text-align: left;
+  text-align: center;         /* centred so wrapped lines read symmetrically */
 }
 
 @media (max-width: 760px) {
@@ -604,6 +617,9 @@ a:hover {
     text-align: center;
   }
   .app-legal-gh { margin-left: 0; }   /* centre with the rest of the stacked footer */
+  /* Stacked footer is the last thing on the page, which puts it under the
+     floating nav button; keep the text clear of that corner. */
+  body.has-fab .app-legal { padding-bottom: 76px; }
 }
 
 /* Optional page-relevant line inside the shared footer. Only the Player page
@@ -621,9 +637,9 @@ a:hover {
 }
 
 /* ===== Site navigation FAB (markup built by shared/js/fab.js) =====
-   Replaces the per-page footer nav. A radial menu anchored bottom-right whose
-   four items fan out over a quarter circle up-and-left only, so none can be
-   pushed off the bottom edge of the screen. */
+   Replaces the per-page footer nav. A labelled menu that stacks upward from the
+   button, right-aligned and scrollable on short screens. Each item carries its
+   destination accent (--fab-accent) on the portal's dark card surface. */
 .fab-container {
   position: fixed;
   right: 24px;
@@ -665,78 +681,81 @@ a:hover {
 .fab-container.open .fab-icon-close { opacity: 1; transform: rotate(0deg) scale(1); }
 .fab-container.open .fab-main { transform: scale(1.07); }
 
-.fab-item {
+/* Items stack upward from the main button as labelled pills, so every
+   destination is readable without hovering. --fab-delay and --fab-accent come
+   from shared/js/fab.js. */
+.fab-menu {
   position: absolute;
   right: 0;
-  bottom: 0;
-  width: 44px;
-  height: 44px;
+  bottom: calc(100% + 12px);
   display: flex;
+  flex-direction: column;
+  align-items: stretch;   /* every pill matches the widest label */
+  gap: 8px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 0 2px 2px;   /* room for the focus ring */
+  visibility: hidden;
+  transition: visibility 0s linear 0.25s;
+}
+
+.fab-container.open .fab-menu {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.fab-item {
+  display: inline-flex;
+  flex: 0 0 auto;   /* keep the 40px pill; the menu scrolls when space is short */
   align-items: center;
-  justify-content: center;
+  gap: 9px;
+  height: 40px;
+  padding: 0 14px 0 11px;
   border-radius: var(--radius-full);
-  color: var(--color-primary-light);
-  background: var(--color-surface-elevated);
-  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--fab-accent, var(--color-primary)) 12%, var(--color-bg-secondary));
+  border: 1px solid color-mix(in srgb, var(--fab-accent, var(--color-primary)) 32%, var(--color-border));
   box-shadow: var(--shadow-md);
   text-decoration: none;
-  opacity: 0;
-  transform: scale(0.4);
-  pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease,
-              background 0.15s ease, border-color 0.15s ease;
-  z-index: 1;
-}
-
-.fab-item:hover,
-.fab-item:focus-visible {
-  z-index: 3;   /* lift the item so its label paints in front of its neighbours */
-  background: var(--color-bg-tertiary);
-  border-color: var(--color-border-hover);
-  color: var(--color-primary);
-}
-
-/* Four evenly spaced stops over a quarter circle of radius 132: 90, 60, 30, 0
-   degrees. Keep this in step with the item list in shared/js/fab.js. */
-.fab-container.open .fab-item-1 { transform: translate(0, -132px) scale(1); opacity: 1; pointer-events: auto; transition-delay: 0.04s; }
-.fab-container.open .fab-item-2 { transform: translate(-66px, -114px) scale(1); opacity: 1; pointer-events: auto; transition-delay: 0.08s; }
-.fab-container.open .fab-item-3 { transform: translate(-114px, -66px) scale(1); opacity: 1; pointer-events: auto; transition-delay: 0.12s; }
-.fab-container.open .fab-item-4 { transform: translate(-132px, 0) scale(1); opacity: 1; pointer-events: auto; transition-delay: 0.16s; }
-
-/* Named label anchored to its own button (shows on hover AND keyboard focus),
-   rather than the reference's cursor-tracked floating tooltip. */
-.fab-item-label {
-  position: absolute;
-  right: calc(100% + 10px);
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 4px 9px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg-tertiary);
-  color: var(--color-text);
-  font-size: 11.5px;
-  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
   opacity: 0;
+  transform: translateY(10px) scale(0.96);
   pointer-events: none;
-  transition: opacity 0.15s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease,
+              background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-/* The arc's top stop sits directly above the main button, only ~18px above the
-   stop below it - less than the label is tall - so a left-hand label there ends
-   up underneath the next button down the arc. Put that one above its button and
-   centre it; the other stops are >=48px apart and have room to their left. */
-.fab-item-1 .fab-item-label {
-  right: auto;
-  left: 50%;
-  top: auto;
-  bottom: calc(100% + 8px);
-  transform: translateX(-50%);
+.fab-container.open .fab-item {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition-delay: var(--fab-delay, 0s);
 }
 
-.fab-item:hover .fab-item-label,
-.fab-item:focus-visible .fab-item-label { opacity: 1; }
+.fab-item svg { flex: 0 0 auto; color: var(--fab-accent, var(--color-primary-light)); }
+
+/* The label is always visible; hover/focus lights the whole pill up in the
+   destination's accent instead of revealing hidden text. */
+.fab-item:hover,
+.fab-item:focus-visible {
+  background: color-mix(in srgb, var(--fab-accent, var(--color-primary)) 26%, var(--color-bg-secondary));
+  border-color: color-mix(in srgb, var(--fab-accent, var(--color-primary)) 68%, var(--color-border));
+  color: color-mix(in srgb, var(--fab-accent, var(--color-primary)) 55%, white);
+  box-shadow: var(--shadow-card-hover, var(--shadow-md));
+  outline: none;
+}
+
+.fab-item:hover svg,
+.fab-item:focus-visible svg { color: color-mix(in srgb, var(--fab-accent, var(--color-primary)) 55%, white); }
+
+.fab-item:focus-visible { box-shadow: 0 0 0 2px var(--color-info); }
+
+.fab-item-label {
+  font-size: 12.5px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
 
 .fab-backdrop {
   position: fixed;
@@ -849,6 +868,23 @@ body.has-fab .app-legal-content { padding-right: 76px; }
   margin: auto;
   border-radius: 0;
   cursor: grab;
+}
+
+/* A composed card face (Engine-V2/js/card-face.js) standing in for the <img>.
+   The width cap carries a vh term so a 1.4 card still fits 80vh. */
+.cv-img.is-face { display: none; }
+.cv-stage .card-face {
+  flex: 0 0 auto;
+  width: min(96vw, 460px, 56vh);
+  cursor: zoom-in;
+  user-select: none;
+  filter: drop-shadow(0 12px 34px rgba(0, 0, 0, 0.55));
+}
+.cv-stage.cv-zoomed .card-face {
+  width: min(96vw, 900px);
+  margin: auto;
+  cursor: grab;
+  filter: none;
 }
 
 .cv-meta {
@@ -1087,7 +1123,7 @@ body.has-fab .app-legal-content { padding-right: 76px; }
    Card-table polish (opt-in utilities)
    Tactile "physical card table" helpers used by the index /
    player / admin pages. Default appearance of other pages is
-   unchanged — pages opt in by adding the .surface-felt class to
+   unchanged – pages opt in by adding the .surface-felt class to
    <body> and using the shadow tokens below.
    ============================================================ */
 :root {
@@ -1122,4 +1158,322 @@ body.has-fab .app-legal-content { padding-right: 76px; }
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.008) 0 1px, transparent 1px 3px);
   background-attachment: fixed;
 }
+
+/* ===== In-browser model panel (shared/js → Engine-V2/js/webllm-provider.js) =====
+   The status/download panel for the WebLLM (WebGPU) provider. Markup is built by
+   the provider module and mounted into a host element on both the Solo AI
+   settings modal and the AI Generator, so it lives here rather than in either
+   page stylesheet. */
+.webllm-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-tertiary);
+}
+
+.webllm-lead {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+}
+
+/* Which GPU the browser actually handed the model. */
+.webllm-gpu {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* Informational (not a warning): how to move onto the discrete GPU. */
+.webllm-note {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--color-info);
+  border-radius: var(--radius-sm);
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--color-text);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+/* The requirements / download-size warning. Amber, not red: it is a caution, and
+   it is also the surface for the "WebGPU unavailable" reason. */
+.webllm-warning {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-text);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+.webllm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.webllm-progress {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.webllm-progress-bar {
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width 0.2s ease;
+}
+
+.webllm-status {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+/* Models already stored in this browser: switching to one needs no download. */
+.webllm-downloads {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+}
+
+.webllm-downloads-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.webllm-downloads-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--space-1);
+}
+
+.webllm-dl-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 3px 0;
+  font-size: var(--font-size-xs);
+}
+
+.webllm-dl-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.webllm-dl-size {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.webllm-dl-badge {
+  flex: 0 0 auto;
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-light);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.webllm-downloads-empty {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+/* Live token stream for the AI Generator (Solo streams into its own typing
+   bubble instead). Monospace so a half-written JSON object stays readable. */
+.ai-live {
+  margin: 0 var(--space-4) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-tertiary);
+  overflow: hidden;
+}
+
+.ai-live-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.ai-live-head .ai-live-spacer { flex: 1 1 auto; }
+
+.ai-live-text {
+  margin: 0;
+  padding: var(--space-3);
+  max-height: 260px;
+  overflow: auto;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ===== Live card face (markup built by Engine-V2/js/card-face.js) =====
+   A template card is composed at display time: the PNG template underneath,
+   the card's own text on top. card-face.js sets every position inline, so this
+   block only provides the box model and the type.
+
+   The face is a fixed 2.5:3.5 box sized from its HOST's width. A host that
+   crops - the Player flips `.flip-card-back` into a wide band - therefore crops
+   the composed face exactly the way `object-fit: cover` used to crop the <img>.
+   `container-type: inline-size` makes `cqw` mean 1% of the face's own width,
+   which is the unit card-face.js expresses its font sizes in. */
+.card-face {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  container-type: inline-size;
+  overflow: hidden;
+  font-family: 'Teko', 'Segoe UI', Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.05;
+  color: #14181f;
+}
+
+/* The template keeps its own transparent margin and drop shadow - it is drawn
+   to fill the face box and is never cropped by the box itself. */
+.card-face .cf-template {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: fill;
+}
+
+.card-face .cf-block {
+  position: absolute;
+  overflow: hidden;
+}
+
+.card-face .cf-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The title sits in the printed band, centred on both axes. */
+.card-face .cf-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.card-face .cf-title .cf-line {
+  width: 100%;
+  /* One line, so an over-long title can be measured and scaled to fit the band
+     (Engine-V2/js/card-face.js fitTitle). */
+  white-space: nowrap;
+}
+
+.card-face .cf-artwork {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card-face .cf-artwork img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Repeated diagonal watermark. One oversized rotated block rather than a tiled
+   background image, so it can use the self-hosted Teko face. The opacity here
+   matches WATERMARK_OPACITY in Engine-V2/js/card-face.js - keep them in step. */
+.card-face .cf-watermark {
+  position: absolute;
+  left: -40%;
+  top: -40%;
+  width: 180%;
+  height: 180%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  transform: rotate(-30deg);
+  opacity: 0.04;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.card-face .cf-wm-row {
+  display: flex;
+  justify-content: space-around;
+  white-space: nowrap;
+  font-size: 3cqw;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
+/* Stagger every other row so the repetition reads as a texture, not a grid. */
+.card-face .cf-wm-row:nth-child(odd) { padding-left: 7%; }
+
+/* GitHub signature, printed in the transparent margin below the card. */
+.card-face .cf-footer {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8cqw;
+  color: #6b7280;
+  text-decoration: none;
+  opacity: 0.78;
+  letter-spacing: 0.03em;
+}
+
+.card-face .cf-footer svg {
+  width: 1.7em;
+  height: 1.7em;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
+/* A host holding a composed face crops it the way the old <img> was cropped. */
+.has-card-face {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The host's <img> is kept in the DOM (ids and `img` selectors elsewhere rely
+   on it) but hidden whenever a composed face stands in for it. */
+img.is-face { display: none; }
+
 

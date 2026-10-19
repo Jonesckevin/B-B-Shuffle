@@ -1,6 +1,6 @@
 {
  "_meta": {
-  "description": "B&B Shuffle card catalog. Normalized copy of every shared/decks/*/carddb.json plus deck metadata from Engine-V2/js/config.js. Organize by deck, then by card type. Text read off the card FACES lives in `description` (a procedure's body paragraph, a scenario card's scene-setting paragraph, an inject's rule, a consultant's action), `tools` (the TOOLS list on procedures and scenario cards), `notes` (an inject's NOTES paragraph), `specialties`/`quote` (consultants) and `cost` (the v3.1 'Competitive Price: N RP' badge). A field is ABSENT, never [], when it has not been read yet - see `text` and each deck's `textCoverage` for progress, exactly like `detection`. Scenario cards expose a 'detection' array = the Procedure cards printed in the card's DETECTION section (OCR'd from the card face into docs/card-detection.json). alignment.decks[*].scenarioNameAsProcedure lists scenario cards whose exact name also exists as a Procedure card — the name-level proxy for 'is this scenario card detectable by a procedure'. Use card.detection (procedure names) for the real scenario->procedure mapping; never rely on exact-name matching alone.",
+  "description": "B&B Shuffle card catalog. Normalized copy of every shared/decks/*/carddb.json plus deck metadata from Engine-V2/js/config.js. Organize by deck, then by card type. Text read off the card FACES lives in `description` (a procedure's body paragraph, a scenario card's scene-setting paragraph, an inject's rule, a consultant's action), `tools` (the TOOLS list on procedures and scenario cards), `notes` (an inject's NOTES paragraph), `specialties`/`quote` (consultants) and `cost` (the v3.1 'Competitive Price: N RP' badge). A field is ABSENT, never [], when it has not been read yet - see `text` and each deck's `textCoverage` for progress, exactly like `detection`. Scenario cards expose a 'detection' array = the Procedure cards printed in the card's DETECTION section (OCR'd from the card face into docs/card-detection.json). alignment.decks[*].scenarioNameAsProcedure lists scenario cards whose exact name also exists as a Procedure card – the name-level proxy for 'is this scenario card detectable by a procedure'. Use card.detection (procedure names) for the real scenario->procedure mapping; never rely on exact-name matching alone.",
   "schemaVersion": "1.2",
   "generated": "2026-09-27T18:03:19+00:00",
   "deckCount": 18,
@@ -8599,7 +8599,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -8677,7 +8677,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -14555,7 +14555,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/core-v3/BNB_CARDS_v3_46.webp",
       "details": [
        {
@@ -14633,7 +14633,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal Takes Your Most Skilled Handler Into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/core-v3/BNB_CARDS_v3_52.webp",
       "details": [
        {
@@ -16111,7 +16111,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -16189,7 +16189,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -16300,7 +16300,7 @@
        "Public Speaking",
        "Comic Book Nerd"
       ],
-      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" — Dan Erwin"
+      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" – Dan Erwin"
      },
      {
       "id": "079",
@@ -16322,7 +16322,7 @@
        "Public Speaking",
        "PowerPoint... lots and lots of PowerPoint"
       ],
-      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" — Tim Medin"
+      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" – Tim Medin"
      },
      {
       "id": "080",
@@ -16344,7 +16344,7 @@
        "Infosec Instructor and Author",
        "Public Speaking"
       ],
-      "quote": "\"Offense informs defense and defense informs offense.\" — Jorge Orchilles"
+      "quote": "\"Offense informs defense and defense informs offense.\" – Jorge Orchilles"
      },
      {
       "id": "081",
@@ -16365,7 +16365,7 @@
        "Incident Response Kill Chain Slayer",
        "Architect of Inspirational PPTX"
       ],
-      "quote": "\"Heroism is often nothing more than the omission of details.\" — Asim Qureshi"
+      "quote": "\"Heroism is often nothing more than the omission of details.\" – Asim Qureshi"
      },
      {
       "id": "082",
@@ -16387,7 +16387,7 @@
        "Game Aficionado",
        "Geek Dad"
       ],
-      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" — Mikko Hypponen"
+      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" – Mikko Hypponen"
      },
      {
       "id": "083",
@@ -16409,7 +16409,7 @@
        "Motivational Speaking",
        "Building Businesses"
       ],
-      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" — Marcus J. Carey"
+      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" – Marcus J. Carey"
      },
      {
       "id": "084",
@@ -16430,7 +16430,7 @@
        "Building a Team of People Smarter Than Me",
        "No One's Ever Wondered My Opinion"
       ],
-      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" — Robert M. Lee"
+      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" – Robert M. Lee"
      },
      {
       "id": "085",
@@ -16452,7 +16452,7 @@
        "Optimistic",
        "Always Calm During a Storm"
       ],
-      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" — Stéphane Nappo"
+      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" – Stéphane Nappo"
      },
      {
       "id": "086",
@@ -16474,7 +16474,7 @@
        "Mentoring",
        "Restoring Golden Age Arcade Machines"
       ],
-      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" — Anonymous"
+      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" – Anonymous"
      },
      {
       "id": "087",
@@ -16496,7 +16496,7 @@
        "Loud Angry Rock n' Roll",
        "Mountain Biking Terrifying Distances"
       ],
-      "quote": "\"Things are only fragile till they break.\" — Dovetail Joint"
+      "quote": "\"Things are only fragile till they break.\" – Dovetail Joint"
      },
      {
       "id": "088",
@@ -16519,7 +16519,7 @@
        "Husband and Father",
        "Amateur Woodworker"
       ],
-      "quote": "\"It's not a bug, it's a feature!\" — Unknown"
+      "quote": "\"It's not a bug, it's a feature!\" – Unknown"
      },
      {
       "id": "089",
@@ -16543,7 +16543,7 @@
        "Magic: The Gathering",
        "Parenting"
       ],
-      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" — John Strand"
+      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" – John Strand"
      },
      {
       "id": "090",
@@ -16565,7 +16565,7 @@
        "Pathfinding",
        "Bass Fishing"
       ],
-      "quote": "\"It's always easier to hack a human than a computer.\" — Kevin Mitnick"
+      "quote": "\"It's always easier to hack a human than a computer.\" – Kevin Mitnick"
      },
      {
       "id": "091",
@@ -16587,7 +16587,7 @@
        "Knows \"TheBlindHacker\"",
        "Wilderness Survival"
       ],
-      "quote": "\"To some people, I'll always be the bad guy.\" — Kevin Mitnick"
+      "quote": "\"To some people, I'll always be the bad guy.\" – Kevin Mitnick"
      }
     ]
    }
@@ -19376,7 +19376,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -19454,7 +19454,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -21219,7 +21219,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -21297,7 +21297,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -22936,7 +22936,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -23014,7 +23014,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -23546,7 +23546,7 @@
        "Public Speaking",
        "Comic Book Nerd"
       ],
-      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" — Dan Erwin"
+      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" – Dan Erwin"
      },
      {
       "id": "026",
@@ -23562,7 +23562,7 @@
        "Public Speaking",
        "PowerPoint... lots and lots of PowerPoint"
       ],
-      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" — Tim Medin"
+      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" – Tim Medin"
      },
      {
       "id": "027",
@@ -23578,7 +23578,7 @@
        "Infosec Instructor and Author",
        "Public Speaking"
       ],
-      "quote": "\"Offense informs defense and defense informs offense.\" — Jorge Orchilles"
+      "quote": "\"Offense informs defense and defense informs offense.\" – Jorge Orchilles"
      },
      {
       "id": "028",
@@ -23593,7 +23593,7 @@
        "Incident Response Kill Chain Slayer",
        "Architect of Inspirational PPTX"
       ],
-      "quote": "\"Heroism is often nothing more than the omission of details.\" — Asim Qureshi"
+      "quote": "\"Heroism is often nothing more than the omission of details.\" – Asim Qureshi"
      },
      {
       "id": "029",
@@ -23609,7 +23609,7 @@
        "Game Aficionado",
        "Geek Dad"
       ],
-      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" — Mikko Hypponen"
+      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" – Mikko Hypponen"
      },
      {
       "id": "030",
@@ -23625,7 +23625,7 @@
        "Motivational Speaking",
        "Building Businesses"
       ],
-      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" — Marcus J. Carey"
+      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" – Marcus J. Carey"
      },
      {
       "id": "031",
@@ -23640,7 +23640,7 @@
        "Building a Team of People Smarter Than Me",
        "No One's Ever Wondered My Opinion"
       ],
-      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" — Robert M. Lee"
+      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" – Robert M. Lee"
      },
      {
       "id": "032",
@@ -23656,7 +23656,7 @@
        "Optimistic",
        "Always Calm During a Storm"
       ],
-      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" — Stéphane Nappo"
+      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" – Stéphane Nappo"
      },
      {
       "id": "033",
@@ -23672,7 +23672,7 @@
        "Mentoring",
        "Restoring Golden Age Arcade Machines"
       ],
-      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" — Anonymous"
+      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" – Anonymous"
      }
     ],
     "exfil": [
@@ -25467,7 +25467,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -25545,7 +25545,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -25763,7 +25763,7 @@
        "Janitorial Services",
        "F-Bomb Enthusiast"
       ],
-      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" — Kyle Hanslovan"
+      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" – Kyle Hanslovan"
      },
      {
       "id": "079",
@@ -25787,7 +25787,7 @@
        "Runs On Monster™",
        "Co-Creator of Dinosaurs"
       ],
-      "quote": "\"Show, not tell; facts, not fear.\" — John Hammond"
+      "quote": "\"Show, not tell; facts, not fear.\" – John Hammond"
      },
      {
       "id": "080",
@@ -25810,7 +25810,7 @@
        "Home Chef",
        "Seer of Things Unseen"
       ],
-      "quote": "\"Decode all the things.\" — Matthew Brennan"
+      "quote": "\"Decode all the things.\" – Matthew Brennan"
      },
      {
       "id": "081",
@@ -25832,7 +25832,7 @@
        "Published Author",
        "Technical Instructor"
       ],
-      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" — Jamie Levy"
+      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" – Jamie Levy"
      },
      {
       "id": "082",
@@ -25854,7 +25854,7 @@
        "Being Pedantic",
        "Napping Enthusiast"
       ],
-      "quote": "\"Keep calm and DFIR on.\" — Harlan Carvey"
+      "quote": "\"Keep calm and DFIR on.\" – Harlan Carvey"
      },
      {
       "id": "083",
@@ -25877,7 +25877,7 @@
        "Champion of Diversity, Equity, Inclusion, and Belonging",
        "Bakes a Mean Banana Bread"
       ],
-      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" — Cat Contillo"
+      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" – Cat Contillo"
      }
     ]
    }
@@ -30035,7 +30035,7 @@
       "id": "068",
       "type": "c2",
       "name": "Bluetooth as Exfil",
-      "description": "The attackers knew you were watching that wired connection closely and got crafty—they exfiltrate all that valuable data via a Bluetooth-enabled device.",
+      "description": "The attackers knew you were watching that wired connection closely and got crafty–they exfiltrate all that valuable data via a Bluetooth-enabled device.",
       "image": "decks/red-canary/REDCANARY__17.webp",
       "details": [
        {
@@ -32062,7 +32062,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -32140,7 +32140,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -32913,7 +32913,7 @@
        "Public Speaking",
        "Comic Book Nerd"
       ],
-      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" — Dan Erwin"
+      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" – Dan Erwin"
      },
      {
       "id": "078",
@@ -32938,7 +32938,7 @@
        "Janitorial Services",
        "F-Bomb Enthusiast"
       ],
-      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" — Kyle Hanslovan"
+      "quote": "\"Every person you admire in cybersecurity also struggles with imposter syndrome.\" – Kyle Hanslovan"
      },
      {
       "id": "079",
@@ -32962,7 +32962,7 @@
        "Runs On Monster™",
        "Co-Creator of Dinosaurs"
       ],
-      "quote": "\"Show, not tell; facts, not fear.\" — John Hammond"
+      "quote": "\"Show, not tell; facts, not fear.\" – John Hammond"
      },
      {
       "id": "079",
@@ -32984,7 +32984,7 @@
        "Public Speaking",
        "PowerPoint... lots and lots of PowerPoint"
       ],
-      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" — Tim Medin"
+      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" – Tim Medin"
      },
      {
       "id": "080",
@@ -33006,7 +33006,7 @@
        "Infosec Instructor and Author",
        "Public Speaking"
       ],
-      "quote": "\"Offense informs defense and defense informs offense.\" — Jorge Orchilles"
+      "quote": "\"Offense informs defense and defense informs offense.\" – Jorge Orchilles"
      },
      {
       "id": "080",
@@ -33029,7 +33029,7 @@
        "Home Chef",
        "Seer of Things Unseen"
       ],
-      "quote": "\"Decode all the things.\" — Matthew Brennan"
+      "quote": "\"Decode all the things.\" – Matthew Brennan"
      },
      {
       "id": "081",
@@ -33050,7 +33050,7 @@
        "Incident Response Kill Chain Slayer",
        "Architect of Inspirational PPTX"
       ],
-      "quote": "\"Heroism is often nothing more than the omission of details.\" — Asim Qureshi"
+      "quote": "\"Heroism is often nothing more than the omission of details.\" – Asim Qureshi"
      },
      {
       "id": "081",
@@ -33072,7 +33072,7 @@
        "Public Speaking",
        "Lifting Heavy Things"
       ],
-      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" — Will Durant"
+      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" – Will Durant"
      },
      {
       "id": "081",
@@ -33094,7 +33094,7 @@
        "Published Author",
        "Technical Instructor"
       ],
-      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" — Jamie Levy"
+      "quote": "\"The more you know, the more you realize there’s so much more you don’t know.\" – Jamie Levy"
      },
      {
       "id": "082",
@@ -33116,7 +33116,7 @@
        "Open Source Security Tools",
        "Privacy and Encryption"
       ],
-      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" — Adam Mashinchi"
+      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" – Adam Mashinchi"
      },
      {
       "id": "082",
@@ -33137,7 +33137,7 @@
        "Building Tools to Help Combat Human Trafficking",
        "Playing Table-Top Games"
       ],
-      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" — Dev"
+      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" – Dev"
      },
      {
       "id": "082",
@@ -33159,7 +33159,7 @@
        "Game Aficionado",
        "Geek Dad"
       ],
-      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" — Mikko Hypponen"
+      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" – Mikko Hypponen"
      },
      {
       "id": "082",
@@ -33181,7 +33181,7 @@
        "Being Pedantic",
        "Napping Enthusiast"
       ],
-      "quote": "\"Keep calm and DFIR on.\" — Harlan Carvey"
+      "quote": "\"Keep calm and DFIR on.\" – Harlan Carvey"
      },
      {
       "id": "083",
@@ -33201,7 +33201,7 @@
        "Adversary Emulation",
        "Training"
       ],
-      "quote": "\"Prevention is ideal, but detection is a must.\" — Anonymous"
+      "quote": "\"Prevention is ideal, but detection is a must.\" – Anonymous"
      },
      {
       "id": "083",
@@ -33224,7 +33224,7 @@
        "Champion of Diversity, Equity, Inclusion, and Belonging",
        "Bakes a Mean Banana Bread"
       ],
-      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" — Cat Contillo"
+      "quote": "\"When the infosec industry supports culture add vs culture fit, diversity will continue to strengthen and help cultivate innovative brilliance.\" – Cat Contillo"
      },
      {
       "id": "083",
@@ -33246,7 +33246,7 @@
        "Motivational Speaking",
        "Building Businesses"
       ],
-      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" — Marcus J. Carey"
+      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" – Marcus J. Carey"
      },
      {
       "id": "083",
@@ -33267,7 +33267,7 @@
        "Public Speaking",
        "Community Support"
       ],
-      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" — Sean"
+      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" – Sean"
      },
      {
       "id": "084",
@@ -33289,7 +33289,7 @@
        "Community Contributor",
        "Beer Brewer"
       ],
-      "quote": "\"Make a decision, even if it’s wrong.\" — Dad"
+      "quote": "\"Make a decision, even if it’s wrong.\" – Dad"
      },
      {
       "id": "084",
@@ -33310,7 +33310,7 @@
        "Detection and Response",
        "Meme Connoisseur"
       ],
-      "quote": "\"I am everywhere and nowhere.\" — The Haag"
+      "quote": "\"I am everywhere and nowhere.\" – The Haag"
      },
      {
       "id": "084",
@@ -33331,7 +33331,7 @@
        "Building a Team of People Smarter Than Me",
        "No One's Ever Wondered My Opinion"
       ],
-      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" — Robert M. Lee"
+      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" – Robert M. Lee"
      },
      {
       "id": "085",
@@ -33353,7 +33353,7 @@
        "Optimistic",
        "Always Calm During a Storm"
       ],
-      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" — Stéphane Nappo"
+      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" – Stéphane Nappo"
      },
      {
       "id": "085",
@@ -33391,7 +33391,7 @@
        "Mentoring",
        "Restoring Golden Age Arcade Machines"
       ],
-      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" — Anonymous"
+      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" – Anonymous"
      },
      {
       "id": "087",
@@ -33413,7 +33413,7 @@
        "Loud Angry Rock n' Roll",
        "Mountain Biking Terrifying Distances"
       ],
-      "quote": "\"Things are only fragile till they break.\" — Dovetail Joint"
+      "quote": "\"Things are only fragile till they break.\" – Dovetail Joint"
      },
      {
       "id": "088",
@@ -33436,7 +33436,7 @@
        "Husband and Father",
        "Amateur Woodworker"
       ],
-      "quote": "\"It's not a bug, it's a feature!\" — Unknown"
+      "quote": "\"It's not a bug, it's a feature!\" – Unknown"
      },
      {
       "id": "089",
@@ -33460,7 +33460,7 @@
        "Magic: The Gathering",
        "Parenting"
       ],
-      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" — John Strand"
+      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" – John Strand"
      },
      {
       "id": "090",
@@ -33482,7 +33482,7 @@
        "Pathfinding",
        "Bass Fishing"
       ],
-      "quote": "\"It's always easier to hack a human than a computer.\" — Kevin Mitnick"
+      "quote": "\"It's always easier to hack a human than a computer.\" – Kevin Mitnick"
      },
      {
       "id": "091",
@@ -33504,7 +33504,7 @@
        "Knows \"TheBlindHacker\"",
        "Wilderness Survival"
       ],
-      "quote": "\"To some people, I'll always be the bad guy.\" — Kevin Mitnick"
+      "quote": "\"To some people, I'll always be the bad guy.\" – Kevin Mitnick"
      }
     ]
    }
@@ -34456,7 +34456,7 @@
       "id": "068",
       "type": "c2",
       "name": "Bluetooth as Exfil",
-      "description": "The attackers knew you were watching that wired connection closely and got crafty—they exfiltrate all that valuable data via a Bluetooth-enabled device.",
+      "description": "The attackers knew you were watching that wired connection closely and got crafty–they exfiltrate all that valuable data via a Bluetooth-enabled device.",
       "image": "decks/red-canary/REDCANARY__17.webp",
       "details": [
        {
@@ -35082,7 +35082,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -35160,7 +35160,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -35267,7 +35267,7 @@
        "Open Source Security Tools",
        "Privacy and Encryption"
       ],
-      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" — Adam Mashinchi"
+      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" – Adam Mashinchi"
      },
      {
       "id": "083",
@@ -35287,7 +35287,7 @@
        "Adversary Emulation",
        "Training"
       ],
-      "quote": "\"Prevention is ideal, but detection is a must.\" — Anonymous"
+      "quote": "\"Prevention is ideal, but detection is a must.\" – Anonymous"
      },
      {
       "id": "084",
@@ -35308,7 +35308,7 @@
        "Detection and Response",
        "Meme Connoisseur"
       ],
-      "quote": "\"I am everywhere and nowhere.\" — The Haag"
+      "quote": "\"I am everywhere and nowhere.\" – The Haag"
      }
     ]
    }
@@ -36860,7 +36860,7 @@
       "id": "046",
       "type": "inject",
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "details": [
        {
@@ -36938,7 +36938,7 @@
       "id": "052",
       "type": "inject",
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "details": [
        {
@@ -37069,7 +37069,7 @@
        "Public Speaking",
        "Lifting Heavy Things"
       ],
-      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" — Will Durant"
+      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" – Will Durant"
      },
      {
       "id": "082",
@@ -37090,7 +37090,7 @@
        "Building Tools to Help Combat Human Trafficking",
        "Playing Table-Top Games"
       ],
-      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" — Dev"
+      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" – Dev"
      },
      {
       "id": "083",
@@ -37111,7 +37111,7 @@
        "Public Speaking",
        "Community Support"
       ],
-      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" — Sean"
+      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" – Sean"
      },
      {
       "id": "084",
@@ -37133,7 +37133,7 @@
        "Community Contributor",
        "Beer Brewer"
       ],
-      "quote": "\"Make a decision, even if it’s wrong.\" — Dad"
+      "quote": "\"Make a decision, even if it’s wrong.\" – Dad"
      },
      {
       "id": "085",

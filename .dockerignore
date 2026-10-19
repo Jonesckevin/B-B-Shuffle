@@ -19,12 +19,20 @@ dockerupload.gitignore
 .github/
 
 # --- Docker files (not needed inside the image) ---
+# docker/ holds build-only helpers; the compose files carry local-only config.
 # docker-compose.dev.yml carries a real provider API key; excluding it here
 # stops it being baked into the image and served from the web root.
+docker/
 docker-compose.yml
 docker-compose.dev.yml
 .dockerignore
 Dockerfile
+
+# --- Local secrets ---
+# .env carries BB_AI_* values for `docker compose` interpolation. Without this
+# rule it is copied into the image and downloadable from the web root at /.env.
+.env
+.env.*
 
 # --- Markdown docs (only the third-party notice is served) ---
 *.md
@@ -52,12 +60,21 @@ floating-action-btn.html
 data/
 
 # --- Tooling / build inputs (not used at runtime) ---
+# tools/minify.py IS needed: the Dockerfile runs it in the builder stage, and it
+# skips itself (and scripts/) when it writes the runtime tree.
+_site/
+_min/
 scripts/
 docs/build_card_details.py
 docs/card-detection.json
 docs/detection/
 .trivy/
 __pycache__/
+
+# --- 3D-print vectors (traced offline, nothing reads them at runtime) ---
+# Black & white SVG/DXF/PNG derived from the brand PNGs by
+# scripts/build_bw_vectors.py.  See 3d-print/README.md.
+3d-print/
 *.pyc
 
 # --- Setup scripts / archived legacy launchers ---

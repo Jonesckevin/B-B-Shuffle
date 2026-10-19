@@ -17,9 +17,8 @@ requirements; it does **not** relicense any component.
 |---|---|---|---|---|
 | [jQuery](https://jquery.com/) | `Engine-V1/index.html`, `help.html` (CDN) | 3.5.1 / 3.6.0 | MIT | OpenJS Foundation & jQuery contributors |
 | [Lightbox2](https://lokeshdhakar.com/projects/lightbox2/) | `Engine-V1/lightbox.js` (vendored) | 2.x | MIT | © Lokesh Dhakar |
-| [Mermaid](https://mermaid.js.org/) | `Engine-V2/modules/mermaid/flowchart.html` (CDN) | 11.x | MIT | © Knut Sveidqvist and contributors |
-| [Architects Daughter](https://fonts.google.com/specimen/Architects+Daughter) | `Engine-V1/help.html`, `Engine-V1/index.html` (Google Fonts CDN) | — | SIL Open Font License 1.1 | © Kimberly Geswein |
-| [Ubuntu](https://fonts.google.com/specimen/Ubuntu) | `Engine-V1/*.html` (Google Fonts CDN) | — | Ubuntu Font Licence 1.0 | © Canonical Ltd. |
+| [Architects Daughter](https://fonts.google.com/specimen/Architects+Daughter) | `Engine-V1/help.html`, `Engine-V1/index.html` (Google Fonts CDN) | – | SIL Open Font License 1.1 | © Kimberly Geswein |
+| [Ubuntu](https://fonts.google.com/specimen/Ubuntu) | `Engine-V1/*.html` (Google Fonts CDN) | – | Ubuntu Font Licence 1.0 | © Canonical Ltd. |
 
 Libraries loaded from a CDN are **not redistributed** by this project; the
 attribution above is provided as a courtesy. The vendored Lightbox2 file

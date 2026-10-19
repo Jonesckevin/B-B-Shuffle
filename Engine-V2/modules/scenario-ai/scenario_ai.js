@@ -102,6 +102,23 @@ const ScenarioAI = {
             jsonMode: true,
             models: ['gemini-flash-lite-latest', 'gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite']
         },
+        // A model that runs in the browser on WebGPU (see webllm-provider.js).
+        // Keyless and address-less: callAPI routes it to WebLLM instead of fetch.
+        // The curated ids mirror WebLLMProvider.MODELS, with literals as the
+        // fallback for a page that did not load the provider script.
+        webllm: {
+            name: 'In-browser model (no API key)',
+            endpoint: '',
+            modelsEndpoint: '',
+            defaultModel: 'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+            models: (typeof WebLLMProvider !== 'undefined')
+                ? WebLLMProvider.MODELS.map(m => m.id)
+                : [
+                    'SmolLM2-360M-Instruct-q4f16_1-MLC',
+                    'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+                    'Llama-3.2-3B-Instruct-q4f16_1-MLC'
+                ]
+        },
         // Local servers are deliberately NOT a provider of their own: Ollama,
         // LM Studio and llama.cpp all speak the OpenAI-compatible API, so they
         // are the Custom Endpoint. See CUSTOM_ENDPOINTS for the addresses people
@@ -269,6 +286,12 @@ const ScenarioAI = {
         // Picking a model from a custom endpoint's live list keeps the free-text
         // name in step, so the two controls cannot disagree about what is sent.
         Utils.getElement('api-model')?.addEventListener('change', () => {
+            // The in-browser panel quotes the chosen model's download size, so it
+            // has to be re-rendered when the selection changes.
+            if (Utils.getElement('api-provider')?.value === 'webllm') {
+                this.renderLocalPanel(true);
+                return;
+            }
             if (Utils.getElement('api-provider')?.value !== 'custom') return;
             const manual = Utils.getElement('api-model-manual');
             const value = Utils.getElement('api-model')?.value || '';
@@ -332,6 +355,12 @@ const ScenarioAI = {
             if (e.target.id === 'settings-modal') this.closeSettingsModal();
         });
 
+        // Stop the in-browser model mid-generation (a no-op for other providers).
+        Utils.getElement('result-stop-btn')?.addEventListener('click', () => {
+            const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+            if (local) local.interrupt();
+        });
+
         // Temperature slider
         Utils.getElement('temperature')?.addEventListener('input', (e) => {
             Utils.getElement('temp-value').textContent = e.target.value;
@@ -350,13 +379,34 @@ const ScenarioAI = {
      */
     updateProviderUI(provider) {
         const modelGroup = Utils.getElement('model-group');
-        const customEndpointGroup = Utils.getElement('custom-endpoint-group');
+
+        // The in-browser model (WebLLM) is keyless and local: no key field, no
+        // endpoint field, and its own status/download panel below the pickers.
+        if (provider === 'webllm') {
+            Utils.hideElement('api-key-group');
+            Utils.hideElement('custom-endpoint-group');
+            Utils.hideElement('api-model-manual');
+            // Shared mode hides the provider picker, but an in-browser model can
+            // never be server-proxied, so keep the picker on screen.
+            Utils.showElement('provider-group');
+            Utils.toggleElement(modelGroup, true);
+            this.populateStaticModels('webllm');
+            this.renderLocalPanel(true);
+            this.setModelHint('Runs in your browser – download the selected model once, then it works offline.');
+            return;
+        }
+
+        this.renderLocalPanel(false);
+        // Restore the per-user key field for the user's own key: switching away
+        // from the in-browser model left it hidden.
+        if (this.keyMode() === 'own') Utils.showElement('api-key-group');
+        else Utils.hideElement('api-key-group');
 
         // Custom is the offline / self-hosted option (Ollama, LM Studio,
         // llama.cpp...). The Model dropdown stays visible for it, because those
         // servers do expose /v1/models - there is just no curated list to fall
         // back on when the server is not running.
-        Utils.toggleElement(customEndpointGroup, provider === 'custom');
+        Utils.toggleElement('custom-endpoint-group', provider === 'custom');
         Utils.toggleElement(modelGroup, true);
 
         if (provider === 'custom') {
@@ -383,6 +433,28 @@ const ScenarioAI = {
             this.populateStaticModels(provider);
             this.setModelHint('Enter your API key to load available models.');
         }
+    },
+
+    /**
+     * Show or hide the in-browser model status panel. The panel is built and
+     * maintained by webllm-provider.js; this only decides visibility and where
+     * the chosen model comes from.
+     * @param {boolean} show
+     */
+    renderLocalPanel(show) {
+        const group = Utils.getElement('webllm-host-group');
+        const host = Utils.getElement('webllm-host');
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        if (!group || !host || !local) return;
+        if (!show) {
+            Utils.hideElement(group);
+            return;
+        }
+        local.mount(host, {
+            getModel: () => this.modelFor('webllm'),
+            getSelect: () => Utils.getElement('api-model')
+        });
+        Utils.showElement(group);
     },
 
     /**
@@ -430,6 +502,11 @@ const ScenarioAI = {
     maybeAutoRefreshModels() {
         const provider = Utils.getElement('api-provider')?.value || '';
         const key = Utils.getElement('api-key')?.value?.trim() || '';
+        // The in-browser model has no key and no live list to fetch.
+        if (provider === 'webllm') {
+            this.refreshModels();
+            return;
+        }
         // A custom (local) endpoint needs no key: try it as soon as it is set.
         if (provider === 'custom') {
             if (Utils.getElement('custom-endpoint')?.value?.trim()) this.refreshModels();
@@ -457,6 +534,14 @@ const ScenarioAI = {
         // Shared-key mode lists models through the server proxy (no key here).
         if (this.keyMode() === 'shared') {
             this.refreshSharedModels();
+            return;
+        }
+
+        // The in-browser model has no key and nothing to query: its list is the
+        // curated set (filtered once the engine has loaded).
+        if (provider === 'webllm') {
+            this.populateStaticModels('webllm');
+            this.setModelHint('Runs in your browser – download the selected model once, then it works offline.');
             return;
         }
 
@@ -600,6 +685,8 @@ const ScenarioAI = {
 
     /** Current key source chosen by the user: 'own' or 'shared'. */
     keyMode() {
+        // The in-browser model runs in this tab and can never use a server key.
+        if (Utils.getElement('api-provider')?.value === 'webllm') return 'own';
         const el = document.querySelector('input[name="key-mode"]:checked');
         return el ? el.value : 'own';
     },
@@ -634,7 +721,7 @@ const ScenarioAI = {
 
         if (!this.shared.available) {
             sharedRadio.disabled = true;
-            this.setSharedHint('Shared key requires the app server (API) — not available on this page.', 'error');
+            this.setSharedHint('Shared key requires the app server (API) – not available on this page.', 'error');
             return;
         }
 
@@ -686,12 +773,15 @@ const ScenarioAI = {
 
         if (!shared) {
             Utils.showElement('provider-group');
-            Utils.showElement('api-key-group');
             const provider = Utils.getElement('api-provider')?.value || '';
+            // The in-browser model has no key field at all - updateProviderUI is
+            // what decides, so do not blindly re-show the key input above it.
+            if (provider !== 'webllm') Utils.showElement('api-key-group');
             this.updateProviderUI(provider); // model/custom-endpoint + static list + hint
             const key = Utils.getElement('api-key')?.value?.trim() || '';
-            // A custom (local) endpoint needs no key, so try it either way.
-            if (provider === 'custom' || key.length >= 8) this.refreshModels();
+            // A custom (local) endpoint and the in-browser model need no key, so
+            // try them either way.
+            if (provider === 'custom' || provider === 'webllm' || key.length >= 8) this.refreshModels();
             this.setSharedHint('Shared mode uses a key stored on this server so players don\'t need their own. The key never reaches this browser.');
             return;
         }
@@ -704,11 +794,11 @@ const ScenarioAI = {
         Utils.showElement('model-group');
 
         if (!this.shared.available) {
-            this.setSharedHint('Shared key requires the app server (API) — not available on this page.', 'error');
+            this.setSharedHint('Shared key requires the app server (API) – not available on this page.', 'error');
             return;
         }
         if (!this.shared.configured) {
-            this.setSharedHint('No shared key configured yet — open “Shared key on this server” below to add one.', 'error');
+            this.setSharedHint('No shared key configured yet – open “Shared key on this server” below to add one.', 'error');
             return;
         }
 
@@ -874,6 +964,17 @@ const ScenarioAI = {
                 Utils.showToast('Enter the server address for the custom endpoint', 'warning');
                 return;
             }
+        } else if (provider === 'webllm') {
+            // No key to check: the model runs in this browser. Refuse the run only
+            // when the device cannot run it at all.
+            const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+            if (local) {
+                const avail = await local.available();
+                if (!avail.ok) {
+                    Utils.showToast('In-browser models need WebGPU – ' + (avail.reason || ''), 'warning');
+                    return;
+                }
+            }
         } else if (!apiKey) {
             Utils.showToast('Please enter an API key', 'warning');
             return;
@@ -893,7 +994,17 @@ const ScenarioAI = {
 
             // Build the messages and call the API
             const messages = this.buildMessages();
-            const response = await this.callAPI(provider, apiKey, messages);
+            // Stream an in-browser model's tokens into a live block (which also
+            // swaps out the spinner); every other provider ignores the hook and
+            // returns the whole reply at once.
+            const onToken = (provider === 'webllm') ? (delta, full) => this.streamLive(full) : null;
+            if (onToken) this.showLive(true);
+            let response;
+            try {
+                response = await this.callAPI(provider, apiKey, messages, onToken);
+            } finally {
+                if (onToken) this.showLive(false);
+            }
 
             // Keep the model's own words, parseable or not - it is the only way
             // for the user to see what came back when the JSON is broken.
@@ -916,7 +1027,7 @@ const ScenarioAI = {
             console.error('Generation failed:', error);
             // A parse failure still shows the reply; point the user at it.
             const hint = (this.lastRawResponse && /JSON/i.test(error.message || ''))
-                ? ' — the model\'s raw reply is shown below.'
+                ? ' – the model\'s raw reply is shown below.'
                 : '';
             this.showStatus('Generation failed: ' + error.message + hint, 'error');
             this.renderRawResponse();
@@ -1033,7 +1144,7 @@ ${cardsByType.consultant?.length ? '- The consultant is optional: name one only 
      * @param {Array<{role:string,content:string}>} messages - Chat messages
      * @returns {Promise<string>} Response text
      */
-    async callAPI(provider, apiKey, messages) {
+    async callAPI(provider, apiKey, messages, onToken) {
         // Shared-key mode: the server proxies the request with its stored key.
         if (this.keyMode() === 'shared') {
             return await this.callShared(messages);
@@ -1047,9 +1158,31 @@ ${cardsByType.consultant?.length ? '- The consultant is optional: name one only 
             return await this.callCompatible(provider, apiKey, messages);
         } else if (provider === 'custom') {
             return await this.callCustom(apiKey, messages);
+        } else if (provider === 'webllm') {
+            return await this.callWebLLM(messages, onToken);
         }
 
         throw new Error('Unknown provider');
+    },
+
+    /**
+     * Run the request on the in-browser model (WebLLM / WebGPU). Keyless and
+     * offline-capable: the engine is downloaded once by webllm-provider.js.
+     * @param {Array<{role:string,content:string}>} messages - Chat messages
+     * @param {Function} [onToken] - Called with (delta, full) as tokens arrive
+     * @returns {Promise<string>} Response text
+     */
+    async callWebLLM(messages, onToken) {
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        if (!local) throw new Error('The in-browser model needs webllm-provider.js on this page.');
+        const avail = await local.available();
+        if (!avail.ok) throw new Error('In-browser models need WebGPU. ' + (avail.reason || ''));
+        return await local.chatMessages(messages, {
+            model: this.modelFor('webllm'),
+            temperature: this.settings.temperature,
+            maxTokens: this.settings.maxTokens,
+            onToken
+        });
     },
 
     /** The model to send: the dropdown's value, else the provider's default. */
@@ -1111,11 +1244,11 @@ ${cardsByType.consultant?.length ? '- The consultant is optional: name one only 
         let message = detail || fallback || `API request failed (${status})`;
         if (!/\(\d{3}\)\s*$/.test(message)) message += ` (${status})`;
         if (status === 401 || status === 403) {
-            message += ' — the key was rejected. Check it is complete and belongs to the selected provider.';
+            message += ' – the key was rejected. Check it is complete and belongs to the selected provider.';
         } else if (status === 429) {
-            message += ' — this model\'s free daily allowance is used up. Pick a different model from the list for a fresh allowance, or wait for the reset.';
+            message += ' – this model\'s free daily allowance is used up. Pick a different model from the list for a fresh allowance, or wait for the reset.';
         } else if (status === 404) {
-            message += ' — that usually means the model is not available to this key. Pick one from the Model list.';
+            message += ' – that usually means the model is not available to this key. Pick one from the Model list.';
         }
         return new Error(message);
     },
@@ -1499,7 +1632,7 @@ ${cardsByType.consultant?.length ? '- The consultant is optional: name one only 
                 source: 'ai-generator',
                 at: new Date().toISOString()
             });
-            Utils.showToast('Scenario moved to the editor — review, then Save to Library', 'success');
+            Utils.showToast('Scenario moved to the editor – review, then Save to Library', 'success');
             // The Scenario Editor (Library input form) lives at Engine-V2/admin.html.
             window.location.href = '../../admin.html?loadScenario=true';
         } catch (error) {
@@ -1517,6 +1650,35 @@ ${cardsByType.consultant?.length ? '- The consultant is optional: name one only 
         Utils.toggleElement('result-empty', !show && !this.generatedScenario);
         Utils.toggleElement('result-content', !show && this.generatedScenario);
         Utils.getElement('generate-btn').disabled = show;
+    },
+
+    /**
+     * Show or hide the live token stream. It stands in for the spinner while an
+     * in-browser model writes, so the text itself is the progress indicator.
+     * @param {boolean} show
+     */
+    showLive(show) {
+        const live = Utils.getElement('result-live');
+        if (!live) return;
+        if (show) {
+            const text = Utils.getElement('result-live-text');
+            if (text) text.textContent = '';
+            Utils.hideElement('result-loading');
+            Utils.showElement(live);
+            return;
+        }
+        Utils.hideElement(live);
+    },
+
+    /**
+     * Render the reply generated so far into the live block.
+     * @param {string} text - Everything generated so far
+     */
+    streamLive(text) {
+        const pre = Utils.getElement('result-live-text');
+        if (!pre) return;
+        pre.textContent = String(text == null ? '' : text);
+        pre.scrollTop = pre.scrollHeight;
     },
 
     /**

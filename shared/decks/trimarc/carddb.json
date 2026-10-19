@@ -635,7 +635,7 @@
     },
     {
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "type": "inject",
       "id": "046",
@@ -683,7 +683,7 @@
     },
     {
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "type": "inject",
       "id": "052",
@@ -1029,7 +1029,7 @@
         "Public Speaking",
         "Lifting Heavy Things"
       ],
-      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" — Will Durant"
+      "quote": "\"We are what we repeatedly do. Excellence, then, is not an act, but a habit.\" – Will Durant"
     },
     {
       "name": "Dev Badlu",
@@ -1045,7 +1045,7 @@
         "Building Tools to Help Combat Human Trafficking",
         "Playing Table-Top Games"
       ],
-      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" — Dev"
+      "quote": "\"Security is like an onion, the more layers you have the more crying the red team is going to be doing.\" – Dev"
     },
     {
       "name": "Sean Metcalf",
@@ -1061,7 +1061,7 @@
         "Public Speaking",
         "Community Support"
       ],
-      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" — Sean"
+      "quote": "\"The question every organization has to answer for themselves is do they want to take the red pill & learn their security issues or the blue pill and continue thinking everything is fine.\" – Sean"
     },
     {
       "name": "Brandon Colley",
@@ -1078,7 +1078,7 @@
         "Community Contributor",
         "Beer Brewer"
       ],
-      "quote": "\"Make a decision, even if it’s wrong.\" — Dad"
+      "quote": "\"Make a decision, even if it’s wrong.\" – Dad"
     },
     {
       "name": "SEANbot",

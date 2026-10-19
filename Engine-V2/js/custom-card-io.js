@@ -1,5 +1,5 @@
 /**
- * B&B Shuffle — Custom Card I/O
+ * B&B Shuffle – Custom Card I/O
  * ------------------------------------------------------------------
  * Client wrapper around the /api/custom-cards endpoints. Mirrors the tolerant
  * response handling used by scenario-io.js (accepts {success,data} or a bare

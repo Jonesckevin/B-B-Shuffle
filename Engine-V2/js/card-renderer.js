@@ -1,7 +1,7 @@
-/*B&B Shuffle — Card Renderer*/
+/*B&B Shuffle – Card Renderer*/
 
 const CardRenderer = {
-    // 2.5 : 3.5 — the aspect ratio used by every card in the app.
+    // 2.5 : 3.5 – the aspect ratio used by every card in the app.
     WIDTH: 750,
     HEIGHT: 1050,
 
@@ -489,7 +489,7 @@ const CardRenderer = {
         const scale = opts.scale || 2;
         const skin = this.resolveSkin(this.normalize(card));
         // opts is forwarded so the SVG carries width/height = W*scale while its
-        // viewBox stays 750x1050 — the browser then rasterises the VECTORS at the
+        // viewBox stays 750x1050 – the browser then rasterises the VECTORS at the
         // final size, making the drawImage below 1:1 rather than an upscale.
         // A data: URI is required: external refs are blocked in secure-static
         // mode and would taint the canvas.

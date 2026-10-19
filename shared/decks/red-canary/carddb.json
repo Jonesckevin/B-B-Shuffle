@@ -635,7 +635,7 @@
     },
     {
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "type": "inject",
       "id": "046",
@@ -683,7 +683,7 @@
     },
     {
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "type": "inject",
       "id": "052",
@@ -891,7 +891,7 @@
     },
     {
       "name": "Bluetooth as Exfil",
-      "description": "The attackers knew you were watching that wired connection closely and got crafty—they exfiltrate all that valuable data via a Bluetooth-enabled device.",
+      "description": "The attackers knew you were watching that wired connection closely and got crafty–they exfiltrate all that valuable data via a Bluetooth-enabled device.",
       "image": "../../shared/decks/red-canary/REDCANARY__17.webp",
       "type": "c2",
       "id": "068",
@@ -1049,7 +1049,7 @@
         "Open Source Security Tools",
         "Privacy and Encryption"
       ],
-      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" — Adam Mashinchi"
+      "quote": "\"Keep in mind that for the adversary, tactics, techniques, and procedures (TTPs) are side effects, not the intent.\" – Adam Mashinchi"
     },
     {
       "name": "Carrie Roberts",
@@ -1064,7 +1064,7 @@
         "Adversary Emulation",
         "Training"
       ],
-      "quote": "\"Prevention is ideal, but detection is a must.\" — Anonymous"
+      "quote": "\"Prevention is ideal, but detection is a must.\" – Anonymous"
     },
     {
       "name": "Mike Haag",
@@ -1080,7 +1080,7 @@
         "Detection and Response",
         "Meme Connoisseur"
       ],
-      "quote": "\"I am everywhere and nowhere.\" — The Haag"
+      "quote": "\"I am everywhere and nowhere.\" – The Haag"
     }
   ],
   "red": "img/bb-back-init.png",

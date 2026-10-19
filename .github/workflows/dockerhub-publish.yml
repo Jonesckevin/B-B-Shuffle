@@ -61,6 +61,7 @@ jobs:
             index.html
             api_server.py
             nginx.conf
+            tools/minify.py
             LICENSE
             NOTICE
             THIRD-PARTY-NOTICES.md
@@ -68,6 +69,8 @@ jobs:
             Engine-V2/player.html
             Engine-V2/admin.html
             Engine-V2/scenario-library.html
+            Engine-V2/modules/card-creator/card_creator.html
+            Engine-V2/modules/card-creator/card_creator.js
             shared/catalogue.html
             shared/css/base.css
             shared/js/card-viewer.js

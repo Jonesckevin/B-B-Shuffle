@@ -1,5 +1,5 @@
 /**
- * B&B Shuffle Engine-V2 — Dice FX (animated d20)
+ * B&B Shuffle Engine-V2 – Dice FX (animated d20)
  * ============================================================
  * A big 3D d20 that tumbles inside a modal whenever the player
  * rolls dice. It is built from pure CSS 3D (a regular
@@ -50,7 +50,7 @@
   function esc(value) { return Utils.escapeHtml(value); }
 
   /* ------------------------------------------------------------------
-   * Geometry — a regular icosahedron (classic d20). Ported verbatim
+   * Geometry – a regular icosahedron (classic d20). Ported verbatim
    * from the Dice.html reference; do not "simplify" this math.
    * Coordinate space matches CSS: +x right, +y DOWN, +z toward viewer.
    * ------------------------------------------------------------------ */
@@ -293,7 +293,7 @@
         return Math.min(255, Math.round(ch * lightAmt + 255 * specAmt));
       });
 
-      // frame (a thin, slightly darker bevel) behind the fill triangle — kept
+      // frame (a thin, slightly darker bevel) behind the fill triangle – kept
       // narrow and close in tone so the seams stay crisp rather than jagged
       faceEl.style.clipPath = 'polygon(' + polygon(face, 1.02) + ')';
       faceEl.style.background = 'rgb(' + lit.map(function (ch) {
@@ -488,7 +488,7 @@
 
   function setEnabled(on) {
     try { localStorage.setItem(STORAGE_KEY, on ? '1' : '0'); }
-    catch (e) { /* storage unavailable — keep in-memory state only */ }
+    catch (e) { /* storage unavailable – keep in-memory state only */ }
     refreshToggleUI();
     if (typeof Utils !== 'undefined' && Utils.showToast) {
       Utils.showToast(on ? 'Animated d20 roll on' : 'Animated d20 roll off', 'info');
@@ -502,8 +502,8 @@
       btn.classList.toggle('on', on);
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       btn.title = on
-        ? 'Dice FX on — rolls toss a big animated d20. Click to turn off.'
-        : 'Dice FX off — instant rolls. Click to turn on.';
+        ? 'Dice FX on – rolls toss a big animated d20. Click to turn off.'
+        : 'Dice FX off – instant rolls. Click to turn on.';
     }
     var state = el(FXSTATE_ID);
     if (state) state.textContent = on ? 'on' : 'off';

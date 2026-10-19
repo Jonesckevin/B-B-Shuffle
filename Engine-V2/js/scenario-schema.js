@@ -117,7 +117,7 @@ const ScenarioSchema = {
             }
         },
 
-        // Notes — free-text running notes for the facilitator/GM, surfaced in the
+        // Notes – free-text running notes for the facilitator/GM, surfaced in the
         // Scenario Editor, the Scenario Library editor, the GM Console and the
         // printed session sheet. A plain string (it used to be a {adminNotes,
         // playerNotes} object, which no code path ever produced).

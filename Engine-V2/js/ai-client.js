@@ -1,5 +1,5 @@
 /**
- * B&B Shuffle — AI Client
+ * B&B Shuffle – AI Client
  * ------------------------------------------------------------------
  * Small, self-contained wrapper around the app's AI plumbing, used by the
  * Custom Card Creator. Deliberately does NOT touch scenario_ai.js.
@@ -14,7 +14,9 @@
  *   AIClient.getOwnSettings()           -> {provider, model, apiKey, ...}|null
  *   AIClient.resolve()                  -> Promise<{ok, mode, label}>
  *   AIClient.listModels(opts)           -> Promise<{models, source, error?}>
- *   AIClient.chat(prompt)               -> Promise<string>
+ *   AIClient.chat(prompt, opts?)        -> Promise<string>
+ *     opts.onToken(delta, full) streams tokens as they arrive (in-browser
+ *     model only; the hosted providers still resolve with the whole string).
  *   AIClient.extractJson(text)          -> Object
  *   AIClient.generateCard(fields)       -> Promise<{name, description, detection, tools, details}>
  */
@@ -139,6 +141,27 @@ const AIClient = {
             modelsEndpoint: '',
             defaultModel: '',
             models: []
+        },
+        // A model that runs in the browser on WebGPU (see webllm-provider.js).
+        // Keyless and address-less like `custom`, but there is no server at all:
+        // AIClient hands the prompt to window.WebLLMProvider instead of fetching.
+        // The curated ids mirror WebLLMProvider.MODELS, with literals as the
+        // fallback for a page that did not load the provider script.
+        webllm: {
+            name: 'In-browser model (no API key)',
+            endpoint: '',
+            modelsEndpoint: '',
+            local: true,
+            defaultModel: (typeof WebLLMProvider !== 'undefined' && WebLLMProvider.MODELS[1])
+                ? WebLLMProvider.MODELS[1].id
+                : 'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+            models: (typeof WebLLMProvider !== 'undefined')
+                ? WebLLMProvider.MODELS.map(m => m.id)
+                : [
+                    'SmolLM2-360M-Instruct-q4f16_1-MLC',
+                    'SmolLM2-1.7B-Instruct-q4f16_1-MLC',
+                    'Llama-3.2-3B-Instruct-q4f16_1-MLC'
+                ]
         }
     },
 
@@ -172,7 +195,10 @@ const AIClient = {
             if (!raw) return null;
             const parsed = this.migrateSettings(JSON.parse(raw));
             if (!parsed) return null;
-            return (parsed.apiKey || parsed.provider === 'custom') ? parsed : null;
+            // A custom endpoint and the in-browser model are both keyless, so
+            // their record counts as usable without an API key.
+            const keyless = parsed.provider === 'custom' || parsed.provider === 'webllm';
+            return (parsed.apiKey || keyless) ? parsed : null;
         } catch (e) {
             return null;
         }
@@ -231,6 +257,19 @@ const AIClient = {
      */
     async resolve() {
         const own = this.getOwnSettings();
+
+        // The in-browser model is local and keyless: report it directly, and gate
+        // on WebGPU rather than on any key or server configuration.
+        if (own && own.provider === 'webllm') {
+            const label = this.describeOwn(own);
+            const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+            if (local) {
+                const avail = await local.available();
+                if (!avail.ok) return { ok: false, mode: 'none', label: label };
+            }
+            return { ok: true, mode: 'own', label: label };
+        }
+
         if (this.ownPreferred() && own) {
             return { ok: true, mode: 'own', label: this.describeOwn(own) };
         }
@@ -251,6 +290,14 @@ const AIClient = {
     /** Human label for a set of the user's own settings. */
     describeOwn(own) {
         const provider = this.PROVIDERS[own.provider];
+        // The in-browser model has no key or endpoint worth naming, and its model
+        // ids are long: name the family, which is what fits under the rail head.
+        if (own.provider === 'webllm') {
+            const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+            const info = (local && own.model) ? local.modelInfo(own.model) : null;
+            const name = info ? info.label.split(' – ')[0] : (own.model || 'in-browser model');
+            return 'In-browser · ' + name;
+        }
         return `${provider ? provider.name : own.provider}${own.model ? ' · ' + own.model : ''}`;
     },
 
@@ -293,6 +340,14 @@ const AIClient = {
         if (!cfg) return { models: [], source: 'curated', error: 'unknown provider: ' + provider };
 
         const curated = this.normalizeModels(cfg.models);
+
+        // The in-browser model has no endpoint to ask: its list is the curated
+        // set, filtered against the engine's own catalogue once it has loaded
+        // (a model WebLLM has retired is dropped rather than offered).
+        if (provider === 'webllm') {
+            const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+            return { models: local ? local.catalog() : curated, source: 'curated' };
+        }
 
         // A custom endpoint (Ollama, LM Studio, llama.cpp or a gateway) is
         // keyless: ask it directly and fall back to nothing else.
@@ -375,19 +430,34 @@ const AIClient = {
     /**
      * Send a single-turn prompt and return the model's text.
      * @param {string} prompt
+     * @param {Object} [opts]
+     * @param {Function} [opts.onToken] - Called with (delta, full) as tokens
+     *   arrive. Only the in-browser model streams; the hosted providers ignore
+     *   it and resolve with the whole string, so callers are unaffected.
+     * @param {number} [opts.maxTokens] - Per-call output budget, over the stored
+     *   setting. The Solo AI uses this to ask for one-line answers.
+     * @param {number} [opts.temperature] - Per-call sampling temperature, over the
+     *   stored setting.
+     * @param {string[]} [opts.stop] - Sequences that end the answer early
+     *   (honoured by the in-browser model; ignored by the hosted providers).
      * @returns {Promise<string>}
      */
-    async chat(prompt) {
+    async chat(prompt, opts = {}) {
         const own = this.getOwnSettings();
+        // The in-browser model is local and keyless, so it wins outright: a
+        // stored "use the server's key" choice must not route around it.
+        if (own && own.provider === 'webllm') {
+            return await this.chatDirect(prompt, own, opts);
+        }
         if (this.ownPreferred() && own) {
-            return await this.chatDirect(prompt, own);
+            return await this.chatDirect(prompt, own, opts);
         }
         const shared = await this.getSharedConfig();
         if (shared.configured) {
             return await this.chatViaServer(prompt, shared);
         }
         if (own) {
-            return await this.chatDirect(prompt, own);
+            return await this.chatDirect(prompt, own, opts);
         }
         throw new Error('No AI key configured. Set one in the AI Generator, or ask your host to add a shared key.');
     },
@@ -421,21 +491,30 @@ const AIClient = {
     },
 
     /** Direct call with the user's own key. */
-    async chatDirect(prompt, settings) {
+    async chatDirect(prompt, settings, opts = {}) {
         if (settings) this.migrateSettings(settings);
         const provider = this.PROVIDERS[settings.provider];
         if (!provider) throw new Error('Unknown AI provider: ' + settings.provider);
 
+        // The in-browser model never touches the network - it runs on WebGPU in
+        // this tab and streams tokens back through opts.onToken.
+        if (settings.provider === 'webllm') {
+            return await this.chatViaWebLLM(prompt, settings, opts);
+        }
+
         const model = settings.model || provider.defaultModel;
-        const temperature = typeof settings.temperature === 'number' ? settings.temperature : 0.7;
-        const maxTokens = settings.maxTokens || 1600;
+        // A caller may override the sampling settings for its own use (the Solo AI
+        // wants a short, literal answer); otherwise the stored values apply.
+        const temperature = (typeof opts.temperature === 'number') ? opts.temperature
+            : (typeof settings.temperature === 'number' ? settings.temperature : 0.7);
+        const maxTokens = opts.maxTokens || settings.maxTokens || 1600;
 
         // A custom / local endpoint: OpenAI-compatible, addressed by the settings
         // record, and keyless unless the user supplied a key. Covers Ollama,
         // LM Studio, llama.cpp and hosted gateways alike.
         if (settings.provider === 'custom') {
             const endpoint = settings.endpoint || this.customEndpoint(settings);
-            if (!endpoint) throw new Error('No custom endpoint configured — set it in the AI Generator settings.');
+            if (!endpoint) throw new Error('No custom endpoint configured – set it in the AI Generator settings.');
             if (!model) throw new Error('No model name configured for the custom endpoint.');
 
             const headers = { 'Content-Type': 'application/json' };
@@ -453,7 +532,7 @@ const AIClient = {
             }, this.REQUEST_TIMEOUT_MS);
 
             if (!res.ok) {
-                throw new Error(`The endpoint rejected the request (${res.status}) — is the server running and the model loaded?`);
+                throw new Error(`The endpoint rejected the request (${res.status}) – is the server running and the model loaded?`);
             }
             const data = await res.json();
             return data.choices?.[0]?.message?.content || data.response || '';
@@ -505,6 +584,37 @@ const AIClient = {
     },
 
     /**
+     * Run the prompt on the in-browser model (WebLLM / WebGPU).
+     *
+     * The engine is loaded lazily and cached by webllm-provider.js, so the first
+     * call may spend a while downloading the weights. Failures are thrown with a
+     * human message (no WebGPU, engine cannot be fetched) so the Solo AI falls
+     * back to its offline clue tables exactly as it does for a bad key.
+     * @param {string} prompt
+     * @param {Object} settings - The stored settings record
+     * @param {Object} [opts] - `onToken(delta, full)` streams tokens live
+     * @returns {Promise<string>}
+     */
+    async chatViaWebLLM(prompt, settings, opts = {}) {
+        const local = (typeof WebLLMProvider !== 'undefined') ? WebLLMProvider : null;
+        if (!local) {
+            throw new Error('The in-browser model needs webllm-provider.js on this page.');
+        }
+        const avail = await local.available();
+        if (!avail.ok) {
+            throw new Error(avail.reason || 'In-browser models need WebGPU, which this browser does not provide.');
+        }
+        return await local.chat(prompt, {
+            model: settings.model || local.pickDefault(),
+            temperature: (typeof opts.temperature === 'number') ? opts.temperature
+                : ((typeof settings.temperature === 'number') ? settings.temperature : 0.7),
+            maxTokens: opts.maxTokens || settings.maxTokens || 1600,
+            stop: opts.stop,
+            onToken: opts.onToken
+        });
+    },
+
+    /**
      * Turn a provider error body into something the player can act on.
      *
     * Provide actionable guidance for common quota and model-availability errors:
@@ -522,13 +632,13 @@ const AIClient = {
     apiError(status, detail) {
         const base = String(detail || '').trim() || `AI request failed (${status})`;
         if (status === 429 || /RESOURCE_EXHAUSTED|quota|rate limit/i.test(base)) {
-            return base + ' — this model\'s free daily allowance is used up, which is a quota '
+            return base + ' – this model\'s free daily allowance is used up, which is a quota '
                 + 'limit and not a bad key. Free Gemini keys get ~20 requests per day PER MODEL, '
                 + 'so picking a different model from the list gives you a fresh allowance straight '
                 + 'away (or wait for the daily reset, or enable billing).';
         }
         if (status === 404 || /not found|no longer available|does not exist|unsupported/i.test(base)) {
-            return base + ' — that usually means the model is not available to this key. Pick one from the Model list.';
+            return base + ' – that usually means the model is not available to this key. Pick one from the Model list.';
         }
         return base;
     },
@@ -625,7 +735,7 @@ const AIClient = {
             '- Keep the name under 28 characters.',
             '- Write in plain language a mixed-ability table can follow.',
             '- Detection/Tools entries must be short (2-5 words each).',
-            '- "details" is an optional array of { "text": "...", "url": "https://..." } — use [] when unsure.',
+            '- "details" is an optional array of { "text": "...", "url": "https://..." } – use [] when unsure.',
             '- Respond ONLY with the JSON object, no commentary.'
         );
 

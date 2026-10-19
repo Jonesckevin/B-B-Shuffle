@@ -1,13 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, follow">
+  <title>B&amp;B Shuffle  Card Reference | Engine-V1</title>
 
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Ubuntu:wght@300&display=swap"
-    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=5">
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
     crossorigin="anonymous"></script>
-  <link href="lightbox.css" rel="stylesheet" />
+  <link href="lightbox.css?v=1" rel="stylesheet" />
   <style>
     .cardgrid {
       text-align: center;
@@ -42,9 +44,7 @@
   </style>
 
 </head>
-
-
-
+<body>
 <!-- CARD REFERENCE -->
 <header>
   <center>
@@ -88,75 +88,82 @@
     return a;
   }
 
+  // Each card is one string in the galleries below. Building it here keeps the
+  // alt text next to the file name instead of repeating the markup 53 times.
+  function cardImg(file, lightbox, alt) {
+    return "<div class='proc'><a href='../shared/decks/core/" + file + ".webp' data-lightbox='" + lightbox +
+      "'><img class='procimg' src='../shared/decks/core/" + file + ".webp' alt='" + alt + "'></a></div>";
+  }
+
   var proc = [
-    "<div class='proc'><a href='../shared/decks/core/procedure-1.webp' data-lightbox='procedure1'><img class='procimg' src='../shared/decks/core/procedure-1.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-2.webp' data-lightbox='procedure2'><img class='procimg' src='../shared/decks/core/procedure-2.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-3.webp' data-lightbox='procedure3'><img class='procimg' src='../shared/decks/core/procedure-3.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-4.webp' data-lightbox='procedure4'><img class='procimg' src='../shared/decks/core/procedure-4.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-5.webp' data-lightbox='procedure5'><img class='procimg' src='../shared/decks/core/procedure-5.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-6.webp' data-lightbox='procedure6'><img class='procimg' src='../shared/decks/core/procedure-6.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-7.webp' data-lightbox='procedure7'><img class='procimg' src='../shared/decks/core/procedure-7.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-8.webp' data-lightbox='procedure8'><img class='procimg' src='../shared/decks/core/procedure-8.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-9.webp' data-lightbox='procedure9'><img class='procimg' src='../shared/decks/core/procedure-9.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-10.webp' data-lightbox='procedure10'><img class='procimg' src='../shared/decks/core/procedure-10.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/procedure-11.webp' data-lightbox='procedure11'><img class='procimg' src='../shared/decks/core/procedure-11.webp'></a></div>"
+    cardImg('procedure-1', 'procedure1', 'Procedure card 1'),
+    cardImg('procedure-2', 'procedure2', 'Procedure card 2'),
+    cardImg('procedure-3', 'procedure3', 'Procedure card 3'),
+    cardImg('procedure-4', 'procedure4', 'Procedure card 4'),
+    cardImg('procedure-5', 'procedure5', 'Procedure card 5'),
+    cardImg('procedure-6', 'procedure6', 'Procedure card 6'),
+    cardImg('procedure-7', 'procedure7', 'Procedure card 7'),
+    cardImg('procedure-8', 'procedure8', 'Procedure card 8'),
+    cardImg('procedure-9', 'procedure9', 'Procedure card 9'),
+    cardImg('procedure-10', 'procedure10', 'Procedure card 10'),
+    cardImg('procedure-11', 'procedure11', 'Procedure card 11')
   ]
 
   var init = [
-    "<div class='proc'><a href='../shared/decks/core/initial-1.webp' data-lightbox='initial1'><img class='procimg' src='../shared/decks/core/initial-1.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-2.webp' data-lightbox='initial2'><img class='procimg' src='../shared/decks/core/initial-2.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-3.webp' data-lightbox='initial3'><img class='procimg' src='../shared/decks/core/initial-3.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-4.webp' data-lightbox='initial4'><img class='procimg' src='../shared/decks/core/initial-4.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-5.webp' data-lightbox='initial5'><img class='procimg' src='../shared/decks/core/initial-5.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-6.webp' data-lightbox='initial6'><img class='procimg' src='../shared/decks/core/initial-6.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-7.webp' data-lightbox='initial7'><img class='procimg' src='../shared/decks/core/initial-7.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-8.webp' data-lightbox='initial8'><img class='procimg' src='../shared/decks/core/initial-8.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-9.webp' data-lightbox='initial9'><img class='procimg' src='../shared/decks/core/initial-9.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/initial-10.webp' data-lightbox='initial10'><img class='procimg' src='../shared/decks/core/initial-10.webp'></a></div>"
+    cardImg('initial-1', 'initial1', 'Initial Compromise card 1'),
+    cardImg('initial-2', 'initial2', 'Initial Compromise card 2'),
+    cardImg('initial-3', 'initial3', 'Initial Compromise card 3'),
+    cardImg('initial-4', 'initial4', 'Initial Compromise card 4'),
+    cardImg('initial-5', 'initial5', 'Initial Compromise card 5'),
+    cardImg('initial-6', 'initial6', 'Initial Compromise card 6'),
+    cardImg('initial-7', 'initial7', 'Initial Compromise card 7'),
+    cardImg('initial-8', 'initial8', 'Initial Compromise card 8'),
+    cardImg('initial-9', 'initial9', 'Initial Compromise card 9'),
+    cardImg('initial-10', 'initial10', 'Initial Compromise card 10')
   ]
 
   var pivot = [
-    "<div class='proc'><a href='../shared/decks/core/pivot-1.webp' data-lightbox='pivot1'><img class='procimg' src='../shared/decks/core/pivot-1.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/pivot-2.webp' data-lightbox='pivot2'><img class='procimg' src='../shared/decks/core/pivot-2.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/pivot-3.webp' data-lightbox='pivot3'><img class='procimg' src='../shared/decks/core/pivot-3.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/pivot-4.webp' data-lightbox='pivot4'><img class='procimg' src='../shared/decks/core/pivot-4.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/pivot-5.webp' data-lightbox='pivot5'><img class='procimg' src='../shared/decks/core/pivot-5.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/pivot-6.webp' data-lightbox='pivot6'><img class='procimg' src='../shared/decks/core/pivot-6.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/pivot-7.webp' data-lightbox='pivot7'><img class='procimg' src='../shared/decks/core/pivot-7.webp'></a></div>"
+    cardImg('pivot-1', 'pivot1', 'Pivot and Escalate card 1'),
+    cardImg('pivot-2', 'pivot2', 'Pivot and Escalate card 2'),
+    cardImg('pivot-3', 'pivot3', 'Pivot and Escalate card 3'),
+    cardImg('pivot-4', 'pivot4', 'Pivot and Escalate card 4'),
+    cardImg('pivot-5', 'pivot5', 'Pivot and Escalate card 5'),
+    cardImg('pivot-6', 'pivot6', 'Pivot and Escalate card 6'),
+    cardImg('pivot-7', 'pivot7', 'Pivot and Escalate card 7')
   ]
 
   var c2 = [
-    "<div class='proc'><a href='../shared/decks/core/exfil-2.webp' data-lightbox='c21'><img class='procimg' src='../shared/decks/core/exfil-2.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/exfil-3.webp' data-lightbox='c21'><img class='procimg' src='../shared/decks/core/exfil-3.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/exfil-4.webp' data-lightbox='c22'><img class='procimg' src='../shared/decks/core/exfil-4.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/exfil-5.webp' data-lightbox='c23'><img class='procimg' src='../shared/decks/core/exfil-5.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/exfil-6.webp' data-lightbox='c24'><img class='procimg' src='../shared/decks/core/exfil-6.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/exfil-7.webp' data-lightbox='c22'><img class='procimg' src='../shared/decks/core/exfil-7.webp'></a></div>"
+    cardImg('exfil-2', 'c21', 'C2 and Exfiltration card 2'),
+    cardImg('exfil-3', 'c21', 'C2 and Exfiltration card 3'),
+    cardImg('exfil-4', 'c22', 'C2 and Exfiltration card 4'),
+    cardImg('exfil-5', 'c23', 'C2 and Exfiltration card 5'),
+    cardImg('exfil-6', 'c24', 'C2 and Exfiltration card 6'),
+    cardImg('exfil-7', 'c22', 'C2 and Exfiltration card 7')
   ]
 
   var persist = [
-    "<div class='proc'><a href='../shared/decks/core/persist-1.webp' data-lightbox='persist1'><img class='procimg' src='../shared/decks/core/persist-1.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-2.webp' data-lightbox='persist2'><img class='procimg' src='../shared/decks/core/persist-2.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-3.webp' data-lightbox='persist3'><img class='procimg' src='../shared/decks/core/persist-3.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-4.webp' data-lightbox='persist4'><img class='procimg' src='../shared/decks/core/persist-4.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-5.webp' data-lightbox='persist5'><img class='procimg' src='../shared/decks/core/persist-5.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-6.webp' data-lightbox='persist6'><img class='procimg' src='../shared/decks/core/persist-6.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-7.webp' data-lightbox='persist7'><img class='procimg' src='../shared/decks/core/persist-7.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-8.webp' data-lightbox='persist8'><img class='procimg' src='../shared/decks/core/persist-8.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/persist-9.webp' data-lightbox='persist9'><img class='procimg' src='../shared/decks/core/persist-9.webp'></a></div>"
+    cardImg('persist-1', 'persist1', 'Persistence card 1'),
+    cardImg('persist-2', 'persist2', 'Persistence card 2'),
+    cardImg('persist-3', 'persist3', 'Persistence card 3'),
+    cardImg('persist-4', 'persist4', 'Persistence card 4'),
+    cardImg('persist-5', 'persist5', 'Persistence card 5'),
+    cardImg('persist-6', 'persist6', 'Persistence card 6'),
+    cardImg('persist-7', 'persist7', 'Persistence card 7'),
+    cardImg('persist-8', 'persist8', 'Persistence card 8'),
+    cardImg('persist-9', 'persist9', 'Persistence card 9')
   ]
 
   var ins = [
-    "<div class='proc'><a href='../shared/decks/core/inject-1.webp' data-lightbox='inject1'><img class='procimg' src='../shared/decks/core/inject-1.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-2.webp' data-lightbox='inject2'><img class='procimg' src='../shared/decks/core/inject-2.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-3.webp' data-lightbox='inject3'><img class='procimg' src='../shared/decks/core/inject-3.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-4.webp' data-lightbox='inject4'><img class='procimg' src='../shared/decks/core/inject-4.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-5.webp' data-lightbox='inject5'><img class='procimg' src='../shared/decks/core/inject-5.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-6.webp' data-lightbox='inject6'><img class='procimg' src='../shared/decks/core/inject-6.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-7.webp' data-lightbox='inject7'><img class='procimg' src='../shared/decks/core/inject-7.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-8.webp' data-lightbox='inject8'><img class='procimg' src='../shared/decks/core/inject-8.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-9.webp' data-lightbox='inject9'><img class='procimg' src='../shared/decks/core/inject-9.webp'></a></div>",
-    "<div class='proc'><a href='../shared/decks/core/inject-10.webp' data-lightbox='inject10'><img class='procimg' src='../shared/decks/core/inject-10.webp'></a></div>"
+    cardImg('inject-1', 'inject1', 'Inject card 1'),
+    cardImg('inject-2', 'inject2', 'Inject card 2'),
+    cardImg('inject-3', 'inject3', 'Inject card 3'),
+    cardImg('inject-4', 'inject4', 'Inject card 4'),
+    cardImg('inject-5', 'inject5', 'Inject card 5'),
+    cardImg('inject-6', 'inject6', 'Inject card 6'),
+    cardImg('inject-7', 'inject7', 'Inject card 7'),
+    cardImg('inject-8', 'inject8', 'Inject card 8'),
+    cardImg('inject-9', 'inject9', 'Inject card 9'),
+    cardImg('inject-10', 'inject10', 'Inject card 10')
   ]
 
   shuffle(proc);
@@ -197,4 +204,19 @@
 
 
 
-<script src="lightbox.js"></script>
+<script src="lightbox.js?v=1"></script>
+<script>
+  // The card grid is assembled from cardImg() above, which already writes an
+  // alt attribute. Keep a filename-derived fallback for any card added without
+  // one, and defer offscreen images.
+  document.querySelectorAll('.procimg').forEach(function (img) {
+    if (!img.getAttribute('alt')) {
+      var file = (img.getAttribute('src') || '').split('/').pop().replace(/\.webp$/i, '');
+      var label = file.replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+      img.alt = label + ' card';
+    }
+    img.loading = 'lazy';
+  });
+</script>
+</body>
+</html>

@@ -635,7 +635,7 @@
     },
     {
       "name": "False Alarm: It Was a Penetration Test",
-      "description": "Relax, it wasn't an APT, or any T for that matter — It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
+      "description": "Relax, it wasn't an APT, or any T for that matter – It was the External Pentesting firm the Defenders' CEO hired. They've breached everything, and now the Defenders are paying them to be told how bad it was. The Incident Captain ends the session and the Defenders discuss how they would have detected the Attack Techniques and Procedures of the Penetration Testers.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_46.webp",
       "type": "inject",
       "id": "046",
@@ -683,7 +683,7 @@
     },
     {
       "name": "Legal takes Your Most Skilled Handler into a Meeting to Explain the Incident",
-      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process — that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
+      "description": "Who brought a lawyer to the party? There's always one person who pretty much runs the whole IR process – that \"One Essential Person.\" Well, the legal team just took that person away for \"Very Important Reasons.\" The Defenders lose the +3 modifier on Established Detections for 2 turns.",
       "image": "../../shared/decks/cardbase/v31/BNB_CARDS_v3.1_52.webp",
       "type": "inject",
       "id": "052",
@@ -982,7 +982,7 @@
         "Public Speaking",
         "Comic Book Nerd"
       ],
-      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" — Dan Erwin"
+      "quote": "\"The best way to get management excited about a disaster plan is to burn down the building across the street.\" – Dan Erwin"
     },
     {
       "name": "Tim Medin",
@@ -999,7 +999,7 @@
         "Public Speaking",
         "PowerPoint... lots and lots of PowerPoint"
       ],
-      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" — Tim Medin"
+      "quote": "\"You see the world different. You learn how things work... and then how to break it. That is hacking.\" – Tim Medin"
     },
     {
       "name": "Jorge Orchilles",
@@ -1016,7 +1016,7 @@
         "Infosec Instructor and Author",
         "Public Speaking"
       ],
-      "quote": "\"Offense informs defense and defense informs offense.\" — Jorge Orchilles"
+      "quote": "\"Offense informs defense and defense informs offense.\" – Jorge Orchilles"
     },
     {
       "name": "Alissa Torres",
@@ -1032,7 +1032,7 @@
         "Incident Response Kill Chain Slayer",
         "Architect of Inspirational PPTX"
       ],
-      "quote": "\"Heroism is often nothing more than the omission of details.\" — Asim Qureshi"
+      "quote": "\"Heroism is often nothing more than the omission of details.\" – Asim Qureshi"
     },
     {
       "name": "Dieter Smith",
@@ -1049,7 +1049,7 @@
         "Game Aficionado",
         "Geek Dad"
       ],
-      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" — Mikko Hypponen"
+      "quote": "\"Rarely is anyone thanked for the work they did to prevent the disaster that didn't happen.\" – Mikko Hypponen"
     },
     {
       "name": "Marcus J. Carey",
@@ -1066,7 +1066,7 @@
         "Motivational Speaking",
         "Building Businesses"
       ],
-      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" — Marcus J. Carey"
+      "quote": "\"Half of my InfoSec program is working, the problem is I don't know which half.\" – Marcus J. Carey"
     },
     {
       "name": "Robert M. Lee",
@@ -1082,7 +1082,7 @@
         "Building a Team of People Smarter Than Me",
         "No One's Ever Wondered My Opinion"
       ],
-      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" — Robert M. Lee"
+      "quote": "\"The threats are worse than you realize but not as bad as you would like to imagine.\" – Robert M. Lee"
     },
     {
       "name": "Chloe Messdaghi",
@@ -1099,7 +1099,7 @@
         "Optimistic",
         "Always Calm During a Storm"
       ],
-      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" — Stéphane Nappo"
+      "quote": "\"If you think you know-it-all about cybersecurity, this discipline was probably ill-explained to you.\" – Stéphane Nappo"
     },
     {
       "name": "Eric Conrad",
@@ -1116,7 +1116,7 @@
         "Mentoring",
         "Restoring Golden Age Arcade Machines"
       ],
-      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" — Anonymous"
+      "quote": "\"What you call hacking: I call logging in. Credential abuse is more powerful than exploitation.\" – Anonymous"
     },
     {
       "name": "John Strand",
@@ -1133,7 +1133,7 @@
         "Loud Angry Rock n' Roll",
         "Mountain Biking Terrifying Distances"
       ],
-      "quote": "\"Things are only fragile till they break.\" — Dovetail Joint"
+      "quote": "\"Things are only fragile till they break.\" – Dovetail Joint"
     },
     {
       "name": "Joff Thyer",
@@ -1151,7 +1151,7 @@
         "Husband and Father",
         "Amateur Woodworker"
       ],
-      "quote": "\"It's not a bug, it's a feature!\" — Unknown"
+      "quote": "\"It's not a bug, it's a feature!\" – Unknown"
     },
     {
       "name": "Beau Bullock",
@@ -1170,7 +1170,7 @@
         "Magic: The Gathering",
         "Parenting"
       ],
-      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" — John Strand"
+      "quote": "\"Stop trying to impress so-called 'wizards' and just share your knowledge.\" – John Strand"
     },
     {
       "name": "Richard Phung",
@@ -1187,7 +1187,7 @@
         "Pathfinding",
         "Bass Fishing"
       ],
-      "quote": "\"It's always easier to hack a human than a computer.\" — Kevin Mitnick"
+      "quote": "\"It's always easier to hack a human than a computer.\" – Kevin Mitnick"
     },
     {
       "name": "Edward Miro",
@@ -1204,7 +1204,7 @@
         "Knows \"TheBlindHacker\"",
         "Wilderness Survival"
       ],
-      "quote": "\"To some people, I'll always be the bad guy.\" — Kevin Mitnick"
+      "quote": "\"To some people, I'll always be the bad guy.\" – Kevin Mitnick"
     }
   ],
   "red": "img/bb-back-init.png",

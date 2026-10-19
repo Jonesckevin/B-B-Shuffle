@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230f1117'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='17' font-weight='700' fill='%235b8def' text-anchor='middle'>B</text></svg>">
+<title>Page not found - B&amp;B Shuffle</title>
+<!--
+  The 404 page, and deliberately SELF-CONTAINED: no stylesheet, script, font or
+  image is fetched. A 404 can be triggered by a mistyped asset path, so anything
+  this page linked to could itself 404 - inline CSS (and a data-URI favicon, so
+  the browser does not probe /favicon.ico) is the only way it can never render
+  half-broken.
+
+  Where it is used
+    - GitHub Pages (bb-v2): any root-level 404.html is served for every
+      unmatched path automatically. Nothing else to configure.
+    - nginx (this repo): `error_page 404 /404.html;` in nginx.conf.
+
+  Why the links are rewritten at runtime
+    GitHub Pages serves this file for an ARBITRARY bad URL, and nginx's
+    `error_page` is an internal redirect, so the browser's address bar keeps the
+    bad path. Either way `location.pathname` is NOT this file's location, and a
+    relative href would resolve against the broken directory (that is what made
+    the older `shared/error.html` render unstyled from a deep path). The script
+    below walks up the requested path and probes for `manifest.webmanifest` to
+    find the real site root, so the page works at a domain root
+    (bbshuffle.com) and under a sub-path (/B-B-Shuffle/) alike.
+    The hrefs are pre-seeded with root-absolute guesses, so navigation still
+    works if the probe cannot run at all.
+-->
+<style>
+  :root {
+    --bg: #0f1117;
+    --panel: #171b25;
+    --border: #2a3140;
+    --text: #e7eaf0;
+    --muted: #9aa4b5;
+    --accent: #5b8def;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+      radial-gradient(1100px 620px at 50% -10%, #1b2436 0%, var(--bg) 62%);
+    color: var(--text);
+    font-family: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { width: 100%; max-width: 720px; }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 32px 32px;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mark svg { width: 26px; height: 26px; fill: var(--accent); }
+  .code {
+    margin: 18px 0 6px;
+    font-size: clamp(56px, 14vw, 96px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, #ffffff 0%, #6b8ecf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  h1 { margin: 0 0 10px; font-size: 22px; font-weight: 650; }
+  .lede { margin: 0 auto; max-width: 46ch; color: var(--muted); }
+  code.path {
+    display: inline-block;
+    max-width: 100%;
+    margin-top: 14px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #11151d;
+    color: #cbd5e1;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    overflow-wrap: anywhere;
+  }
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+    gap: 10px;
+    margin: 26px 0 4px;
+  }
+  .actions a, .actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #1e2430;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .actions a:hover, .actions button:hover {
+    background: #232b3a;
+    border-color: #3b4658;
+    transform: translateY(-1px);
+  }
+  .actions a:focus-visible, .actions button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .actions .primary {
+    grid-column: 1 / -1;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0b1020;
+  }
+  .actions .primary:hover { background: #6d9bf5; border-color: #6d9bf5; }
+  .actions .wide { grid-column: 1 / -1; }
+  .legal {
+    margin: 22px auto 0;
+    max-width: 60ch;
+    color: #6b7688;
+    font-size: 11.5px;
+    line-height: 1.6;
+  }
+  .legal a { color: #8b9ac0; }
+  @media (prefers-reduced-motion: reduce) {
+    .actions a, .actions button { transition: none; }
+    .actions a:hover, .actions button:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        B&amp;B Shuffle
+      </span>
+
+      <div class="code">404</div>
+      <h1>That page isn&rsquo;t on the table</h1>
+      <p class="lede">
+        The link is broken, or the page was renamed or removed. Nothing is wrong
+        with your session &mdash; pick a destination below and carry on.
+      </p>
+      <code class="path" id="bad-path" hidden></code>
+
+      <div class="actions">
+        <a class="primary" data-path="index.html" href="/index.html">Back to the main menu</a>
+        <a data-path="Engine-V2/player.html" href="/Engine-V2/player.html">Player</a>
+        <a data-path="Engine-V2/scenario-library.html" href="/Engine-V2/scenario-library.html">Scenario Library</a>
+        <a data-path="Engine-V2/modules/card-creator/card_creator.html" href="/Engine-V2/modules/card-creator/card_creator.html">Card Creator</a>
+        <a data-path="Engine-V2/custom-cards.html" href="/Engine-V2/custom-cards.html">Custom Cards</a>
+        <a data-path="shared/catalogue.html" href="/shared/catalogue.html">Card Catalogue</a>
+        <button type="button" class="wide" id="go-back">Go back to the previous page</button>
+      </div>
+
+      <p class="legal">
+        Unofficial community project. Backdoors &amp; Breaches is a game by
+        Black Hills Information Security &amp; Antisyphon Training &mdash;
+        <a href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">play it on the official site</a>.
+        Cards you create here are your own content.
+      </p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Show what was actually requested. */
+  var bad = document.getElementById('bad-path');
+  if (bad && location.pathname && location.pathname !== '/') {
+    bad.textContent = location.pathname + location.search;
+    bad.hidden = false;
+  }
+
+  var back = document.getElementById('go-back');
+  if (back) {
+    if (window.history.length > 1) {
+      back.addEventListener('click', function () { window.history.back(); });
+    } else {
+      back.hidden = true;
+    }
+  }
+
+  /* Point every data-path link at the real site root (see the header note). */
+  var segments = location.pathname.split('/').filter(Boolean);
+  var last = segments[segments.length - 1];
+  if (last && /\.[A-Za-z0-9]{1,8}$/.test(last)) segments.pop();
+
+  /* Shortest prefix first: a site served from a domain root answers on the very
+     first probe (one request, no console noise), and a sub-path deploy falls
+     through to the longer prefixes until one resolves. */
+  var candidates = [];
+  for (var depth = 0; depth <= segments.length; depth++) {
+    candidates.push('/' + segments.slice(0, depth).join('/') + (depth ? '/' : ''));
+  }
+
+  function apply(root) {
+    var links = document.querySelectorAll('a[data-path]');
+    for (var i = 0; i < links.length; i++) {
+      links[i].setAttribute('href', root + links[i].getAttribute('data-path'));
+    }
+  }
+
+  var index = 0;
+  (function probe() {
+    if (index >= candidates.length) {
+      apply(candidates[0]);
+      return;
+    }
+    var root = candidates[index++];
+    /* GET, not HEAD: a HEAD fetch resolves with the right status but its
+       discarded body shows up as a spurious `net::ERR_ABORTED` in the console.
+       `cache: 'no-store'` also makes the service worker step aside - it bypasses
+       no-store requests - so a stale shell can never answer this probe. The
+       manifest is under a kilobyte, so the cost is nil. */
+    fetch(root + 'manifest.webmanifest', { cache: 'no-store' })
+      .then(function (res) { res.ok ? apply(root) : probe(); })
+      .catch(probe);
+  })();
+})();
+</script>
+</body>
+</html>
