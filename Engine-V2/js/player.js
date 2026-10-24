@@ -191,7 +191,12 @@ const PlayerController = {
             select.dataset.built = '1';
         }
         const stored = Utils.getFromStorage((CONFIG.storage && CONFIG.storage.preferredDeck) ? CONFIG.storage.preferredDeck : 'bb-shuffle-deck', '');
-        const fallback = (CONFIG.defaultDeck && baseKeys.indexOf(CONFIG.defaultDeck) !== -1) ? CONFIG.defaultDeck : baseKeys[0];
+        // Prefer the deck the automatic deal uses, so a visitor who presses
+        // Quick Start after the auto-dealt game lands on the same deck.
+        const preferred = (CONFIG.quickStartDeck && baseKeys.indexOf(CONFIG.quickStartDeck) !== -1)
+            ? CONFIG.quickStartDeck
+            : CONFIG.defaultDeck;
+        const fallback = (preferred && baseKeys.indexOf(preferred) !== -1) ? preferred : baseKeys[0];
         select.value = (stored && baseKeys.indexOf(stored) !== -1) ? stored : fallback;
     },
 
@@ -264,14 +269,14 @@ const PlayerController = {
         const procCount = (CONFIG.game && CONFIG.game.procedureCount) || 7;
         const enhancedCount = (CONFIG.game && CONFIG.game.enhancedDefault) || 3;
         const procedures = [];
-        const procPool = [...(lists.procedure || [])];
+        const procPool = this.uniqueByName([...(lists.procedure || [])]);
         for (let i = 0; i < procCount && procPool.length; i++) {
             const idx = Math.floor(Math.random() * procPool.length);
             procedures.push(pack(procPool.splice(idx, 1)[0], { enhanced: i < enhancedCount }));
         }
 
         const injects = [];
-        const injectPool = [...(lists.inject || [])];
+        const injectPool = this.uniqueByName([...(lists.inject || [])]);
         for (let i = 0; i < 3 && injectPool.length; i++) {
             const idx = Math.floor(Math.random() * injectPool.length);
             injects.push(pack(injectPool.splice(idx, 1)[0]));
@@ -304,6 +309,29 @@ const PlayerController = {
     quickStartId() {
         if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
         return 'qs-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+    },
+
+    /**
+     * Drop repeat card names from a deal pool.
+     *
+     * The MEGA Deck (and the sponsor decks) reprint a card from other sets under
+     * the same name with different art - it ships four "Permissions Audit" and
+     * two "Endpoint Analysis" procedures. They are genuinely different cards, but
+     * drawing two of the same name into one hand reads as a bug, so a deal takes
+     * at most one card per name. Exact duplicates (same name and art) are also
+     * removed by this.
+     * @param {Array<Object>} cards - Candidate cards
+     * @returns {Array<Object>} Cards with a single entry per name, order preserved
+     */
+    uniqueByName(cards) {
+        const seen = new Set();
+        return (cards || []).filter(card => {
+            const key = String((card && card.name) || '').trim().toLowerCase();
+            if (!key) return true;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
     },
 
     /**
@@ -347,7 +375,7 @@ const PlayerController = {
             const enhancedCount = gameConfig.enhancedCount ?? (CONFIG.game && CONFIG.game.enhancedDefault) ?? 3;
 
             const dealt = [];
-            const copy = [...pool];
+            const copy = this.uniqueByName(pool);
             for (let i = 0; i < procCount && copy.length; i++) {
                 const idx = Math.floor(Math.random() * copy.length);
                 dealt.push({ ...copy.splice(idx, 1)[0], enhanced: i < enhancedCount });
@@ -670,15 +698,41 @@ const PlayerController = {
     },
 
     /**
+     * Deal the default Quick Start when the board opens with nothing to play.
+     *
+     * A first visit (or a browser with cleared storage) has no saved game and no
+     * scenario link, so the board would sit on placeholders with no cards to look
+     * at. Dealing the default deck instead gives the visitor a real table - four
+     * phase cards, a procedure hand and injects - and the result is persisted, so
+     * a reload keeps the same game. Choosing Quick Start or Load replaces it as
+     * usual; nothing is cleared, so the auto-dealt game is never a dead end.
+     * @returns {Promise<Object|null>} Dealt scenario, or null when it could not be built
+     */
+    async autoDealQuickStart() {
+        const deckKey = (CONFIG && CONFIG.quickStartDeck) || 'mega-deck';
+        try {
+            const scenario = await this.buildRandomScenario(deckKey);
+            if (scenario) Utils.saveToStorage('bb-current-scenario', scenario);
+            return scenario || null;
+        } catch (error) {
+            // A missing deck file (a partial static preview) must not stop the
+            // board from drawing its empty state.
+            console.error('Auto Quick Start failed:', error);
+            return null;
+        }
+    },
+
+    /**
      * Load scenario from storage or URL
      */
     async loadScenario() {
         // Check for scenario in URL params
         const params = Utils.getQueryParams();
-        
-        if (params.scenarioId) {
+        const requestedScenario = params.scenarioId || params.scenario;
+
+        if (requestedScenario) {
             try {
-                this.scenario = await ScenarioIO.loadFromServer(params.scenarioId);
+                this.scenario = await ScenarioIO.loadFromServer(requestedScenario);
             } catch (error) {
                 console.error('Failed to load scenario from server:', error);
             }
@@ -689,14 +743,27 @@ const PlayerController = {
             this.scenario = Utils.getFromStorage('bb-current-scenario', null, true);
         }
 
+        // Nothing saved and nothing requested: deal the default Quick Start so the
+        // board opens with cards. A scenario link that was asked for but failed is
+        // left empty on purpose - replacing it with an unrelated random game would
+        // hide the failure.
+        let autoDealt = false;
+        if (!this.scenario && !requestedScenario) {
+            this.scenario = await this.autoDealQuickStart();
+            autoDealt = !!this.scenario;
+        }
+
         if (this.scenario) {
             // A saved game that has no procedure cards still gets a playable
             // board by dealing a fresh hand of procedures from its deck.
             const dealt = await this.ensureProceduresFromDeck();
             await this.ensureConsultantsFromDeck();
             this.setupGame();
-            if (dealt) {
-                const name = (this.scenario.metadata && this.scenario.metadata.name) || this.scenario.deck?.name || 'Scenario';
+            const name = (this.scenario.metadata && this.scenario.metadata.name) || this.scenario.deck?.name || 'Scenario';
+            if (autoDealt) {
+                const deckName = (this.scenario.deck && this.scenario.deck.name) || 'the default deck';
+                Utils.showToast(`No game saved – dealt a Quick Start from ${deckName}. Pick another deck any time.`, 'success');
+            } else if (dealt) {
                 Utils.showToast(`${name}: no procedures saved – dealt ${dealt} from the deck`, 'info');
             }
         } else {

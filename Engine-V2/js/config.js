@@ -170,6 +170,13 @@ const CONFIG = {
     // Default deck
     defaultDeck: 'core',
 
+    // Deck dealt by Quick Start when the visitor has no preference saved, and by
+    // the automatic deal the Player performs when it opens with no scenario at
+    // all (no ?scenarioId and no saved game). The MEGA Deck carries every card
+    // set, so a visitor always lands on a table with a full chain, a procedure
+    // hand and injects.
+    quickStartDeck: 'mega-deck',
+
     // Game settings
     game: {
         initialTurns: 10,
