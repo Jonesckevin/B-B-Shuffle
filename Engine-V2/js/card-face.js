@@ -78,54 +78,167 @@
     // Measured off the supplied templates. The DOM and canvas renderers share
     // this table so they cannot drift.
 
-    // Measured off the supplied 680x941 templates (temp/measure_templates.py).
-    // Every template prints the card at the same place; only the heading sits
-    // differently, which is why the layouts differ:
+    // Measured off the supplied 680x941 templates and cross-checked against the
+    // printed deck cards in shared/decks/*/ (789x1089, same proportions):
     //   title band      y  7.1% - 13.4%   body x 14% - 86.5%   body ends ~90.5%
     //   scenario:  DETECTION rule 35.7%   TOOLS rule 61.5%
     //   procedure: TOOLS rule    36.1%
     //   inject / consultant: NOTES / SPECIALTIES rule 31.7%
-    // The DOM and canvas renderers share this table so they cannot drift.
+    //
+    // TYPE SIZE: the printed cards set body copy at 37px line pitch on a 789px
+    // card - 4.7% of the width, with ink 3.7% wide. In Teko that is a ~4.0cqw
+    // face with 1.15 leading, which is what every `size` below uses. Blocks that
+    // would overflow shrink themselves (fitBlocks() / drawBlock()), so a long
+    // list or a wordy description still fits instead of clipping.
+    //
+    // A box may also carry any of:
+    //   color        ink override (the consultant's blue effect line, green quote)
+    //   weight       font weight (the effect line is bold)
+    //   italic       italic text (the quote)
+    //   lineHeight   multiple of the font size (default 1.15 on canvas)
+    //   columns      split the list into N side-by-side columns, column-major
+    //   stripProtocol  print "linkedin.com/in/x" instead of the full https URL
+    //   circle       crop the image into a circle (the consultant's portrait)
+    //
+    // IMAGE PLACEMENT: `placements` holds one variant per artwork position. A
+    // variant replaces the shared list box (`tools` / `notes` / `quote`) and
+    // supplies the image box, so moving the picture also moves the text it
+    // would otherwise sit on top of.
+    //   right   image flush right, list in a narrow left column (print default)
+    //   left    image flush left, list in a narrow right column
+    //   center  list across the top of the panel, image centred below it
+    //   wide    list across the top, image edge to edge below it
+    //   none    no image, list gets the whole panel
 
     // The title sits a shade below the band's true centre: Teko carries a deep
     // descender, so optically centring the line box leaves the caps looking high.
-    var TITLE_BOX = { x: 11, y: 7.5, w: 78, h: 6.4, size: 6.4, align: 'center', lines: 1 };
+    // `weight` is the bold the DOM applies via .card-face .cf-title { font-weight:
+    // 600 }; the canvas cannot inherit it, so it is recorded here too.
+    var TITLE_BOX = { x: 11, y: 7.5, w: 78, h: 6.4, size: 7.4, align: 'center', lines: 1, weight: 600 };
+
+    // Consultant accents. The green is sampled from the consultant template's
+    // band and border; the blue matches the printed "(+3) modifier" effect line.
+    var CONSULTANT_GREEN = '#0aa14a';
+    var CONSULTANT_BLUE = '#1f74b8';
+    // Portrait ring thickness, percent of the face WIDTH (the DOM twin lives in
+    // shared/css/base.css as `border-width: 0.9cqw` on .cf-portrait).
+    var PORTRAIT_RING = 0.9;
+    // Share of a column's width the canvas lets text use - the remainder is the
+    // gutter between the consultant's two SPECIALTIES columns.
+    var COLUMN_GUTTER = 0.94;
+
+    var BODY = 4.0;      // list / paragraph type (printed cards: 4.7% pitch)
+    var LINKS = 3.4;     // the optional resources row under the body
 
     var BOXES = {
         // initial / pivot / c2 / persist – DETECTION list, then TOOLS beside the
-        // uploaded artwork panel.
+        // uploaded artwork in the lower panel.
         scenario: {
-            description: { x: 14, y: 15.2, w: 72.5, h: 15, size: 3.3, align: 'left', lines: 5 },
-            detection:   { x: 14, y: 36.4, w: 72.5, h: 19.5, size: 3.3, align: 'left', lines: 6 },
-            tools:       { x: 14, y: 62.4, w: 22, h: 27, size: 3.3, align: 'left', lines: 10 },
-            // Used when the card carries no artwork - the list is then free to
-            // use the whole width instead of the narrow column.
-            toolsWide:   { x: 14, y: 62.4, w: 72.5, h: 27, size: 3.3, align: 'left', lines: 10 },
-            artwork:     { x: 37, y: 62.2, w: 50, h: 28.5 },
-            resources:   { x: 14, y: 84.0, w: 72.5, h: 7.5, size: 2.6, align: 'left', lines: 3 }
+            description: { x: 14, y: 15.2, w: 72.5, h: 19, size: BODY, align: 'left' },
+            detection:   { x: 14, y: 36.4, w: 72.5, h: 19.5, size: BODY, align: 'left' },
+            resources:   { x: 14, y: 84.0, w: 72.5, h: 7.5, size: LINKS, align: 'left' },
+            placements: {
+                right:  { tools: { x: 14, y: 62.4, w: 30, h: 27, size: BODY, align: 'left' },
+                          artwork: { x: 46, y: 62.2, w: 40.5, h: 28 } },
+                left:   { tools: { x: 56.5, y: 62.4, w: 30, h: 27, size: BODY, align: 'left' },
+                          artwork: { x: 14, y: 62.2, w: 40.5, h: 28 } },
+                center: { tools: { x: 14, y: 62.4, w: 72.5, h: 11, size: BODY, align: 'left' },
+                          artwork: { x: 25, y: 73.5, w: 50, h: 16.5 } },
+                wide:   { tools: { x: 14, y: 62.4, w: 72.5, h: 11, size: BODY, align: 'left' },
+                          artwork: { x: 14, y: 73.5, w: 72.5, h: 16.5, fit: 'cover' } },
+                none:   { tools: { x: 14, y: 62.4, w: 72.5, h: 27, size: BODY, align: 'left' } }
+            }
         },
         // procedure – TOOLS only, heading higher up the card.
         procedure: {
-            description: { x: 14, y: 15.2, w: 72.5, h: 16, size: 3.3, align: 'left', lines: 5 },
-            tools:       { x: 14, y: 36.8, w: 22, h: 52, size: 3.3, align: 'left', lines: 18 },
-            toolsWide:   { x: 14, y: 36.8, w: 72.5, h: 52, size: 3.3, align: 'left', lines: 18 },
-            artwork:     { x: 37, y: 36.6, w: 50, h: 53 },
-            resources:   { x: 14, y: 84.0, w: 72.5, h: 7.5, size: 2.6, align: 'left', lines: 3 }
+            description: { x: 14, y: 15.2, w: 72.5, h: 19.5, size: BODY, align: 'left' },
+            resources:   { x: 14, y: 84.0, w: 72.5, h: 7.5, size: LINKS, align: 'left' },
+            placements: {
+                right:  { tools: { x: 14, y: 36.8, w: 30, h: 52, size: BODY, align: 'left' },
+                          artwork: { x: 46, y: 36.6, w: 40.5, h: 53.6 } },
+                left:   { tools: { x: 56.5, y: 36.8, w: 30, h: 52, size: BODY, align: 'left' },
+                          artwork: { x: 14, y: 36.6, w: 40.5, h: 53.6 } },
+                center: { tools: { x: 14, y: 36.8, w: 72.5, h: 26, size: BODY, align: 'left' },
+                          artwork: { x: 25, y: 63.5, w: 50, h: 26.5 } },
+                wide:   { tools: { x: 14, y: 36.8, w: 72.5, h: 26, size: BODY, align: 'left' },
+                          artwork: { x: 14, y: 63.5, w: 72.5, h: 26.5, fit: 'cover' } },
+                none:   { tools: { x: 14, y: 36.8, w: 72.5, h: 52, size: BODY, align: 'left' } }
+            }
         },
-        // inject – a full-height NOTES panel (the card's GM notes). No artwork
-        // panel on this template.
+        // inject – the NOTES panel, plus the card's GM notes.
         inject: {
-            description: { x: 14, y: 15.2, w: 72.5, h: 11, size: 3.3, align: 'left', lines: 4 },
-            notes:       { x: 14, y: 32.3, w: 72.5, h: 55, size: 3.3, align: 'left', lines: 18 },
-            resources:   { x: 14, y: 86.5, w: 72.5, h: 6, size: 2.6, align: 'left', lines: 2 }
+            description: { x: 14, y: 15.2, w: 72.5, h: 11, size: BODY, align: 'left' },
+            resources:   { x: 14, y: 86.5, w: 72.5, h: 6, size: LINKS, align: 'left' },
+            placements: {
+                right:  { notes: { x: 14, y: 32.3, w: 44, h: 52, size: BODY, align: 'left' },
+                          artwork: { x: 60, y: 34, w: 26.5, h: 48 } },
+                left:   { notes: { x: 42, y: 32.3, w: 44.5, h: 52, size: BODY, align: 'left' },
+                          artwork: { x: 14, y: 34, w: 26.5, h: 48 } },
+                center: { notes: { x: 14, y: 32.3, w: 72.5, h: 25, size: BODY, align: 'left' },
+                          artwork: { x: 25, y: 59, w: 50, h: 26 } },
+                wide:   { notes: { x: 14, y: 32.3, w: 72.5, h: 25, size: BODY, align: 'left' },
+                          artwork: { x: 14, y: 59, w: 72.5, h: 26, fit: 'cover' } },
+                none:   { notes: { x: 14, y: 32.3, w: 72.5, h: 52, size: BODY, align: 'left' } }
+            }
         },
-        // consultant – SPECIALTIES list. No artwork panel on this template.
+        // consultant – a bold blue effect line, a two-column SPECIALTIES list,
+        // then the consultant's own quote beside a circular portrait, with their
+        // website/socials along the bottom edge. The portrait sets only its
+        // width: both renderers derive the height from it, so the crop stays a
+        // true circle at any face size.
         consultant: {
-            description: { x: 14, y: 15.2, w: 72.5, h: 11, size: 3.3, align: 'left', lines: 4 },
-            specialties: { x: 14, y: 32.3, w: 72.5, h: 52, size: 3.3, align: 'left', lines: 17 },
-            resources:   { x: 14, y: 86.5, w: 72.5, h: 6, size: 2.6, align: 'left', lines: 2 }
+            description: { x: 14, y: 15.2, w: 72.5, h: 11, size: 4.3, align: 'center', weight: 700, color: CONSULTANT_BLUE },
+            specialties: { x: 14, y: 32.3, w: 72.5, h: 16, size: BODY, align: 'left', columns: 2, lineHeight: 1.15 },
+            // One row along the bottom edge, like the printed socials: joining the
+            // links keeps them on a single line, which is all this strip of the
+            // card has room for. Both renderers then shrink the row to fit rather
+            // than stacking the links down past the card edge.
+            resources:   { x: 14, y: 86, w: 72.5, h: 4.5, size: LINKS, align: 'left', stripProtocol: true, row: true },
+            placements: {
+                right:  { quote: { x: 14, y: 61, w: 33, h: 18, size: 3.5, align: 'left', italic: true, lineHeight: 1.25, color: CONSULTANT_GREEN },
+                          portrait: { x: 50, y: 60, w: 36, circle: true } },
+                left:   { quote: { x: 52, y: 61, w: 33, h: 18, size: 3.5, align: 'left', italic: true, lineHeight: 1.25, color: CONSULTANT_GREEN },
+                          portrait: { x: 14, y: 60, w: 36, circle: true } },
+                center: { quote: { x: 14, y: 55, w: 72.5, h: 11, size: 3.5, align: 'center', italic: true, lineHeight: 1.25, color: CONSULTANT_GREEN },
+                          portrait: { x: 35, y: 64, w: 30, circle: true } },
+                wide:   { quote: { x: 14, y: 53, w: 72.5, h: 11, size: 3.5, align: 'center', italic: true, lineHeight: 1.25, color: CONSULTANT_GREEN },
+                          artwork: { x: 14, y: 66, w: 72.5, h: 23, fit: 'cover' } },
+                none:   { quote: { x: 14, y: 60, w: 72.5, h: 22, size: 3.5, align: 'left', italic: true, lineHeight: 1.25, color: CONSULTANT_GREEN } }
+            }
         }
     };
+
+    /**
+     * Artwork placements, in the order the Creator lists them. `illustration`
+     * and `banner` are the names saved before the four-way choice existed and
+     * still map onto `right` and `wide`.
+     */
+    var PLACEMENTS = ['wide', 'center', 'left', 'right', 'none'];
+    var PLACEMENT_ALIASES = { illustration: 'right', banner: 'wide', '': 'right' };
+    var DEFAULT_PLACEMENT = 'right';
+
+    /** Normalise a stored `artwork` value to one of PLACEMENTS. */
+    function placementFor(value) {
+        var key = String(value == null ? '' : value).trim().toLowerCase();
+        if (PLACEMENT_ALIASES[key]) key = PLACEMENT_ALIASES[key];
+        return PLACEMENTS.indexOf(key) >= 0 ? key : DEFAULT_PLACEMENT;
+    }
+
+    /**
+     * The box set for one card: the layout's shared boxes with the chosen
+     * placement's list + image boxes merged over them.
+     */
+    function boxesFor(layout, artwork) {
+        var base = BOXES[layout] || BOXES.procedure;
+        var variants = base.placements || {};
+        var variant = variants[placementFor(artwork)] || variants[DEFAULT_PLACEMENT] || {};
+        var out = {};
+        for (var key in base) {
+            if (key !== 'placements') out[key] = base[key];
+        }
+        for (var own in variant) out[own] = variant[own];
+        return out;
+    }
 
     var INK = '#14181f';
 
@@ -208,15 +321,37 @@
         return [String(value).trim()].filter(Boolean);
     }
 
-    function resourceLines(card) {
+    /**
+     * The printable form of a card's links. A consultant prints the short form
+     * ("linkedin.com/in/kylehanslovan" rather than the full https URL) so the
+     * footer row matches the social handle printed on the deck cards.
+     */
+    function resourceLines(card, stripProtocol) {
         return (Array.isArray(card.resources) ? card.resources : [])
             .map(function (r) { return (r && (r.url || r.text)) || ''; })
-            .filter(Boolean);
+            .filter(Boolean)
+            .map(function (value) {
+                if (!stripProtocol) return value;
+                return String(value)
+                    .replace(/^https?:\/\//i, '')
+                    .replace(/^www\./i, '')
+                    .replace(/\/+$/, '');
+            });
     }
 
     /** Page-relative URL of a template WebP (the file name is repo-relative). */
     function templateSrc(file) {
         return DIR + file;
+    }
+
+    /**
+     * A `row` box prints its entries on one line, separated by a middle dot -
+     * the consultant's website/socials strip. Scenarios and procedures keep one
+     * entry per line, because their boxes are tall enough for the list.
+     */
+    function rowLines(lines, box) {
+        if (!box || !box.row || lines.length < 2) return lines;
+        return [lines.join(' \u00b7 ')];
     }
 
     /**
@@ -248,20 +383,95 @@
         if (box.h) el.style.height = box.h + '%';
         if (box.size) el.style.fontSize = box.size + 'cqw';
         if (box.align) el.style.textAlign = box.align;
+        if (box.lineHeight) el.style.lineHeight = box.lineHeight;
+    }
+
+    /**
+     * One styled line of card text.
+     * @param {HTMLElement} parent
+     * @returns {HTMLElement}
+     */
+    function textLine(parent, text) {
+        var line = document.createElement('div');
+        line.className = 'cf-line';
+        line.textContent = text;
+        parent.appendChild(line);
+        return line;
     }
 
     function textBlock(className, box, lines, color) {
         var el = document.createElement('div');
         el.className = 'cf-block ' + className;
         boxStyle(el, box);
-        if (color) el.style.color = color;
-        (lines || []).forEach(function (text) {
-            var line = document.createElement('div');
-            line.className = 'cf-line';
-            line.textContent = text;
-            el.appendChild(line);
-        });
+        // Remember the design size so fitBlocks() can shrink from it and always
+        // measure against the same starting point.
+        if (box.size) el.setAttribute('data-cf-size', box.size);
+        var ink = box.color || color;
+        if (ink) el.style.color = ink;
+        if (box.weight) el.style.fontWeight = box.weight;
+        if (box.italic) el.style.fontStyle = 'italic';
+        if (box.row) el.classList.add('cf-row');
+
+        var items = lines || [];
+        var cols = box.columns || 1;
+        if (cols > 1) {
+            // Column-major, like a printed list: the first half fills the left
+            // column so the eye reads top-to-bottom and then across.
+            el.classList.add('cf-columns');
+            var per = Math.ceil(items.length / cols);
+            for (var c = 0; c < cols; c++) {
+                var col = document.createElement('div');
+                col.className = 'cf-col';
+                items.slice(c * per, (c + 1) * per).forEach(function (text) {
+                    textLine(col, text);
+                });
+                el.appendChild(col);
+            }
+            return el;
+        }
+
+        items.forEach(function (text) { textLine(el, text); });
         return el;
+    }
+
+    /** Uploaded artwork in a rectangular panel. `fit: 'cover'` crops it to fill
+     *  the box (the Wide placement) instead of letterboxing it - set inline so
+     *  the placement cannot be lost to a stale shared stylesheet. */
+    function artworkBlock(src, box) {
+        var art = document.createElement('div');
+        art.className = 'cf-artwork';
+        boxStyle(art, box);
+        var img = document.createElement('img');
+        img.src = artSrc(src);
+        img.alt = '';
+        if (box.fit === 'cover') {
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.maxWidth = 'none';
+            img.style.maxHeight = 'none';
+            img.style.objectFit = 'cover';
+        }
+        art.appendChild(img);
+        return art;
+    }
+
+    /**
+     * Uploaded artwork cropped into a circle (consultant cards). Only the width
+     * comes from the box - the height follows from `aspect-ratio: 1` so the
+     * crop stays round however tall the face is, exactly like drawPortrait().
+     */
+    function portraitBlock(src, box) {
+        var wrap = document.createElement('div');
+        wrap.className = 'cf-portrait';
+        wrap.style.left = box.x + '%';
+        wrap.style.top = box.y + '%';
+        wrap.style.width = box.w + '%';
+        wrap.style.borderColor = CONSULTANT_GREEN;
+        var img = document.createElement('img');
+        img.src = artSrc(src);
+        img.alt = '';
+        wrap.appendChild(img);
+        return wrap;
     }
 
     /**
@@ -284,24 +494,120 @@
         block.style.fontSize = (TITLE_BOX.size * (available / needed) * 0.99).toFixed(2) + 'cqw';
     }
 
-    var titleObserver = (typeof ResizeObserver !== 'undefined')
+    /**
+     * Shrink any text block that overflows its box.
+     *
+     * The design sizes in BOXES are the printed decks' sizes, so a card with a
+     * long description or a dozen tools needs less. Rather than clip, the block
+     * steps its size down from the design size until the content fits - the
+     * canvas twin of this is the loop inside drawBlock(), which caps the wrapped
+     * line count instead of measuring pixels.
+     *
+     * Sizes stay in `cqw`, so the result is identical at every face width and
+     * survives a resize. Only ever called once the face is connected and laid
+     * out - a detached element measures zero.
+     */
+    function fitBlocks(face) {
+        if (!face.isConnected) return;
+        var blocks = face.querySelectorAll('.cf-block');
+        for (var i = 0; i < blocks.length; i++) {
+            var el = blocks[i];
+            var base = parseFloat(el.getAttribute('data-cf-size'));
+            if (!base) continue;
+
+            var size = base;
+            el.style.fontSize = size.toFixed(2) + 'cqw';
+
+            // A row block keeps its entries on one line while that line stays
+            // legible. Past ~2.6cqw the row would be too small to read, so it
+            // falls back to wrapping and fitting the box height instead of
+            // running off the card edge.
+            if (el.classList.contains('cf-row')) {
+                var row = el.querySelector('.cf-line');
+                if (row) {
+                    row.style.whiteSpace = 'nowrap';
+                    el.style.fontSize = base.toFixed(2) + 'cqw';
+                    var avail = el.clientWidth;
+                    var need = row.scrollWidth;
+                    if (avail && need > avail) {
+                        var fitted = base * (avail / need) * 0.99;
+                        if (fitted >= 2.6) {
+                            el.style.fontSize = fitted.toFixed(2) + 'cqw';
+                        } else {
+                            row.style.whiteSpace = 'normal';
+                            var wrapSize = base;
+                            for (var step2 = 0; step2 < 60 && wrapSize > 2.2; step2++) {
+                                if (el.scrollHeight <= el.clientHeight + 1) break;
+                                wrapSize -= 0.05;
+                                el.style.fontSize = wrapSize.toFixed(2) + 'cqw';
+                            }
+                        }
+                    }
+                }
+                continue;
+            }
+
+            // 0.05cqw steps, never below 2.2cqw (the resources row's floor).
+            for (var step = 0; step < 60 && size > 2.2; step++) {
+                if (el.scrollHeight <= el.clientHeight + 1) break;
+                size -= 0.05;
+                el.style.fontSize = size.toFixed(2) + 'cqw';
+            }
+        }
+    }
+
+    /**
+     * Watch a face: fit the title and shrink overflowing blocks now, and again
+     * whenever the face's width changes. One observer for both jobs because a
+     * resize invalidates the two together.
+     */
+    var faceObserver = (typeof ResizeObserver !== 'undefined')
         ? new ResizeObserver(function (entries) {
-            entries.forEach(function (entry) { fitTitle(entry.target); });
+            entries.forEach(function (entry) {
+                fitTitle(entry.target);
+                fitBlocks(entry.target);
+            });
         })
         : null;
 
-    /** Fit the title now and whenever the face is resized. */
-    function observeTitle(face) {
-        if (!face.querySelector('.cf-title')) return;
-        if (titleObserver) titleObserver.observe(face);
+    function observeFace(face) {
+        if (faceObserver) faceObserver.observe(face);
         if (typeof requestAnimationFrame === 'function') {
-            requestAnimationFrame(function () { fitTitle(face); });
+            requestAnimationFrame(function () {
+                fitTitle(face);
+                fitBlocks(face);
+            });
+        }
+        // The first measurement may run before Teko has loaded, which would fit
+        // against a fallback face. Re-fit when the fonts are ready.
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () {
+                fitTitle(face);
+                fitBlocks(face);
+            }).catch(function () { /* older browsers */ });
         }
     }
 
     /* ------------------------------------------------------------------ */
     /* DOM renderer                                                        */
     /* ------------------------------------------------------------------ */
+
+    /**
+     * Keep an image clear of the resources row.
+     *
+     * A card may print links along the bottom, and the printed decks shrink the
+     * artwork rather than run it under them. Returns a narrowed copy of the box
+     * (never mutates the shared table).
+     */
+    function clearOfLinks(box, linkBox, hasLinks) {
+        if (!box || !box.h || box.circle || !hasLinks || !linkBox) return box;
+        var limit = linkBox.y - 1.2;
+        if (box.y >= limit || box.y + box.h <= limit) return box;
+        var out = {};
+        for (var key in box) out[key] = box[key];   // keep fit / circle / anything added later
+        out.h = limit - box.y;
+        return out;
+    }
 
     /**
      * Build a card face element.
@@ -313,14 +619,18 @@
         var data = card || {};
         var type = String(data.type || 'procedure').toLowerCase();
         var tpl = templateFor(type) || TEMPLATES.procedure;
-        var boxes = BOXES[tpl.layout];
+        var boxes = boxesFor(tpl.layout, data.artwork);
 
         var face = document.createElement('div');
         face.className = 'card-face card-face--' + type;
 
-        // Artwork decides whether the TOOLS list gets a narrow column or the
-        // whole width.
-        var hasArt = !!(boxes.artwork && data.image && data.artwork !== 'none');
+        var links = rowLines(resourceLines(data, boxes.resources && boxes.resources.stripProtocol), boxes.resources);
+
+        // Artwork decides how much room the list gets. A consultant has no
+        // artwork panel - its picture is the circular portrait (or the wide
+        // banner, when that placement is chosen).
+        var imageBox = clearOfLinks(boxes.artwork || boxes.portrait, boxes.resources, links.length > 0);
+        var hasArt = !!(imageBox && data.image);
 
         var img = document.createElement('img');
         img.className = 'cf-template';
@@ -338,7 +648,7 @@
             face.appendChild(textBlock('cf-detection', boxes.detection, asList(data.detection), INK));
         }
         if (boxes.tools) {
-            face.appendChild(textBlock('cf-tools', (!hasArt && boxes.toolsWide) || boxes.tools, asList(data.tools), INK));
+            face.appendChild(textBlock('cf-tools', boxes.tools, asList(data.tools), INK));
         }
         if (boxes.notes) {
             face.appendChild(textBlock('cf-notes', boxes.notes, asList(data.notes), INK));
@@ -346,20 +656,18 @@
         if (boxes.specialties) {
             face.appendChild(textBlock('cf-specialties', boxes.specialties, asList(data.specialties), INK));
         }
-
-        // Uploaded artwork sits in the lower-right panel (matching the printed cards).
-        if (hasArt) {
-            var art = document.createElement('div');
-            art.className = 'cf-artwork';
-            boxStyle(art, boxes.artwork);
-            var artImg = document.createElement('img');
-            artImg.src = artSrc(data.image);
-            artImg.alt = '';
-            art.appendChild(artImg);
-            face.appendChild(art);
+        if (boxes.quote && data.quote) {
+            face.appendChild(textBlock('cf-quote', boxes.quote, String(data.quote).split(/\r?\n/), INK));
         }
 
-        var links = resourceLines(data);
+        // Uploaded artwork sits in the chosen placement - a rectangular panel,
+        // or a circle on a consultant.
+        if (hasArt) {
+            face.appendChild(boxes.portrait && imageBox.circle
+                ? portraitBlock(data.image, imageBox)
+                : artworkBlock(data.image, imageBox));
+        }
+
         if (boxes.resources && links.length) {
             face.appendChild(textBlock('cf-resources', boxes.resources, links, INK));
         }
@@ -372,7 +680,7 @@
         boxStyle(footer, FOOTER_BOX);
         face.appendChild(footer);
 
-        observeTitle(face);
+        observeFace(face);
         return face;
     }
 
@@ -455,26 +763,168 @@
         return lines;
     }
 
+    /**
+     * Canvas twin of the title band.
+     *
+     * The DOM centres the title's line box inside TITLE_BOX (flex, align-items:
+     * center), so the font's ascent/descent box ends up centred on the band.
+     * Canvas 'top'/'middle' baselines follow the em square instead, and Teko's
+     * metrics (ascent 0.96em + descent 0.48em) put that well above the band
+     * centre - the glyphs then sit against the top border. Computing the
+     * baseline from the measured metrics reproduces the DOM exactly.
+     *
+     * The borrowed 0.99 is fitTitle()'s shrink-to-fit factor, so an over-long
+     * name is scaled in the PNG just as it is on screen.
+     */
+    function drawTitle(ctx, box, text, color, W, H) {
+        var maxWidth = W * box.w / 100;
+        var size = W * (box.size || 3) / 100;
+        var weight = box.weight || 400;
+
+        ctx.font = weight + ' ' + size + 'px ' + FONT;
+        var width = ctx.measureText(text).width;
+        if (width > maxWidth && width > 0) {
+            size = size * (maxWidth / width) * 0.99;
+            ctx.font = weight + ' ' + size + 'px ' + FONT;
+        }
+
+        var metrics = ctx.measureText(text);
+        var ascent = metrics.fontBoundingBoxAscent;
+        var descent = metrics.fontBoundingBoxDescent;
+        if (typeof ascent !== 'number' || typeof descent !== 'number') {
+            ascent = size * 0.8;
+            descent = size * 0.2;
+        }
+
+        ctx.fillStyle = box.color || color || INK;
+        ctx.textAlign = box.align === 'center' ? 'center' : 'left';
+        ctx.textBaseline = 'alphabetic';
+        var x = box.align === 'center' ? W * (box.x + box.w / 2) / 100 : W * box.x / 100;
+        var y = H * (box.y + box.h / 2) / 100 + (ascent - descent) / 2;
+        ctx.fillText(text, x, y);
+    }
+
+    /** Lines available in a box at a given size (canvas pixels). */
+    function boxCapacity(box, size, H) {
+        var height = H * (box.h || 0) / 100;
+        if (!height) return 99;
+        return Math.max(1, Math.floor(height / (size * (box.lineHeight || 1.15))));
+    }
+
     function drawBlock(ctx, box, lines, color, W, H) {
         if (!box || !lines || !lines.length) return;
+
+        // A multi-column list draws each column as its own narrower block, so
+        // wrapping and alignment stay identical to the single-column case.
+        if (box.columns > 1) {
+            var per = Math.ceil(lines.length / box.columns);
+            var colWidth = box.w / box.columns;
+            for (var c = 0; c < box.columns; c++) {
+                var chunk = lines.slice(c * per, (c + 1) * per);
+                if (!chunk.length) continue;
+                drawBlock(ctx, {
+                    x: box.x + c * colWidth,
+                    y: box.y,
+                    w: colWidth * COLUMN_GUTTER,
+                    h: box.h,
+                    size: box.size,
+                    align: box.align,
+                    lineHeight: box.lineHeight,
+                    weight: box.weight,
+                    italic: box.italic,
+                    color: box.color
+                }, chunk, color, W, H);
+            }
+            return;
+        }
+
+        var maxWidth = W * box.w / 100;
         var size = W * (box.size || 3) / 100;
-        ctx.font = size + 'px ' + FONT;
-        ctx.fillStyle = color || INK;
+        var floor = W * 0.022;                 // the 2.2cqw floor in fitBlocks()
+        var out = [];
+
+        // A row box is one measured line, shrunk by width - the consultant's
+        // socials stay on the bottom edge like the printed card. If one line
+        // would have to shrink below ~2.6cqw to fit, fall through to the normal
+        // wrap-and-fit path so the links stay readable instead of vanishing.
+        if (box.row) {
+            var row = lines.join(' \u00b7 ');
+            ctx.font = (box.italic ? 'italic ' : '') + (box.weight || 400) + ' ' + size + 'px ' + FONT;
+            var rowWidth = ctx.measureText(row).width;
+            var rowFits = rowWidth <= maxWidth || rowWidth <= 0;
+            var rowSize = rowWidth > 0 ? size * (maxWidth / rowWidth) * 0.99 : size;
+            if (rowFits || rowSize >= W * 0.026) {
+                if (!rowFits) {
+                    size = rowSize;
+                    ctx.font = (box.italic ? 'italic ' : '') + (box.weight || 400) + ' ' + size + 'px ' + FONT;
+                }
+                ctx.fillStyle = box.color || color || INK;
+                ctx.textBaseline = 'top';
+                ctx.textAlign = box.align === 'center' ? 'center' : 'left';
+                var rowX = box.align === 'center' ? W * (box.x + box.w / 2) / 100 : W * box.x / 100;
+                ctx.fillText(row, rowX, H * box.y / 100);
+                return;
+            }
+        }
+
+        // Shrink until the wrapped text fits the box - the same rule fitBlocks()
+        // applies in the DOM, so the PNG matches what the preview shows.
+        for (var attempt = 0; attempt < 24; attempt++) {
+            ctx.font = (box.italic ? 'italic ' : '') + (box.weight || 400) + ' ' + size + 'px ' + FONT;
+            out = [];
+            for (var i = 0; i < lines.length; i++) {
+                var wrapped = wrapForCanvas(ctx, lines[i], maxWidth);
+                for (var j = 0; j < wrapped.length; j++) out.push(wrapped[j]);
+            }
+            if (out.length <= boxCapacity(box, size, H) || size <= floor) break;
+            size *= 0.94;
+        }
+
+        ctx.fillStyle = box.color || color || INK;
         ctx.textBaseline = 'top';
         ctx.textAlign = box.align === 'center' ? 'center' : 'left';
 
-        var maxWidth = W * box.w / 100;
         var x = box.align === 'center' ? W * (box.x + box.w / 2) / 100 : W * box.x / 100;
         var y = H * box.y / 100;
-        var lineHeight = size * 1.15;
+        var lineHeight = size * (box.lineHeight || 1.15);
 
-        var out = [];
-        lines.forEach(function (text) {
-            wrapForCanvas(ctx, text, maxWidth).forEach(function (l) { out.push(l); });
-        });
-        out.slice(0, box.lines || 99).forEach(function (line, i) {
+        out.forEach(function (line, i) {
             ctx.fillText(line, x, y + i * lineHeight);
         });
+    }
+
+    /**
+     * Canvas twin of portraitBlock(): the artwork cover-cropped into a circle
+     * with the template's green ring. The height always follows the width, so
+     * the crop is round whatever the image is.
+     */
+    function drawPortrait(ctx, box, img, W, H) {
+        var d = W * box.w / 100;
+        var cx = W * box.x / 100 + d / 2;
+        var cy = H * box.y / 100 + d / 2;
+        var r = d / 2;
+        var iw = img.naturalWidth || img.width || 1;
+        var ih = img.naturalHeight || img.height || 1;
+        var s = Math.max(d / iw, d / ih);
+        var dw = iw * s;
+        var dh = ih * s;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(img, cx - dw / 2, cy - dh / 2, dw, dh);
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        var ring = W * PORTRAIT_RING / 100;
+        ctx.arc(cx, cy, Math.max(1, r - ring / 2), 0, Math.PI * 2);
+        ctx.lineWidth = ring;
+        ctx.strokeStyle = CONSULTANT_GREEN;
+        ctx.stroke();
+        ctx.restore();
     }
 
     /** Canvas twin of watermarkBlock() - same text, angle and opacity. */
@@ -576,7 +1026,7 @@
         var data = card || {};
         var type = String(data.type || 'procedure').toLowerCase();
         var tpl = templateFor(type) || TEMPLATES.procedure;
-        var boxes = BOXES[tpl.layout];
+        var boxes = boxesFor(tpl.layout, data.artwork);
         var scale = (opts && opts.scale) || 1;
 
         var img = await loadImage(templateSrc(tpl.file));
@@ -593,29 +1043,44 @@
         var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, W, H);
 
-        var hasArt = !!(boxes.artwork && data.image && data.artwork !== 'none');
+        var links = rowLines(resourceLines(data, boxes.resources && boxes.resources.stripProtocol), boxes.resources);
+        var imageBox = clearOfLinks(boxes.artwork || boxes.portrait, boxes.resources, links.length > 0);
+        var hasArt = !!(imageBox && data.image);
 
         if (hasArt) {
             try {
                 var art = await loadImage(artSrc(data.image));
-                var bx = W * boxes.artwork.x / 100;
-                var by = H * boxes.artwork.y / 100;
-                var bw = W * boxes.artwork.w / 100;
-                var bh = H * boxes.artwork.h / 100;
-                var s = Math.min(bw / (art.width || 1), bh / (art.height || 1));
-                var aw = (art.width || 1) * s;
-                var ah = (art.height || 1) * s;
-                ctx.drawImage(art, bx + (bw - aw) / 2, by + (bh - ah) / 2, aw, ah);
+                if (boxes.portrait && imageBox.circle) {
+                    drawPortrait(ctx, imageBox, art, W, H);
+                } else {
+                    var bx = W * imageBox.x / 100;
+                    var by = H * imageBox.y / 100;
+                    var bw = W * imageBox.w / 100;
+                    var bh = H * (imageBox.h || imageBox.w) / 100;
+                    var ratio = imageBox.fit === 'cover' ? Math.max : Math.min;
+                    var s = ratio(bw / (art.width || 1), bh / (art.height || 1));
+                    var aw = (art.width || 1) * s;
+                    var ah = (art.height || 1) * s;
+                    // Clip to the box: a cover-crop overhangs it, and the DOM
+                    // panel hides that overflow (overflow: hidden).
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(bx, by, bw, bh);
+                    ctx.clip();
+                    ctx.drawImage(art, bx + (bw - aw) / 2, by + (bh - ah) / 2, aw, ah);
+                    ctx.restore();
+                }
             } catch (_) { /* artwork is optional */ }
         }
 
-        drawBlock(ctx, TITLE_BOX, [data.name || 'Untitled Card'], tpl.title, W, H);
+        drawTitle(ctx, TITLE_BOX, String(data.name || 'Untitled Card'), tpl.title, W, H);
         if (data.description && boxes.description) drawBlock(ctx, boxes.description, [String(data.description)], INK, W, H);
         if (boxes.detection) drawBlock(ctx, boxes.detection, asList(data.detection), INK, W, H);
-        if (boxes.tools) drawBlock(ctx, (!hasArt && boxes.toolsWide) || boxes.tools, asList(data.tools), INK, W, H);
+        if (boxes.tools) drawBlock(ctx, boxes.tools, asList(data.tools), INK, W, H);
         if (boxes.notes) drawBlock(ctx, boxes.notes, asList(data.notes), INK, W, H);
         if (boxes.specialties) drawBlock(ctx, boxes.specialties, asList(data.specialties), INK, W, H);
-        if (boxes.resources) drawBlock(ctx, boxes.resources, resourceLines(data), INK, W, H);
+        if (boxes.quote && data.quote) drawBlock(ctx, boxes.quote, String(data.quote).split(/\r?\n/), INK, W, H);
+        if (boxes.resources && links.length) drawBlock(ctx, boxes.resources, links, INK, W, H);
 
         // Same order as the DOM: template, artwork, text, watermark, footer.
         drawWatermark(ctx, W, H);
@@ -630,6 +1095,8 @@
         DIR: DIR,
         FONT: FONT,
         TEMPLATES: TEMPLATES,
+        PLACEMENTS: PLACEMENTS,
+        placementFor: placementFor,
         templateFor: templateFor,
         templateUrl: templateUrl,
         isTemplateCard: isTemplateCard,

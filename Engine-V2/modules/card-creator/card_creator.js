@@ -40,14 +40,15 @@ const CardCreator = {
 
     cacheElements() {
         const ids = [
-            'cc-type', 'cc-id', 'cc-name', 'cc-description',
+            'cc-type', 'cc-id', 'cc-name', 'cc-description', 'cc-description-hint',
             'cc-detection-field', 'cc-detection-chips', 'cc-detection-input', 'cc-detection-suggest',
             'cc-tools-field', 'cc-tools-chips', 'cc-tools-input',
             'cc-notes-field', 'cc-notes',
             'cc-specialties-field', 'cc-specialties-chips', 'cc-specialties-input',
+            'cc-quote-field', 'cc-quote',
             'cc-resources', 'cc-add-resource',
             'cc-drop', 'cc-image-input', 'cc-thumb', 'cc-thumb-img', 'cc-image-clear',
-            'cc-artwork-section', 'cc-artwork-seg',
+            'cc-artwork-section', 'cc-artwork-seg', 'cc-artwork-hint', 'cc-artwork-place-field',
             'cc-preview', 'cc-save', 'cc-export-png', 'cc-copy-json',
             'cc-new-btn', 'cc-preview-status', 'cc-form-status',
             'cc-ai', 'cc-ai-mode', 'cc-ai-theme', 'cc-ai-difficulty', 'cc-ai-context',
@@ -66,9 +67,10 @@ const CardCreator = {
             tools: [],
             notes: '',
             specialties: [],
+            quote: '',
             resources: [],
             image: '',
-            artwork: 'illustration',
+            artwork: 'right',
             style: 'template'
         };
     },
@@ -80,7 +82,7 @@ const CardCreator = {
     bindEvents() {
         const onInput = () => { this.readForm(); this.scheduleRender(); };
 
-        ['cc-name', 'cc-description', 'cc-notes', 'cc-id'].forEach(id => {
+        ['cc-name', 'cc-description', 'cc-notes', 'cc-id', 'cc-quote'].forEach(id => {
             this.el[id]?.addEventListener('input', onInput);
         });
 
@@ -183,6 +185,7 @@ const CardCreator = {
         this.card.name = this.el['cc-name']?.value || '';
         this.card.description = this.el['cc-description']?.value || '';
         this.card.notes = this.el['cc-notes']?.value || '';
+        this.card.quote = this.el['cc-quote']?.value || '';
         this.card.resources = this.readResources();
     },
 
@@ -196,12 +199,19 @@ const CardCreator = {
         if (this.el['cc-name']) this.el['cc-name'].value = c.name || '';
         if (this.el['cc-description']) this.el['cc-description'].value = c.description || '';
         if (this.el['cc-notes']) this.el['cc-notes'].value = c.notes || '';
+        if (this.el['cc-quote']) this.el['cc-quote'].value = c.quote || '';
 
         const check = (name, value) => {
             const input = document.querySelector(`input[name="${name}"][value="${value}"]`);
             if (input) input.checked = true;
         };
-        check('cc-artwork', c.artwork || 'illustration');
+        // Cards saved before the four-way choice exist with 'illustration' or
+        // 'banner'; CardFace maps those onto right/wide.
+        const placement = (typeof CardFace !== 'undefined' && CardFace.placementFor)
+            ? CardFace.placementFor(c.artwork)
+            : (c.artwork || 'right');
+        this.card.artwork = placement;
+        check('cc-artwork', placement);
         this.paintSeg('cc-artwork-seg');
 
         this.renderChips('detection');
@@ -223,19 +233,34 @@ const CardCreator = {
     /**
      * Which fields the chosen type actually prints. The templates decide: the
      * scenario cards print DETECTION + TOOLS, the procedure prints TOOLS only,
-     * the inject prints NOTES and the consultant prints SPECIALTIES.
+     * the inject prints NOTES and the consultant prints SPECIALTIES, a quote and
+     * a circular portrait of the uploaded artwork.
      */
     updateTypeFields() {
         const type = this.card.type;
         const isScenario = this.SCENARIO_TYPES.includes(type);
         const isProcedure = type === 'procedure';
+        const isConsultant = type === 'consultant';
 
         this.el['cc-detection-field']?.classList.toggle('cc-hidden', !isScenario);
         this.el['cc-tools-field']?.classList.toggle('cc-hidden', !(isScenario || isProcedure));
         this.el['cc-notes-field']?.classList.toggle('cc-hidden', type !== 'inject');
-        this.el['cc-specialties-field']?.classList.toggle('cc-hidden', type !== 'consultant');
-        // Only the scenario and procedure templates carry an artwork panel.
-        this.el['cc-artwork-section']?.classList.toggle('cc-hidden', !(isScenario || isProcedure));
+        this.el['cc-specialties-field']?.classList.toggle('cc-hidden', !isConsultant);
+        this.el['cc-quote-field']?.classList.toggle('cc-hidden', !isConsultant);
+        // The scenario, procedure and consultant templates all print an image.
+        this.el['cc-artwork-section']?.classList.toggle('cc-hidden', !(isScenario || isProcedure || isConsultant));
+
+        this.setHint('cc-description-hint', isConsultant
+            ? 'Printed centred in bold blue - the effect the consultant grants.'
+            : (type === 'inject' ? 'Printed under the NOTES heading.' : 'Prints under the card title.'));
+        this.setHint('cc-artwork-hint', isConsultant
+            ? 'A head-and-shoulders shot works best: Left/Right print it as a circle beside the quote, Wide as a banner.'
+            : 'Printed in the panel below the heading, beside or under the list.');
+    },
+
+    setHint(id, text) {
+        const el = this.el[id];
+        if (el) el.textContent = text;
     },
 
     /* ------------------------------------------------------------------ */
@@ -580,6 +605,7 @@ const CardCreator = {
             tools: this.card.tools,
             notes: this.card.notes || '',
             specialties: this.card.specialties,
+            quote: this.card.quote || '',
             // Marks the card as template-composed: every display surface renders
             // it live from this key instead of using `image` as the face.
             template: this.card.type,
@@ -674,13 +700,16 @@ const CardCreator = {
                 tools: Array.isArray(card.tools) ? card.tools.slice() : [],
                 notes: card.notes || '',
                 specialties: Array.isArray(card.specialties) ? card.specialties.slice() : [],
+                quote: card.quote || '',
                 resources: Array.isArray(card.resources) ? card.resources.map(r => ({ text: r.text || '', url: r.url || '' })) : [],
                 // A card saved before templates existed has no `template` key and
                 // its `image` is the face that used to be rendered into it, not
                 // artwork. Drop it so editing cannot mistake a whole card for an
                 // illustration, and save the card back as a template.
                 image: card.template ? (card.image || '') : '',
-                artwork: card.artwork || 'illustration',
+                artwork: (typeof CardFace !== 'undefined' && CardFace.placementFor)
+                    ? CardFace.placementFor(card.artwork)
+                    : (card.artwork || 'right'),
                 style: 'template',
                 enabled: card.enabled !== false
             };

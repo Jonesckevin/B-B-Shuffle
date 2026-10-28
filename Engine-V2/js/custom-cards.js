@@ -212,6 +212,7 @@ const CustomCardsLibrary = {
                 tools: card.tools || [],
                 notes: card.notes || '',
                 specialties: card.specialties || [],
+                quote: card.quote || '',
                 template: card.template || '',
                 artwork: card.artwork || 'illustration',
                 style: card.style || 'template',

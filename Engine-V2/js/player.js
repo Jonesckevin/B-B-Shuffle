@@ -7,6 +7,12 @@
 // Canonical definition lives in Utils; this alias keeps existing call sites.
 const CARD_TYPE_LABELS = Utils.CARD_TYPE_LABELS;
 
+// Deck Builder hand-off. Engine-V2/deck-builder.js keeps the user's deck in
+// localStorage; the Player accepts it as the pseudo-deck key `built` (it cannot
+// be a CONFIG.decks entry, because CONFIG is frozen).
+const BUILT_DECK_KEY = 'built';
+const BUILT_DECK_STORAGE = 'bb-built-deck';
+
 const PlayerController = {
     // State
     scenario: null,
@@ -184,13 +190,23 @@ const PlayerController = {
         if (!select) return;
         const decks = (typeof CONFIG !== 'undefined' && CONFIG.decks) ? CONFIG.decks : {};
         const baseKeys = Object.keys(decks).filter(k => !decks[k].expansion);
+        const built = this.builtDeck();
         if (!select.dataset.built) {
-            select.innerHTML = baseKeys.map(k =>
+            const builtOption = built
+                ? `<option value="${BUILT_DECK_KEY}">${Utils.escapeHtml(built.title || 'My Deck')} (built)</option>`
+                : '';
+            select.innerHTML = builtOption + baseKeys.map(k =>
                 `<option value="${k}">${Utils.escapeHtml(decks[k].name || k)}</option>`
             ).join('');
             select.dataset.built = '1';
         }
         const stored = Utils.getFromStorage((CONFIG.storage && CONFIG.storage.preferredDeck) ? CONFIG.storage.preferredDeck : 'bb-shuffle-deck', '');
+        // A deck built in the Deck Builder is offered first so it is one click
+        // away for the visitor who just made it.
+        if (built && stored === BUILT_DECK_KEY) {
+            select.value = BUILT_DECK_KEY;
+            return;
+        }
         // Prefer the deck the automatic deal uses, so a visitor who presses
         // Quick Start after the auto-dealt game lands on the same deck.
         const preferred = (CONFIG.quickStartDeck && baseKeys.indexOf(CONFIG.quickStartDeck) !== -1)
@@ -225,21 +241,50 @@ const PlayerController = {
     },
 
     /**
+     * The deck saved by the Deck Builder, or null when there is none.
+     * @returns {Object|null}
+     */
+    builtDeck() {
+        try {
+            const raw = localStorage.getItem(BUILT_DECK_STORAGE);
+            if (!raw) return null;
+            const deck = JSON.parse(raw);
+            return (deck && Array.isArray(deck.cards) && deck.cards.length) ? deck : null;
+        } catch (e) {
+            return null;
+        }
+    },
+
+    /**
      * Build a random scenario (4 phase cards + procedures + injects) from a deck
-     * @param {string} deckKey - Deck key from CONFIG.decks
+     * @param {string} deckKey - Deck key from CONFIG.decks, or BUILT_DECK_KEY
      * @returns {Promise<Object>} Scenario payload ready for the board
      */
     async buildRandomScenario(deckKey) {
-        const cfg = (typeof CONFIG !== 'undefined' && CONFIG.decks) ? CONFIG.decks[deckKey] : null;
-        if (!cfg) throw new Error('Unknown deck');
+        const isBuilt = deckKey === BUILT_DECK_KEY;
+        const cfg = isBuilt ? null : ((typeof CONFIG !== 'undefined' && CONFIG.decks) ? CONFIG.decks[deckKey] : null);
+        if (!isBuilt && !cfg) throw new Error('Unknown deck');
 
-        const json = await Utils.loadJson(cfg.path);
+        let json;
+        if (isBuilt) {
+            const built = this.builtDeck();
+            if (!built) throw new Error('No deck is saved in this browser – build one first');
+            json = { data: built.cards.map(entry => (entry && entry.card) || entry) };
+        } else {
+            json = await Utils.loadJson(cfg.path);
+        }
+
+        const deckName = isBuilt
+            ? ((this.builtDeck() && this.builtDeck().title) || 'My Deck')
+            : (cfg.name || deckKey);
+        const deckPath = isBuilt ? '' : cfg.path;
+
         const data = Array.isArray(json && json.data) ? json.data : [];
         // The four scenario slots come from the canonical list; procedures and
         // injects are always in play (consultants are resolved separately by
         // ensureConsultantsFromDeck).
         const lists = {};
-        [...Utils.SCENARIO_TYPES, 'procedure', 'inject'].forEach(type => { lists[type] = []; });
+        [...Utils.SCENARIO_TYPES, 'procedure', 'inject', 'consultant'].forEach(type => { lists[type] = []; });
         data.forEach(card => {
             const type = (card.type || '').toLowerCase();
             if (lists[type]) lists[type].push({ ...card, image: Utils.assetPath(card.image) });
@@ -282,16 +327,23 @@ const PlayerController = {
             injects.push(pack(injectPool.splice(idx, 1)[0]));
         }
 
+        // A deck built in the browser names its own consultants; every other deck
+        // resolves them from its file (ensureConsultantsFromDeck).
+        const consultants = isBuilt
+            ? this.uniqueByName([...(lists.consultant || [])]).slice(0, 3).map(card => pack(card))
+            : [];
+
         const now = new Date().toISOString();
         return {
             id: this.quickStartId(),
             version: '1.0',
             exportDate: now,
-            metadata: { name: `Quick Start – ${cfg.name || deckKey}`, author: 'Quick Start', createdAt: now, modifiedAt: now },
-            deck: { key: deckKey, name: cfg.name || deckKey, path: cfg.path },
+            metadata: { name: `Quick Start – ${deckName}`, author: 'Quick Start', createdAt: now, modifiedAt: now },
+            deck: { key: deckKey, name: deckName, path: deckPath },
             scenario,
             procedures,
             injects,
+            consultants,
             gameConfig: {
                 initialTurns: (CONFIG.game && CONFIG.game.initialTurns) || 10,
                 maxStrikes: (CONFIG.game && CONFIG.game.maxStrikes) || 3,
@@ -738,6 +790,16 @@ const PlayerController = {
             }
         }
 
+        // The Deck Builder's "Play this deck" links here with ?deck=built.
+        const wantsBuilt = params.deck === BUILT_DECK_KEY;
+        if (!this.scenario && wantsBuilt) {
+            try {
+                this.scenario = await this.buildRandomScenario(BUILT_DECK_KEY);
+            } catch (error) {
+                Utils.showToast(error.message || 'Could not deal that deck', 'error');
+            }
+        }
+
         // Fall back to localStorage
         if (!this.scenario) {
             this.scenario = Utils.getFromStorage('bb-current-scenario', null, true);
@@ -748,7 +810,7 @@ const PlayerController = {
         // left empty on purpose - replacing it with an unrelated random game would
         // hide the failure.
         let autoDealt = false;
-        if (!this.scenario && !requestedScenario) {
+        if (!this.scenario && !requestedScenario && !wantsBuilt) {
             this.scenario = await this.autoDealQuickStart();
             autoDealt = !!this.scenario;
         }
@@ -839,7 +901,9 @@ const PlayerController = {
      */
     procedureBackUrl() {
         const deckKey = this.scenario?.deck?.key;
-        return Utils.cardbackFor(deckKey, 'procedure') || '../shared/decks/cardbacks/v2/procedure.webp';
+        const built = deckKey === BUILT_DECK_KEY ? this.builtDeck() : null;
+        const chosen = built && built.cardbacks && built.cardbacks.procedure;
+        return chosen || Utils.cardbackFor(deckKey, 'procedure') || '../shared/decks/cardbacks/v2/procedure.webp';
     },
 
     /**
@@ -856,8 +920,12 @@ const PlayerController = {
         const deckKey = this.scenario?.deck?.key;
         if (!deckKey) return;
 
+        // A deck built in the browser names its own backs; anything else follows
+        // the deck registry.
+        const built = deckKey === BUILT_DECK_KEY ? this.builtDeck() : null;
+
         const setBack = (cardId, type, alt) => {
-            const url = Utils.cardbackFor(deckKey, type);
+            const url = (built && built.cardbacks && built.cardbacks[type]) || Utils.cardbackFor(deckKey, type);
             const img = Utils.getElement(cardId)?.querySelector('.flip-card-front img');
             if (!img || !url || img.getAttribute('src') === url) return;
             img.src = url;

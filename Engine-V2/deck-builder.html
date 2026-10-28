@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <title>Deck Builder – Backdoors &amp; Breaches | B&amp;B Shuffle</title>
+    <meta name="description" content="Assemble a Backdoors &amp; Breaches deck: pick scenarios, procedures and injects, choose card backs, check detection coverage, then save, export or play it.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="B&amp;B Shuffle">
+    <meta property="og:title" content="Deck Builder – Backdoors &amp; Breaches">
+    <meta property="og:description" content="Assemble a custom Backdoors &amp; Breaches deck, pick its card backs and review detection coverage before you play.">
+    <meta property="og:image" content="../shared/img/og-bbshuffle.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Deck Builder – Backdoors &amp; Breaches">
+    <meta name="twitter:description" content="Assemble a custom Backdoors &amp; Breaches deck, pick its card backs and review detection coverage before you play.">
+    <meta name="twitter:image" content="../shared/img/og-bbshuffle.png">
+    <link rel="icon" href="../shared/img/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="../shared/img/favicon.png">
+
+    <link rel="stylesheet" href="../shared/css/base.css?v=2">
+    <link rel="stylesheet" href="../shared/css/modules.css">
+    <link rel="stylesheet" href="css/deck-builder.css?v=4">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "B&B Shuffle", "item": "../index.html" },
+        { "@type": "ListItem", "position": 2, "name": "Deck Builder", "item": "deck-builder.html" }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <div class="module-layout">
+        <!-- Header -->
+        <header class="module-header">
+            <div class="header-left">
+                <a href="player.html" class="back-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Game
+                </a>
+                <h1 class="module-title">Deck Builder</h1>
+            </div>
+            <div class="header-right">
+                <a href="admin.html" class="btn btn-ghost">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Scenario Editor
+                </a>
+            </div>
+        </header>
+
+        <!-- Slim filter bar -->
+        <div class="db-toolbar">
+            <div class="db-tool">
+                <label class="db-tool-label" for="db-search">Find cards</label>
+                <input id="db-search" class="form-input" type="search" placeholder="Card or tool name" autocomplete="off">
+            </div>
+            <div class="db-tool">
+                <label class="db-tool-label" for="db-source">Source deck</label>
+                <select id="db-source" class="form-select">
+                    <option value="all">All decks</option>
+                </select>
+            </div>
+            <div class="db-tool db-tool-grow">
+                <span class="db-tool-label" id="db-type-label">Card type</span>
+                <div class="db-chips" id="db-type-filter" role="group" aria-labelledby="db-type-label"></div>
+            </div>
+            <span class="db-pool-count" id="db-pool-count"></span>
+            <span class="db-status" id="db-status"></span>
+        </div>
+
+        <main class="db-panes">
+            <!-- Card pool -->
+            <section class="db-pane db-pool-pane" aria-label="Card pool">
+                <div class="db-pool" id="db-pool"></div>
+                <button id="db-more" class="btn btn-ghost btn-sm db-more hidden" type="button">Show more cards</button>
+            </section>
+
+            <!-- Deck -->
+            <aside class="db-pane db-deck-pane" aria-label="Your deck">
+                <div class="db-deck-head">
+                    <label class="db-label" for="db-title">Deck name</label>
+                    <input id="db-title" class="form-input" type="text" maxlength="48" placeholder="My Deck">
+                    <div class="db-ready" id="db-ready"></div>
+                </div>
+
+                <details class="db-section" id="db-sec-scenario" open>
+                    <summary>
+                        <span class="db-sec-name">Scenario</span>
+                        <span class="db-sec-state" id="db-state-scenario"></span>
+                        <span class="db-sec-count" id="db-count-scenario">0</span>
+                    </summary>
+                    <div class="db-sec-body" id="db-list-scenario"></div>
+                </details>
+
+                <details class="db-section" id="db-sec-procedure">
+                    <summary>
+                        <span class="db-sec-name">Procedures</span>
+                        <span class="db-sec-state" id="db-state-procedure"></span>
+                        <span class="db-sec-count" id="db-count-procedure">0/4</span>
+                    </summary>
+                    <div class="db-sec-body" id="db-list-procedure"></div>
+                </details>
+
+                <details class="db-section" id="db-sec-inject">
+                    <summary>
+                        <span class="db-sec-name">Injects</span>
+                        <span class="db-sec-state" id="db-state-inject"></span>
+                        <span class="db-sec-count" id="db-count-inject">0/4</span>
+                    </summary>
+                    <div class="db-sec-body" id="db-list-inject"></div>
+                </details>
+
+                <details class="db-section" id="db-sec-consultant">
+                    <summary>
+                        <span class="db-sec-name">Consultants</span>
+                        <span class="db-sec-state" id="db-state-consultant"></span>
+                        <span class="db-sec-count" id="db-count-consultant">0</span>
+                    </summary>
+                    <div class="db-sec-body" id="db-list-consultant"></div>
+                </details>
+
+                <details class="db-section" id="db-sec-stats">
+                    <summary>
+                        <span class="db-sec-name">Statistics</span>
+                    </summary>
+                    <div class="db-sec-body" id="db-stats"></div>
+                </details>
+
+                <details class="db-section" id="db-sec-backs">
+                    <summary>
+                        <span class="db-sec-name">Card backs</span>
+                    </summary>
+                    <div class="db-sec-body" id="db-backs"></div>
+                </details>
+
+                <div class="db-actions">
+                    <button id="db-play" class="btn btn-primary btn-sm" type="button">Play this deck</button>
+                    <button id="db-export" class="btn btn-secondary btn-sm" type="button">Export JSON</button>
+                    <button id="db-import" class="btn btn-ghost btn-sm" type="button">Import JSON</button>
+                    <button id="db-clear" class="btn btn-ghost btn-sm" type="button">Clear</button>
+                    <input type="file" id="db-import-input" class="db-file-input" accept="application/json,.json">
+                </div>
+                <p class="db-hint">Decks are saved in this browser only. Export JSON to keep a copy or move it to another device.</p>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Detection picker: a scenario needs at least one procedure that detects it -->
+    <div class="db-modal-backdrop" id="db-detect-modal" hidden>
+        <div class="db-modal" role="dialog" aria-modal="true" aria-labelledby="db-detect-title">
+            <div class="db-modal-head">
+                <h2 id="db-detect-title">Scenario</h2>
+                <button type="button" class="db-modal-close" id="db-detect-close" aria-label="Close">&times;</button>
+            </div>
+            <p class="db-modal-sub" id="db-detect-sub"></p>
+            <p class="db-modal-note">A scenario no procedure detects can never be found during a game, so this deck needs at least one of these procedures.</p>
+            <div class="db-detect-list" id="db-detect-list"></div>
+            <div class="db-modal-actions">
+                <span class="db-modal-status" id="db-detect-status"></span>
+                <button type="button" class="btn btn-ghost btn-sm" id="db-detect-cancel">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" id="db-detect-confirm" disabled>Add scenario + procedures</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-legal">
+        <div class="app-legal-content">
+            <a class="app-legal-classic" href="https://www.blackhillsinfosec.com/tools/backdoorsandbreaches/classic" target="_blank" rel="noopener noreferrer">
+                <img class="app-legal-logo" src="../shared/img/bb-logo-transparent-w.png" alt="Backdoors &amp; Breaches logo" width="2518" height="999" loading="lazy" decoding="async">
+                <span>B&amp;B Classic – Official Site</span>
+            </a>
+            <p class="app-legal-disclaimer">Unofficial project. Backdoors &amp; Breaches is a game by Black Hills Information Security &amp; Antisyphon Training. Decks you build here are your own selection of published cards.</p>
+            <a class="app-legal-gh" href="https://github.com/Jonesckevin" target="_blank" rel="noopener noreferrer" title="Jonesckevin on GitHub" aria-label="Jonesckevin on GitHub">
+                <svg class="app-legal-gh-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>Jonesckevin</span>
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/deck-builder.js?v=8"></script>
+    <!-- Site navigation FAB (shared radial menu) -->
+    <script src="../shared/js/fab.js"></script>
+    <script src="../shared/js/seo.js"></script>
+</body>
+</html>

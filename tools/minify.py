@@ -23,6 +23,8 @@ does **not** mangle names, reorder statements or fold expressions. It:
     literals, so `'https://example.com'` is not mistaken for a comment;
   * drops indentation and blank lines and collapses runs of spaces;
   * compacts CSS and JSON onto a single line;
+  * rewrites each page's local CSS/JS references to `?v=<content hash>` of the
+    file it just emitted, so no asset version is ever bumped by hand;
   * keeps every newline that separated two statements in JS, so automatic
     semicolon insertion behaves exactly as it did, and every newline in HTML.
 
@@ -41,6 +43,7 @@ runs).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -518,6 +521,52 @@ def rows():
     ]
 
 
+# ---------------------------------------------------------------------------
+# Cache busting
+# ---------------------------------------------------------------------------
+
+# `src="js/utils.js?v=12"` / `href="../shared/css/base.css?v=2"` / plain
+# `src="js/utils.js"`. Only styles and scripts are versioned: they are the files
+# that change, and they are the ones a browser will happily serve from cache.
+ASSET_REF_RE = re.compile(
+    r'(?P<attr>\b(?:src|href)\s*=\s*["\'])(?P<path>[^"\'?#]+\.(?:css|js))'
+    r'(?:\?v=[^"\']*)?(?P<quote>["\'])',
+    re.I,
+)
+
+
+def resolve_ref(page_rel: Path, ref: str):
+    """POSIX path (relative to the source root) that a page reference points at."""
+    ref = ref.split("#", 1)[0].split("?", 1)[0].strip()
+    if not ref or "://" in ref or ref.startswith("//") or ref.startswith("data:"):
+        return None
+    if ref.startswith("/"):
+        joined = os.path.normpath(ref.lstrip("/"))
+    else:
+        joined = os.path.normpath(os.path.join(str(page_rel.parent), ref))
+    return joined.replace(os.sep, "/")
+
+
+def stamp_asset_versions(html: str, page_rel: Path, hashes: dict) -> str:
+    """Point every local CSS/JS reference at its content hash.
+
+    The number in a `?v=` query is arbitrary - browsers only compare the URL
+    string - so the build derives it from the bytes it just emitted and the
+    hand-maintained versions stop being anyone's job. A reference whose file
+    is not in the output (an external URL, a file the build skipped) is left
+    exactly as written.
+    """
+
+    def repl(match: re.Match) -> str:
+        path = match.group("path")
+        digest = hashes.get(resolve_ref(page_rel, path) or "")
+        if not digest:
+            return match.group(0)
+        return f'{match.group("attr")}{path}?v={digest}{match.group("quote")}'
+
+    return ASSET_REF_RE.sub(repl, html)
+
+
 def build(src_root: Path, out_root: Path, check: bool) -> int:
     # Guard the one case that could destroy the source: an output path that is
     # the source itself, or an ancestor of it (rmtree would take the source with
@@ -535,6 +584,10 @@ def build(src_root: Path, out_root: Path, check: bool) -> int:
     problems: list[str] = []
     js_out: list[Path] = []
     skipped = 0
+    # Content hash per emitted CSS/JS file, keyed by source-relative POSIX path.
+    # HTML is written last so every reference can be stamped from this map.
+    hashes: dict[str, str] = {}
+    pending_html: list[tuple[Path, Path, str, int]] = []
 
     # Walk with pruning, and collect the source list up front: the walk writes
     # into out_root, and a live rglob would pick up the files it just created.
@@ -595,15 +648,29 @@ def build(src_root: Path, out_root: Path, check: bool) -> int:
                 if "<!--" in result:
                     problems.append(f"{rel}: a comment survived")
                     continue
+                # Defer: the ?v= values come from the assets written below.
+                pending_html.append((rel, target, result, len(raw)))
+                continue
             else:
                 result = minify_json(text)
         except Exception as error:                       # noqa: BLE001
             problems.append(f"{rel}: {error}")
             continue
 
+        if kind in ("js", "css"):
+            hashes[rel.as_posix()] = hashlib.sha1(result.encode("utf-8")).hexdigest()[:8]
+
         target.write_text(result, encoding="utf-8", newline="")
         bucket = totals.setdefault(path.suffix.lower() or "(none)", [0, 0])
         bucket[0] += len(raw)
+        bucket[1] += len(result.encode("utf-8"))
+
+    # Second pass: stamp the asset hashes into every page, then write them.
+    for rel, target, result, raw_len in pending_html:
+        result = stamp_asset_versions(result, rel, hashes)
+        target.write_text(result, encoding="utf-8", newline="")
+        bucket = totals.setdefault(".html", [0, 0])
+        bucket[0] += raw_len
         bucket[1] += len(result.encode("utf-8"))
 
     if check and js_out:

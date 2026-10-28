@@ -409,8 +409,8 @@ class CustomCardManager:
     lives in data/uploads/cards/ – the card face itself is composed live from
     shared/img/card-templates/<type>.webp by Engine-V2/js/card-face.js and is
     never baked into a PNG. Extra per-card fields (detection, tools, notes,
-    specialties, template, resources, artwork, style, enabled) are preserved so
-    a card can be loaded back into the creator for editing.
+    specialties, quote, template, resources, artwork, style, enabled) are
+    preserved so a card can be loaded back into the creator for editing.
     """
 
     DECK_ID = 'custom-cards'
@@ -419,7 +419,10 @@ class CustomCardManager:
     # and Scenario Editor, so it must be accepted here too. 'exfil' is
     # vendor-only artwork and is deliberately not offered.
     VALID_TYPES = {'initial', 'pivot', 'c2', 'persist', 'procedure', 'inject', 'consultant'}
-    VALID_ARTWORK = {'illustration', 'banner', 'none'}
+    # Where the card image sits. 'illustration'/'banner' are the values saved
+    # before the four-way choice existed and are folded into right/wide.
+    VALID_ARTWORK = {'wide', 'center', 'left', 'right', 'none'}
+    ARTWORK_ALIASES = {'illustration': 'right', 'banner': 'wide'}
     # Only 'template' is offered by the Creator now. 'app' survives so a card
     # saved before the templates existed keeps its own stored art rather than
     # being re-rendered (its `image` is a whole face, not artwork).
@@ -516,8 +519,9 @@ class CustomCardManager:
             return None
 
         artwork = str(incoming.get('artwork', existing.get('artwork', ''))).strip().lower()
+        artwork = self.ARTWORK_ALIASES.get(artwork, artwork)
         if artwork not in self.VALID_ARTWORK:
-            artwork = 'none' if ctype == 'inject' else 'illustration'
+            artwork = 'none' if ctype == 'inject' else 'right'
 
         style = str(incoming.get('style', existing.get('style', ''))).strip().lower()
         if style not in self.VALID_STYLES:
@@ -537,6 +541,7 @@ class CustomCardManager:
         detection = self._string_list(incoming.get('detection', existing.get('detection', [])))
         tools = self._string_list(incoming.get('tools', existing.get('tools', [])))
         specialties = self._string_list(incoming.get('specialties', existing.get('specialties', [])))
+        quote = str(incoming.get('quote', existing.get('quote', '')) or '').strip()
         notes = str(incoming.get('notes', existing.get('notes', '')) or '').strip()
         is_scenario = ctype in ('initial', 'pivot', 'c2', 'persist')
         is_procedure = ctype == 'procedure'
@@ -562,11 +567,13 @@ class CustomCardManager:
             'detection': detection if is_scenario else [],
             # The scenario templates print DETECTION *and* TOOLS; the procedure
             # template prints TOOLS; the inject prints NOTES and the consultant
-            # prints SPECIALTIES. Real deck JSONs already carry `tools` on their
-            # scenario cards, so the lists are deliberately not type-exclusive.
+            # prints SPECIALTIES beside its quote and portrait. Real deck JSONs
+            # already carry `tools` on their scenario cards, so the lists are
+            # deliberately not type-exclusive.
             'tools': tools if (is_scenario or is_procedure) else [],
             'notes': notes if ctype == 'inject' else '',
             'specialties': specialties if ctype == 'consultant' else [],
+            'quote': quote if ctype == 'consultant' else '',
             'template': template,
             'artwork': artwork,
             'style': style,

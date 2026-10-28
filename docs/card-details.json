@@ -1,8 +1,8 @@
 {
  "_meta": {
-  "description": "B&B Shuffle card catalog. Normalized copy of every shared/decks/*/carddb.json plus deck metadata from Engine-V2/js/config.js. Organize by deck, then by card type. Text read off the card FACES lives in `description` (a procedure's body paragraph, a scenario card's scene-setting paragraph, an inject's rule, a consultant's action), `tools` (the TOOLS list on procedures and scenario cards), `notes` (an inject's NOTES paragraph), `specialties`/`quote` (consultants) and `cost` (the v3.1 'Competitive Price: N RP' badge). A field is ABSENT, never [], when it has not been read yet - see `text` and each deck's `textCoverage` for progress, exactly like `detection`. Scenario cards expose a 'detection' array = the Procedure cards printed in the card's DETECTION section (OCR'd from the card face into docs/card-detection.json). alignment.decks[*].scenarioNameAsProcedure lists scenario cards whose exact name also exists as a Procedure card – the name-level proxy for 'is this scenario card detectable by a procedure'. Use card.detection (procedure names) for the real scenario->procedure mapping; never rely on exact-name matching alone.",
+  "description": "B&B Shuffle card catalog. Normalized copy of every shared/decks/*/carddb.json plus deck metadata from Engine-V2/js/config.js. Organize by deck, then by card type. Text read off the card FACES lives in `description` (a procedure's body paragraph, a scenario card's scene-setting paragraph, an inject's rule, a consultant's action), `tools` (the TOOLS list on procedures and scenario cards), `notes` (an inject's NOTES paragraph), `specialties`/`quote` (consultants) and `cost` (the v3.1 'Competitive Price: N RP' badge). A field is ABSENT, never [], when it has not been read yet - see `text` and each deck's `textCoverage` for progress, exactly like `detection`. Scenario cards expose a 'detection' array = the Procedure cards printed in the card's DETECTION section (OCR'd from the card face into docs/card-detection.json). alignment.decks[*].scenarioNameAsProcedure lists scenario cards whose exact name also exists as a Procedure card — the name-level proxy for 'is this scenario card detectable by a procedure'. Use card.detection (procedure names) for the real scenario->procedure mapping; never rely on exact-name matching alone.",
   "schemaVersion": "1.2",
-  "generated": "2026-09-27T18:03:19+00:00",
+  "generated": "2026-10-28T04:34:50+00:00",
   "deckCount": 18,
   "cardCount": 1454,
   "competitiveCardCount": 64
@@ -21,44 +21,8 @@
   "scenarioCards": 846,
   "withDetection": 846,
   "missing": 0,
-  "resolvedViaNameAlias": 58,
+  "resolvedViaNameAlias": 42,
   "unresolvedProcedureMatches": [
-   {
-    "deck": "cloud-security",
-    "card": "Cloud Service Provider Vulnerability",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "cloud-security",
-    "card": "Cloud Service Provider Vulnerability",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "cloud-security",
-    "card": "Instance Metadata Service Access",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "cloud-security",
-    "card": "Misconfigured Container Image Compromise",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "cloud-security",
-    "card": "Malicious Serverless Function",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "Web Server Compromise",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
    {
     "deck": "core",
     "card": "Insider Threat",
@@ -79,12 +43,6 @@
    },
    {
     "deck": "core",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
     "card": "Kerberoasting",
     "type": "pivot",
     "raw": "Honey Services"
@@ -97,69 +55,9 @@
    },
    {
     "deck": "core",
-    "card": "HTTP as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "HTTPS as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "DNS as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "Windows Background Intelligent Transfer Service (BITS)",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "Gmail, Tumblr, Salesforce, Twitter as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "Domain Fronting as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "Web Proxy (Firewall Log Review)"
-   },
-   {
-    "deck": "core",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core",
     "card": "Evil Firmware",
     "type": "persist",
     "raw": "Prayers to an Engaged and Merciful God"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "Phishing",
-    "type": "initial",
-    "raw": "Análisis de protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "AMENAZA INTERNA",
-    "type": "initial",
-    "raw": "Análisis de Comportamiento de Entidades y Usuarios"
    },
    {
     "deck": "core-spanish",
@@ -177,25 +75,7 @@
     "deck": "core-spanish",
     "card": "Password Spray",
     "type": "initial",
-    "raw": "Análisis de Comportamiento de Entidades y Usuarios"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "Password Spray",
-    "type": "initial",
     "raw": "Análisis de bitácoras de firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "RELACIÓN DE CONFIANZA",
-    "type": "initial",
-    "raw": "Análisis de Comportamiento de Entidades y Usuarios"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "INGENIERÍA SOCIAL",
-    "type": "initial",
-    "raw": "Análisis de herramientas de seguridad de endpoints"
    },
    {
     "deck": "core-spanish",
@@ -217,159 +97,15 @@
    },
    {
     "deck": "core-spanish",
-    "card": "USO DE CREDENCIALES ROBADAS",
-    "type": "initial",
-    "raw": "Análisis de Servidores"
-   },
-   {
-    "deck": "core-spanish",
     "card": "ENVENENAMIENTO DE PROTOCOLOS BROADCAST/MULTICAST",
     "type": "pivot",
     "raw": "Análisis de bitácoras de firewalls"
    },
    {
     "deck": "core-spanish",
-    "card": "UTILIZANDO ACTIVE DIRECTORY COMO UN ARMA",
-    "type": "pivot",
-    "raw": "Análisis de protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "CREACION/MODIFICACIÓN DE NUEVO SERVICIO",
-    "type": "pivot",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "ESCALAMIENTO DE PRIVILEGIOS LOCALES",
-    "type": "pivot",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "HTTP COMO CANAL DE EXFILTRACIÓN",
-    "type": "c2",
-    "raw": "Cacería de amenazas de red con herramientas Zeek y RITA Análisis"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "HTTP COMO CANAL DE EXFILTRACIÓN",
-    "type": "c2",
-    "raw": "Bitácoras de Firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "HTTPS COMO CANAL DE EXFILTRACIÓN",
-    "type": "c2",
-    "raw": "Cacería de amenazas de red con herramientas Zeek y RITA Análisis"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "HTTPS COMO CANAL DE EXFILTRACIÓN",
-    "type": "c2",
-    "raw": "Bitácoras de Firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "DNS Como C2",
-    "type": "c2",
-    "raw": "Cacería de amenazas de red con herramientas Zeek y RITA Análisis"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "DNS Como C2",
-    "type": "c2",
-    "raw": "Bitácoras de Firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "SERVICIO DE TRANSFERENCIA INTELIGENTE EN SEGUNDO PLANO DE WINDOWS (BITS)",
-    "type": "c2",
-    "raw": "Cacería de amenazas de red con herramientas Zeek y RITA Análisis"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "SERVICIO DE TRANSFERENCIA INTELIGENTE EN SEGUNDO PLANO DE WINDOWS (BITS)",
-    "type": "c2",
-    "raw": "Bitácoras de Firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "GMAIL, TUMBLR, SALESFORCE, TWITTER COMO C2",
-    "type": "c2",
-    "raw": "Cacería de amenazas de red con herramientas Zeek y RITA Análisis"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "GMAIL, TUMBLR, SALESFORCE, TWITTER COMO C2",
-    "type": "c2",
-    "raw": "Bitácoras de Firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "ENCUBRIMIENTO DE DOMINIOS COMO C2",
-    "type": "c2",
-    "raw": "Cacería de amenazas de red con herramientas Zeek y RITA Análisis"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "ENCUBRIMIENTO DE DOMINIOS COMO C2",
-    "type": "c2",
-    "raw": "Bitácoras de Firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "SERVICIO MALICIOSO",
-    "type": "persist",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "ATAQUES CON DLL",
-    "type": "persist",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "ADICIÓN DE NUEVO USUARIO",
-    "type": "persist",
-    "raw": "Análisis de la protección de la seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "CONTROLADOR MALICIOSO",
-    "type": "persist",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "SHIMMING DE APLICACIONES",
-    "type": "persist",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "PLUGINS DE NAVEGADOR MALICIOSOS",
-    "type": "persist",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
     "card": "PLUGINS DE NAVEGADOR MALICIOSOS",
     "type": "persist",
     "raw": "Análisis de bitácoras de firewalls"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "SCRIPTS DE INICIO DE SESIÓN",
-    "type": "persist",
-    "raw": "Análisis de la protección de seguridad de endpoints"
-   },
-   {
-    "deck": "core-spanish",
-    "card": "FIRMWARE MALICIOSO",
-    "type": "persist",
-    "raw": "Análisis de Protección de Seguridad de Endpoint"
    },
    {
     "deck": "core-spanish",
@@ -378,18 +114,6 @@
     "raw": "Oraciones a un Dios Comprometido y Misericordioso"
    },
    {
-    "deck": "core-spanish",
-    "card": "CARACTERÍSTICAS DE ACCESIBILIDAD",
-    "type": "persist",
-    "raw": "Análisis de Protección de Seguridad de Endpoint"
-   },
-   {
-    "deck": "core-v1",
-    "card": "Web Server Compromise",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
     "deck": "core-v1",
     "card": "Insider Threat",
     "type": "initial",
@@ -409,12 +133,6 @@
    },
    {
     "deck": "core-v1",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
     "card": "Kerberoasting",
     "type": "pivot",
     "raw": "Honey Services"
@@ -427,63 +145,9 @@
    },
    {
     "deck": "core-v1",
-    "card": "HTTP as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
-    "card": "HTTPS as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
-    "card": "DNS as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
-    "card": "Windows Background Intelligent Transfer Service (BITS)",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
-    "card": "Gmail, Tumblr, Salesforce, Twitter as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
-    "card": "Domain Fronting as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "Web Proxy (Firewall Log Review)"
-   },
-   {
-    "deck": "core-v1",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v1",
     "card": "Evil Firmware",
     "type": "persist",
     "raw": "Prayers to an Engaged and Merciful God"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Phish",
-    "type": "initial",
-    "raw": "Firewall Log Review"
    },
    {
     "deck": "core-v22",
@@ -505,69 +169,9 @@
    },
    {
     "deck": "core-v22",
-    "card": "Password Spray",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Social Engineering",
-    "type": "initial",
-    "raw": "User Awareness Training"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Exploitable External Service",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Broadcast/Multicast Protocol Poisoning",
-    "type": "pivot",
-    "raw": "CredDefense Toolkit"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Broadcast/Multicast Protocol Poisoning",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Weaponizing Active Directory",
-    "type": "pivot",
-    "raw": "Internal Segmentation"
-   },
-   {
-    "deck": "core-v22",
     "card": "Credential Stuffing",
     "type": "pivot",
     "raw": "Internal Segmentation"
-   },
-   {
-    "deck": "core-v22",
-    "card": "HTTP as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v22",
-    "card": "HTTPS as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
    },
    {
     "deck": "core-v22",
@@ -577,33 +181,15 @@
    },
    {
     "deck": "core-v22",
-    "card": "Windows Backgound Intelligent Transfer Service (BITS)",
-    "type": "c2",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v22",
     "card": "Gmail, Tumblr, Salesforce, Twitter as C2",
     "type": "c2",
     "raw": "NetFlow, Zeek/Bro, RITA Analysis"
    },
    {
     "deck": "core-v22",
-    "card": "Domain Fronting as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Malicious Browser Plugins",
+    "card": "New User Added",
     "type": "persist",
-    "raw": "Web Proxy (Firewall Log Review)"
-   },
-   {
-    "deck": "core-v22",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
+    "raw": "Permissions Audit"
    },
    {
     "deck": "core-v22",
@@ -615,19 +201,7 @@
     "deck": "core-v3",
     "card": "Phishing",
     "type": "initial",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Phishing",
-    "type": "initial",
     "raw": "Cloud Event Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Phishing",
-    "type": "initial",
-    "raw": "User and Entity Behavior Analytics (UEBA)"
    },
    {
     "deck": "core-v3",
@@ -639,229 +213,25 @@
     "deck": "core-v3",
     "card": "Unauthorized Cloud Access",
     "type": "initial",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Unauthorized Cloud Access",
-    "type": "initial",
     "raw": "Cloud Event Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Unauthorized Cloud Access",
-    "type": "initial",
-    "raw": "User and Entity Behavior Analytics (UEBA)"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "User and Entity Behavior Analytics"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "DLP (Ha! Ha! Kidding. DLP never works.)"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "Working with HR"
-   },
-   {
-    "deck": "core-v3",
-    "card": "External Password Spray",
-    "type": "initial",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "External Password Spray",
-    "type": "initial",
-    "raw": "User and Entity Behavior Analytics (UEBA)"
    },
    {
     "deck": "core-v3",
     "card": "External Password Spray",
     "type": "initial",
     "raw": "Cloud Event Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Trusted Relationship",
-    "type": "initial",
-    "raw": "User and Entity Behavior Analytics"
    },
    {
     "deck": "core-v3",
     "card": "Social Engineering",
     "type": "initial",
-    "raw": "User Awareness Training"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "External Service Exploitation",
-    "type": "initial",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
+    "raw": "Cloud Event Log Analysis"
    },
    {
     "deck": "core-v3",
     "card": "Credential Stuffing",
     "type": "initial",
-    "raw": "User and Entity Behavior Analytics"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Internal Password Spray",
-    "type": "pivot",
-    "raw": "User and Entity Behavior Analytics"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Kerberoasting",
-    "type": "pivot",
-    "raw": "User and Entity Behavior Analytics"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Kerberoasting",
-    "type": "pivot",
-    "raw": "Honey Services"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Kerberoasting",
-    "type": "pivot",
-    "raw": "Internal Segmentation"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Broadcast/Multicast Protocol Poisoning",
-    "type": "pivot",
-    "raw": "CredDefense Toolkit"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Broadcast/Multicast Protocol Poisoning",
-    "type": "pivot",
-    "raw": "User and Entity Behavior Analytics"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Broadcast/Multicast Protocol Poisoning",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Weaponizing Active Directory",
-    "type": "pivot",
-    "raw": "User and Entity Behavior Analytics"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Weaponizing Active Directory",
-    "type": "pivot",
-    "raw": "Internal Segmentation"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Credential Harvesting",
-    "type": "pivot",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Credential Harvesting",
-    "type": "pivot",
-    "raw": "User and Entity Behavior Analytics (UEBA)"
-   },
-   {
-    "deck": "core-v3",
-    "card": "New Service Creation/Modification",
-    "type": "pivot",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "HTTP as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "HTTPS as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Domain Name System (DNS) as C2",
-    "type": "c2",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Cloud-Based Services as Exfil",
-    "type": "c2",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Domain Fronting as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Malicious Service",
-    "type": "persist",
-    "raw": "Security Information and Event Management (SIEM) Log Analysis"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "Web Proxy (Firewall Log Review)"
-   },
-   {
-    "deck": "core-v3",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core-v31-expansion",
-    "card": "Missing HTTP Strict Transport Security (HSTS) Protection",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v31-expansion",
-    "card": "Missing HTTP Strict Transport Security (HSTS) Protection",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "core-v31-expansion",
-    "card": "Supply Chain Attack",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
+    "raw": "Cloud Event Log Analysis"
    },
    {
     "deck": "core-v31-expansion",
@@ -883,207 +253,15 @@
    },
    {
     "deck": "core-v31-expansion",
-    "card": "SMB Weakness",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v31-expansion",
     "card": "Internal Spearphishing",
     "type": "pivot",
     "raw": "User Awareness Training"
    },
    {
     "deck": "core-v31-expansion",
-    "card": "Stale Network Address Configurations (SNAC) Attack",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "core-v31-expansion",
-    "card": "Stale Network Address Configurations (SNAC) Attack",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "core-v31-expansion",
     "card": "Exfiltration Over Physical Medium",
     "type": "c2",
     "raw": "User Awareness Training"
-   },
-   {
-    "deck": "core31",
-    "card": "Bring Your Own (Exploited) Device",
-    "type": "initial",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core31",
-    "card": "Social Engineering",
-    "type": "initial",
-    "raw": "User Awareness Training"
-   },
-   {
-    "deck": "core31",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "DLP (Ha! Ha! Kidding. DLP never works.)"
-   },
-   {
-    "deck": "core31",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "Working with HR"
-   },
-   {
-    "deck": "core31",
-    "card": "Weaponizing Active Directory",
-    "type": "pivot",
-    "raw": "Internal Segmentation"
-   },
-   {
-    "deck": "core31",
-    "card": "Kerberoasting",
-    "type": "pivot",
-    "raw": "Honey Services"
-   },
-   {
-    "deck": "core31",
-    "card": "Kerberoasting",
-    "type": "pivot",
-    "raw": "Internal Segmentation"
-   },
-   {
-    "deck": "core31",
-    "card": "Domain Fronting as C2",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core31",
-    "card": "HTTPS as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core31",
-    "card": "HTTP as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "core31",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "Web Proxy (Firewall Log Review)"
-   },
-   {
-    "deck": "core31",
-    "card": "Malicious Browser Plugins",
-    "type": "persist",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Microsoft Direct Phishing",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Wi-Fi Guest Network Escape",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "densecure",
-    "card": "Wi-Fi Guest Network Escape",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Vendor Default Credentials Attack",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "densecure",
-    "card": "Vishing",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Trojan Mail",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "densecure",
-    "card": "HTML Smuggling",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "densecure",
-    "card": "Insecure Internet of Things (IoT)",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Insecure Internet of Things (IoT)",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "densecure",
-    "card": "Unauthorized Filesharing Utility",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Unauthorized Filesharing Utility",
-    "type": "c2",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "densecure",
-    "card": "Misuse of Remote Access Software",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Hosted Note Taking as C2",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Group Policy Object (GPO) Modification",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "Screensaver Hijack",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "SSH Authorized Keys Modification",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "densecure",
-    "card": "SSH Authorized Keys Modification",
-    "type": "persist",
-    "raw": "Firewall Log Review"
    },
    {
     "deck": "electrical-co-op",
@@ -1506,30 +684,6 @@
     "raw": "Endpoint Analysis"
    },
    {
-    "deck": "huntress",
-    "card": "Fake Software Updates",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "huntress",
-    "card": "Embedded Remote Access Trojan (RAT)",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "huntress",
-    "card": "Public Facing Database Compromise",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "huntress",
-    "card": "Rotating C2 Server Location",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
     "deck": "ics-ot",
     "card": "Internal Password Spray",
     "type": "pivot",
@@ -1546,30 +700,6 @@
     "card": "Malicious Logon Scripts",
     "type": "persist",
     "raw": "Cyber Deception"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Missing HTTP Strict Transport Security (HSTS) Protection",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Supply Chain Attack",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Fake Software Updates",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Microsoft Direct Phishing",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
    },
    {
     "deck": "mega-deck",
@@ -1591,123 +721,9 @@
    },
    {
     "deck": "mega-deck",
-    "card": "Embedded Remote Access Trojan (RAT)",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Wi-Fi Guest Network Escape",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "AI Generated Script",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Cloud Service Provider Vulnerability",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Gatekeeper Bypass",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Vishing",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Compromised Virtual Host",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "DLP (Ha! Ha! Kidding. DLP never works.)"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Insider Threat",
-    "type": "initial",
-    "raw": "Working with HR"
-   },
-   {
-    "deck": "mega-deck",
     "card": "Internal Spearphishing",
     "type": "pivot",
     "raw": "User Awareness Training"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Stale Network Address Configurations (SNAC) Attack",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Insecure Internet of Things (IoT)",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Broadcast/Multicast Protocol Poisoning",
-    "type": "pivot",
-    "raw": "CredDefense Toolkit"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "PsExec Abuse",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Lateral Tool Transfer",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "vCenter Console Coercion",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Server Management Compromise",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Misconfigured Container Image Compromise",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Malicious Serverless Function",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Rotating C2 Server Location",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
    },
    {
     "deck": "mega-deck",
@@ -1717,171 +733,9 @@
    },
    {
     "deck": "mega-deck",
-    "card": "Authorized Remote Tools",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "GIFs as C2",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Malicious Access Point",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Living Off Trusted Sites (LOTS)",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Unauthorized Filesharing Utility",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Misuse of Remote Access Software",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Hosted Note Taking as C2",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "HTTP as Exfil",
-    "type": "c2",
-    "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
     "card": "DNS as C2",
     "type": "c2",
     "raw": "NetFlow, Zeek/Bro, RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Group Policy Object (GPO) Modification",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Screensaver Hijack",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "SSH Authorized Keys Modification",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "mega-deck",
-    "card": "Spawn Web Shell",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "red-canary",
-    "card": "Gatekeeper Bypass",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "red-canary",
-    "card": "PsExec Abuse",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "red-canary",
-    "card": "Lateral Tool Transfer",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "red-canary",
-    "card": "Authorized Remote Tools",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "red-canary",
-    "card": "Malicious Access Point",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "red-canary",
-    "card": "Spawn Web Shell",
-    "type": "persist",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "AI Generated Script",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "Compromised Virtual Host",
-    "type": "initial",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "Corrupted Employee",
-    "type": "initial",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "trimarc",
-    "card": "vCenter Console Coercion",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "Server Management Compromise",
-    "type": "pivot",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "Server Management Compromise",
-    "type": "pivot",
-    "raw": "Firewall Log Review"
-   },
-   {
-    "deck": "trimarc",
-    "card": "GIFs as C2",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "Living Off Trusted Sites (LOTS)",
-    "type": "c2",
-    "raw": "Network Threat Hunting - Zeek/RITA Analysis"
-   },
-   {
-    "deck": "trimarc",
-    "card": "Living Off Trusted Sites (LOTS)",
-    "type": "c2",
-    "raw": "Firewall Log Review"
    }
   ]
  },
@@ -7277,8 +6131,8 @@
       ],
       "detection": [
        "Cloud Event Log Analysis",
-       "Firewall Log Review",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Firewall Log Analysis",
+       "Network Threat Hunting"
       ]
      },
      {
@@ -7705,7 +6559,7 @@
       ],
       "detection": [
        "Cloud Event Log Analysis",
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)"
       ]
@@ -7778,7 +6632,7 @@
        "Pacu"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)"
       ]
@@ -7981,7 +6835,7 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -8883,7 +7737,7 @@
       "detection": [
        "Server Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9027,7 +7881,7 @@
       ],
       "detection": [
        "Firewall Log Review",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9291,7 +8145,7 @@
        "dnscat2"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9315,7 +8169,7 @@
        }
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9335,7 +8189,7 @@
        "Sneaky Creeper"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9354,7 +8208,7 @@
        "Cobalt Strike"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9379,7 +8233,7 @@
        "Prismatica"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -9403,7 +8257,7 @@
        "SILENTTRINITY"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      }
     ],
@@ -9548,8 +8402,8 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Web Proxy (Firewall Log Review)",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Review",
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -10014,7 +8868,7 @@
       "detection": [
        "ANÁLISIS DE BITACORAS DE SIEM",
        "ANÁLISIS DEL SERVIDOR",
-       "Análisis de protección de seguridad de endpoints"
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS"
       ]
      },
      {
@@ -10095,7 +8949,7 @@
        "Jornadas de trabajo largas"
       ],
       "detection": [
-       "Análisis de Comportamiento de Entidades y Usuarios",
+       "ANÁLISIS DE COMPORTAMIENTO DE USUARIOS Y ENTIDADES (UEBA)",
        "CIBERENGAñO",
        "Prevención de Pérdida de Datos - DLP (¡AJA! Broma. - ¡DLP nunca funciona!)",
        "Apoyo por parte de Recursos Humanos"
@@ -10136,7 +8990,7 @@
       "detection": [
        "ANÁLISIS DE BITACORAS DE SIEM",
        "CIBERENGAñO",
-       "Análisis de Comportamiento de Entidades y Usuarios",
+       "ANÁLISIS DE COMPORTAMIENTO DE USUARIOS Y ENTIDADES (UEBA)",
        "Análisis de bitácoras de firewalls"
       ]
      },
@@ -10151,7 +9005,7 @@
       ],
       "detection": [
        "ANÁLISIS DE BITACORAS DE SIEM",
-       "Análisis de Comportamiento de Entidades y Usuarios"
+       "ANÁLISIS DE COMPORTAMIENTO DE USUARIOS Y ENTIDADES (UEBA)"
       ]
      },
      {
@@ -10175,7 +9029,7 @@
        "Una meta y sueños de causar el mal"
       ],
       "detection": [
-       "Análisis de herramientas de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
        "Entrenamiento de Concientización de Seguridad para usuarios"
       ]
@@ -10248,7 +9102,7 @@
        "Registro de servicios con las cuentas de correo de trabajo"
       ],
       "detection": [
-       "Análisis de Servidores",
+       "ANÁLISIS DEL SERVIDOR",
        "ANÁLISIS DE COMPORTAMIENTO DE USUARIOS Y ENTIDADES (UEBA)"
       ]
      }
@@ -10369,7 +9223,7 @@
       "detection": [
        "ANÁLISIS DE BITACORAS DE SIEM",
        "ANÁLISIS DE COMPORTAMIENTO DE USUARIOS Y ENTIDADES (UEBA)",
-       "Análisis de protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "CIBERENGAñO"
       ]
      },
@@ -10436,7 +9290,7 @@
       ],
       "detection": [
        "ANÁLISIS DE ENDPOINTS",
-       "Análisis de la protección de seguridad de endpoints"
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS"
       ]
      },
      {
@@ -10465,7 +9319,7 @@
       ],
       "detection": [
        "CIBERENGAñO",
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS"
       ]
      }
@@ -10488,8 +9342,8 @@
        "C2 Matrix"
       ],
       "detection": [
-       "Cacería de amenazas de red con herramientas Zeek y RITA Análisis",
-       "Bitácoras de Firewalls"
+       "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+       "REVISIÓN DE BITÁCORAS DE FIREWALL"
       ]
      },
      {
@@ -10517,8 +9371,8 @@
        "SILENT TRINITY"
       ],
       "detection": [
-       "Cacería de amenazas de red con herramientas Zeek y RITA Análisis",
-       "Bitácoras de Firewalls"
+       "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+       "REVISIÓN DE BITÁCORAS DE FIREWALL"
       ]
      },
      {
@@ -10537,8 +9391,8 @@
        "dnscat2"
       ],
       "detection": [
-       "Cacería de amenazas de red con herramientas Zeek y RITA Análisis",
-       "Bitácoras de Firewalls"
+       "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+       "REVISIÓN DE BITÁCORAS DE FIREWALL"
       ]
      },
      {
@@ -10562,8 +9416,8 @@
        "UBoatRAT"
       ],
       "detection": [
-       "Cacería de amenazas de red con herramientas Zeek y RITA Análisis",
-       "Bitácoras de Firewalls"
+       "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+       "REVISIÓN DE BITÁCORAS DE FIREWALL"
       ]
      },
      {
@@ -10587,8 +9441,8 @@
        "Sneaky Creeper"
       ],
       "detection": [
-       "Cacería de amenazas de red con herramientas Zeek y RITA Análisis",
-       "Bitácoras de Firewalls"
+       "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+       "REVISIÓN DE BITÁCORAS DE FIREWALL"
       ]
      },
      {
@@ -10611,8 +9465,8 @@
        "Cobalt Strike"
       ],
       "detection": [
-       "Cacería de amenazas de red con herramientas Zeek y RITA Análisis",
-       "Bitácoras de Firewalls"
+       "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA",
+       "REVISIÓN DE BITÁCORAS DE FIREWALL"
       ]
      }
     ],
@@ -10641,7 +9495,7 @@
        "autoruns.exe"
       ],
       "detection": [
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE MEMORIA",
        "ANÁLISIS DE ENDPOINTS"
       ]
@@ -10672,7 +9526,7 @@
        "PowerUp"
       ],
       "detection": [
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE MEMORIA",
        "ANÁLISIS DE ENDPOINTS"
       ]
@@ -10698,7 +9552,7 @@
        "Cobalt Strike"
       ],
       "detection": [
-       "Análisis de la protección de la seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS"
       ]
      },
@@ -10722,7 +9576,7 @@
        "Alureon"
       ],
       "detection": [
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE MEMORIA",
        "ANÁLISIS DE ENDPOINTS"
       ]
@@ -10747,7 +9601,7 @@
        "Kit de evaluación e implementación de Windows (Windows ADK)"
       ],
       "detection": [
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS"
       ]
      },
@@ -10772,7 +9626,7 @@
        "graniet/chromebackdoor"
       ],
       "detection": [
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS",
        "Análisis de bitácoras de firewalls",
        "CACERÍA DE AMENAZAS DE RED CON HERRAMIENTAS ZEEK Y RITA"
@@ -10798,7 +9652,7 @@
        "Persistencia de Meterpreter"
       ],
       "detection": [
-       "Análisis de la protección de seguridad de endpoints",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS"
       ]
      },
@@ -10824,7 +9678,7 @@
        "Trickbot"
       ],
       "detection": [
-       "Análisis de Protección de Seguridad de Endpoint",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS",
        "Oraciones a un Dios Comprometido y Misericordioso"
       ]
@@ -10846,7 +9700,7 @@
        "Rubber Ducky - Para ejemplos"
       ],
       "detection": [
-       "Análisis de Protección de Seguridad de Endpoint",
+       "ANÁLISIS DE SEGURIDAD DE PROTECCIÓN DE ENDPOINTS",
        "ANÁLISIS DE ENDPOINTS"
       ]
      }
@@ -11259,7 +10113,7 @@
       "detection": [
        "Server Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11403,7 +10257,7 @@
       ],
       "detection": [
        "Firewall Log Review",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11669,7 +10523,7 @@
        "Prismatica"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11697,7 +10551,7 @@
        "SILENTTRINITY"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11716,7 +10570,7 @@
        "dnscat2"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11732,7 +10586,7 @@
        }
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11756,7 +10610,7 @@
        "Sneaky Creeper"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -11779,7 +10633,7 @@
        "Cobalt Strike"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      }
     ],
@@ -11924,8 +10778,8 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Web Proxy (Firewall Log Review)",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Review",
+       "NetFlow,Zeek/Bro,Real Intelligence Threat Analytics (RITA) Analysis"
       ]
      },
      {
@@ -12363,7 +11217,7 @@
        "GoPhish"
       ],
       "detection": [
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Endpoint Security Protection Analysis"
       ]
      },
@@ -12474,7 +11328,7 @@
       "detection": [
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)",
-       "Firewall Log Review"
+       "Firewall Log Analysis"
       ]
      },
      {
@@ -12500,7 +11354,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "User Awareness Training"
+       "Network Threat Hunting - Zeek/RITA Analysis",
+       "User and Entity Behavior Analytics (UEBA)",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -12533,8 +11389,9 @@
        "The completely asinine belief that somehow allowing people to bring their own devices in is a worthy cost savings."
       ],
       "detection": [
-       "Firewall Log Review",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Analysis",
+       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -12555,7 +11412,7 @@
        "Unauthorized System Stood Up by Employee"
       ],
       "detection": [
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Server Analysis"
       ]
      },
@@ -12582,7 +11439,9 @@
       ],
       "detection": [
        "Server Analysis",
-       "User and Entity Behavior Analytics (UEBA)"
+       "User and Entity Behavior Analytics (UEBA)",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      }
     ],
@@ -12615,7 +11474,9 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Cyber Deception",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -12681,9 +11542,10 @@
        "Responder attacks LLMNR, NBT-NS, WPAD, and mDNS."
       ],
       "detection": [
-       "CredDefense Toolkit",
+       "Cyber Deception",
        "User and Entity Behavior Analytics (UEBA)",
-       "Firewall Log Review"
+       "Firewall Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -12718,7 +11580,8 @@
       "detection": [
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)",
-       "Internal Segmentation"
+       "Endpoint Security Protection Analysis",
+       "Cyber Deception"
       ]
      },
      {
@@ -12835,7 +11698,10 @@
        "C2 Matrix"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -12863,7 +11729,10 @@
        "SILENTTRINITY"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -12907,7 +11776,7 @@
       ],
       "detection": [
        "Network Threat Hunting - Zeek/RITA Analysis",
-       "Firewall Log Review"
+       "Firewall Log Analysis"
       ]
      },
      {
@@ -12954,7 +11823,9 @@
        "Cobalt Strike"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      }
     ],
@@ -13040,6 +11911,7 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
+       "Memory Analysis",
        "Endpoint Analysis"
       ]
      },
@@ -13065,7 +11937,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Endpoint Analysis"
+       "Endpoint Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -13115,8 +11989,8 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Web Proxy (Firewall Log Review)",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Analysis",
+       "Memory Analysis"
       ]
      },
      {
@@ -13187,8 +12061,8 @@
        "USB Rubber Ducky - For examples"
       ],
       "detection": [
-       "Endpoint Analysis",
-       "Endpoint Security Protection Analysis"
+       "Endpoint Security Protection Analysis",
+       "Endpoint Analysis"
       ]
      }
     ],
@@ -13565,10 +12439,10 @@
        "Social-Engineer Toolkit (SET)"
       ],
       "detection": [
-       "Security Information and Event Management (SIEM) Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
        "Server Analysis",
        "Cloud Event Log Analysis",
-       "User and Entity Behavior Analytics (UEBA)"
+       "User and Entity Behavior Analysis (UEBA)"
       ]
      },
      {
@@ -13614,10 +12488,10 @@
        "Pacu"
       ],
       "detection": [
-       "Security Information and Event Management (SIEM) Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
        "Cloud Event Log Analysis",
        "Permissions Audit",
-       "User and Entity Behavior Analytics (UEBA)"
+       "User and Entity Behavior Analysis (UEBA)"
       ]
      },
      {
@@ -13636,9 +12510,11 @@
        "Company-Issued Equipment"
       ],
       "detection": [
-       "User and Entity Behavior Analytics",
-       "DLP (Ha! Ha! Kidding. DLP never works.)",
-       "Working with HR"
+       "User and Entity Behavior Analysis (UEBA)",
+       "Active Defense and Cyber Deception",
+       "Endpoint Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -13660,9 +12536,9 @@
        "FindMeAccess"
       ],
       "detection": [
-       "Security Information and Event Management (SIEM) Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
        "Active Defense and Cyber Deception",
-       "User and Entity Behavior Analytics (UEBA)",
+       "User and Entity Behavior Analysis (UEBA)",
        "Cloud Event Log Analysis"
       ]
      },
@@ -13685,7 +12561,7 @@
       ],
       "detection": [
        "Security Infomation and Event Management (SIEM) Log Analysis",
-       "User and Entity Behavior Analytics"
+       "User and Entity Behavior Analysis (UEBA)"
       ]
      },
      {
@@ -13707,7 +12583,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "User Awareness Training"
+       "Network Threat Hunting",
+       "User and Entity Behavior Analysis (UEBA)",
+       "Cloud Event Log Analysis"
       ]
      },
      {
@@ -13728,8 +12606,9 @@
        "Malicious Web Ads"
       ],
       "detection": [
-       "Firewall Log Review",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Analysis",
+       "Network Threat Hunting",
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -13753,7 +12632,7 @@
       "detection": [
        "Firewall Log Analysis",
        "Server Analysis",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -13776,7 +12655,9 @@
       ],
       "detection": [
        "Server Analysis",
-       "User and Entity Behavior Analytics"
+       "User and Entity Behavior Analysis (UEBA)",
+       "Cloud Event Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      }
     ],
@@ -13800,8 +12681,10 @@
        "LOLBins"
       ],
       "detection": [
-       "User and Entity Behavior Analytics",
-       "Security Infomation and Event Management (SIEM) Log Analysis"
+       "User and Entity Behavior Analysis (UEBA)",
+       "Active Defense and Cyber Deception",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -13824,9 +12707,9 @@
       ],
       "detection": [
        "Security Infomation and Event Management (SIEM) Log Analysis",
-       "User and Entity Behavior Analytics",
-       "Honey Services",
-       "Internal Segmentation"
+       "User and Entity Behavior Analysis (UEBA)",
+       "Active Defense and Cyber Deception",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -13848,9 +12731,10 @@
        "Inveigh"
       ],
       "detection": [
-       "CredDefense Toolkit",
-       "User and Entity Behavior Analytics",
-       "Firewall Log Review"
+       "Active Defense and Cyber Deception",
+       "User and Entity Behavior Analysis (UEBA)",
+       "Firewall Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -13873,8 +12757,9 @@
       ],
       "detection": [
        "Security Infomation and Event Management (SIEM) Log Analysis",
-       "User and Entity Behavior Analytics",
-       "Internal Segmentation"
+       "User and Entity Behavior Analysis (UEBA)",
+       "Endpoint Security Protection Analysis",
+       "Active Defense and Cyber Deception"
       ]
      },
      {
@@ -13896,8 +12781,8 @@
        "Mimikatz"
       ],
       "detection": [
-       "Security Information and Event Management (SIEM) Log Analysis",
-       "User and Entity Behavior Analytics (UEBA)",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
+       "User and Entity Behavior Analysis (UEBA)",
        "Active Defense and Cyber Deception"
       ]
      },
@@ -13922,7 +12807,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -13969,7 +12854,10 @@
        "Mythic"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -13990,7 +12878,10 @@
        "Mythic"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -14012,7 +12903,7 @@
       "detection": [
        "Network Threat Hunting",
        "Firewall Log Analysis",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -14059,7 +12950,7 @@
        "Network Threat Hunting",
        "Firewall Log Analysis",
        "Endpoint Analysis",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -14080,7 +12971,9 @@
        "Mythic"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      }
     ],
@@ -14107,7 +13000,7 @@
        "Endpoint Security Protection Analysis",
        "Memory Analysis",
        "Endpoint Analysis",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Security Infomation and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -14155,6 +13048,7 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
+       "Memory Analysis",
        "Endpoint Analysis"
       ]
      },
@@ -14178,7 +13072,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Endpoint Analysis"
+       "Endpoint Analysis",
+       "Security Infomation and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -14202,7 +13098,8 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Endpoint Analysis"
+       "Endpoint Analysis",
+       "Memory Analysis"
       ]
      },
      {
@@ -14227,8 +13124,8 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Web Proxy (Firewall Log Review)",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Analysis",
+       "Memory Analysis"
       ]
      },
      {
@@ -14297,8 +13194,8 @@
        "OMGCable"
       ],
       "detection": [
-       "Endpoint Analysis",
-       "Endpoint Security Protection Analysis"
+       "Endpoint Security Protection Analysis",
+       "Endpoint Analysis"
       ]
      }
     ],
@@ -14965,8 +13862,8 @@
        "SSLSplit"
       ],
       "detection": [
-       "Firewall Log Review",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Firewall Log Analysis",
+       "Network Threat Hunting"
       ]
      },
      {
@@ -14992,7 +13889,7 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -15226,7 +14123,7 @@
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "Firewall Log Review"
+       "Firewall Log Analysis"
       ]
      },
      {
@@ -15302,8 +14199,8 @@
        "Eavesarp"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
-       "Firewall Log Review"
+       "Network Threat Hunting",
+       "Firewall Log Analysis"
       ]
      },
      {
@@ -16666,7 +15563,9 @@
       ],
       "detection": [
        "Server Analysis",
-       "User and Entity Behavior Analytics (UEBA)"
+       "User and Entity Behavior Analytics (UEBA)",
+       "Cloud Event Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -16711,8 +15610,9 @@
        "Malicious Web Ads"
       ],
       "detection": [
-       "Firewall Log Review",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Analysis",
+       "Network Threat Hunting",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -16734,7 +15634,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "User Awareness Training"
+       "Network Threat Hunting",
+       "User and Entity Behavior Analytics (UEBA)",
+       "Cloud Event Log Analysis"
       ]
      },
      {
@@ -16804,8 +15706,10 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "DLP (Ha! Ha! Kidding. DLP never works.)",
-       "Working with HR"
+       "Active Defense and Cyber Deception",
+       "Endpoint Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -16978,7 +15882,8 @@
       "detection": [
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)",
-       "Internal Segmentation"
+       "Endpoint Security Protection Analysis",
+       "Active Defense and Cyber Deception"
       ]
      },
      {
@@ -17027,8 +15932,8 @@
       "detection": [
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)",
-       "Honey Services",
-       "Internal Segmentation"
+       "Active Defense and Cyber Deception",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -17051,7 +15956,9 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Active Defense and Cyber Deception",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      }
     ],
@@ -17074,7 +15981,9 @@
        "Mythic"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
      {
@@ -17164,7 +16073,10 @@
        "Mythic"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -17185,7 +16097,10 @@
        "Mythic"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      }
     ],
@@ -17208,8 +16123,8 @@
        "OMGCable"
       ],
       "detection": [
-       "Endpoint Analysis",
-       "Endpoint Security Protection Analysis"
+       "Endpoint Security Protection Analysis",
+       "Endpoint Analysis"
       ]
      },
      {
@@ -17282,8 +16197,8 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Web Proxy (Firewall Log Review)",
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Firewall Log Analysis",
+       "Memory Analysis"
       ]
      },
      {
@@ -17307,7 +16222,8 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Endpoint Analysis"
+       "Endpoint Analysis",
+       "Memory Analysis"
       ]
      },
      {
@@ -17330,7 +16246,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Endpoint Analysis"
+       "Endpoint Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -17354,6 +16272,7 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
+       "Memory Analysis",
        "Endpoint Analysis"
       ]
      },
@@ -19857,7 +18776,7 @@
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)",
        "Cloud Event Log Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -19877,10 +18796,10 @@
        "Metasploit"
       ],
       "detection": [
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Active Defense and Cyber Deception",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -19924,7 +18843,7 @@
        "Firefox"
       ],
       "detection": [
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Server Analysis",
        "Active Defense and Cyber Deception",
        "Permissions Audit"
@@ -19947,7 +18866,7 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -19973,7 +18892,7 @@
        "Endpoint Security Protection Analysis",
        "Memory Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "Firewall Log Review"
+       "Firewall Log Analysis"
       ]
      },
      {
@@ -19993,7 +18912,7 @@
        }
       ],
       "detection": [
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Memory Analysis",
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis"
@@ -20189,9 +19108,9 @@
        "Shodan"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Active Defense and Cyber Deception",
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -20494,8 +19413,8 @@
        "Google Drive"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
-       "Firewall Log Review",
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -20518,7 +19437,7 @@
       ],
       "detection": [
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -20552,7 +19471,7 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -20845,7 +19764,7 @@
        "Microsoft Advanced Group Policy Management"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Server Analysis",
        "Endpoint Security Protection Analysis"
@@ -20900,7 +19819,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -20926,8 +19845,8 @@
       ],
       "detection": [
        "Server Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
-       "Firewall Log Review"
+       "Network Threat Hunting",
+       "Firewall Log Analysis"
       ]
      }
     ],
@@ -24428,7 +23347,7 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -24450,7 +23369,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -24471,7 +23390,7 @@
        "SQLmap"
       ],
       "detection": [
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      }
@@ -24876,7 +23795,7 @@
        "Out of Band C2"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      }
@@ -27211,7 +26130,7 @@
       ],
       "detection": [
        "Firewall Log Review",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27309,7 +26228,7 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27332,7 +26251,7 @@
       "detection": [
        "Endpoint Security Protection Analysis",
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27377,7 +26296,7 @@
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)",
        "Cloud Event Log Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27538,7 +26457,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27590,7 +26509,7 @@
        "Firewall Log Review",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Cyber Deception",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27614,7 +26533,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      },
@@ -27640,7 +26559,7 @@
       "detection": [
        "Cloud Event Log Analysis",
        "Firewall Log Review",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27663,7 +26582,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -27992,7 +26911,7 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -28054,7 +26973,7 @@
        "Server Analysis",
        "Memory Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -28071,8 +26990,10 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "DLP (Ha! Ha! Kidding. DLP never works.)",
-       "Working with HR"
+       "Active Defense and Cyber Deception",
+       "Endpoint Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -28657,7 +27578,7 @@
        "Eavesarp"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Firewall Log Review"
       ]
      },
@@ -28806,7 +27727,7 @@
        "Shodan"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Cyber Deception",
        "Firewall Log Review",
        "Security Information and Event Management (SIEM) Log Analysis"
@@ -28955,7 +27876,9 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Security Information and Event Management (SIEM) Log Analysis"
+       "Active Defense and Cyber Deception",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -29057,9 +27980,10 @@
        "Responder Attacks LLMNR, NBT-NS, WPAD, and mDNS."
       ],
       "detection": [
-       "CredDefense Toolkit",
+       "Active Defense and Cyber Deception",
        "User and Entity Behavior Analytics (UEBA)",
-       "Firewall Log Review"
+       "Firewall Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -29132,7 +28056,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -29194,7 +28118,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -29420,7 +28344,7 @@
        }
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Endpoint Security Protection Analysis",
        "Memory Analysis"
@@ -29466,7 +28390,7 @@
        "Metasploit"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Firewall Log Review"
       ]
      },
@@ -29696,7 +28620,7 @@
        "Pacu"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "User and Entity Behavior Analytics (UEBA)"
       ]
@@ -29899,7 +28823,7 @@
       ],
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -29959,7 +28883,7 @@
        "Out of Band C2"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      },
@@ -30005,7 +28929,7 @@
       ],
       "detection": [
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      },
@@ -30069,7 +28993,7 @@
        "Merlin"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Endpoint Security Protection Analysis",
        "Memory Analysis"
       ]
@@ -30086,7 +29010,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Physical Security Review"
       ]
      },
@@ -30108,7 +29032,7 @@
        "Merlin"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Firewall Log Review",
        "User and Entity Behavior Analytics (UEBA)"
@@ -30131,7 +29055,7 @@
        "Google Drive"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Firewall Log Review",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
@@ -30155,7 +29079,7 @@
       ],
       "detection": [
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -30189,7 +29113,7 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -30324,7 +29248,10 @@
        "C2 Matrix"
       ],
       "detection": [
-       "NetFlow, Zeek/Bro, RITA Analysis"
+       "Network Threat Hunting",
+       "Firewall Log Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Endpoint Security Protection Analysis"
       ]
      },
      {
@@ -30851,7 +29778,7 @@
        "Microsoft Advanced Group Policy Management"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Server Analysis",
        "Endpoint Security Protection Analysis"
@@ -31040,7 +29967,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -31144,7 +30071,7 @@
       ],
       "detection": [
        "Server Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Firewall Log Review"
       ]
      },
@@ -31200,7 +30127,7 @@
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
        "Server Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -31259,7 +30186,9 @@
       ],
       "detection": [
        "Endpoint Security Protection Analysis",
-       "Endpoint Analysis"
+       "Endpoint Analysis",
+       "Security Information and Event Management (SIEM) Log Analysis",
+       "Permissions Audit"
       ]
      },
      {
@@ -31279,8 +30208,8 @@
        "USB Rubber Ducky - For examples"
       ],
       "detection": [
-       "Endpoint Analysis",
-       "Endpoint Security Protection Analysis"
+       "Endpoint Security Protection Analysis",
+       "Endpoint Analysis"
       ]
      },
      {
@@ -33875,7 +32804,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -34235,7 +33164,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      },
@@ -34260,7 +33189,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis"
       ]
      }
@@ -34426,7 +33355,7 @@
       ],
       "detection": [
        "Endpoint Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      },
@@ -34484,7 +33413,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Physical Security Review"
       ]
      }
@@ -34799,7 +33728,7 @@
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
        "Server Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      }
     ],
@@ -35662,7 +34591,7 @@
       "detection": [
        "Endpoint Analysis",
        "Endpoint Security Protection Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      },
@@ -35732,7 +34661,7 @@
        "Server Analysis",
        "Memory Analysis",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "Network Threat Hunting - Zeek/RITA Analysis"
+       "Network Threat Hunting"
       ]
      },
      {
@@ -35756,7 +34685,7 @@
       "detection": [
        "User and Entity Behavior Analytics (UEBA)",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "Permissions Audit"
       ]
      },
@@ -36082,7 +35011,7 @@
        }
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
        "Endpoint Security Protection Analysis",
        "Memory Analysis"
@@ -36109,8 +35038,8 @@
        "Metasploit"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
-       "Firewall Log Review"
+       "Network Threat Hunting",
+       "Firewall Log Analysis"
       ]
      }
     ],
@@ -36273,7 +35202,7 @@
        "Merlin"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Endpoint Security Protection Analysis",
        "Memory Analysis"
       ]
@@ -36296,9 +35225,9 @@
        "Merlin"
       ],
       "detection": [
-       "Network Threat Hunting - Zeek/RITA Analysis",
+       "Network Threat Hunting",
        "Security Information and Event Management (SIEM) Log Analysis",
-       "Firewall Log Review",
+       "Firewall Log Analysis",
        "User and Entity Behavior Analytics (UEBA)"
       ]
      }

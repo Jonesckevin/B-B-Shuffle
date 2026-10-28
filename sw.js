@@ -160,7 +160,9 @@ self.addEventListener('fetch', function (event) {
   // Static art/icons/fonts: cache-first, refresh in the background.
   if (ASSET_RE.test(url.pathname)) {
     event.respondWith((async function () {
-      const cached = await caches.match(request);
+      // ignoreSearch: the build stamps ?v=<content hash> onto CSS/JS URLs, and
+      // the precache list holds plain paths, so match on the path alone.
+      const cached = await caches.match(request, { ignoreSearch: true });
       if (cached) {
         fetch(request).then(function (res) {
           return putIn(RUNTIME_CACHE, request, res);
@@ -181,7 +183,9 @@ self.addEventListener('fetch', function (event) {
       await putIn(RUNTIME_CACHE, request, fresh);
       return fresh;
     } catch (err) {
-      const cached = await caches.match(request);
+      // Same reason as above: a ?v=<hash> URL and its precached plain path are
+      // the same file, so an offline request must still find it.
+      const cached = await caches.match(request, { ignoreSearch: true });
       if (cached) return cached;
       throw err;
     }

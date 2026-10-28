@@ -72,6 +72,12 @@
             icon: '<path d="M12 3a9 9 0 1 0 0 18h1.4a2.4 2.4 0 0 0 0-4.8H13a2 2 0 0 1 0-4h3.1a4.9 4.9 0 0 0 0-9.2H12z"/><circle cx="7.6" cy="10.4" r="1.1"/><circle cx="10.6" cy="6.6" r="1.1"/><circle cx="15" cy="6.6" r="1.1"/>'
         },
         {
+            label: 'Deck Builder',
+            href: 'Engine-V2/deck-builder.html',
+            accent: '#0ea5e9',
+            icon: '<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="16" rx="1"/><path d="M18 8l3 2-3 2"/><path d="M18 14h3"/>'
+        },
+        {
             label: 'Solo AI',
             href: 'Engine-V2/player.html?mode=solo',
             accent: '#22c55e',
