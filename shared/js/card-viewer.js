@@ -10,12 +10,16 @@
  * Usage:
  *   CardViewer.open(src, { name, type, action: { label, onClick } });
  *   CardViewer.open(src, { name, type, sections: [{ label, html }] });
+ *   CardViewer.open('', { items: [{ src, name, type, sections }, ...], index: 0 });
  *   CardViewer.close();
  *   CardViewer.isOpen();
  *
  * Interaction:
  *   - Optional `sections` render as tabs under the image (Details | Info);
  *     a single section shows without the tab bar.
+ *   - `items` turns the viewer into a gallery: side arrows, ArrowLeft /
+ *     ArrowRight and a `3 / 12` counter cycle through the list (wrapping at
+ *     either end). A single item behaves exactly like the plain form.
  *   - Click the card image (or the "Zoom" pill) to toggle Fit <-> 1:1 (scroll to pan).
  *   - Esc, the X button, or clicking the dimmed backdrop closes the viewer.
  * Styles live in shared/css/base.css (.cv-*).
@@ -33,11 +37,16 @@
   let actionBtn = null;
   let tabsEl = null;
   let panelsEl = null;
+  let prevBtn = null;
+  let nextBtn = null;
+  let countEl = null;
 
   let isOpen = false;
   let prevOverflow = '';
   let drag = null;            // active pan gesture while zoomed
   let suppressClick = false;  // swallow the click that ends a pan
+  let items = [];             // gallery items; empty for a single card
+  let itemIndex = 0;
 
   // DELIBERATE DUPLICATE of Utils.CARD_TYPE_LABELS (Engine-V2/js/utils.js).
   // This file must stay dependency-free: on Engine-V2/custom-cards.html it is
@@ -68,9 +77,12 @@
       '<div class="cv-stage" title="Click the card to toggle zoom">' +
       '  <img class="cv-img" alt="Card preview">' +
       '</div>' +
+      '<button type="button" class="cv-nav cv-prev" title="Previous card (left arrow)" aria-label="Previous card" hidden>&#10094;</button>' +
+      '<button type="button" class="cv-nav cv-next" title="Next card (right arrow)" aria-label="Next card" hidden>&#10095;</button>' +
       '<div class="cv-meta">' +
       '  <span class="cv-name"></span>' +
       '  <span class="cv-type" hidden></span>' +
+      '  <span class="cv-count" hidden></span>' +
       '  <button type="button" class="cv-action" hidden></button>' +
       '  <button type="button" class="cv-zoom" title="Toggle Fit / actual size">Zoom</button>' +
       '  <span class="cv-hint"></span>' +
@@ -88,6 +100,9 @@
     actionBtn = rootEl.querySelector('.cv-action');
     tabsEl = rootEl.querySelector('.cv-tabs');
     panelsEl = rootEl.querySelector('.cv-panels');
+    prevBtn = rootEl.querySelector('.cv-prev');
+    nextBtn = rootEl.querySelector('.cv-next');
+    countEl = rootEl.querySelector('.cv-count');
 
     rootEl.querySelector('.cv-close').addEventListener('click', close);
     rootEl.addEventListener('click', (e) => {
@@ -136,11 +151,22 @@
       const btn = e.target.closest('.cv-tab');
       if (btn) selectTab(parseInt(btn.dataset.idx, 10));
     });
+    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
+    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); go(1); });
     document.addEventListener('keydown', (e) => {
       if (!isOpen) return;
       if (e.key === 'Escape') {
         e.preventDefault();
         close();
+        return;
+      }
+      if (items.length < 2) return;
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        go(1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        go(-1);
       }
     });
     window.addEventListener('resize', () => { if (isOpen) fit(); });
@@ -198,28 +224,37 @@
     panelsEl.scrollTop = 0;
   }
 
-  function open(src, opts) {
-    opts = opts || {};
-    if (!src && !opts.face) return;
-    if (!rootEl) build();
+  /** Hint line, which mentions the arrows only when there is more than one card. */
+  function hintText(zoomed) {
+    if (zoomed) return 'Scroll or drag to pan · Esc to close';
+    return items.length > 1
+      ? 'Left/right arrows to browse · Click the card to zoom · Esc to close'
+      : 'Click the card to zoom · Esc to close';
+  }
 
-    isOpen = true;
+  /**
+   * Paint one card into the viewer. Everything that differs between two cards
+   * lives here, so a gallery step and a direct open take the same path.
+   */
+  function renderItem(item) {
+    item = item || {};
 
     // A composed card face (Engine-V2/js/card-face.js) can take the stage
     // instead of the <img>. The <img> stays in the DOM - the pan/zoom handlers
     // drive it - but is hidden whenever a face is supplied.
     const stale = stageEl.querySelector('.card-face');
     if (stale) stale.remove();
-    if (opts.face) {
-      stageEl.appendChild(opts.face);
+    const face = typeof item.face === 'function' ? item.face() : item.face;
+    if (face) {
+      stageEl.appendChild(face);
       imgEl.removeAttribute('src');
     } else {
-      imgEl.src = src;
+      imgEl.src = item.src || '';
     }
-    imgEl.classList.toggle('is-face', !!opts.face);
-    imgEl.alt = opts.name || 'Card preview';
-    nameEl.textContent = opts.name || '';
-    const label = typeLabel(opts.type);
+    imgEl.classList.toggle('is-face', !!face);
+    imgEl.alt = item.name || 'Card preview';
+    nameEl.textContent = item.name || '';
+    const label = typeLabel(item.type);
     if (label) {
       typeEl.textContent = label;
       typeEl.hidden = false;
@@ -227,22 +262,74 @@
       typeEl.hidden = true;
     }
 
-    if (opts.action && opts.action.label) {
-      actionBtn.textContent = opts.action.label;
-      actionBtn._cb = opts.action.onClick || null;
+    if (item.action && item.action.label) {
+      actionBtn.textContent = item.action.label;
+      actionBtn._cb = item.action.onClick || null;
       actionBtn.hidden = false;
     } else {
       actionBtn.hidden = true;
       actionBtn._cb = null;
     }
 
-    hintEl.textContent = 'Click the card to zoom · Esc to close';
+    renderSections(item.sections);
+  }
+
+  /** Show or hide the gallery arrows and update the `3 / 12` counter. */
+  function updateNav() {
+    const gallery = items.length > 1;
+    if (prevBtn) prevBtn.hidden = !gallery;
+    if (nextBtn) nextBtn.hidden = !gallery;
+    if (countEl) {
+      countEl.hidden = !gallery;
+      countEl.textContent = gallery ? (itemIndex + 1) + ' / ' + items.length : '';
+    }
+    rootEl.classList.toggle('cv-gallery', gallery);
+  }
+
+  /** Step through the gallery, wrapping at either end. */
+  function go(delta) {
+    if (!isOpen || items.length < 2) return;
+    itemIndex = (itemIndex + delta + items.length) % items.length;
+    renderItem(items[itemIndex]);
+    updateNav();
+    fit();
+  }
+
+  function open(src, opts) {
+    opts = opts || {};
+    const list = Array.isArray(opts.items) ? opts.items.filter(Boolean) : null;
+    if (!list && !src && !opts.face) return;
+    if (!rootEl) build();
+
+    const wasOpen = isOpen;
+    isOpen = true;
+
+    if (list && list.length) {
+      items = list;
+      const requested = parseInt(opts.index, 10);
+      itemIndex = Math.min(Math.max(isNaN(requested) ? 0 : requested, 0), list.length - 1);
+      renderItem(items[itemIndex]);
+    } else {
+      items = [];
+      itemIndex = 0;
+      renderItem({
+        src: src,
+        face: opts.face,
+        name: opts.name,
+        type: opts.type,
+        sections: opts.sections,
+        action: opts.action
+      });
+    }
+
+    updateNav();
     rootEl.hidden = false;
-    renderSections(opts.sections);
     fit();
 
-    prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    if (!wasOpen) {
+      prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   function fit() {
@@ -252,7 +339,7 @@
     stageEl.scrollTop = 0;
     stageEl.scrollLeft = 0;
     if (zoomBtn) zoomBtn.textContent = 'Zoom';
-    if (hintEl) hintEl.textContent = 'Click the card to zoom · Esc to close';
+    if (hintEl) hintEl.textContent = hintText(false);
   }
 
   function toggleZoom() {
@@ -260,15 +347,18 @@
     const zoomed = stageEl.classList.toggle('cv-zoomed');
     if (rootEl) rootEl.classList.toggle('is-zoomed', zoomed);
     zoomBtn.textContent = zoomed ? 'Fit' : 'Zoom';
-    hintEl.textContent = zoomed ? 'Scroll or drag to pan · Esc to close' : 'Click the card to zoom · Esc to close';
+    hintEl.textContent = hintText(zoomed);
     if (!zoomed) fit();
   }
 
   function close() {
     if (!isOpen) return;
     isOpen = false;
+    items = [];
+    itemIndex = 0;
     rootEl.hidden = true;
     rootEl.classList.remove('is-zoomed');
+    rootEl.classList.remove('cv-gallery');
     stageEl.classList.remove('cv-zoomed');
     drag = null;
     suppressClick = false;
@@ -277,6 +367,7 @@
     stageEl.querySelectorAll('.card-face').forEach(el => el.remove());
     actionBtn.hidden = true;
     actionBtn._cb = null;
+    if (countEl) countEl.hidden = true;
     document.body.style.overflow = prevOverflow;
     prevOverflow = '';
   }
@@ -285,6 +376,8 @@
     open: open,
     close: close,
     toggleZoom: toggleZoom,
+    next: function () { go(1); },
+    prev: function () { go(-1); },
     isOpen: function () { return isOpen; }
   };
 })(window);

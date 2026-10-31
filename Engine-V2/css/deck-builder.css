@@ -128,9 +128,53 @@
   gap: var(--space-2);
 }
 
+/* Wrapper so the tile button and its corner preview button can sit together. */
+.db-tile {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.db-card-preview {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-hover);
+  background: rgba(8, 12, 18, 0.82);
+  color: var(--color-text);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+/* Fully visible on hover or keyboard focus, and always on touch screens. */
+.db-tile:hover .db-card-preview,
+.db-card-preview:focus-visible {
+  opacity: 1;
+}
+
+.db-card-preview:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .db-card-preview { opacity: 1; }
+}
+
 .db-card {
   position: relative;
   display: flex;
+  flex: 1 1 auto;
+  width: 100%;
   flex-direction: column;
   gap: 4px;
   padding: 6px;
@@ -346,6 +390,18 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--color-text);
+  /* A button, so the row name is focusable and opens the preview gallery. */
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.db-row-name:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
 }
 
 .db-row-deck {

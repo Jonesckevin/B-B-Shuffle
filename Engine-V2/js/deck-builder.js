@@ -120,15 +120,26 @@ const DeckBuilder = {
             this.renderPool();
         });
 
-        // Pool cards toggle in and out of the deck.
+        // Pool cards toggle in and out of the deck; the corner button previews.
         e['db-pool']?.addEventListener('click', ev => {
+            const preview = ev.target.closest('[data-preview]');
+            if (preview) {
+                this.openPreview(this.renderedPool, preview.dataset.preview);
+                return;
+            }
             const tile = ev.target.closest('[data-key]');
             if (tile) this.toggle(tile.dataset.key);
         });
 
-        // Remove buttons live in the four deck-rail lists, not in a wrapper.
+        // Remove buttons and preview names live in the four deck-rail lists, not
+        // in a wrapper.
         ['db-list-scenario', 'db-list-procedure', 'db-list-inject', 'db-list-consultant'].forEach(id => {
             e[id]?.addEventListener('click', ev => {
+                const preview = ev.target.closest('[data-preview]');
+                if (preview) {
+                    this.openPreview(this.railEntries(), preview.dataset.preview);
+                    return;
+                }
                 const btn = ev.target.closest('[data-remove]');
                 if (btn) this.toggle(btn.dataset.remove);
             });
@@ -488,6 +499,8 @@ const DeckBuilder = {
 
         const entries = this.poolEntries();
         const slice = entries.slice(0, this.shown);
+        // The preview gallery cycles exactly what is on screen, in screen order.
+        this.renderedPool = slice;
 
         host.innerHTML = slice.length
             ? slice.map(entry => this.cardTile(entry)).join('')
@@ -506,13 +519,24 @@ const DeckBuilder = {
         const key = this.entryKey(entry);
         const card = entry.card;
         const inDeck = this.keys.has(key) ? ' is-in' : '';
+        const name = this.esc(card.name || 'Untitled');
 
-        return `<button type="button" class="db-card${inDeck}" data-key="${this.esc(key)}" title="${this.esc(card.name || '')}">` +
+        // The tile toggles the card in and out of the deck; the corner button
+        // opens the preview gallery, starting on this card.
+        return `<div class="db-tile">` +
+            `<button type="button" class="db-card${inDeck}" data-key="${this.esc(key)}" title="${name}">` +
             `<span class="db-card-art"><img loading="lazy" decoding="async" src="${this.esc(this.imageSrc(card))}" alt=""></span>` +
-            `<span class="db-card-name">${this.esc(card.name || 'Untitled')}</span>` +
+            `<span class="db-card-name">${name}</span>` +
             `<span class="db-card-meta">${this.esc(entry.deckName)} · ${this.esc(card.id || '')}</span>` +
             `<span class="db-card-tick" aria-hidden="true">&#10003;</span>` +
-            `</button>`;
+            `</button>` +
+            `<button type="button" class="db-card-preview" data-preview="${this.esc(key)}" ` +
+            `title="Preview ${name}" aria-label="Preview ${name}">` +
+            `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">` +
+            `<path d="M4 9V5a1 1 0 0 1 1-1h4"/><path d="M20 15v4a1 1 0 0 1-1 1h-4"/>` +
+            `<path d="M20 9V5a1 1 0 0 0-1-1h-4"/><path d="M4 15v4a1 1 0 0 0 1 1h4"/>` +
+            `</svg></button>` +
+            `</div>`;
     },
 
     /** Repaint just the "already in the deck" ticks, without rebuilding the grid. */
@@ -521,6 +545,48 @@ const DeckBuilder = {
         this.el['db-pool']?.querySelectorAll('[data-key]').forEach(tile => {
             tile.classList.toggle('is-in', this.keys.has(tile.dataset.key));
         });
+    },
+
+    /* ------------------------------------------------------------------ */
+    /* Preview gallery                                                     */
+    /* ------------------------------------------------------------------ */
+
+    /** The deck's cards in the order the rail prints them. */
+    railEntries() {
+        const order = [];
+        this.SCENARIO_TYPES.forEach(type => order.push(...this.sorted(type)));
+        ['procedure', 'inject', 'consultant'].forEach(type => order.push(...this.sorted(type)));
+        return order;
+    },
+
+    /** One CardViewer item for a catalogue entry: the card image plus its text. */
+    previewItem(entry) {
+        const card = entry.card || {};
+        const list = (label, values) => (Array.isArray(values) && values.length)
+            ? `<h4 class="cv-sub">${this.esc(label)}</h4><ul class="cv-detail-list">` +
+              values.map(value => `<li>${this.esc(value)}</li>`).join('') + '</ul>'
+            : '';
+        const meta = `<p class="cv-note"><b>${this.esc(entry.deckName || entry.deck || 'Deck')}</b> · ` +
+            `${this.esc(this.label(card.type))}${card.id ? ' · ' + this.esc(card.id) : ''}</p>`;
+        const html = meta +
+            (card.description ? `<p>${this.esc(card.description)}</p>` : '') +
+            list('DETECTION', card.detection) +
+            list('TOOLS', card.tools) +
+            (card.notes ? `<p class="cv-note">${this.esc(card.notes)}</p>` : '');
+
+        return {
+            src: this.imageSrc(card),
+            name: card.name || 'Untitled',
+            type: card.type,
+            sections: [{ label: 'Details', html }]
+        };
+    },
+
+    /** Open the shared viewer on `key`, with `entries` as the browsable gallery. */
+    openPreview(entries, key) {
+        if (typeof CardViewer === 'undefined' || !Array.isArray(entries) || !entries.length) return;
+        const index = Math.max(0, entries.findIndex(entry => this.entryKey(entry) === key));
+        CardViewer.open('', { items: entries.map(entry => this.previewItem(entry)), index });
     },
 
     /* ------------------------------------------------------------------ */
@@ -541,7 +607,7 @@ const DeckBuilder = {
         const key = this.esc(this.entryKey(entry));
         const name = this.esc(entry.card.name || 'Untitled');
         return `<div class="db-row">` +
-            `<span class="db-row-name" title="${name}">${name}</span>` +
+            `<button type="button" class="db-row-name" data-preview="${key}" title="Preview ${name}">${name}</button>` +
             `<span class="db-row-deck">${this.esc(entry.deckName || '')}</span>` +
             `<button type="button" class="db-row-remove" data-remove="${key}" title="Remove" aria-label="Remove ${name}">&times;</button>` +
             `</div>`;

@@ -935,6 +935,58 @@ body.has-fab .app-legal-content { padding-right: 76px; }
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
+/* ===== Card Viewer: gallery navigation (opt-in via `items`) =====
+   Two edge arrows plus a `3 / 12` counter, shown only when the viewer holds
+   more than one card. Keyboard arrows do the same thing; the buttons exist so
+   the affordance is visible. */
+.cv-nav {
+  position: fixed;
+  top: 50%;
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  margin-top: -23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-hover);
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.cv-nav[hidden] { display: none !important; }
+.cv-nav:hover {
+  color: #fff;
+  border-color: var(--color-primary);
+  transform: scale(1.06);
+}
+.cv-nav.cv-prev { left: max(10px, 2vw); }
+.cv-nav.cv-next { right: max(10px, 2vw); }
+.cv-nav:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.cv-count {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 2px 9px;
+  background: rgba(255, 255, 255, 0.04);
+  font-variant-numeric: tabular-nums;
+}
+.cv-count[hidden] { display: none !important; }
+
+@media (max-width: 720px) {
+  .cv-nav { width: 38px; height: 38px; margin-top: -19px; font-size: 14px; }
+}
+
 /* ===== Card Viewer: optional Details / Info tabs (opt-in via `sections`) =====
    With details the viewer switches to a wide two-column layout: the card
    image keeps the full height on the left while the Details/Info tabs sit in
